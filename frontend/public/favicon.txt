@@ -1,0 +1,9 @@
+Please generate a favicon.ico file from the SVG:
+1. Use the icon.svg as the source
+2. Convert to favicon.ico format (multiple sizes: 16x16, 32x32, 48x48)
+3. Place in the public directory
+
+You can use online tools like https://realfavicongenerator.net/ or software like ImageMagick:
+```
+convert -background none -density 256x256 icon.svg -define icon:auto-resize -colors 256 favicon.ico
+``` 

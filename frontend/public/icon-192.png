@@ -1,0 +1,48 @@
+/* This is a placeholder. Use this script to generate icons:
+
+// create-icons.js
+const fs = require('fs');
+const path = require('path');
+const { createCanvas } = require('canvas');
+
+function createIcon(size) {
+  const canvas = createCanvas(size, size);
+  const ctx = canvas.getContext('2d');
+  
+  // Green background
+  ctx.fillStyle = '#4ade80';
+  ctx.fillRect(0, 0, size, size);
+  
+  // Flag pole
+  const poleWidth = size * 0.06;
+  const poleHeight = size * 0.6;
+  ctx.fillStyle = '#334155';
+  ctx.fillRect(size * 0.3, size * 0.2, poleWidth, poleHeight);
+  
+  // Flag
+  ctx.fillStyle = '#ef4444';
+  ctx.beginPath();
+  ctx.moveTo(size * 0.3 + poleWidth, size * 0.2);
+  ctx.lineTo(size * 0.7, size * 0.3);
+  ctx.lineTo(size * 0.3 + poleWidth, size * 0.4);
+  ctx.closePath();
+  ctx.fill();
+  
+  // Base
+  ctx.fillStyle = '#334155';
+  ctx.beginPath();
+  ctx.arc(size * 0.3 + poleWidth/2, size * 0.2 + poleHeight + size * 0.05, size * 0.05, 0, Math.PI * 2);
+  ctx.fill();
+  
+  return canvas.toBuffer('image/png');
+}
+
+// Create icons
+const sizes = [192, 512];
+sizes.forEach(size => {
+  const buffer = createIcon(size);
+  fs.writeFileSync(path.join(__dirname, `icon-${size}.png`), buffer);
+  console.log(`Created icon-${size}.png`);
+});
+
+*/ 

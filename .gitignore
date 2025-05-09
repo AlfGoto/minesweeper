@@ -1,0 +1,16 @@
+*/.env
+*/.env.local
+*/.env.development.local
+*/.env.test.local
+*/.env.production.local
+
+# API keys are secured by using:
+# - API_URL (server-side only in Next.js)
+# - NEXT_PUBLIC_WEBSOCKET_URL (for client connections)
+# - WebSocket service handles game submissions with API_URL
+
+# API keys should now be stored in server-side .env files only (no NEXT_PUBLIC_ prefix needed)
+
+
+*/node_modules/
+*/.next/
