@@ -37,6 +37,8 @@ class GameService {
       upgrade: false,
       reconnectionAttempts: this.maxReconnectAttempts,
       timeout: 10000,
+      // Do not add a namespace (the server is using the default namespace)
+      forceNew: true
     });
   
     this.setupEventListeners();
@@ -48,14 +50,16 @@ class GameService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
-      console.log('WebSocket connected');
       this.isConnecting = false;
       this.reconnectAttempts = 0;
       this.connectionCallback?.(true);
     });
 
-    this.socket.on('disconnect', () => {
-      console.log('WebSocket disconnected');
+    this.socket.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error.message);
+    });
+
+    this.socket.on('disconnect', (reason) => {
       this.connectionCallback?.(false);
       
       // Try to reconnect if not reached max attempts
@@ -66,12 +70,10 @@ class GameService {
     });
 
     this.socket.on('gameState', (state: GameState) => {
-      console.log('Received gameState event', { gameOver: state.gameOver, gameWon: state.gameWon });
       this.gameStateCallback?.(state);
     });
 
     this.socket.on('cellUpdates', (updates: { row: number, col: number, cell: Cell }[]) => {
-      console.log('Received cellUpdates event', { count: updates.length });
       this.cellUpdatesCallback?.(updates);
     });
 

@@ -1249,12 +1249,9 @@ io.on('connection', (socket) => {
       // 1. The game hasn't started yet
       // 2. The game is already over (won or lost)
       if (!game.gameStarted || game.gameOver || game.gameWon) {
-        console.log(`Cleaning up inactive game data for user: ${userId}`);
         games.delete(userId);
         lastAccessTime.delete(userId);
       } else {
-        console.log(`User ${userId} disconnected but game in progress, keeping data`);
-        
         // Optional: Set a cleanup timeout for games in progress
         // If they don't reconnect within 30 minutes, clean up anyway
         setTimeout(() => {
@@ -1263,7 +1260,6 @@ io.on('connection', (socket) => {
             const currentGame = games.get(userId)!;
             // Only delete if it's the same game instance and still in progress
             if (currentGame === game && !currentGame.gameOver && !currentGame.gameWon) {
-              console.log(`Cleaning up abandoned game for user: ${userId}`);
               games.delete(userId);
               lastAccessTime.delete(userId);
             }
@@ -1276,6 +1272,7 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
+  // Keep this console.log as it's informational for server startup
   console.log(`🚀 WebSocket server running on port ${PORT}`);
 });
 
@@ -1285,7 +1282,6 @@ const CLEANUP_INTERVAL = 60 * 60 * 1000; // 1 hour
 const INACTIVE_THRESHOLD = 2 * 60 * 60 * 1000; // 2 hours
 
 setInterval(() => {
-  console.log(`Running periodic cleanup. Current games: ${games.size}`);
   const now = Date.now();
   
   // Clean up inactive games
@@ -1295,13 +1291,8 @@ setInterval(() => {
     
     // If game is completed or hasn't been accessed in a while
     if ((game.gameOver || game.gameWon) || timeSinceAccess > INACTIVE_THRESHOLD) {
-      console.log(`Cleaning up inactive game for user: ${userId}, inactive for ${timeSinceAccess / 60000} minutes`);
       games.delete(userId);
       lastAccessTime.delete(userId);
     }
   }
-  
-  // Log memory usage
-  const memoryUsage = process.memoryUsage();
-  console.log(`Memory usage - RSS: ${Math.round(memoryUsage.rss / 1024 / 1024)}MB, Heap: ${Math.round(memoryUsage.heapUsed / 1024 / 1024)}/${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`);
 }, CLEANUP_INTERVAL); 
