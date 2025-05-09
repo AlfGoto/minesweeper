@@ -1,0 +1,1 @@
+nohup npm run start -- -p 3001 -H 0.0.0.0 > logs.txt 2>&1 &

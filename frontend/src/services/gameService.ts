@@ -48,12 +48,14 @@ class GameService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
+      console.log('WebSocket connected');
       this.isConnecting = false;
       this.reconnectAttempts = 0;
       this.connectionCallback?.(true);
     });
 
     this.socket.on('disconnect', () => {
+      console.log('WebSocket disconnected');
       this.connectionCallback?.(false);
       
       // Try to reconnect if not reached max attempts
@@ -64,14 +66,17 @@ class GameService {
     });
 
     this.socket.on('gameState', (state: GameState) => {
+      console.log('Received gameState event', { gameOver: state.gameOver, gameWon: state.gameWon });
       this.gameStateCallback?.(state);
     });
 
     this.socket.on('cellUpdates', (updates: { row: number, col: number, cell: Cell }[]) => {
+      console.log('Received cellUpdates event', { count: updates.length });
       this.cellUpdatesCallback?.(updates);
     });
 
     this.socket.on('error', (error: string) => {
+      console.error('WebSocket error:', error);
       this.errorCallback?.(error);
     });
   }

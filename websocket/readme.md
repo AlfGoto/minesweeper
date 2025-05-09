@@ -1,0 +1,1 @@
+```HOST=0.0.0.0 nohup npm run start > logs.txt```
