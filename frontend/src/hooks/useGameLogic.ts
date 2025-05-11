@@ -38,6 +38,9 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
   const localTimerRef = useRef<number>(0);
   const animationFrameRef = useRef<number>(0);
 
+  // Add a ref to store the cancel modal function
+  const cancelModalRef = useRef<(() => void) | null>(null);
+
   // ----------------
   // Setup & Cleanup
   // ----------------
@@ -115,51 +118,17 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     });
   }, []);
   
-  // Handle lose condition
-  const handleLose = useCallback((state: GameState) => {
-    // Start animation
-    setBombAnimation(true);
-    
-    // Try using gameTime instead of time as the server might not be setting time property
-    const serverTime = state.gameTime !== undefined ? state.gameTime : 
-                      (state.time !== undefined ? state.time : timer);
-    
-    setFinalTime(serverTime); // Use actual server time, don't force a minimum
-    
-    // Stop timer
-    stopTimer();
-    
-    // Show modal after animation
-    setTimeout(() => {
-      setShowLoseModal(true);
-      setShowWinModal(false);
-    }, 1500);
-  }, [timer]);
-  
-  // Handle win condition
-  const handleWin = useCallback((state: GameState) => {
-    // Start animation
-    setWinAnimation(true);
-    
-    // Try using gameTime if winTime is not available
-    const serverWinTime = state.winTime !== undefined ? state.winTime : 
-                        (state.gameTime !== undefined ? state.gameTime : timer);
-    
-    setFinalTime(serverWinTime); // Use actual server time, don't force a minimum
-    
-    // Stop timer
-    stopTimer();
-    
-    // Show modal after animation
-    setTimeout(() => {
-      setShowLoseModal(false);
-      setShowWinModal(true);
-    }, 1500);
-  }, [timer]);
-  
   // ----------------
   // Timer Management
   // ----------------
+  
+  // Stop the timer
+  const stopTimer = useCallback(() => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = 0;
+    }
+  }, []);
   
   // Start the timer with high precision using requestAnimationFrame
   const startTimer = useCallback(() => {
@@ -194,15 +163,95 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     if (gameStarted && !gameState.gameOver && !gameState.gameWon) {
       animationFrameRef.current = requestAnimationFrame(updateTimer);
     }
-  }, [gameStarted, gameState.gameOver, gameState.gameWon]);
+  }, [gameStarted, gameState.gameOver, gameState.gameWon, stopTimer]);
   
-  // Stop the timer
-  const stopTimer = useCallback(() => {
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = 0;
+  // Handle lose condition
+  const handleLose = useCallback((state: GameState) => {
+    // Start animation
+    setBombAnimation(true);
+    
+    // Try using gameTime instead of time as the server might not be setting time property
+    const serverTime = state.gameTime !== undefined ? state.gameTime : 
+                      (state.time !== undefined ? state.time : timer);
+    
+    setFinalTime(serverTime); // Use actual server time, don't force a minimum
+    
+    // Stop timer
+    stopTimer();
+    
+    // Immediately reveal all bombs in client grid for better UX
+    if (clientGrid.length > 0) {
+      setClientGrid(grid => {
+        const newGrid = JSON.parse(JSON.stringify(grid));
+        
+        // Reveal all bombs
+        for (let r = 0; r < newGrid.length; r++) {
+          for (let c = 0; c < newGrid[r].length; c++) {
+            if (newGrid[r][c].value === -1) {
+              newGrid[r][c].revealed = true;
+            }
+          }
+        }
+        
+        return newGrid;
+      });
     }
-  }, []);
+    
+    // Use a ref to track if game was restarted before modal appears
+    const wasRestartedRef = { current: false };
+    
+    // Show modal after animation, but only if game hasn't been restarted
+    const modalTimeout = setTimeout(() => {
+      if (!wasRestartedRef.current) {
+        setShowLoseModal(true);
+        setShowWinModal(false);
+      }
+    }, 1500);
+    
+    // Expose a way to cancel the modal if game is restarted
+    const cancelModal = () => {
+      wasRestartedRef.current = true;
+      clearTimeout(modalTimeout);
+    };
+
+    // Add the cancel function to a ref for access in handleRestart
+    cancelModalRef.current = cancelModal;
+  }, [timer, stopTimer, clientGrid]);
+  
+  // Handle win condition
+  const handleWin = useCallback((state: GameState) => {
+    // Start animation
+    setWinAnimation(true);
+    
+    // Try using gameTime if winTime is not available
+    const serverWinTime = state.winTime !== undefined ? state.winTime : 
+                        (state.gameTime !== undefined ? state.gameTime : timer);
+    
+    setFinalTime(serverWinTime); // Use actual server time, don't force a minimum
+    
+    // Stop timer
+    stopTimer();
+    
+    // Use a ref to track if game was restarted before modal appears
+    const wasRestartedRef = { current: false };
+    
+    // Show modal after animation, but only if game hasn't been restarted
+    const modalTimeout = setTimeout(() => {
+      if (!wasRestartedRef.current) {
+        setShowLoseModal(false);
+        setShowWinModal(true);
+      }
+    }, 1500);
+    
+    // Expose a way to cancel the modal if game is restarted
+    const cancelModal = () => {
+      wasRestartedRef.current = true;
+      clearTimeout(modalTimeout);
+    };
+
+    // Add the cancel function to a ref for access in handleRestart
+    cancelModalRef.current = cancelModal;
+  }, [timer, stopTimer]);
   
   // Format timer as xxmin xxs xxxms
   const formatTimer = useCallback((t: number): string => {
@@ -241,6 +290,9 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
       startTimer();
     }
     
+    // Check if this cell is a bomb before revealing
+    const isBomb = clientGrid[row][col].value === -1;
+    
     // Apply optimistic update
     setClientGrid(grid => {
       // Create a new grid to avoid mutating state
@@ -249,8 +301,17 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
       // Reveal the cell
       newGrid[row][col].revealed = true;
       
-      // Show bomb animation if needed
-      if (newGrid[row][col].value === -1) {
+      // If this is a bomb, also reveal all other bombs immediately for better UX
+      if (isBomb) {
+        // Reveal all other bombs
+        for (let r = 0; r < newGrid.length; r++) {
+          for (let c = 0; c < newGrid[r].length; c++) {
+            if (newGrid[r][c].value === -1) {
+              newGrid[r][c].revealed = true;
+            }
+          }
+        }
+        
         setBombAnimation(true);
         // Store final time in seconds (milliseconds / 1000) - ensure positive value
         setFinalTime(Math.max(localTimerRef.current / 1000, 1));
@@ -262,7 +323,7 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     // Send action to server
     gameService.revealCell(row, col);
     return true;
-  }, [clientGrid, gameState.gameOver, gameState.gameWon, gameStarted]);
+  }, [clientGrid, gameState.gameOver, gameState.gameWon, gameStarted, startTimer]);
   
   // Simple dedicated flag toggling function
   const toggleFlagCell = useCallback((row: number, col: number) => {
@@ -391,11 +452,20 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
   
   // Handle game restart
   const handleRestart = useCallback(() => {
-    // Immediately hide modals and reset animations
-    setShowLoseModal(false);
-    setShowWinModal(false);
+    // Cancel any pending modals
+    if (cancelModalRef.current) {
+      cancelModalRef.current();
+      cancelModalRef.current = null;
+    }
+
+    // Force cleanup of any animations by actually removing the animation classes
+    // This prevents animation from continuing despite restarts
     setBombAnimation(false);
     setWinAnimation(false);
+    
+    // Immediately hide modals
+    setShowLoseModal(false);
+    setShowWinModal(false);
     
     // Properly reset timer
     setTimer(0.001); // Small non-zero value to ensure display updates
@@ -420,7 +490,7 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
         startTimer();
       }
     }, 100);
-  }, [startTimer]);
+  }, [startTimer, stopTimer, gameStarted]);
   
   // ----------------
   // Mouse Event Handlers

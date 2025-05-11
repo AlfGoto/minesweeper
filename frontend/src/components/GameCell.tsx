@@ -9,6 +9,7 @@ interface GameCellProps {
   isWinAnimation: boolean;
   onCellClick: (row: number, col: number) => void;
   onCellRightClick: (e: React.MouseEvent, row: number, col: number) => void;
+  disabled?: boolean;
 }
 
 const getCellColor = (cell: Cell, rowIndex: number, colIndex: number) => {
@@ -55,6 +56,7 @@ const GameCell = ({
   isWinAnimation,
   onCellClick,
   onCellRightClick,
+  disabled = false,
 }: GameCellProps) => {
   // Track mouse button states
   const [leftMouseDown, setLeftMouseDown] = useState(false);
@@ -69,7 +71,7 @@ const GameCell = ({
     flex items-center justify-center 
     text-xs font-bold 
     ${getNumberColor(cell.value)} 
-    overflow-hidden cell-base cursor-pointer
+    overflow-hidden cell-base ${disabled ? 'cursor-default' : 'cursor-pointer'}
     ${cell.flagged && !cell.revealed ? 'cell-flagged' : ''}
     ${leftMouseDown && rightMouseDown ? 'cell-chord-active' : ''}
   `;
@@ -79,13 +81,15 @@ const GameCell = ({
 
   // Effect to handle chord action when both buttons are pressed
   useEffect(() => {
-    if (leftMouseDown && rightMouseDown && cell.revealed && cell.value > 0) {
+    if (!disabled && leftMouseDown && rightMouseDown && cell.revealed && cell.value > 0) {
       onCellClick(rowIndex, colIndex);
     }
-  }, [leftMouseDown, rightMouseDown, cell, rowIndex, colIndex, onCellClick]);
+  }, [leftMouseDown, rightMouseDown, cell, rowIndex, colIndex, onCellClick, disabled]);
 
   // Left click handler
   const handleLeftClick = (e: React.MouseEvent) => {
+    if (disabled) return;
+
     e.preventDefault();
     setLeftMouseDown(true);
 
@@ -97,6 +101,8 @@ const GameCell = ({
 
   // Right click handler - specifically for flag toggling
   const handleRightClick = (e: React.MouseEvent) => {
+    if (disabled) return;
+
     e.preventDefault();
     e.stopPropagation();
 
@@ -113,6 +119,8 @@ const GameCell = ({
 
   // Mouse down handler - route to specific handlers
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (disabled) return;
+
     e.preventDefault();
 
     if (e.button === 0) {
@@ -177,12 +185,13 @@ const GameCell = ({
     >
       <button
         ref={buttonRef}
-        className="absolute inset-0 w-full h-full cursor-pointer z-10"
+        className={`absolute inset-0 w-full h-full ${disabled ? 'cursor-default' : 'cursor-pointer'} z-10 ${disabled ? 'pointer-events-none' : ''}`}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onContextMenu={handleContextMenu}
         data-row={rowIndex}
         data-col={colIndex}
+        disabled={disabled}
       />
 
       {/* Cell content */}
@@ -194,9 +203,14 @@ const GameCell = ({
 
       {/* Flag element - separate from cell content for animation */}
       {cell.flagged && !cell.revealed && (
-        <div className="absolute inset-0 flex items-center justify-center text-[20px] z-5">
+        <div className="absolute inset-0 flex items-center justify-center text-[20px] z-5 animate-fall">
           🚩
         </div>
+      )}
+
+      {/* Bomb indicator (invisible) for animation targeting */}
+      {cell.value === -1 && (
+        <div className="sr-only" data-is-bomb="true"></div>
       )}
     </div>
   );

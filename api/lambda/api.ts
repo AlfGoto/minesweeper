@@ -137,7 +137,9 @@ async function saveGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyRes
     usedFlags, 
     bombsExploded,
     noFlagWin,
-    timePlayed
+    timePlayed,
+    cellsRevealed,
+    gameRestarts
   } = body;
 
   if (!userId || !status) {
@@ -175,7 +177,9 @@ async function saveGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyRes
     usedFlags: usedFlags !== undefined ? usedFlags : null,
     bombsExploded: bombsExploded !== undefined ? bombsExploded : null,
     noFlagWin: noFlagWin !== undefined ? noFlagWin : null,
-    timePlayed: timePlayed !== undefined ? timePlayed : null
+    timePlayed: timePlayed !== undefined ? timePlayed : null,
+    cellsRevealed: cellsRevealed !== undefined ? cellsRevealed : null,
+    gameRestarts: gameRestarts !== undefined ? gameRestarts : null
   };
 
   // Use AWS SDK v3 pattern for DynamoDB to save the game record
@@ -224,7 +228,9 @@ async function saveGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyRes
           // Include additional stats for the best time records as well
           usedFlags: usedFlags !== undefined ? usedFlags : null,
           noFlagWin: noFlagWin !== undefined ? noFlagWin : null,
-          timePlayed: timePlayed !== undefined ? timePlayed : null
+          timePlayed: timePlayed !== undefined ? timePlayed : null,
+          cellsRevealed: cellsRevealed !== undefined ? cellsRevealed : null,
+          gameRestarts: gameRestarts !== undefined ? gameRestarts : null
         };
         
         await dynamoDB.send(
@@ -545,6 +551,12 @@ async function getUserStats(userId: string): Promise<APIGatewayProxyResult> {
   let noFlagWins = 0;
   let totalTimePlayed = 0;
   let gamesWithTimePlayed = 0;
+  // Additional new stats
+  let totalCellsRevealed = 0;
+  let totalGameRestarts = 0;
+  let abandonedGames = 0;
+  let restartedGames = 0;
+  let totalFlagsUsed = 0; // Track total flags used
   
   // Filter out records that aren't regular game records
   const regularGames = games.filter((game: any) => 
@@ -577,6 +589,22 @@ async function getUserStats(userId: string): Promise<APIGatewayProxyResult> {
       gamesWithTimePlayed++;
     }
     
+    // Track cells revealed
+    if (game.cellsRevealed && typeof game.cellsRevealed === 'number') {
+      totalCellsRevealed += game.cellsRevealed;
+    }
+
+    // Track game restarts 
+    if (game.gameRestarts && typeof game.gameRestarts === 'number') {
+      totalGameRestarts += game.gameRestarts;
+    }
+    
+    // Track flags used
+    if (game.usedFlags && typeof game.usedFlags === 'number') {
+      totalFlagsUsed += game.usedFlags;
+    }
+    
+    // Track game status categories
     if (game.status === 'success') {
       wins++;
       totalWinTime += game.time || 0;
@@ -586,6 +614,10 @@ async function getUserStats(userId: string): Promise<APIGatewayProxyResult> {
       }
     } else if (game.status === 'defeat') {
       losses++;
+    } else if (game.status === 'abandoned') {
+      abandonedGames++;
+    } else if (game.status === 'restarted') {
+      restartedGames++;
     }
   });
   
@@ -616,13 +648,19 @@ async function getUserStats(userId: string): Promise<APIGatewayProxyResult> {
     noFlagWins,
     timePlayed: totalTimePlayed,
     averageGameTime,
+    // Add additional new stats
+    totalCellsRevealed,
+    gameRestarts: totalGameRestarts,
+    abandonedGames,
+    restartedGames,
     recentGames: regularGames
       .sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
       .slice(0, 5)
       .map((game: any) => ({
         ...game,
         userId: game.rawUserId || userId, // Use the raw userId if available
-      }))
+      })),
+    totalFlagsUsed
   };
   
   return {
@@ -636,26 +674,50 @@ async function getUserStats(userId: string): Promise<APIGatewayProxyResult> {
  * Get a user's best (fastest) games
  */
 async function getUserBestGames(userId: string, limit: number = 5): Promise<APIGatewayProxyResult> {
-  // Format the user key with proper prefix
-  const userPK = `USER#${userId}`;
-  
-  // Query all games for this user
-  const params = {
-    TableName: TABLE_NAME,
-    KeyConditionExpression: 'userId = :userId AND begins_with(#ts, :datePrefix)',
-    ExpressionAttributeValues: {
-      ':userId': userPK,
-      ':datePrefix': 'DATE#',
-      ':status': 'success'
-    },
-    ExpressionAttributeNames: { 
-      '#ts': 'timestamp',
-      '#st': 'status'
-    },
-    FilterExpression: '#st = :status'
-  };
-  
   try {
+    const results = [];
+    
+    // STEP 1: Check for entries in the BEST partition first
+    const bestParams = {
+      TableName: TABLE_NAME,
+      KeyConditionExpression: 'userId = :best AND #ts = :sk',
+      ExpressionAttributeValues: {
+        ':best': 'BEST',
+        ':sk': `BEST#${userId}`
+      },
+      ExpressionAttributeNames: {
+        '#ts': 'timestamp'
+      }
+    };
+    
+    const bestTimeResult = await dynamoDB.send(new QueryCommand(bestParams));
+    const bestTimeRecord = bestTimeResult.Items && bestTimeResult.Items.length > 0 
+      ? bestTimeResult.Items[0] 
+      : null;
+    
+    if (bestTimeRecord && bestTimeRecord.time > 0) {
+      results.push({
+        ...bestTimeRecord,
+        userId: bestTimeRecord.rawUserId || userId,
+        status: 'success',
+        date: bestTimeRecord.date || new Date().toISOString()
+      });
+    }
+    
+    // STEP 2: Check regular game records 
+    const userPK = `USER#${userId}`;
+    const params = {
+      TableName: TABLE_NAME,
+      KeyConditionExpression: 'userId = :userId AND begins_with(#ts, :datePrefix)',
+      ExpressionAttributeValues: {
+        ':userId': userPK,
+        ':datePrefix': 'DATE#'
+      },
+      ExpressionAttributeNames: { 
+        '#ts': 'timestamp'
+      }
+    };
+    
     const result = await dynamoDB.send(new QueryCommand(params));
     
     // Transform results to standardize userId (remove prefix)
@@ -663,13 +725,58 @@ async function getUserBestGames(userId: string, limit: number = 5): Promise<APIG
       ...item,
       userId: item.rawUserId || (item.userId.startsWith('USER#') ? item.userId.substring(5) : item.userId),
       // Clean up the timestamp by removing prefix if needed
+      date: item.date || (item.timestamp.startsWith('DATE#') ? item.timestamp.substring(5) : item.timestamp),
       displayTimestamp: item.timestamp.startsWith('DATE#') ? item.timestamp.substring(5) : item.timestamp
     }));
     
-    // Sort by time (ascending) to get fastest times first and limit to top 5
-    const bestGames = allGames
+    // Filter to only include successful games with valid times
+    const successGames = allGames.filter(game => {
+      // Accept any of these conditions as a "successful" game:
+      // 1. status is 'success'
+      // 2. game has a time/successTime/winTime value > 0
+      const hasValidTime = 
+        (game.time && game.time > 0) || 
+        (game.successTime && game.successTime > 0) || 
+        (game.winTime && game.winTime > 0);
+      
+      return (
+        (game.status === 'success') && 
+        hasValidTime
+      );
+    });
+    
+    // Normalize the time field
+    const normalizedGames = successGames.map(game => ({
+      ...game,
+      // Use the first non-zero time value found
+      time: game.time || game.successTime || game.winTime || 0,
+      // Ensure date is properly formatted
+      date: game.date || new Date(game.displayTimestamp).toISOString()
+    }));
+    
+    // Add these to our results array
+    results.push(...normalizedGames);
+    
+    // Deduplicate (in case the same game is in both BEST and regular records)
+    const uniqueResults = [];
+    const seen = new Set();
+    
+    for (const game of results) {
+      // Use a combination of time and date as a unique key
+      const key = `${game.time}-${game.date}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueResults.push(game);
+      }
+    }
+    
+    // Sort by time (ascending) to get fastest times first and limit to requested count
+    const bestGames = uniqueResults
       .sort((a: any, b: any) => a.time - b.time)
       .slice(0, limit);
+    
+    // If we still have no results after all this, it's a true data issue
+    console.log(`Found ${bestGames.length} best games for user ${userId}`);
     
     return {
       statusCode: 200,

@@ -81,6 +81,8 @@ export default function Game() {
             winAnimation={winAnimation}
             onCellClick={handleCellClick}
             onCellRightClick={handleRightClick}
+            gameOver={gameOver}
+            gameWon={gameWon}
           />
         ) : (
           // Loading state

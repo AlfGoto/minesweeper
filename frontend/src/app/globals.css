@@ -181,6 +181,11 @@ body {
   }
 }
 
+/* Flag fall animation class */
+.animate-fall {
+  animation: fall 0.3s ease-out forwards;
+}
+
 @keyframes cellReveal {
   from { 
     transform: scale(0.9);

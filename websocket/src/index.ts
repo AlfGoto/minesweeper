@@ -92,6 +92,8 @@ interface GameState {
   noFlagUse: boolean;
   gameTime: number | null;
   time: number | null;
+  cellsRevealed: number;  // Track cells revealed
+  gameRestarts: number;   // Track number of game restarts
 }
 
 const games = new Map<string, GameState>();
@@ -231,7 +233,9 @@ function initializeGame(userId: string): GameState {
     bombsExploded: 0,
     noFlagUse: true,
     gameTime: null,
-    time: null
+    time: null,
+    cellsRevealed: 0,  // Initialize to 0
+    gameRestarts: 0    // Initialize to 0
   };
 }
 
@@ -300,6 +304,9 @@ io.on('connection', (socket) => {
       // Always reveal the clicked cell
       cell.revealed = true;
       
+      // Increment the cells revealed counter for the first cell
+      game.cellsRevealed = 1;
+      
       // Auto-reveal adjacent cells since it's a 0
       const directions = [
         [-1, -1], [-1, 0], [-1, 1],
@@ -367,6 +374,9 @@ io.on('connection', (socket) => {
           level.forEach(([r, c]) => {
             const cell = game.grid[r][c];
             cell.revealed = true;
+            
+            // Increment cellsRevealed for each automatically revealed cell
+            game.cellsRevealed++;
           });
           
           // Emit updated state after each level
@@ -465,6 +475,9 @@ io.on('connection', (socket) => {
 
     // Make sure to actually mark the cell as revealed
     cell.revealed = true;
+    
+    // Increment the cells revealed counter
+    game.cellsRevealed++;
 
     if (cell.value === -1) {
       game.gameOver = true;
@@ -934,6 +947,9 @@ io.on('connection', (socket) => {
         if (!targetCell.flagged && !targetCell.revealed) {
           targetCell.revealed = true;
           
+          // Increment the cells revealed counter
+          game.cellsRevealed++;
+          
           // Just collect zero cells - we'll process them with delay
           if (targetCell.value === 0) {
             zeroReveals.push({ row: newRow, col: newCol });
@@ -1234,38 +1250,113 @@ io.on('connection', (socket) => {
     // Track access
     trackGameAccess(userId);
     
+    // Check if we have an existing game that's started but not won/lost
+    if (games.has(userId)) {
+      const existingGame = games.get(userId)!;
+      
+      // Only save game data if the game has actually started
+      if (existingGame.gameStarted && !existingGame.gameOver && !existingGame.gameWon) {
+        try {
+          // Calculate the game time up to this point
+          const gameTime = existingGame.startTime ? Date.now() - existingGame.startTime : 0;
+          
+          // Remove trailing slash from API URL if present
+          const baseApiUrl = (process.env.API_URL || '').replace(/\/$/, '');
+          const apiEndpoint = `${baseApiUrl}/games`;
+          
+          // Only try to save if we have a valid API URL
+          if (baseApiUrl) {
+            // Get user info from socket auth if available
+            const userName = socket.handshake.auth.userName || userId;
+            const userImage = socket.handshake.auth.userImage || null;
+            
+            const payload = {
+              userId,
+              userName,
+              userImage,
+              status: 'restarted',  // New status for restarted games
+              time: gameTime,
+              // Include additional stats
+              bombsExploded: existingGame.bombsExploded,
+              usedFlags: existingGame.flagsPlaced,
+              cellsRevealed: existingGame.cellsRevealed,  // Include cells revealed
+              timePlayed: gameTime
+            };
+            
+            // Fire and forget - we don't need to wait for the response
+            axios.post(apiEndpoint, payload, { timeout: 3000 })
+              .catch(error => {
+                console.error(`Failed to save restarted game for user ${userId}:`, error.message);
+              });
+          }
+        } catch (error) {
+          console.error('Error saving restarted game:', error);
+        }
+      }
+    }
+    
+    // Create a new game, preserving the restart count if possible
+    const gameRestarts = games.has(userId) ? (games.get(userId)!.gameRestarts || 0) + 1 : 0;
     const newGame = initializeGame(userId);
+    newGame.gameRestarts = gameRestarts;  // Set the restart count
+    
     games.set(userId, newGame);
     io.emit('gameState', newGame);
   });
 
   socket.on('disconnect', () => {
+    console.log(`User ${userId} disconnected, cleaning up game state`);
+    
     // Check if we have a game for this user
     if (games.has(userId)) {
       const game = games.get(userId)!;
       
-      // Only clean up games that are not in progress
-      // This means either:
-      // 1. The game hasn't started yet
-      // 2. The game is already over (won or lost)
-      if (!game.gameStarted || game.gameOver || game.gameWon) {
-        games.delete(userId);
-        lastAccessTime.delete(userId);
-      } else {
-        // Optional: Set a cleanup timeout for games in progress
-        // If they don't reconnect within 30 minutes, clean up anyway
-        setTimeout(() => {
-          // Check if the game still exists and hasn't been updated
-          if (games.has(userId)) {
-            const currentGame = games.get(userId)!;
-            // Only delete if it's the same game instance and still in progress
-            if (currentGame === game && !currentGame.gameOver && !currentGame.gameWon) {
-              games.delete(userId);
-              lastAccessTime.delete(userId);
-            }
+      // Save the game result if it's in progress and hasn't been completed
+      if (game.gameStarted && !game.gameOver && !game.gameWon) {
+        try {
+          // Calculate the game time up to this point
+          const gameTime = game.startTime ? Date.now() - game.startTime : 0;
+          
+          // Remove trailing slash from API URL if present
+          const baseApiUrl = (process.env.API_URL || '').replace(/\/$/, '');
+          const apiEndpoint = `${baseApiUrl}/games`;
+          
+          // Only try to save if we have a valid API URL
+          if (baseApiUrl) {
+            // Get user info from socket auth if available
+            const userName = socket.handshake.auth.userName || userId;
+            const userImage = socket.handshake.auth.userImage || null;
+            
+            const payload = {
+              userId,
+              userName,
+              userImage,
+              status: 'abandoned', // Mark as abandoned game
+              successTime: null,
+              time: gameTime,
+              // Include additional stats
+              bombsExploded: game.bombsExploded,
+              usedFlags: game.flagsPlaced,
+              cellsRevealed: game.cellsRevealed,  // Include cells revealed
+              gameRestarts: game.gameRestarts,    // Include game restarts
+              timePlayed: gameTime
+            };
+            
+            // Fire and forget - no need to wait for response as user disconnected
+            axios.post(apiEndpoint, payload, { timeout: 3000 })
+              .catch(error => {
+                console.error(`Failed to save abandoned game for user ${userId}:`, error.message);
+              });
           }
-        }, 30 * 60 * 1000); // 30 minutes
+        } catch (error) {
+          console.error('Error saving abandoned game:', error);
+        }
       }
+      
+      // Immediately clean up the game to free memory
+      games.delete(userId);
+      lastAccessTime.delete(userId);
+      console.log(`Removed game state for disconnected user ${userId}`);
     }
   });
 });
