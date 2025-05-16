@@ -4,7 +4,9 @@ import {
   PutCommand,
   QueryCommand, 
   ScanCommand,
-  DeleteCommand
+  DeleteCommand,
+  GetCommand,
+  UpdateCommand
 } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
@@ -190,6 +192,26 @@ async function saveGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyRes
     })
   );
 
+  // Update aggregated stats for this user
+  try {
+    await updateUserStats({
+      userId,
+      userName: userName || userId,
+      userImage: userImage || null,
+      status,
+      timePlayed: timePlayed !== undefined ? timePlayed : gameTime, // Use timePlayed if available, otherwise fallback to gameTime
+      cellsRevealed: cellsRevealed !== undefined ? cellsRevealed : 0,
+      usedFlags: usedFlags !== undefined ? usedFlags : 0,
+      bombsExploded: bombsExploded !== undefined ? bombsExploded : 0,
+      noFlagWin: noFlagWin === true,
+      gameTime: gameTime > 0 ? gameTime : 0,
+      gameRestarts: gameRestarts !== undefined ? gameRestarts : 0
+    });
+  } catch (error) {
+    console.error('Error updating user stats:', error);
+    // Continue - don't fail the operation if stats update fails
+  }
+
   // If this is a successful game and has a time, update best time if appropriate
   if (status === 'success' && gameTime > 0) {
     try {
@@ -249,10 +271,7 @@ async function saveGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyRes
   return {
     statusCode: 200,
     headers,
-    body: JSON.stringify({ 
-      message: 'Game result stored successfully',
-      item: gameItem
-    }),
+    body: JSON.stringify({ message: 'Game saved successfully' }),
   };
 }
 
@@ -504,170 +523,128 @@ async function getUserLeaderboardContext(userId: string): Promise<APIGatewayProx
  * Get stats for a specific user
  */
 async function getUserStats(userId: string): Promise<APIGatewayProxyResult> {
-  // Format the user key with proper prefix
-  const userPK = `USER#${userId}`;
-  
-  // Query all games for this user
-  const params = {
-    TableName: TABLE_NAME,
-    KeyConditionExpression: 'userId = :userId',
-    ExpressionAttributeValues: {
-      ':userId': userPK
-    }
-  };
-  
-  const result = await dynamoDB.send(new QueryCommand(params));
-  const games = result.Items || [];
-  
-  // Check the BEST partition for the user's best time
-  const bestParams = {
-    TableName: TABLE_NAME,
-    KeyConditionExpression: 'userId = :best AND #ts = :sk',
-    ExpressionAttributeValues: {
-      ':best': 'BEST',
-      ':sk': `BEST#${userId}`
-    },
-    ExpressionAttributeNames: {
-      '#ts': 'timestamp'
-    }
-  };
-  
-  const bestTimeResult = await dynamoDB.send(new QueryCommand(bestParams));
-  const bestTimeRecord = bestTimeResult.Items && bestTimeResult.Items.length > 0 
-    ? bestTimeResult.Items[0] 
-    : null;
-  
-  // Calculate stats
-  let totalGames = 0;
-  let wins = 0;
-  let losses = 0;
-  let fastestWin = bestTimeRecord ? bestTimeRecord.time : Number.MAX_SAFE_INTEGER;
-  let averageWinTime = 0;
-  let totalWinTime = 0;
-  let userName = bestTimeRecord?.userName || userId;
-  let userImage = bestTimeRecord?.userImage || null;
-  // New stats
-  let bombsExploded = 0;
-  let noFlagWins = 0;
-  let totalTimePlayed = 0;
-  let gamesWithTimePlayed = 0;
-  // Additional new stats
-  let totalCellsRevealed = 0;
-  let totalGameRestarts = 0;
-  let abandonedGames = 0;
-  let restartedGames = 0;
-  let totalFlagsUsed = 0; // Track total flags used
-  
-  // Filter out records that aren't regular game records
-  const regularGames = games.filter((game: any) => 
-    game.timestamp.startsWith('DATE#')
-  );
-  totalGames = regularGames.length;
-  
-  regularGames.forEach((game: any) => {
-    // If we have a userName or userImage from any record, use the most recent one
-    if (game.userName && !userName) {
-      userName = game.userName;
-    }
-    if (game.userImage && !userImage) {
-      userImage = game.userImage;
-    }
+  try {
+    const statPK = `STAT#${userId}`;
+    const statSK = 'STAT';
     
-    // Track bombs exploded if available
-    if (game.bombsExploded) {
-      bombsExploded += game.bombsExploded;
-    }
-    
-    // Track no flag wins if available
-    if (game.status === 'success' && game.noFlagWin === true) {
-      noFlagWins++;
-    }
-    
-    // Track time played if available
-    if (game.timePlayed && typeof game.timePlayed === 'number') {
-      totalTimePlayed += game.timePlayed;
-      gamesWithTimePlayed++;
-    }
-    
-    // Track cells revealed
-    if (game.cellsRevealed && typeof game.cellsRevealed === 'number') {
-      totalCellsRevealed += game.cellsRevealed;
-    }
-
-    // Track game restarts 
-    if (game.gameRestarts && typeof game.gameRestarts === 'number') {
-      totalGameRestarts += game.gameRestarts;
-    }
-    
-    // Track flags used
-    if (game.usedFlags && typeof game.usedFlags === 'number') {
-      totalFlagsUsed += game.usedFlags;
-    }
-    
-    // Track game status categories
-    if (game.status === 'success') {
-      wins++;
-      totalWinTime += game.time || 0;
-      // Only use game times for fastestWin calculation if we don't have a bestTimeRecord
-      if (!bestTimeRecord) {
-        fastestWin = Math.min(fastestWin, game.time || Number.MAX_SAFE_INTEGER);
+    const result = await dynamoDB.send(new GetCommand({
+      TableName: TABLE_NAME,
+      Key: {
+        userId: statPK,
+        timestamp: statSK
       }
-    } else if (game.status === 'defeat') {
-      losses++;
-    } else if (game.status === 'abandoned') {
-      abandonedGames++;
-    } else if (game.status === 'restarted') {
-      restartedGames++;
+    }));
+    
+    if (result.Item) {
+      const stats = result.Item;
+      
+      // Calculate derived stats
+      const totalGames = stats.gamesPlayed || 0;
+      const wins = stats.gamesWon || 0;
+      const totalWinTime = stats.totalWinTime || 0;
+      const timePlayed = stats.totalTimePlayed || 0;
+      
+      // Calculate averages
+      const averageWinTime = wins > 0 ? Math.round(totalWinTime / wins) : 0;
+      const averageGameTime = totalGames > 0 ? Math.round(timePlayed / totalGames) : 0;
+      
+      // Rename fields to match frontend expectations
+      const transformedStats = {
+        ...stats,
+        userId: stats.rawUserId || userId,
+        totalGames: stats.gamesPlayed || 0,
+        totalFlagsUsed: stats.totalFlagsPlaced || 0,
+        averageWinTime,
+        averageGameTime,
+        // Ensure all fields have default values
+        wins: stats.gamesWon || 0,
+        losses: stats.gamesLost || 0,
+        winRate: totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0,
+        bombsExploded: stats.totalBombsExploded || 0,
+        noFlagWins: stats.noFlagWins || 0,
+        timePlayed: stats.totalTimePlayed || 0,
+        totalCellsRevealed: stats.totalCellsRevealed || 0,
+        gameRestarts: stats.totalGameRestarts || 0,
+        abandonedGames: stats.gamesAbandoned || 0,
+        restartedGames: stats.gamesRestarted || 0,
+        recentGames: stats.recentGames || await getRecentGames(userId, 5)
+      };
+      
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(transformedStats)
+      };
     }
-  });
-  
-  // Calculate average win time
-  averageWinTime = wins > 0 ? Math.round(totalWinTime / wins) : 0;
-  
-  // Calculate average game time
-  const averageGameTime = gamesWithTimePlayed > 0 ? Math.round(totalTimePlayed / gamesWithTimePlayed) : 0;
-  
-  // If no wins, set fastestWin to 0
-  if (fastestWin === Number.MAX_SAFE_INTEGER) {
-    fastestWin = 0;
+    
+    // If no stats exist yet, return empty stats
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        userId,
+        totalGames: 0,
+        wins: 0,
+        losses: 0,
+        winRate: 0,
+        bombsExploded: 0,
+        noFlagWins: 0,
+        timePlayed: 0,
+        averageGameTime: 0,
+        totalCellsRevealed: 0,
+        gameRestarts: 0,
+        abandonedGames: 0,
+        restartedGames: 0,
+        totalFlagsUsed: 0,
+        averageWinTime: 0,
+        fastestWin: null,
+        recentGames: await getRecentGames(userId, 5)
+      })
+    };
+  } catch (error) {
+    console.error(`Error in getUserStats for ${userId}:`, error);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ 
+        message: 'Error fetching user stats',
+        error: error instanceof Error ? error.message : String(error)
+      })
+    };
   }
-  
-  // Create stats object
-  const stats = {
-    userId,
-    userName,
-    userImage,
-    totalGames,
-    wins,
-    losses,
-    winRate: totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0,
-    fastestWin,
-    averageWinTime,
-    // Add new stats
-    bombsExploded,
-    noFlagWins,
-    timePlayed: totalTimePlayed,
-    averageGameTime,
-    // Add additional new stats
-    totalCellsRevealed,
-    gameRestarts: totalGameRestarts,
-    abandonedGames,
-    restartedGames,
-    recentGames: regularGames
-      .sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
-      .slice(0, 5)
-      .map((game: any) => ({
-        ...game,
-        userId: game.rawUserId || userId, // Use the raw userId if available
-      })),
-    totalFlagsUsed
-  };
-  
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify(stats)
-  };
+}
+
+/**
+ * Get recent games for a user
+ */
+async function getRecentGames(userId: string, limit: number = 5): Promise<any[]> {
+  try {
+    const userPK = `USER#${userId}`;
+    
+    const params = {
+      TableName: TABLE_NAME,
+      KeyConditionExpression: 'userId = :userId AND begins_with(#ts, :datePrefix)',
+      ExpressionAttributeValues: {
+        ':userId': userPK,
+        ':datePrefix': 'DATE#'
+      },
+      ExpressionAttributeNames: { 
+        '#ts': 'timestamp'
+      },
+      ScanIndexForward: false, // Sort by timestamp descending (newest first)
+      Limit: limit
+    };
+    
+    const result = await dynamoDB.send(new QueryCommand(params));
+    
+    return (result.Items || []).map((item: any) => ({
+      ...item,
+      userId: item.rawUserId || (item.userId.startsWith('USER#') ? item.userId.substring(5) : item.userId),
+    }));
+  } catch (error) {
+    console.error(`Error fetching recent games for user ${userId}:`, error);
+    return [];
+  }
 }
 
 /**
@@ -794,4 +771,174 @@ async function getUserBestGames(userId: string, limit: number = 5): Promise<APIG
       })
     };
   }
+}
+
+/**
+ * Update or create the aggregated stats for a user
+ */
+interface UpdateStatsParams {
+  userId: string;
+  userName: string;
+  userImage: string | null;
+  status: string;
+  timePlayed: number;
+  cellsRevealed: number;
+  usedFlags: number;
+  bombsExploded: number;
+  noFlagWin: boolean;
+  gameTime: number;
+  gameRestarts: number;
+}
+
+async function updateUserStats(params: UpdateStatsParams): Promise<void> {
+  const {
+    userId,
+    userName,
+    userImage,
+    status,
+    timePlayed,
+    cellsRevealed,
+    usedFlags,
+    bombsExploded,
+    noFlagWin,
+    gameTime,
+    gameRestarts
+  } = params;
+  
+  const statPK = `STAT#${userId}`;
+  const statSK = 'STAT';
+  
+  // First, check if the stats entity exists
+  const existingStats = await dynamoDB.send(new GetCommand({
+    TableName: TABLE_NAME,
+    Key: {
+      userId: statPK,
+      timestamp: statSK
+    }
+  }));
+  
+  // Calculate TTL for statistics (1 year)
+  const ttl = Math.floor(Date.now() / 1000) + (365 * 24 * 60 * 60);
+  
+  if (!existingStats.Item) {
+    // Create a new stats entity if it doesn't exist
+    const statsItem = {
+      userId: statPK,
+      timestamp: statSK,
+      rawUserId: userId,
+      userName,
+      userImage,
+      gamesPlayed: 1,
+      gamesWon: status === 'success' ? 1 : 0,
+      gamesLost: status === 'defeat' ? 1 : 0,
+      gamesAbandoned: status === 'abandoned' ? 1 : 0,
+      gamesRestarted: status === 'restarted' ? 1 : 0,
+      totalTimePlayed: timePlayed > 0 ? timePlayed : 0,
+      totalCellsRevealed: cellsRevealed > 0 ? cellsRevealed : 0,
+      totalFlagsPlaced: usedFlags > 0 ? usedFlags : 0,
+      totalBombsExploded: bombsExploded > 0 ? bombsExploded : 0,
+      noFlagWins: (status === 'success' && noFlagWin) ? 1 : 0,
+      fastestWin: (status === 'success' && gameTime > 0) ? gameTime : null,
+      totalWinTime: (status === 'success' && gameTime > 0) ? gameTime : 0,
+      totalGameRestarts: gameRestarts > 0 ? gameRestarts : 0,
+      lastUpdated: new Date().toISOString(),
+      ttl
+    };
+    
+    await dynamoDB.send(new PutCommand({
+      TableName: TABLE_NAME,
+      Item: statsItem
+    }));
+    
+    return;
+  }
+  
+  // Update existing stats entity
+  const existingItem = existingStats.Item;
+  
+  // Calculate increments for each stat based on the game status
+  const isWin = status === 'success';
+  const isLoss = status === 'defeat';
+  const isAbandoned = status === 'abandoned';
+  const isRestarted = status === 'restarted';
+  
+  // Calculate new fastest win time
+  let newFastestWin = existingItem.fastestWin || null;
+  if (isWin && gameTime > 0) {
+    if (!newFastestWin || gameTime < newFastestWin) {
+      newFastestWin = gameTime;
+    } else {
+      newFastestWin = existingItem.fastestWin;
+    }
+  } else {
+    newFastestWin = existingItem.fastestWin || null;
+  }
+  
+  // Store up to 5 recent games in the stats entity
+  let recentGames = existingItem.recentGames || [];
+  
+  // Try to add this game to recent games
+  const recentGame = {
+    status,
+    time: gameTime,
+    date: new Date().toISOString(),
+    usedFlags,
+    cellsRevealed,
+    bombsExploded
+  };
+  
+  recentGames.unshift(recentGame); // Add to beginning
+  recentGames = recentGames.slice(0, 5); // Keep only 5 most recent
+  
+  // Create update expression parts
+  const updateExpressions = [
+    'gamesPlayed = if_not_exists(gamesPlayed, :zero) + :one',
+    'gamesWon = if_not_exists(gamesWon, :zero) + :win',
+    'gamesLost = if_not_exists(gamesLost, :zero) + :loss',
+    'gamesAbandoned = if_not_exists(gamesAbandoned, :zero) + :abandoned',
+    'gamesRestarted = if_not_exists(gamesRestarted, :zero) + :restarted',
+    'totalTimePlayed = if_not_exists(totalTimePlayed, :zero) + :timePlayed',
+    'totalCellsRevealed = if_not_exists(totalCellsRevealed, :zero) + :cellsRevealed',
+    'totalFlagsPlaced = if_not_exists(totalFlagsPlaced, :zero) + :usedFlags',
+    'totalBombsExploded = if_not_exists(totalBombsExploded, :zero) + :bombsExploded',
+    'noFlagWins = if_not_exists(noFlagWins, :zero) + :noFlagWin',
+    'totalWinTime = if_not_exists(totalWinTime, :zero) + :winTime',
+    'totalGameRestarts = if_not_exists(totalGameRestarts, :zero) + :gameRestarts',
+    'fastestWin = :fastestWin',
+    'userName = :userName',
+    'userImage = :userImage',
+    'lastUpdated = :now',
+    'ttl = :ttl',
+    'recentGames = :recentGames'
+  ];
+  
+  await dynamoDB.send(new UpdateCommand({
+    TableName: TABLE_NAME,
+    Key: {
+      userId: statPK,
+      timestamp: statSK
+    },
+    UpdateExpression: `SET ${updateExpressions.join(', ')}`,
+    ExpressionAttributeValues: {
+      ':one': 1,
+      ':win': isWin ? 1 : 0,
+      ':loss': isLoss ? 1 : 0,
+      ':abandoned': isAbandoned ? 1 : 0,
+      ':restarted': isRestarted ? 1 : 0,
+      ':zero': 0,
+      ':timePlayed': timePlayed > 0 ? timePlayed : 0,
+      ':cellsRevealed': cellsRevealed > 0 ? cellsRevealed : 0,
+      ':usedFlags': usedFlags > 0 ? usedFlags : 0,
+      ':bombsExploded': bombsExploded > 0 ? bombsExploded : 0,
+      ':noFlagWin': (isWin && noFlagWin) ? 1 : 0,
+      ':winTime': (isWin && gameTime > 0) ? gameTime : 0,
+      ':gameRestarts': gameRestarts > 0 ? gameRestarts : 0,
+      ':fastestWin': newFastestWin,
+      ':userName': userName,
+      ':userImage': userImage,
+      ':now': new Date().toISOString(),
+      ':ttl': ttl,
+      ':recentGames': recentGames
+    }
+  }));
 } 

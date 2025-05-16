@@ -424,7 +424,8 @@ io.on('connection', (socket) => {
                     usedFlags: game.flagsPlaced,
                     noFlagWin: game.noFlagUse,
                     bombsExploded: game.bombsExploded,
-                    timePlayed: gameTime
+                    timePlayed: gameTime,
+                    cellsRevealed: game.cellsRevealed
                   };
                   
                   // Add timeout and continue game flow regardless of API result
@@ -520,7 +521,8 @@ io.on('connection', (socket) => {
             // Include additional stats
             bombsExploded: game.bombsExploded,
             usedFlags: game.flagsPlaced,
-            timePlayed: gameTime
+            timePlayed: gameTime,
+            cellsRevealed: game.cellsRevealed
           };
           
           // Add timeout and continue game flow regardless of API result
@@ -678,7 +680,8 @@ io.on('connection', (socket) => {
                     usedFlags: game.flagsPlaced,
                     noFlagWin: game.noFlagUse,
                     bombsExploded: game.bombsExploded,
-                    timePlayed: gameTime
+                    timePlayed: gameTime,
+                    cellsRevealed: game.cellsRevealed
                   };
                   
                   // Add timeout and continue game flow regardless of API result
@@ -765,7 +768,8 @@ io.on('connection', (socket) => {
             usedFlags: game.flagsPlaced,
             noFlagWin: game.noFlagUse,
             bombsExploded: game.bombsExploded,
-            timePlayed: gameTime
+            timePlayed: gameTime,
+            cellsRevealed: game.cellsRevealed
           };
           
           // Add timeout and continue game flow regardless of API result
@@ -908,7 +912,8 @@ io.on('connection', (socket) => {
               // Include additional stats
               bombsExploded: game.bombsExploded,
               usedFlags: game.flagsPlaced,
-              timePlayed: gameTime
+              timePlayed: gameTime,
+              cellsRevealed: game.cellsRevealed
             };
             
             // Add timeout and continue game flow regardless of API result
@@ -1103,7 +1108,8 @@ io.on('connection', (socket) => {
                   usedFlags: game.flagsPlaced,
                   noFlagWin: game.noFlagUse,
                   bombsExploded: game.bombsExploded,
-                  timePlayed: gameTime
+                  timePlayed: gameTime,
+                  cellsRevealed: game.cellsRevealed
                 };
                 
                 // Add timeout and continue game flow regardless of API result
@@ -1190,7 +1196,8 @@ io.on('connection', (socket) => {
               usedFlags: game.flagsPlaced,
               noFlagWin: game.noFlagUse,
               bombsExploded: game.bombsExploded,
-              timePlayed: gameTime
+              timePlayed: gameTime,
+              cellsRevealed: game.cellsRevealed
             };
             
             // Add timeout and continue game flow regardless of API result
@@ -1296,7 +1303,7 @@ io.on('connection', (socket) => {
               // Include additional stats
               bombsExploded: existingGame.bombsExploded,
               usedFlags: existingGame.flagsPlaced,
-              cellsRevealed: existingGame.cellsRevealed,  // Include cells revealed
+              cellsRevealed: existingGame.cellsRevealed,  // Already included
               timePlayed: gameTime
             };
             
@@ -1360,8 +1367,8 @@ io.on('connection', (socket) => {
               // Include additional stats
               bombsExploded: game.bombsExploded,
               usedFlags: game.flagsPlaced,
-              cellsRevealed: game.cellsRevealed,  // Include cells revealed
-              gameRestarts: game.gameRestarts,    // Include game restarts
+              cellsRevealed: game.cellsRevealed,  // Already included
+              gameRestarts: game.gameRestarts,    // Already included
               timePlayed: gameTime
             };
             

@@ -1,0 +1,264 @@
+{
+  "version": "41.0.0",
+  "artifacts": {
+    "MinesweeperStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "MinesweeperStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "MinesweeperStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://586794474219/eu-central-1",
+      "properties": {
+        "templateFile": "MinesweeperStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-deploy-role-586794474219-eu-central-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-cfn-exec-role-586794474219-eu-central-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-586794474219-eu-central-1/37518626a68e49d1c567ff6fb8c7a39f7f3e3a573d1c4b2736fa0191065dcd29.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "MinesweeperStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-lookup-role-586794474219-eu-central-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "MinesweeperStack.assets"
+      ],
+      "metadata": {
+        "/MinesweeperStack/GamesTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GamesTableB32AB610"
+          }
+        ],
+        "/MinesweeperStack/GamesHandler/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GamesHandlerServiceRoleDAB145DB"
+          }
+        ],
+        "/MinesweeperStack/GamesHandler/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GamesHandlerServiceRoleDefaultPolicyF88B6210"
+          }
+        ],
+        "/MinesweeperStack/GamesHandler/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GamesHandler5C92DF89"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApi0651EDC6"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApiDeploymentEEE7AC01190b1ea49247e0bf32c2bc998e7eac92"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApiDeploymentStageprodF47F719A"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApiEndpointA37ACBD7"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApiOPTIONS8DAA7646"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigames8576B59B"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigamesOPTIONSE3FCC1DE"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/POST/ApiPermission.MinesweeperStackMinesweeperApi87D4EFC7.POST..games": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigamesPOSTApiPermissionMinesweeperStackMinesweeperApi87D4EFC7POSTgamesA3E2FC99"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/POST/ApiPermission.Test.MinesweeperStackMinesweeperApi87D4EFC7.POST..games": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigamesPOSTApiPermissionTestMinesweeperStackMinesweeperApi87D4EFC7POSTgames7D2805E8"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigamesPOST65E97A48"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/GET/ApiPermission.MinesweeperStackMinesweeperApi87D4EFC7.GET..games": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigamesGETApiPermissionMinesweeperStackMinesweeperApi87D4EFC7GETgames7A7B597C"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/GET/ApiPermission.Test.MinesweeperStackMinesweeperApi87D4EFC7.GET..games": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigamesGETApiPermissionTestMinesweeperStackMinesweeperApi87D4EFC7GETgamesAA3C3E38"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/games/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApigamesGET63D81559"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/leaderboard/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApileaderboard7CD2E4FC"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/leaderboard/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApileaderboardOPTIONSE6DE3AC0"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/leaderboard/GET/ApiPermission.MinesweeperStackMinesweeperApi87D4EFC7.GET..leaderboard": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApileaderboardGETApiPermissionMinesweeperStackMinesweeperApi87D4EFC7GETleaderboard82196188"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/leaderboard/GET/ApiPermission.Test.MinesweeperStackMinesweeperApi87D4EFC7.GET..leaderboard": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApileaderboardGETApiPermissionTestMinesweeperStackMinesweeperApi87D4EFC7GETleaderboardEFE613B5"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/leaderboard/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApileaderboardGETF3A45CCC"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/stats/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApistats649E50B7"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/stats/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApistatsOPTIONS856B3E74"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/stats/{userId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApistatsuserId67066228"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/stats/{userId}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApistatsuserIdOPTIONSB6A9346A"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/stats/{userId}/GET/ApiPermission.MinesweeperStackMinesweeperApi87D4EFC7.GET..stats.{userId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApistatsuserIdGETApiPermissionMinesweeperStackMinesweeperApi87D4EFC7GETstatsuserId3BCDDABD"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/stats/{userId}/GET/ApiPermission.Test.MinesweeperStackMinesweeperApi87D4EFC7.GET..stats.{userId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApistatsuserIdGETApiPermissionTestMinesweeperStackMinesweeperApi87D4EFC7GETstatsuserIdD2D29FB9"
+          }
+        ],
+        "/MinesweeperStack/MinesweeperApi/Default/stats/{userId}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MinesweeperApistatsuserIdGETF45E8AD3"
+          }
+        ],
+        "/MinesweeperStack/ApiGatewayUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayUrl"
+          }
+        ],
+        "/MinesweeperStack/ApiDocsUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiDocsUrl"
+          }
+        ],
+        "/MinesweeperStack/GamesEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GamesEndpoint"
+          }
+        ],
+        "/MinesweeperStack/LeaderboardEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LeaderboardEndpoint"
+          }
+        ],
+        "/MinesweeperStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/MinesweeperStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/MinesweeperStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "MinesweeperStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1005.0"
+}

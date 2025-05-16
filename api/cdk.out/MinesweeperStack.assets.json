@@ -1,0 +1,36 @@
+{
+  "version": "41.0.0",
+  "files": {
+    "69a5be0c6399c7bdc813a29c465ea944ab6744c92566d02d7c366f528eab4e38": {
+      "displayName": "GamesHandler/Code",
+      "source": {
+        "path": "asset.69a5be0c6399c7bdc813a29c465ea944ab6744c92566d02d7c366f528eab4e38",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "586794474219-eu-central-1": {
+          "bucketName": "cdk-hnb659fds-assets-586794474219-eu-central-1",
+          "objectKey": "69a5be0c6399c7bdc813a29c465ea944ab6744c92566d02d7c366f528eab4e38.zip",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-file-publishing-role-586794474219-eu-central-1"
+        }
+      }
+    },
+    "37518626a68e49d1c567ff6fb8c7a39f7f3e3a573d1c4b2736fa0191065dcd29": {
+      "displayName": "MinesweeperStack Template",
+      "source": {
+        "path": "MinesweeperStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "586794474219-eu-central-1": {
+          "bucketName": "cdk-hnb659fds-assets-586794474219-eu-central-1",
+          "objectKey": "37518626a68e49d1c567ff6fb8c7a39f7f3e3a573d1c4b2736fa0191065dcd29.json",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-file-publishing-role-586794474219-eu-central-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
