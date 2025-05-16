@@ -315,7 +315,7 @@ io.on('connection', (socket) => {
       ];
       
       // First reveal just the clicked cell
-      io.emit('gameState', game);
+      socket.emit('gameState', game);
       
       // Collect all cells to reveal by level
       const visited = new Set([`${row},${col}`]);
@@ -380,7 +380,7 @@ io.on('connection', (socket) => {
           });
           
           // Emit updated state after each level
-          io.emit('gameState', game);
+          socket.emit('gameState', game);
           
           // Check for win condition after the last level is revealed
           if (index === levelByLevel.length - 1) {
@@ -430,34 +430,36 @@ io.on('connection', (socket) => {
                   // Add timeout and continue game flow regardless of API result
                   const apiTimeout = setTimeout(() => {
                     // Continue with game state update
-                    io.emit('gameState', game);
+                    socket.emit('gameState', game);
                   }, 1000);
                   
                   axios.post(apiEndpoint, payload, { timeout: 3000 })
                     .then(response => {
                       clearTimeout(apiTimeout);
                       // Continue with game state update
-                      io.emit('gameState', game);
+                      socket.emit('gameState', game);
                     })
                     .catch(error => {
-                      console.error('Failed to save game result:', error.message);
+                      // Simplified error logging
                       if (error.response) {
-                        console.error('Response data:', error.response.data);
-                        console.error('Response status:', error.response.status);
+                        console.error(`API error: ${error.response.status}`);
+                      } else {
+                        console.error('Network error saving game result');
                       }
                       clearTimeout(apiTimeout);
                       // Continue with game state update anyway
-                      io.emit('gameState', game);
+                      socket.emit('gameState', game);
                     });
                   
                   // Don't emit game state here - will be handled by promises
                   return;
                 } else {
-                  console.warn('No API URL configured - skipping game result save');
+                  // No API URL configured - continue without error
+                  socket.emit('gameState', game);
                 }
               } catch (error) {
-                console.error('Error in API call:', error);
-                io.emit('gameState', game);
+                console.error('Error in API call');
+                socket.emit('gameState', game);
               }
             }
           }
@@ -524,37 +526,40 @@ io.on('connection', (socket) => {
           // Add timeout and continue game flow regardless of API result
           const apiTimeout = setTimeout(() => {
             // Continue with game state update
-            io.emit('gameState', game);
+            socket.emit('gameState', game);
           }, 1000);
           
           axios.post(apiEndpoint, payload, { timeout: 3000 })
             .then(response => {
               clearTimeout(apiTimeout);
               // Continue with game state update
-              io.emit('gameState', game);
+              socket.emit('gameState', game);
             })
             .catch(error => {
-              console.error('Failed to save game result:', error.message);
+              // Simplified error logging
               if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
+                console.error(`API error: ${error.response.status}`);
+              } else {
+                console.error('Network error saving game result');
               }
               clearTimeout(apiTimeout);
               // Continue with game state update anyway
-              io.emit('gameState', game);
+              socket.emit('gameState', game);
             });
           
           // Don't emit game state here - will be handled by promises
           return;
         } else {
-          console.warn('No API URL configured - skipping game result save');
+          // No API URL configured - continue without error
+          socket.emit('gameState', game);
         }
       } catch (error) {
-        console.error('Error in API call:', error);
+        console.error('Error in API call');
+        socket.emit('gameState', game);
       }
       
       // Fallback - emit game state if we reach here
-      io.emit('gameState', game);
+      socket.emit('gameState', game);
       return;
     }
 
@@ -567,7 +572,7 @@ io.on('connection', (socket) => {
       ];
       
       // First emit just the clicked cell
-      io.emit('gameState', game);
+      socket.emit('gameState', game);
       
       // Collect all cells to reveal by level
       const visited = new Set([`${row},${col}`]);
@@ -629,7 +634,7 @@ io.on('connection', (socket) => {
           });
           
           // Emit updated state after each level
-          io.emit('gameState', game);
+          socket.emit('gameState', game);
           
           // Check for win condition after the last level is revealed
           if (index === levelByLevel.length - 1) {
@@ -679,35 +684,36 @@ io.on('connection', (socket) => {
                   // Add timeout and continue game flow regardless of API result
                   const apiTimeout = setTimeout(() => {
                     // Continue with game state update
-                    io.emit('gameState', game);
+                    socket.emit('gameState', game);
                   }, 1000);
                   
                   axios.post(apiEndpoint, payload, { timeout: 3000 })
                     .then(response => {
                       clearTimeout(apiTimeout);
                       // Continue with game state update
-                      io.emit('gameState', game);
+                      socket.emit('gameState', game);
                     })
                     .catch(error => {
-                      console.error('Failed to save game result:', error.message);
+                      // Simplified error logging
                       if (error.response) {
-                        console.error('Response data:', error.response.data);
-                        console.error('Response status:', error.response.status);
+                        console.error(`API error: ${error.response.status}`);
+                      } else {
+                        console.error('Network error saving game result');
                       }
                       clearTimeout(apiTimeout);
                       // Continue with game state update anyway
-                      io.emit('gameState', game);
+                      socket.emit('gameState', game);
                     });
                   
                   // Don't emit game state here - will be handled by promises
                   return;
                 } else {
-                  console.warn('No API URL configured - skipping game result save');
-                  io.emit('gameState', game);
+                  // No API URL configured - continue without error
+                  socket.emit('gameState', game);
                 }
               } catch (error) {
-                console.error('Error in API call:', error);
-                io.emit('gameState', game);
+                console.error('Error in API call');
+                socket.emit('gameState', game);
               }
             }
           }
@@ -765,38 +771,41 @@ io.on('connection', (socket) => {
           // Add timeout and continue game flow regardless of API result
           const apiTimeout = setTimeout(() => {
             // Continue with game state update
-            io.emit('gameState', game);
+            socket.emit('gameState', game);
           }, 1000);
           
           axios.post(apiEndpoint, payload, { timeout: 3000 })
             .then(response => {
               clearTimeout(apiTimeout);
               // Continue with game state update
-              io.emit('gameState', game);
+              socket.emit('gameState', game);
             })
             .catch(error => {
-              console.error('Failed to save game result:', error.message);
+              // Simplified error logging
               if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
+                console.error(`API error: ${error.response.status}`);
+              } else {
+                console.error('Network error saving game result');
               }
               clearTimeout(apiTimeout);
               // Continue with game state update anyway
-              io.emit('gameState', game);
+              socket.emit('gameState', game);
             });
           
           // Don't emit game state here - will be handled by promises
           return;
         } else {
-          console.warn('No API URL configured - skipping game result save');
+          // No API URL configured - continue without error
+          socket.emit('gameState', game);
         }
       } catch (error) {
-        console.error('Error in API call:', error);
+        console.error('Error in API call');
+        socket.emit('gameState', game);
       }
     }
     
     // Emit the game state
-    io.emit('gameState', game);
+    socket.emit('gameState', game);
   });
 
   // Also simplify the chord action
@@ -905,35 +914,37 @@ io.on('connection', (socket) => {
             // Add timeout and continue game flow regardless of API result
             const apiTimeout = setTimeout(() => {
               // Continue with game state update
-              io.emit('gameState', game);
+              socket.emit('gameState', game);
             }, 1000);
             
             axios.post(apiEndpoint, payload, { timeout: 3000 })
               .then(response => {
                 clearTimeout(apiTimeout);
                 // Continue with game state update
-                io.emit('gameState', game);
+                socket.emit('gameState', game);
               })
               .catch(error => {
-                console.error('Failed to save game result:', error.message);
+                // Simplified error logging
                 if (error.response) {
-                  console.error('Response data:', error.response.data);
-                  console.error('Response status:', error.response.status);
+                  console.error(`API error: ${error.response.status}`);
+                } else {
+                  console.error('Network error saving game result');
                 }
                 clearTimeout(apiTimeout);
                 // Continue with game state update anyway
-                io.emit('gameState', game);
+                socket.emit('gameState', game);
               });
             
             // Don't emit game state here - will be handled by promises
             return;
           }
         } catch (error) {
-          console.error('Error in API call:', error);
+          console.error('Error in API call');
+          socket.emit('gameState', game);
         }
         
         // Fallback - emit game state if we reach here
-        io.emit('gameState', game);
+        socket.emit('gameState', game);
         return;
       }
       
@@ -958,7 +969,7 @@ io.on('connection', (socket) => {
       }
       
       // Emit initial state with non-zero cells revealed
-      io.emit('gameState', game);
+      socket.emit('gameState', game);
       
       // Process zero reveals with 500ms delay if any exist
       if (zeroReveals.length > 0) {
@@ -1040,7 +1051,7 @@ io.on('connection', (socket) => {
               });
               
               // Emit updated state after each level
-              io.emit('gameState', game);
+              socket.emit('gameState', game);
               
               // Check for win on the very last expansion of the last zero
               if (zeroIndex === zeroReveals.length - 1 && index === levelByLevel.length - 1) {
@@ -1098,38 +1109,39 @@ io.on('connection', (socket) => {
                 // Add timeout and continue game flow regardless of API result
                 const apiTimeout = setTimeout(() => {
                   // Continue with game state update
-                  io.emit('gameState', game);
+                  socket.emit('gameState', game);
                 }, 1000);
                 
                 axios.post(apiEndpoint, payload, { timeout: 3000 })
                   .then(response => {
                     clearTimeout(apiTimeout);
                     // Continue with game state update
-                    io.emit('gameState', game);
+                    socket.emit('gameState', game);
                   })
                   .catch(error => {
-                    console.error('Failed to save game result:', error.message);
+                    // Simplified error logging
                     if (error.response) {
-                      console.error('Response data:', error.response.data);
-                      console.error('Response status:', error.response.status);
+                      console.error(`API error: ${error.response.status}`);
+                    } else {
+                      console.error('Network error saving game result');
                     }
                     clearTimeout(apiTimeout);
                     // Continue with game state update anyway
-                    io.emit('gameState', game);
+                    socket.emit('gameState', game);
                   });
                 
                 // Don't emit game state here - will be handled by promises
                 return;
               } else {
-                console.warn('No API URL configured - skipping game result save');
-                io.emit('gameState', game);
+                // No API URL configured - continue without error
+                socket.emit('gameState', game);
               }
             } catch (error) {
-              console.error('Error in API call:', error);
-              io.emit('gameState', game);
+              console.error('Error in API call');
+              socket.emit('gameState', game);
             }
           } else {
-            io.emit('gameState', game);
+            socket.emit('gameState', game);
           }
         }
         
@@ -1184,37 +1196,42 @@ io.on('connection', (socket) => {
             // Add timeout and continue game flow regardless of API result
             const apiTimeout = setTimeout(() => {
               // Continue with game state update
-              io.emit('gameState', game);
+              socket.emit('gameState', game);
             }, 1000);
             
             axios.post(apiEndpoint, payload, { timeout: 3000 })
               .then(response => {
                 clearTimeout(apiTimeout);
                 // Continue with game state update
-                io.emit('gameState', game);
+                socket.emit('gameState', game);
               })
               .catch(error => {
-                console.error('Failed to save game result:', error.message);
+                // Simplified error logging
                 if (error.response) {
-                  console.error('Response data:', error.response.data);
-                  console.error('Response status:', error.response.status);
+                  console.error(`API error: ${error.response.status}`);
+                } else {
+                  console.error('Network error saving game result');
                 }
                 clearTimeout(apiTimeout);
                 // Continue with game state update anyway
-                io.emit('gameState', game);
+                socket.emit('gameState', game);
               });
             
             // Don't emit game state here - will be handled by promises
             return;
+          } else {
+            // No API URL configured - continue without error
+            socket.emit('gameState', game);
           }
         } catch (error) {
-          console.error('Error in API call:', error);
+          console.error('Error in API call');
+          socket.emit('gameState', game);
         }
       }
     }
     
     // Emit updated game state
-    io.emit('gameState', game);
+    socket.emit('gameState', game);
   });
 
   socket.on('toggleFlag', ({ row, col }) => {
@@ -1243,7 +1260,7 @@ io.on('connection', (socket) => {
       game.noFlagUse = false;
     }
 
-    io.emit('gameState', game);
+    socket.emit('gameState', game);
   });
 
   socket.on('restartGame', () => {
@@ -1286,11 +1303,16 @@ io.on('connection', (socket) => {
             // Fire and forget - we don't need to wait for the response
             axios.post(apiEndpoint, payload, { timeout: 3000 })
               .catch(error => {
-                console.error(`Failed to save restarted game for user ${userId}:`, error.message);
+                // Simplified error logging
+                if (error.response) {
+                  console.error(`API error on restart: ${error.response.status}`);
+                } else {
+                  console.error('Network error on restart');
+                }
               });
           }
         } catch (error) {
-          console.error('Error saving restarted game:', error);
+          console.error('Error saving restarted game');
         }
       }
     }
@@ -1301,11 +1323,12 @@ io.on('connection', (socket) => {
     newGame.gameRestarts = gameRestarts;  // Set the restart count
     
     games.set(userId, newGame);
-    io.emit('gameState', newGame);
+    socket.emit('gameState', newGame);
   });
 
   socket.on('disconnect', () => {
-    console.log(`User ${userId} disconnected, cleaning up game state`);
+    // Track last access time but don't log the disconnect
+    trackGameAccess(userId);
     
     // Check if we have a game for this user
     if (games.has(userId)) {
@@ -1345,18 +1368,34 @@ io.on('connection', (socket) => {
             // Fire and forget - no need to wait for response as user disconnected
             axios.post(apiEndpoint, payload, { timeout: 3000 })
               .catch(error => {
-                console.error(`Failed to save abandoned game for user ${userId}:`, error.message);
+                // Simplified error logging
+                if (error.response) {
+                  console.error(`API error for user ${userId}: ${error.response.status}`);
+                } else {
+                  console.error(`Network error for user ${userId}`);
+                }
               });
           }
         } catch (error) {
-          console.error('Error saving abandoned game:', error);
+          console.error('Error saving abandoned game');
         }
       }
       
-      // Immediately clean up the game to free memory
-      games.delete(userId);
-      lastAccessTime.delete(userId);
-      console.log(`Removed game state for disconnected user ${userId}`);
+      // Add a delay before cleaning up the game state (30 seconds)
+      setTimeout(() => {
+        // Verify the game still exists (might have reconnected)
+        if (games.has(userId)) {
+          // Check if the game hasn't been accessed for at least 30 seconds
+          const lastAccess = lastAccessTime.get(userId) || 0;
+          const timeSinceAccess = Date.now() - lastAccess;
+          
+          // Only clean up if it hasn't been accessed recently
+          if (timeSinceAccess >= 30000) {
+            games.delete(userId);
+            lastAccessTime.delete(userId);
+          }
+        }
+      }, 30000); // 30 seconds delay
     }
   });
 });
@@ -1371,19 +1410,46 @@ httpServer.listen(PORT, () => {
 // This helps ensure we don't leak memory over time
 const CLEANUP_INTERVAL = 60 * 60 * 1000; // 1 hour
 const INACTIVE_THRESHOLD = 2 * 60 * 60 * 1000; // 2 hours
+const CLEANUP_DELAY = 5 * 60 * 1000; // 5 minutes delay before cleanup
 
 setInterval(() => {
   const now = Date.now();
+  let cleanupCount = 0;
   
-  // Clean up inactive games
+  // Mark inactive games for cleanup
+  const gamesToCleanup = new Map();
+  
+  // First pass - identify games to clean up
   for (const [userId, game] of games.entries()) {
     const lastAccess = lastAccessTime.get(userId) || 0;
     const timeSinceAccess = now - lastAccess;
     
     // If game is completed or hasn't been accessed in a while
     if ((game.gameOver || game.gameWon) || timeSinceAccess > INACTIVE_THRESHOLD) {
-      games.delete(userId);
-      lastAccessTime.delete(userId);
+      gamesToCleanup.set(userId, game);
     }
+  }
+  
+  // If there are games to clean up, do it after a delay
+  if (gamesToCleanup.size > 0) {
+    setTimeout(() => {
+      // Second pass - actually clean up, but double check they're still inactive
+      const finalNow = Date.now();
+      
+      for (const [userId, game] of gamesToCleanup.entries()) {
+        // Recheck if the game is still eligible for cleanup
+        if (games.has(userId)) {
+          const lastAccess = lastAccessTime.get(userId) || 0;
+          const timeSinceAccess = finalNow - lastAccess;
+          
+          // Only clean up if it's still inactive
+          if ((game.gameOver || game.gameWon) || timeSinceAccess > INACTIVE_THRESHOLD) {
+            games.delete(userId);
+            lastAccessTime.delete(userId);
+            cleanupCount++;
+          }
+        }
+      }
+    }, CLEANUP_DELAY);
   }
 }, CLEANUP_INTERVAL); 
