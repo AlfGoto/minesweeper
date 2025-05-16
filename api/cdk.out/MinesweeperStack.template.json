@@ -158,7 +158,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-586794474219-eu-central-1",
-     "S3Key": "69a5be0c6399c7bdc813a29c465ea944ab6744c92566d02d7c366f528eab4e38.zip"
+     "S3Key": "3a24da81c96881cfa3d923587b91b600f9d1ac4fae34d627a2624d4477696ab9.zip"
     },
     "Environment": {
      "Variables": {
@@ -183,7 +183,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "MinesweeperStack/GamesHandler/Resource",
-    "aws:asset:path": "asset.69a5be0c6399c7bdc813a29c465ea944ab6744c92566d02d7c366f528eab4e38",
+    "aws:asset:path": "asset.3a24da81c96881cfa3d923587b91b600f9d1ac4fae34d627a2624d4477696ab9",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

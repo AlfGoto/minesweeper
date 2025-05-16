@@ -261,14 +261,25 @@ io.on('connection', (socket) => {
   // Track this access
   trackGameAccess(userId);
 
-  const gameState = games.get(userId)!;
+  const gameState = games.get(userId);
+  if (!gameState) {
+    console.error(`Game not found for user ${userId}`);
+    socket.emit('error', { message: 'Game not found' });
+    return;
+  }
   socket.emit('gameState', gameState);
 
   socket.on('revealCell', ({ row, col }) => {
     // Track access
     trackGameAccess(userId);
     
-    const game = games.get(userId)!;
+    const game = games.get(userId);
+    if (!game) {
+      console.error(`Game not found for user ${userId}`);
+      socket.emit('error', { message: 'Game not found' });
+      return;
+    }
+    
     if (game.gameOver || game.gameWon) {
       return;
     }
@@ -817,7 +828,13 @@ io.on('connection', (socket) => {
     // Track access
     trackGameAccess(userId);
     
-    const game = games.get(userId)!;
+    const game = games.get(userId);
+    if (!game) {
+      console.error(`Game not found for user ${userId}`);
+      socket.emit('error', { message: 'Game not found' });
+      return;
+    }
+    
     if (game.gameOver || game.gameWon) {
       return;
     }
@@ -1068,23 +1085,30 @@ io.on('connection', (socket) => {
         
         // Function to check for win condition
         function checkForWin() {
-          const allNonMinesRevealed = game.grid.every(row =>
+          const currentGame = games.get(userId);
+          if (!currentGame) {
+            console.error(`Game not found for user ${userId}`);
+            socket.emit('error', { message: 'Game not found' });
+            return;
+          }
+
+          const allNonMinesRevealed = currentGame.grid.every(row =>
             row.every(cell => cell.value === -1 || cell.revealed)
           );
           
           if (allNonMinesRevealed) {
-            game.gameWon = true;
-            const winTime = game.startTime ? Date.now() - game.startTime : 0;
+            currentGame.gameWon = true;
+            const winTime = currentGame.startTime ? Date.now() - currentGame.startTime : 0;
             
             // Calculate full game time
-            const gameTime = game.startTime ? Date.now() - game.startTime : 0;
-            game.gameTime = gameTime;
+            const gameTime = currentGame.startTime ? Date.now() - currentGame.startTime : 0;
+            currentGame.gameTime = gameTime;
             
             // Explicitly set the time property for the client
-            game.time = gameTime;
+            currentGame.time = gameTime;
             
             // Attach winTime to game state
-            (game as any).winTime = winTime;
+            (currentGame as any).winTime = winTime;
             
             // Handle win condition same as before
             try {
@@ -1105,24 +1129,24 @@ io.on('connection', (socket) => {
                   status: 'success',
                   successTime: winTime,
                   // Include additional stats
-                  usedFlags: game.flagsPlaced,
-                  noFlagWin: game.noFlagUse,
-                  bombsExploded: game.bombsExploded,
+                  usedFlags: currentGame.flagsPlaced,
+                  noFlagWin: currentGame.noFlagUse,
+                  bombsExploded: currentGame.bombsExploded,
                   timePlayed: gameTime,
-                  cellsRevealed: game.cellsRevealed
+                  cellsRevealed: currentGame.cellsRevealed
                 };
                 
                 // Add timeout and continue game flow regardless of API result
                 const apiTimeout = setTimeout(() => {
                   // Continue with game state update
-                  socket.emit('gameState', game);
+                  socket.emit('gameState', currentGame);
                 }, 1000);
                 
                 axios.post(apiEndpoint, payload, { timeout: 3000 })
                   .then(response => {
                     clearTimeout(apiTimeout);
                     // Continue with game state update
-                    socket.emit('gameState', game);
+                    socket.emit('gameState', currentGame);
                   })
                   .catch(error => {
                     // Simplified error logging
@@ -1133,21 +1157,21 @@ io.on('connection', (socket) => {
                     }
                     clearTimeout(apiTimeout);
                     // Continue with game state update anyway
-                    socket.emit('gameState', game);
+                    socket.emit('gameState', currentGame);
                   });
                 
                 // Don't emit game state here - will be handled by promises
                 return;
               } else {
                 // No API URL configured - continue without error
-                socket.emit('gameState', game);
+                socket.emit('gameState', currentGame);
               }
             } catch (error) {
               console.error('Error in API call');
-              socket.emit('gameState', game);
+              socket.emit('gameState', currentGame);
             }
           } else {
-            socket.emit('gameState', game);
+            socket.emit('gameState', currentGame);
           }
         }
         
@@ -1245,7 +1269,13 @@ io.on('connection', (socket) => {
     // Track access
     trackGameAccess(userId);
     
-    const game = games.get(userId)!;
+    const game = games.get(userId);
+    if (!game) {
+      console.error(`Game not found for user ${userId}`);
+      socket.emit('error', { message: 'Game not found' });
+      return;
+    }
+
     if (game.gameOver || game.gameWon) {
       return;
     }
@@ -1275,57 +1305,60 @@ io.on('connection', (socket) => {
     trackGameAccess(userId);
     
     // Check if we have an existing game that's started but not won/lost
-    if (games.has(userId)) {
-      const existingGame = games.get(userId)!;
-      
-      // Only save game data if the game has actually started
-      if (existingGame.gameStarted && !existingGame.gameOver && !existingGame.gameWon) {
-        try {
-          // Calculate the game time up to this point
-          const gameTime = existingGame.startTime ? Date.now() - existingGame.startTime : 0;
+    const existingGame = games.get(userId);
+    if (!existingGame) {
+      console.error(`Game not found for user ${userId}`);
+      socket.emit('error', { message: 'Game not found' });
+      return;
+    }
+    
+    // Only save game data if the game has actually started
+    if (existingGame.gameStarted && !existingGame.gameOver && !existingGame.gameWon) {
+      try {
+        // Calculate the game time up to this point
+        const gameTime = existingGame.startTime ? Date.now() - existingGame.startTime : 0;
+        
+        // Remove trailing slash from API URL if present
+        const baseApiUrl = (process.env.API_URL || '').replace(/\/$/, '');
+        const apiEndpoint = `${baseApiUrl}/games`;
+        
+        // Only try to save if we have a valid API URL
+        if (baseApiUrl) {
+          // Get user info from socket auth if available
+          const userName = socket.handshake.auth.userName || userId;
+          const userImage = socket.handshake.auth.userImage || null;
           
-          // Remove trailing slash from API URL if present
-          const baseApiUrl = (process.env.API_URL || '').replace(/\/$/, '');
-          const apiEndpoint = `${baseApiUrl}/games`;
+          const payload = {
+            userId,
+            userName,
+            userImage,
+            status: 'restarted',  // New status for restarted games
+            time: gameTime,
+            // Include additional stats
+            bombsExploded: existingGame.bombsExploded,
+            usedFlags: existingGame.flagsPlaced,
+            cellsRevealed: existingGame.cellsRevealed,  // Already included
+            timePlayed: gameTime
+          };
           
-          // Only try to save if we have a valid API URL
-          if (baseApiUrl) {
-            // Get user info from socket auth if available
-            const userName = socket.handshake.auth.userName || userId;
-            const userImage = socket.handshake.auth.userImage || null;
-            
-            const payload = {
-              userId,
-              userName,
-              userImage,
-              status: 'restarted',  // New status for restarted games
-              time: gameTime,
-              // Include additional stats
-              bombsExploded: existingGame.bombsExploded,
-              usedFlags: existingGame.flagsPlaced,
-              cellsRevealed: existingGame.cellsRevealed,  // Already included
-              timePlayed: gameTime
-            };
-            
-            // Fire and forget - we don't need to wait for the response
-            axios.post(apiEndpoint, payload, { timeout: 3000 })
-              .catch(error => {
-                // Simplified error logging
-                if (error.response) {
-                  console.error(`API error on restart: ${error.response.status}`);
-                } else {
-                  console.error('Network error on restart');
-                }
-              });
-          }
-        } catch (error) {
-          console.error('Error saving restarted game');
+          // Fire and forget - we don't need to wait for the response
+          axios.post(apiEndpoint, payload, { timeout: 3000 })
+            .catch(error => {
+              // Simplified error logging
+              if (error.response) {
+                console.error(`API error on restart: ${error.response.status}`);
+              } else {
+                console.error('Network error on restart');
+              }
+            });
         }
+      } catch (error) {
+        console.error('Error saving restarted game');
       }
     }
     
     // Create a new game, preserving the restart count if possible
-    const gameRestarts = games.has(userId) ? (games.get(userId)!.gameRestarts || 0) + 1 : 0;
+    const gameRestarts = existingGame.gameRestarts ? existingGame.gameRestarts + 1 : 1;
     const newGame = initializeGame(userId);
     newGame.gameRestarts = gameRestarts;  // Set the restart count
     
@@ -1338,72 +1371,73 @@ io.on('connection', (socket) => {
     trackGameAccess(userId);
     
     // Check if we have a game for this user
-    if (games.has(userId)) {
-      const game = games.get(userId)!;
-      
-      // Save the game result if it's in progress and hasn't been completed
-      if (game.gameStarted && !game.gameOver && !game.gameWon) {
-        try {
-          // Calculate the game time up to this point
-          const gameTime = game.startTime ? Date.now() - game.startTime : 0;
+    const game = games.get(userId);
+    if (!game) {
+      return; // No game to clean up
+    }
+    
+    // Save the game result if it's in progress and hasn't been completed
+    if (game.gameStarted && !game.gameOver && !game.gameWon) {
+      try {
+        // Calculate the game time up to this point
+        const gameTime = game.startTime ? Date.now() - game.startTime : 0;
+        
+        // Remove trailing slash from API URL if present
+        const baseApiUrl = (process.env.API_URL || '').replace(/\/$/, '');
+        const apiEndpoint = `${baseApiUrl}/games`;
+        
+        // Only try to save if we have a valid API URL
+        if (baseApiUrl) {
+          // Get user info from socket auth if available
+          const userName = socket.handshake.auth.userName || userId;
+          const userImage = socket.handshake.auth.userImage || null;
           
-          // Remove trailing slash from API URL if present
-          const baseApiUrl = (process.env.API_URL || '').replace(/\/$/, '');
-          const apiEndpoint = `${baseApiUrl}/games`;
+          const payload = {
+            userId,
+            userName,
+            userImage,
+            status: 'abandoned', // Mark as abandoned game
+            successTime: null,
+            time: gameTime,
+            // Include additional stats
+            bombsExploded: game.bombsExploded,
+            usedFlags: game.flagsPlaced,
+            cellsRevealed: game.cellsRevealed,  // Already included
+            gameRestarts: game.gameRestarts,    // Already included
+            timePlayed: gameTime
+          };
           
-          // Only try to save if we have a valid API URL
-          if (baseApiUrl) {
-            // Get user info from socket auth if available
-            const userName = socket.handshake.auth.userName || userId;
-            const userImage = socket.handshake.auth.userImage || null;
-            
-            const payload = {
-              userId,
-              userName,
-              userImage,
-              status: 'abandoned', // Mark as abandoned game
-              successTime: null,
-              time: gameTime,
-              // Include additional stats
-              bombsExploded: game.bombsExploded,
-              usedFlags: game.flagsPlaced,
-              cellsRevealed: game.cellsRevealed,  // Already included
-              gameRestarts: game.gameRestarts,    // Already included
-              timePlayed: gameTime
-            };
-            
-            // Fire and forget - no need to wait for response as user disconnected
-            axios.post(apiEndpoint, payload, { timeout: 3000 })
-              .catch(error => {
-                // Simplified error logging
-                if (error.response) {
-                  console.error(`API error for user ${userId}: ${error.response.status}`);
-                } else {
-                  console.error(`Network error for user ${userId}`);
-                }
-              });
-          }
-        } catch (error) {
-          console.error('Error saving abandoned game');
+          // Fire and forget - no need to wait for response as user disconnected
+          axios.post(apiEndpoint, payload, { timeout: 3000 })
+            .catch(error => {
+              // Simplified error logging
+              if (error.response) {
+                console.error(`API error for user ${userId}: ${error.response.status}`);
+              } else {
+                console.error(`Network error for user ${userId}`);
+              }
+            });
+        }
+      } catch (error) {
+        console.error('Error saving abandoned game');
+      }
+    }
+    
+    // Add a delay before cleaning up the game state (30 seconds)
+    setTimeout(() => {
+      // Verify the game still exists (might have reconnected)
+      if (games.has(userId)) {
+        // Check if the game hasn't been accessed for at least 30 seconds
+        const lastAccess = lastAccessTime.get(userId) || 0;
+        const timeSinceAccess = Date.now() - lastAccess;
+        
+        // Only clean up if it hasn't been accessed recently
+        if (timeSinceAccess >= 30000) {
+          games.delete(userId);
+          lastAccessTime.delete(userId);
         }
       }
-      
-      // Add a delay before cleaning up the game state (30 seconds)
-      setTimeout(() => {
-        // Verify the game still exists (might have reconnected)
-        if (games.has(userId)) {
-          // Check if the game hasn't been accessed for at least 30 seconds
-          const lastAccess = lastAccessTime.get(userId) || 0;
-          const timeSinceAccess = Date.now() - lastAccess;
-          
-          // Only clean up if it hasn't been accessed recently
-          if (timeSinceAccess >= 30000) {
-            games.delete(userId);
-            lastAccessTime.delete(userId);
-          }
-        }
-      }, 30000); // 30 seconds delay
-    }
+    }, 30000); // 30 seconds delay
   });
 });
 
