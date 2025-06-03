@@ -6,12 +6,14 @@ export const formatTime = (milliseconds: number): string => {
   const totalMs = Math.floor(milliseconds)
 
   // Calculate minutes, seconds, and milliseconds
-  const hours = Math.floor(totalMs / 3600000)
-  const min = Math.floor(totalMs / 60000)
+  const days = Math.floor(totalMs / 86400000)
+  const hours = Math.floor((totalMs % 86400000) / 3600000)
+  const min = Math.floor((totalMs % 3600000) / 60000)
   const sec = Math.floor((totalMs % 60000) / 1000)
   const ms = Math.floor(totalMs % 1000)
 
   if (min === 0) return `${sec}s ${ms}ms`
   if (hours === 0) return `${min}min ${sec}s`
-  return `${hours}h ${min}min`
+  if (days === 0) return `${hours}h ${min}min`
+  return `${days}d ${hours}h ${min}min`
 }
