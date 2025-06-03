@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { formatTime } from '@/utils/time';
 
 interface GameControlsProps {
   timer: number;
@@ -20,65 +20,26 @@ const GameControls = ({
   const router = useRouter();
   const [navigating, setNavigating] = useState(false);
 
-  // Use refs for timer display and interval
   const timerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(Date.now());
 
-  // Simple function to format time as mm:ss (without milliseconds for better performance)
-  const formatTimeSimple = (milliseconds: number): string => {
-    // First determine if it's in seconds or milliseconds
-    const totalMs = milliseconds < 1000 ? Math.floor(milliseconds * 1000) : Math.floor(milliseconds);
-
-    // Calculate minutes and seconds (no milliseconds)
-    const min = Math.floor(totalMs / 60000);
-    const sec = Math.floor((totalMs % 60000) / 1000);
-
-    return `${min}min ${sec}s`;
-  };
-
-  // Detailed format with milliseconds (only used when game ends)
-  const formatTimeDetailed = (milliseconds: number): string => {
-    // First determine if it's in seconds or milliseconds
-    const totalMs = milliseconds < 1000 ? Math.floor(milliseconds * 1000) : Math.floor(milliseconds);
-
-    // Calculate minutes, seconds, and milliseconds
-    const min = Math.floor(totalMs / 60000);
-    const sec = Math.floor((totalMs % 60000) / 1000);
-    const ms = Math.floor(totalMs % 1000);
-
-    return `${min}min ${sec}s ${ms}ms`;
-  };
-
-  // Setup timer with setInterval
   useEffect(() => {
-    // Clear any existing interval
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-
-    // Set initial time reference
     startTimeRef.current = Date.now() - (timer * 1000);
 
-    // Update function to directly manipulate DOM
     const updateTimer = () => {
       if (timerRef.current) {
-        // Calculate elapsed time, handling conversion consistently
         let elapsed;
         if (finalTime) {
-          // finalTime is likely in milliseconds or seconds, use our formatter to handle it
           elapsed = finalTime;
-          // Use detailed format with milliseconds for final time
-          timerRef.current.textContent = formatTimeDetailed(elapsed);
         } else {
-          // For active games, calculate ms since start
-          elapsed = (Date.now() - startTimeRef.current);
-          // Convert to seconds to be consistent with other time values
-          elapsed = elapsed / 1000;
-          // Use simple format without milliseconds during gameplay for better performance
-          timerRef.current.textContent = formatTimeSimple(elapsed);
+          elapsed = (Date.now() - startTimeRef.current) / 1000;
         }
+        timerRef.current.textContent = formatTime(elapsed);
       }
     };
 

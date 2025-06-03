@@ -52,8 +52,6 @@ const GameCell = ({
   cell,
   rowIndex,
   colIndex,
-  isBombAnimation,
-  isWinAnimation,
   onCellClick,
   onCellRightClick,
   disabled = false,

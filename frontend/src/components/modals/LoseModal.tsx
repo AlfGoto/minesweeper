@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { formatTime } from '@/utils/time';
 
 interface LoseModalProps {
   timer: number;
@@ -11,34 +11,13 @@ export default function LoseModal({
   timer,
   onRestart,
 }: LoseModalProps) {
-  const { data: session } = useSession();
   const timerRef = useRef<HTMLDivElement>(null);
 
-  // Format time as mm:ss.ms
-  const formatTime = (time: number): string => {
-    if (!time || time < 0.001) return '0min 0s 0ms';
-
-    // First determine if time is in seconds or milliseconds
-    // If time is small (less than 1000), it's likely in seconds, otherwise it's in ms
-    const totalMs = time < 1000 ? Math.floor(time * 1000) : Math.floor(time);
-
-    // Calculate minutes, seconds, and milliseconds
-    const min = Math.floor(totalMs / 60000);
-    const sec = Math.floor((totalMs % 60000) / 1000);
-    const ms = Math.floor(totalMs % 1000);
-
-    return `${min}min ${sec}s ${ms}ms`;
-  };
-
-  // Set the timer display once when component mounts
   useEffect(() => {
     if (timerRef.current) {
       timerRef.current.textContent = formatTime(timer);
     }
-  }, [timer, formatTime]);
-
-  // Game result is already saved by the websocket server
-  // No need to save it again here
+  }, [timer]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate-fadeIn">

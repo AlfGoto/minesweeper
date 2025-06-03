@@ -30,10 +30,6 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
   const [gameStarted, setGameStarted] = useState(false);
   const [connected, setConnected] = useState(false);
   
-  // Mouse interaction state
-  const [bothButtonsPressed, setBothButtonsPressed] = useState(false);
-  const [lastCellPressed, setLastCellPressed] = useState<GridPosition | null>(null);
-  
   // Refs for timer and calculation
   const localTimerRef = useRef<number>(0);
   const animationFrameRef = useRef<number>(0);
@@ -252,23 +248,6 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     // Add the cancel function to a ref for access in handleRestart
     cancelModalRef.current = cancelModal;
   }, [timer, stopTimer]);
-  
-  // Format timer as xxmin xxs xxxms
-  const formatTimer = useCallback((t: number): string => {
-    if (!t || t < 0.001) return '0min 0s 0ms';
-    
-    // First determine if t is in seconds or milliseconds
-    // If t is small (less than 1000), it's likely in seconds, otherwise it's in ms
-    const totalMs = t < 1000 ? Math.floor(t * 1000) : Math.floor(t);
-    
-    // Calculate minutes, seconds, and milliseconds
-    const min = Math.floor(totalMs / 60000);
-    const sec = Math.floor((totalMs % 60000) / 1000);
-    const ms = Math.floor(totalMs % 1000);
-    
-    return `${min}min ${sec}s ${ms}ms`;
-  }, []);
-  
   // ----------------
   // User Actions
   // ----------------
@@ -501,8 +480,6 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     // Only handle left (0) or right (2) mouse buttons
     if (e.button !== 0 && e.button !== 2) return;
     
-    setLastCellPressed({ row, col });
-    
     // Get current button states using bitwise check
     const isLeftButtonDown = (e.buttons & 1) === 1;
     const isRightButtonDown = (e.buttons & 2) === 2;
@@ -510,7 +487,6 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     
     // If both buttons are down now, we might be doing a chord action
     if (isBothButtonsDown) {
-      setBothButtonsPressed(true);
       
       // Check if we can do chord action on this cell (revealed and has value)
       if (clientGrid[row]?.[col]?.revealed && clientGrid[row]?.[col]?.value > 0) {
@@ -531,24 +507,6 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
       }
     }
   }, [clientGrid, clientRevealCell, toggleFlagCell, clientChordAction]);
-  
-  // Direct chord action trigger
-  const attemptChordAction = useCallback((row: number, col: number): boolean => {
-    if (!clientGrid[row] || !clientGrid[row][col]) return false;
-    
-    if (clientGrid[row][col].revealed && clientGrid[row][col].value > 0) {
-      return clientChordAction(row, col);
-    }
-    return false;
-  }, [clientGrid, clientChordAction]);
-  
-  // Handle mouse event when both buttons are pressed
-  const handleDualButtonPress = useCallback((row: number, col: number) => {
-    setBothButtonsPressed(true);
-    
-    // Immediately try chord action if applicable
-    attemptChordAction(row, col);
-  }, [attemptChordAction]);
   
   // Handle cell click
   const handleCellClick = useCallback((row: number, col: number) => {
@@ -645,26 +603,6 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     }
   }, [clientGrid, gameState.gameOver, gameState.gameWon, gameStarted, startTimer]);
   
-  // Handle mouse up
-  const handleMouseUp = useCallback((e: React.MouseEvent) => {
-    setBothButtonsPressed(false);
-    setLastCellPressed(null);
-  }, []);
-  
-  // Global mouse up handler
-  useEffect(() => {
-    const handleGlobalMouseUp = (e: MouseEvent) => {
-      setBothButtonsPressed(false);
-      setLastCellPressed(null);
-    };
-    
-    window.addEventListener('mouseup', handleGlobalMouseUp);
-    
-    return () => {
-      window.removeEventListener('mouseup', handleGlobalMouseUp);
-    };
-  }, []);
-  
   // Prevent context menu globally
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
@@ -700,12 +638,8 @@ export default function useGameLogic({ userId, userName, userImage }: UseGameLog
     handleCellClick,
     handleRightClick,
     handleMouseDown,
-    handleMouseUp,
     
     // Additional handlers for direct access
     clientChordAction,
-    
-    // Utilities
-    formatTimer
   };
 } 

@@ -36,7 +36,6 @@ export default function Game() {
     handleRestart,
     handleCellClick,
     handleRightClick,
-    formatTimer
   } = useGameLogic({
     userId,
     userName,

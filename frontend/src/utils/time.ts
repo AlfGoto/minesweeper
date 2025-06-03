@@ -1,6 +1,4 @@
 export const formatTime = (milliseconds: number): string => {
-  if (!milliseconds) return "0min 0s 0ms";
-
   const totalMs = Math.floor(milliseconds);
 
   const days = Math.floor(totalMs / 86400000);
@@ -21,7 +19,7 @@ export const formatTime = (milliseconds: number): string => {
   if (isShort && ms) parts.push(`${ms}ms`);
 
   // If no major parts, show all zeros
-  if (parts.length === 0) return "0min 0s 0ms";
+  if (parts.length === 0) return "0s";
 
   return parts.join(" ");
 };
