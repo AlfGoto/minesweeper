@@ -37,7 +37,7 @@ const GameControls = ({
         if (finalTime) {
           elapsed = finalTime;
         } else {
-          elapsed = (Date.now() - startTimeRef.current) / 1000;
+          elapsed = (Date.now() - startTimeRef.current);
         }
         timerRef.current.textContent = formatTime(elapsed);
       }
