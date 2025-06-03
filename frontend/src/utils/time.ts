@@ -10,13 +10,18 @@ export const formatTime = (milliseconds: number): string => {
   const ms = totalMs % 1000;
 
   const parts: string[] = [];
+
   if (days) parts.push(`${days}d`);
   if (hours) parts.push(`${hours}h`);
   if (min) parts.push(`${min}min`);
   if (sec) parts.push(`${sec}s`);
-  if (parts.length === 0 || (parts.length === 1 && parts[0] === "0s")) {
-    parts.push(`${ms}ms`);
-  }
+
+  const isShort = days === 0 && hours === 0 && min === 0;
+
+  if (isShort && ms) parts.push(`${ms}ms`);
+
+  // If no major parts, show all zeros
+  if (parts.length === 0) return "0min 0s 0ms";
 
   return parts.join(" ");
 };
