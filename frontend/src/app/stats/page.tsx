@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { getServerSession } from 'next-auth';
 import Script from 'next/script';
 import { revalidatePath } from 'next/cache';
-import { formatTime, formatTimeNoMs } from '../../utils/time';
+import { formatTime } from '../../utils/time';
 import { cacheKey } from '../../utils/cache';
-import StatsLoading from './loading';
+import { format } from 'date-fns';
 
 // Types for our API responses
 interface LeaderboardEntry {
@@ -187,7 +187,7 @@ async function LeaderboardSection() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(entry.date).toLocaleDateString()}
+                    {format(new Date(entry.date), 'd MMM, yyyy')}
                   </td>
                 </tr>
               ))}
@@ -287,7 +287,7 @@ async function UserStatsSection({ userId, leaderboard = [] }: { userId: string, 
         {userStats.timePlayed > 0 && (
           <div className="bg-indigo-50 p-4 rounded-lg shadow">
             <div className="text-indigo-800 text-sm font-medium uppercase">⏰ Time Played</div>
-            <div className="text-3xl font-bold mt-1">{formatTimeNoMs(userStats.timePlayed)}</div>
+            <div className="text-3xl font-bold mt-1">{formatTime(userStats.timePlayed)}</div>
             {userStats.averageGameTime > 0 && (
               <div className="text-sm text-gray-600 mt-1">
                 Avg Game: {formatTime(userStats.averageGameTime)}
@@ -346,7 +346,7 @@ async function UserStatsSection({ userId, leaderboard = [] }: { userId: string, 
                       </span>
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(game.date).toLocaleDateString()}
+                      {format(new Date(game.date), 'h:mm / d MMM, yyyy')}
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap text-sm">
                       <div className="flex gap-2">
@@ -409,7 +409,7 @@ async function UserStatsSection({ userId, leaderboard = [] }: { userId: string, 
                       {game.time > 0 ? formatTime(game.time) : '-'}
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(game.date).toLocaleString()}
+                      {format(new Date(game.date), 'h:mm / d MMM, yyyy')}
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap text-sm">
                       <div className="flex flex-wrap gap-2">
