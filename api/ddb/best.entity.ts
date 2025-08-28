@@ -3,6 +3,7 @@ import {
   item,
   number,
   string,
+  boolean,
 } from 'dynamodb-toolbox';
 import { Table } from './table';
 
@@ -15,7 +16,7 @@ export const BestEntity = new Entity({
     cellsRevealed: number().optional(),
     date: string().optional(),
     gameRestarts: number().optional(),
-    noFlagWin: string().optional(),
+    noFlagWin: boolean().optional(),
     rawUserId: string().optional(),
     time: number().optional(),
     timePlayed: number().optional(),

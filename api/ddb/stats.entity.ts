@@ -29,8 +29,6 @@ export const UserStatsEntity = new Entity({
     // GSI attributes for status-time-index
     status: string().optional(), // For GSI partition key
     time: number().optional(), // For GSI sort key
-
-    ttl: number(),
   }),
   timestamps: {
     created: false,

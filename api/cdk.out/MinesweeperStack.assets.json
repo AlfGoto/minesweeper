@@ -1,33 +1,33 @@
 {
   "version": "41.0.0",
   "files": {
-    "c48b69288e3f0f4153cf011b78822a949b043410908c630ed819f2ba2a9d5367": {
+    "3ed46147ab0e1ef47345ffe25d1e76c01e93645cb06e7b9185fa26dee43c0058": {
       "displayName": "GamesHandler/Code",
       "source": {
-        "path": "asset.c48b69288e3f0f4153cf011b78822a949b043410908c630ed819f2ba2a9d5367",
+        "path": "asset.3ed46147ab0e1ef47345ffe25d1e76c01e93645cb06e7b9185fa26dee43c0058",
         "packaging": "zip"
       },
       "destinations": {
-        "586794474219-eu-central-1": {
-          "bucketName": "cdk-hnb659fds-assets-586794474219-eu-central-1",
-          "objectKey": "c48b69288e3f0f4153cf011b78822a949b043410908c630ed819f2ba2a9d5367.zip",
+        "180294175556-eu-central-1": {
+          "bucketName": "cdk-hnb659fds-assets-180294175556-eu-central-1",
+          "objectKey": "3ed46147ab0e1ef47345ffe25d1e76c01e93645cb06e7b9185fa26dee43c0058.zip",
           "region": "eu-central-1",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-file-publishing-role-586794474219-eu-central-1"
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::180294175556:role/cdk-hnb659fds-file-publishing-role-180294175556-eu-central-1"
         }
       }
     },
-    "8a7d1faa801b7f23db6a35a80f33cd3a0ae4215824717b479bb7a5d27b53c211": {
+    "f15124cbb1b7237bc72492f95d796dcc38eec0d73a10e96e6f3a8e48368dd767": {
       "displayName": "MinesweeperStack Template",
       "source": {
         "path": "MinesweeperStack.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "586794474219-eu-central-1": {
-          "bucketName": "cdk-hnb659fds-assets-586794474219-eu-central-1",
-          "objectKey": "8a7d1faa801b7f23db6a35a80f33cd3a0ae4215824717b479bb7a5d27b53c211.json",
+        "180294175556-eu-central-1": {
+          "bucketName": "cdk-hnb659fds-assets-180294175556-eu-central-1",
+          "objectKey": "f15124cbb1b7237bc72492f95d796dcc38eec0d73a10e96e6f3a8e48368dd767.json",
           "region": "eu-central-1",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-file-publishing-role-586794474219-eu-central-1"
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::180294175556:role/cdk-hnb659fds-file-publishing-role-180294175556-eu-central-1"
         }
       }
     }

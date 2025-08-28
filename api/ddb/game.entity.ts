@@ -21,8 +21,6 @@ export const GameEntity = new Entity({
 
     userName: string().optional(),
     userImage: string().optional(),
-
-    ttl: number(),
   }),
   timestamps: {
     created: false,

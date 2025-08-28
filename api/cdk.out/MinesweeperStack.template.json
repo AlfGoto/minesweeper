@@ -157,8 +157,8 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-586794474219-eu-central-1",
-     "S3Key": "c48b69288e3f0f4153cf011b78822a949b043410908c630ed819f2ba2a9d5367.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-180294175556-eu-central-1",
+     "S3Key": "3ed46147ab0e1ef47345ffe25d1e76c01e93645cb06e7b9185fa26dee43c0058.zip"
     },
     "Environment": {
      "Variables": {
@@ -183,7 +183,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "MinesweeperStack/GamesHandler/Resource",
-    "aws:asset:path": "asset.c48b69288e3f0f4153cf011b78822a949b043410908c630ed819f2ba2a9d5367",
+    "aws:asset:path": "asset.3ed46147ab0e1ef47345ffe25d1e76c01e93645cb06e7b9185fa26dee43c0058",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -362,7 +362,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
@@ -394,7 +394,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
@@ -457,7 +457,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
@@ -489,7 +489,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
@@ -613,7 +613,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
@@ -645,7 +645,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
@@ -827,7 +827,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
@@ -859,7 +859,7 @@
      "Fn::Join": [
       "",
       [
-       "arn:aws:execute-api:eu-central-1:586794474219:",
+       "arn:aws:execute-api:eu-central-1:180294175556:",
        {
         "Ref": "MinesweeperApi0651EDC6"
        },
