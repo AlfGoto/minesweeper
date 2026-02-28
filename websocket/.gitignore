@@ -1,0 +1,4 @@
+redocly.yml
+node_modules
+.env
+.dev.vars

@@ -1,0 +1,41 @@
+name = "minesweeper-ws"
+main = "src/worker.ts"
+compatibility_date = "2024-11-01"
+
+# ===== Global (optional) =====
+# You can have top-level vars, etc.
+
+# ===== DEV Environment =====
+[env.dev]
+name = "minesweeper-ws-dev"
+# MUST declare DO bindings inside env
+[env.dev.durable_objects]
+bindings = [
+  { name = "GAMES", class_name = "MinesweeperGame" }
+]
+# Migration to create DO namespace
+[[env.dev.migrations]]
+tag = "v1"
+new_sqlite_classes = ["MinesweeperGame"]
+
+[observability]
+[observability.logs]
+enabled = false
+invocation_logs = true
+
+
+
+# ===== PROD Environment =====
+[env.prod]
+name = "minesweeper-ws-prod"
+[env.prod.durable_objects]
+bindings = [
+  { name = "GAMES", class_name = "MinesweeperGame" }
+]
+[[env.prod.migrations]]
+tag = "v1"
+new_sqlite_classes = ["MinesweeperGame"]
+
+# Optional: prod-only vars
+[env.prod.vars]
+ALLOWED_ORIGIN = "https://minesweeper.fr"
