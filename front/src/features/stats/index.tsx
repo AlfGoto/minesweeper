@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Leaderboard } from "./components/leaderboard";
+import { TotalTimeLeaderboard } from "./components/total-time-leaderboard";
 import { Stats } from "./components/stats";
 import { LatestGames } from "./components/latest-games";
 import { BestGames } from "./components/best-games";
@@ -30,10 +31,42 @@ export async function StatsPage() {
         userImage={session.user.image ?? undefined}
       />
 
-      <Leaderboard />
+      <Tabs defaultValue="latest-games" className="w-full border rounded-lg gap-0">
+        <TabsList className="w-fit mx-2 my-4 p-2">
+          <TabsTrigger
+            value="latest-games"
+            className="flex items-center gap-2 cursor-pointer w-fit"
+          >
+            <span className="text-2xl">🏆</span>
+            <h2 className="text-2xl font-bold">Leaderboard</h2>
+          </TabsTrigger>
+          <TabsTrigger
+            value="total-time"
+            className="flex items-center gap-2 cursor-pointer"
+          >
+            <span className="text-2xl">⏱️</span>
+            <h2 className="text-2xl font-bold">Total Time</h2>
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent
+          value="latest-games"
+          forceMount
+          className="data-[state=inactive]:hidden p-2"
+        >
+          <Leaderboard />
+        </TabsContent>
+        <TabsContent
+          value="total-time"
+          forceMount
+          className="data-[state=inactive]:hidden p-2"
+        >
+          <TotalTimeLeaderboard />
+        </TabsContent>
+      </Tabs>
+
       <Stats stats={stats} title="Your stats" />
 
-      <Tabs defaultValue="latest-games" className="w-full border rounded-lg">
+      <Tabs defaultValue="latest-games" className="w-full border rounded-lg gap-0">
         <TabsList className="w-fit mx-2 my-4 p-2">
           <TabsTrigger
             value="latest-games"

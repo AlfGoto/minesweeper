@@ -1,4 +1,4 @@
-import { getBestGames } from "@/lib/api";
+import { getAllStats } from "@/lib/api";
 import {
   Table,
   TableBody,
@@ -7,10 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { LeaderboardRow } from "./leaderboard-row";
+import { TotalTimeLeaderboardRow } from "./total-time-leaderboard-row";
 
-export async function Leaderboard() {
-  const bestGames = await getBestGames();
+export async function TotalTimeLeaderboard() {
+  const allStats = await getAllStats();
+
+  const sortedByTotalTime = [...allStats]
+    .sort((a, b) => b.totalTime - a.totalTime)
+    .slice(0, 10);
 
   return (
     <div className="flex flex-col gap-4 w-full rounded-xl bg-card">
@@ -24,27 +28,34 @@ export async function Leaderboard() {
               Player
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Time
+              Total Time
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Flags
+              Games
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Date
+              Wins
+            </TableHead>
+            <TableHead className="p-0" style={{ textAlign: "left" }}>
+              Winrate
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {bestGames.map((game, index) => (
-            <LeaderboardRow key={game.userId} game={game} rank={index + 1} />
+          {sortedByTotalTime.map((stats, index) => (
+            <TotalTimeLeaderboardRow
+              key={stats.userId}
+              stats={stats}
+              rank={index + 1}
+            />
           ))}
-          {bestGames.length === 0 && (
+          {sortedByTotalTime.length === 0 && (
             <TableRow className="hover:bg-transparent">
               <TableCell
-                colSpan={5}
+                colSpan={6}
                 className="text-center text-muted-foreground py-12"
               >
-                No games yet. Be the first to win!
+                No games yet. Be the first to play!
               </TableCell>
             </TableRow>
           )}

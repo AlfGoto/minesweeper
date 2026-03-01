@@ -1,9 +1,10 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { z } from "zod"
-import { Game } from "../../core/game"
-import { User } from "../../core/user"
 import { BestGame } from "../../core/best-game"
+import { Game } from "../../core/game"
 import { status } from "../../core/game/game.entity"
+import { User } from "../../core/user"
+import { UserStatsCache } from "../../core/user-stats-cache"
 
 export const StatsSchema = z
   .object({
@@ -84,9 +85,9 @@ export const route = new OpenAPIHono()
           userName: user.userName,
           userPicture: user.userPicture,
         }),
-        200
+        200,
       )
-    }
+    },
   )
   .openapi(
     createRoute({
@@ -126,7 +127,7 @@ export const route = new OpenAPIHono()
         return c.json({ message: "User not found" }, 404)
       }
 
-      const games = await Game.getAllGames(user.userEmail)
+      const [games, bestTime] = await Promise.all([Game.getAllGames(user.userEmail), BestGame.getBestOfUser(user.userEmail)])
 
       const stats = games.reduce(
         (acc, game) => {
@@ -139,10 +140,21 @@ export const route = new OpenAPIHono()
           acc.totalRestarts += game.status === "restarted" ? 1 : 0
           return acc
         },
-        { totalTime: 0, totalFlags: 0, totalRevealed: 0, totalBombs: 0, totalWin: 0, totalRestarts: 0 }
+        { totalTime: 0, totalFlags: 0, totalRevealed: 0, totalBombs: 0, totalWin: 0, totalRestarts: 0 },
       )
 
-      const bestTime = (await BestGame.getBestOfUser(user.userEmail))?.time ?? 0
+      await UserStatsCache.update({
+        userEmail: user.userEmail,
+        totalGames: games.length,
+        totalTime: stats.totalTime,
+        totalFlags: stats.totalFlags,
+        totalRevealed: stats.totalRevealed,
+        totalBombs: stats.totalBombs,
+        totalWin: stats.totalWin,
+        bestTime: bestTime?.time ?? 0,
+        totalNoFlagsWin: user.totalNoFlagsWin ?? 0,
+        totalRestarts: stats.totalRestarts,
+      })
 
       return c.json(
         StatsSchema.parse({
@@ -152,13 +164,13 @@ export const route = new OpenAPIHono()
           totalRevealed: stats.totalRevealed,
           totalBombs: stats.totalBombs,
           totalWin: stats.totalWin,
-          bestTime,
+          bestTime: bestTime?.time ?? 0,
           totalNoFlagsWin: user.totalNoFlagsWin ?? 0,
           totalRestarts: stats.totalRestarts,
         }),
-        200
+        200,
       )
-    }
+    },
   )
   .openapi(
     createRoute({
@@ -211,7 +223,7 @@ export const route = new OpenAPIHono()
       }))
 
       return c.json(z.array(GameSchema).parse(gamesWithUser), 200)
-    }
+    },
   )
   .openapi(
     createRoute({
@@ -253,16 +265,18 @@ export const route = new OpenAPIHono()
 
       const games = await Game.get10BestGames(user.userEmail)
 
-      const gamesWithUser = (games ?? []).map(game => ({
-        status: game.status,
-        time: game.time,
-        flags: game.flags,
-        revealed: game.revealed,
-        date: game.date,
-        userName: user.userName ?? "",
-        userPicture: user.userPicture ?? "",
-      })).sort((a, b) => a.time - b.time)
+      const gamesWithUser = (games ?? [])
+        .map(game => ({
+          status: game.status,
+          time: game.time,
+          flags: game.flags,
+          revealed: game.revealed,
+          date: game.date,
+          userName: user.userName ?? "",
+          userPicture: user.userPicture ?? "",
+        }))
+        .sort((a, b) => a.time - b.time)
 
       return c.json(z.array(GameSchema).parse(gamesWithUser), 200)
-    }
+    },
   )
