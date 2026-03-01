@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { z } from "zod"
 import { Game } from "../../core/game"
 import { User } from "../../core/user"
+import { BestGame } from "../../core/best-game"
 
 export const StatsSchema = z
   .object({
@@ -67,7 +68,7 @@ export const route = new OpenAPIHono().openapi(
       { totalTime: 0, totalFlags: 0, totalRevealed: 0, totalBombs: 0, totalWin: 0, totalRestarts: 0 }
     )
 
-    const bestTime = (await Game.get10BestGames(userEmail))[0]?.time ?? 0
+    const bestTime = (await BestGame.getBestOfUser(userEmail))?.time ?? 0
 
     return c.json(
       StatsSchema.parse({

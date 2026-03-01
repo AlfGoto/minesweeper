@@ -185,15 +185,16 @@ export const route = new OpenAPIHono()
       const game = c.req.valid("json")
 
       // Check for best game BEFORE creating the new game to avoid comparing against itself
-      const existingBestGames = game.status === "won"
-        ? await Game.get10BestGames(game.userEmail)
-        : []
+      const bestGame = game.status === "won" ? await BestGame.getBestOfUser(game.userEmail) : undefined
 
       await Game.create(game)
 
       if (game.status === "won") {
-        if (!existingBestGames[0] || existingBestGames[0].time > game.time) {
+        console.log("Game won, checking best game", { userEmail: game.userEmail, time: game.time, existingBest: bestGame?.time })
+        if (!bestGame || bestGame.time > game.time) {
+          console.log("Updating best game for user", game.userEmail)
           await BestGame.update(game)
+          console.log("Best game updated successfully")
         }
       }
 

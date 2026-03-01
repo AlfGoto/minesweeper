@@ -17,7 +17,10 @@ import { TOTAL_CELLS } from "@/vars";
 
 type GameContextType = {
   getInitialCell: (id: number) => Cell;
-  registerCellSetter: (id: number, setter: React.Dispatch<React.SetStateAction<Cell>>) => () => void;
+  registerCellSetter: (
+    id: number,
+    setter: React.Dispatch<React.SetStateAction<Cell>>,
+  ) => () => void;
   onCellClick: (id: number, clickType: "left" | "right") => void;
   restart: () => void;
   getTime: () => number;
@@ -56,7 +59,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Map of cell ID -> setState function for that cell
-  const cellSettersRef = useRef<Map<number, React.Dispatch<React.SetStateAction<Cell>>>>(new Map());
+  const cellSettersRef = useRef<
+    Map<number, React.Dispatch<React.SetStateAction<Cell>>>
+  >(new Map());
 
   // Ref to store the function that opens/closes the lose dialog
   const loseDialogOpenerRef = useRef<((open: boolean) => void) | null>(null);
@@ -73,7 +78,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   // Register a cell's setState function
   const registerCellSetter = useCallback(
-    (id: number, setter: React.Dispatch<React.SetStateAction<Cell>>): (() => void) => {
+    (
+      id: number,
+      setter: React.Dispatch<React.SetStateAction<Cell>>,
+    ): (() => void) => {
       cellSettersRef.current.set(id, setter);
 
       // Return unsubscribe function
@@ -152,7 +160,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           status: "revealed",
           value: content.value,
         };
-
+        
         const setter = cellSettersRef.current.get(cellId);
         if (setter) {
           setter(newCell); // Only this cell re-renders!
@@ -168,6 +176,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           setter(newCell);
         }
       } else if (content.type === "LOSE") {
+        console.log(content);
         gameOnRef.current = false;
         timeRef.current = content.time;
         // Open the lose dialog after 2 seconds
@@ -197,6 +206,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           }
         });
       } else if (content.type === "WIN") {
+        console.log(content);
         gameOnRef.current = false;
         timeRef.current = content.time;
 
@@ -210,7 +220,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
                   return { ...prevCell, status: "winning" };
                 }
                 if (prevCell.status === "flagged") {
-                  return { status: "winning", value: "bomb" };
+                  return { ...prevCell, status: "winning" };
                 }
                 return prevCell;
               });

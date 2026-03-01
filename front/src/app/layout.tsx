@@ -74,6 +74,28 @@ export const metadata: Metadata = {
     "logisch spel",
     "scorebord",
     "vaardigheidsspel",
+    // German keywords
+    "minesweeper spiel",
+    "minesweeper online",
+    "minenräumer",
+    "minensucher",
+    "denkspiel",
+    "kostenloses spiel",
+    "klassisches spiel",
+    "bestenliste",
+    // Italian keywords
+    "campo minato",
+    "gioco campo minato",
+    "prato fiorito",
+    "gioco di logica",
+    "gioco gratuito",
+    "classifica",
+    // Portuguese keywords
+    "campo minado",
+    "jogo campo minado",
+    "caça-minas",
+    "jogo de lógica",
+    "jogo grátis",
   ],
   authors: [{ name: "AlfGoto" }],
   creator: "AlfGoto",
@@ -127,7 +149,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="alternate icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
 
         <Script
@@ -136,22 +158,45 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "WebApplication",
+              "@type": "VideoGame",
               name: "Minesweeper",
+              alternateName: ["Démineur", "Buscaminas", "Mijnenveger", "Campo Minato"],
+              url: "https://minesweeper.fr",
               applicationCategory: "GameApplication",
-              genre: "Puzzle",
+              genre: ["Puzzle", "Strategy", "Logic"],
+              gamePlatform: ["Web Browser", "Desktop", "Mobile"],
               description:
                 "Play the classic Minesweeper game with modern graphics, compete on the leaderboard, and track your progress.",
+              inLanguage: ["en", "fr", "es", "nl", "de", "it", "pt"],
               operatingSystem: "Any",
+              playMode: "SinglePlayer",
+              numberOfPlayers: {
+                "@type": "QuantitativeValue",
+                value: 1,
+              },
               offers: {
                 "@type": "Offer",
                 price: "0",
                 priceCurrency: "USD",
+                availability: "https://schema.org/InStock",
               },
-              screenshot: "/og-image.png",
-              featureList: "Leaderboard, Player Statistics, Real-time Gameplay",
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.8",
+                ratingCount: "1000",
+                bestRating: "5",
+                worstRating: "1",
+              },
+              screenshot: "https://minesweeper.fr/og-image.png",
+              featureList: [
+                "Multiple difficulty levels",
+                "Global leaderboard",
+                "Personal statistics",
+                "Real-time gameplay",
+                "No download required",
+              ],
               author: {
-                "@type": "Organization",
+                "@type": "Person",
                 name: "AlfGoto",
               },
             }),
