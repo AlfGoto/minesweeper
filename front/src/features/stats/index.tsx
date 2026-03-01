@@ -6,6 +6,7 @@ import { LatestGames } from "./components/latest-games";
 import { BestGames } from "./components/best-games";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { StatsHeader } from "./components/stats-header";
+import { getStats, getLatestGames, getBest10Games } from "@/lib/api";
 
 export async function StatsPage() {
   const session = await getServerSession();
@@ -16,6 +17,12 @@ export async function StatsPage() {
 
   const userEmail = session.user.email;
 
+  const [stats, latestGames, bestGames] = await Promise.all([
+    getStats(userEmail),
+    getLatestGames(userEmail),
+    getBest10Games(userEmail),
+  ]);
+
   return (
     <div className="max-w-[1000px] mx-auto w-full h-full flex flex-col justify-center m-4 rounded-lg p-4 gap-6">
       <StatsHeader
@@ -24,7 +31,7 @@ export async function StatsPage() {
       />
 
       <Leaderboard />
-      <Stats userEmail={userEmail} />
+      <Stats stats={stats} title="Your stats" />
 
       <Tabs defaultValue="latest-games" className="w-full border rounded-lg">
         <TabsList className="w-fit mx-2 my-4 p-2">
@@ -48,14 +55,14 @@ export async function StatsPage() {
           forceMount
           className="data-[state=inactive]:hidden p-2"
         >
-          <LatestGames userEmail={userEmail} />
+          <LatestGames games={latestGames} />
         </TabsContent>
         <TabsContent
           value="best-games"
           forceMount
           className="data-[state=inactive]:hidden p-2"
         >
-          <BestGames userEmail={userEmail} />
+          <BestGames games={bestGames} />
         </TabsContent>
       </Tabs>
     </div>

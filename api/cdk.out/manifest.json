@@ -1,191 +1,191 @@
 {
   "version": "48.0.0",
   "artifacts": {
-    "dev-minesweeper-bff.assets": {
+    "prod-minesweeper-bff.assets": {
       "type": "cdk:asset-manifest",
       "properties": {
-        "file": "dev-minesweeper-bff.assets.json",
+        "file": "prod-minesweeper-bff.assets.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
       }
     },
-    "dev-minesweeper-bff": {
+    "prod-minesweeper-bff": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://586794474219/eu-central-1",
+      "environment": "aws://180294175556/eu-central-1",
       "properties": {
-        "templateFile": "dev-minesweeper-bff.template.json",
+        "templateFile": "prod-minesweeper-bff.template.json",
         "terminationProtection": false,
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-deploy-role-586794474219-eu-central-1",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-cfn-exec-role-586794474219-eu-central-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-586794474219-eu-central-1/b8a04406c4bc92f5fbd5e18cc9aa33918ea422589cfcd10e717bac34a988b557.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::180294175556:role/cdk-hnb659fds-deploy-role-180294175556-eu-central-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::180294175556:role/cdk-hnb659fds-cfn-exec-role-180294175556-eu-central-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-180294175556-eu-central-1/37174a30ba45c8416ed1b9ded402aa885e23038713892641bdd4aa54508f6338.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
-          "dev-minesweeper-bff.assets"
+          "prod-minesweeper-bff.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::586794474219:role/cdk-hnb659fds-lookup-role-586794474219-eu-central-1",
+          "arn": "arn:${AWS::Partition}:iam::180294175556:role/cdk-hnb659fds-lookup-role-180294175556-eu-central-1",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }
       },
       "dependencies": [
-        "dev-minesweeper-bff.assets"
+        "prod-minesweeper-bff.assets"
       ],
       "metadata": {
-        "/dev-minesweeper-bff/MinesweeperBffTable/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffTable/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffTable8C052238"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiCE8EF776"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/DefaultStage/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/DefaultStage/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiDefaultStage607C4298"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/GET--{proxy+}/ApiIntegration/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/GET--{proxy+}/ApiIntegration/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiGETproxyApiIntegration14CF20C3"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/GET--{proxy+}/ApiIntegration-Permission": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/GET--{proxy+}/ApiIntegration-Permission": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiGETproxyApiIntegrationPermission78E80447"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/GET--{proxy+}/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/GET--{proxy+}/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiGETproxy907D2FCF"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/PUT--{proxy+}/ApiIntegration-Permission": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/PUT--{proxy+}/ApiIntegration-Permission": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiPUTproxyApiIntegrationPermission805C0C03"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/PUT--{proxy+}/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/PUT--{proxy+}/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiPUTproxy663CA936"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/POST--{proxy+}/ApiIntegration-Permission": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/POST--{proxy+}/ApiIntegration-Permission": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiPOSTproxyApiIntegrationPermissionCF4E4725"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/POST--{proxy+}/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/POST--{proxy+}/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiPOSTproxyD3CA6843"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/PATCH--{proxy+}/ApiIntegration-Permission": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/PATCH--{proxy+}/ApiIntegration-Permission": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiPATCHproxyApiIntegrationPermissionE6C21C16"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/PATCH--{proxy+}/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/PATCH--{proxy+}/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiPATCHproxy225CA820"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/DELETE--{proxy+}/ApiIntegration-Permission": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/DELETE--{proxy+}/ApiIntegration-Permission": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiDELETEproxyApiIntegrationPermission670292DD"
           }
         ],
-        "/dev-minesweeper-bff/MinesweeperBffApi/DELETE--{proxy+}/Resource": [
+        "/prod-minesweeper-bff/MinesweeperBffApi/DELETE--{proxy+}/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffApiDELETEproxyAC7D0572"
           }
         ],
-        "/dev-minesweeper-bff/ApiFunction/ServiceRole/Resource": [
+        "/prod-minesweeper-bff/ApiFunction/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "ApiFunctionServiceRole52B9747B"
           }
         ],
-        "/dev-minesweeper-bff/ApiFunction/ServiceRole/DefaultPolicy/Resource": [
+        "/prod-minesweeper-bff/ApiFunction/ServiceRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "ApiFunctionServiceRoleDefaultPolicy20A32B8D"
           }
         ],
-        "/dev-minesweeper-bff/ApiFunction/Resource": [
+        "/prod-minesweeper-bff/ApiFunction/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "ApiFunctionCE271BD4"
           }
         ],
-        "/dev-minesweeper-bff/ApiFunction/LogRetention/Resource": [
+        "/prod-minesweeper-bff/ApiFunction/LogRetention/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "ApiFunctionLogRetentionDCC3A405"
           }
         ],
-        "/dev-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
           }
         ],
-        "/dev-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
           }
         ],
-        "/dev-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
           }
         ],
-        "/dev-minesweeper-bff/ApiUrl": [
+        "/prod-minesweeper-bff/ApiUrl": [
           {
             "type": "aws:cdk:logicalId",
             "data": "ApiUrl"
           }
         ],
-        "/dev-minesweeper-bff/CDKMetadata/Default": [
+        "/prod-minesweeper-bff/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadata"
           }
         ],
-        "/dev-minesweeper-bff/BootstrapVersion": [
+        "/prod-minesweeper-bff/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BootstrapVersion"
           }
         ],
-        "/dev-minesweeper-bff/CheckBootstrapVersion": [
+        "/prod-minesweeper-bff/CheckBootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CheckBootstrapVersion"
           }
         ]
       },
-      "displayName": "dev-minesweeper-bff"
+      "displayName": "prod-minesweeper-bff"
     },
     "Tree": {
       "type": "cdk:tree",

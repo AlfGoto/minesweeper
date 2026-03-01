@@ -1,4 +1,3 @@
-import { getLatestGames } from "@/lib/api";
 import { formatDateTime, formatTime } from "@/lib/dates";
 import {
   Table,
@@ -8,10 +7,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+interface GameData {
+  status: "won" | "lost" | "restarted";
+  time: number;
+  flags: number;
+  revealed: number;
+  date: string;
+}
 
-export async function LatestGames(props: { userEmail: string }) {
-  const latestGames = await getLatestGames(props.userEmail);
+interface LatestGamesProps {
+  games: GameData[];
+}
 
+export function LatestGames({ games }: LatestGamesProps) {
   return (
     <Table>
       <TableHeader>
@@ -34,7 +42,7 @@ export async function LatestGames(props: { userEmail: string }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {latestGames.map((game, index) => (
+        {games.map((game, index) => (
           <TableRow key={`${game.date}-${index}`} className="hover:bg-gray-100">
             <TableCell style={{ textAlign: "left" }}>
               <StatusBadge status={game.status} />
@@ -65,7 +73,7 @@ export async function LatestGames(props: { userEmail: string }) {
             </TableCell>
           </TableRow>
         ))}
-        {latestGames.length === 0 && (
+        {games.length === 0 && (
           <TableRow className="hover:bg-transparent">
             <TableCell
               colSpan={5}

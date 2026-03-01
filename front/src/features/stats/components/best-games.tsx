@@ -1,4 +1,3 @@
-import { getBest10Games } from "@/lib/api";
 import { formatDateTime, formatTime } from "@/lib/dates";
 import {
   Table,
@@ -8,10 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+interface GameData {
+  time: number;
+  flags: number;
+  date: string;
+}
 
-export async function BestGames(props: { userEmail: string }) {
-  const bestGames = await getBest10Games(props.userEmail);
+interface BestGamesProps {
+  games: GameData[];
+}
 
+export function BestGames({ games }: BestGamesProps) {
   return (
     <Table>
       <TableHeader>
@@ -31,7 +37,7 @@ export async function BestGames(props: { userEmail: string }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {bestGames.map((game, index) => (
+        {games.map((game, index) => (
           <TableRow key={`${game.date}-${index}`} className="hover:bg-gray-100">
             <TableCell style={{ textAlign: "left" }}>
               <RankBadge rank={index + 1} />
@@ -56,7 +62,7 @@ export async function BestGames(props: { userEmail: string }) {
             </TableCell>
           </TableRow>
         ))}
-        {bestGames.length === 0 && (
+        {games.length === 0 && (
           <TableRow className="hover:bg-transparent">
             <TableCell
               colSpan={5}

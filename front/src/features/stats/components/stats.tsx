@@ -1,12 +1,26 @@
-import { getStats } from "@/lib/api";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/lib/dates";
 import { Separator } from "@/components/ui/separator";
 
-export async function Stats(props: { userEmail: string }) {
-  const stats = await getStats(props.userEmail);
+interface StatsData {
+  totalGames: number;
+  totalTime: number;
+  totalFlags: number;
+  totalRevealed: number;
+  totalBombs: number;
+  totalWin: number;
+  bestTime: number;
+  totalNoFlagsWin: number;
+  totalRestarts: number;
+}
 
+interface StatsProps {
+  stats: StatsData | null | undefined;
+  title?: string;
+}
+
+export function Stats({ stats, title = "Your stats" }: StatsProps) {
   if (!stats) return <NoStats />;
 
   const gameStats = [
@@ -51,7 +65,7 @@ export async function Stats(props: { userEmail: string }) {
     <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
       <div className="flex items-center gap-2">
         <span className="text-2xl">📊</span>
-        <h2 className="text-2xl font-bold">Your stats</h2>
+        <h2 className="text-2xl font-bold">{title}</h2>
       </div>
 
       <StatsGroup title="Games" stats={gameStats} />
