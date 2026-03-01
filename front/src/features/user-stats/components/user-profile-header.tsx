@@ -28,10 +28,10 @@ export function UserProfileHeader({ userName, userImage }: UserProfileHeaderProp
         </div>
       </div>
       <div className="flex gap-2">
-        <Link href="/">
+        <Link href="/" prefetch={true}>
           <Button>Back to game</Button>
         </Link>
-        <Link href="/stats">
+        <Link href="/stats" prefetch={true}>
           <Button variant="outline">Back to stats</Button>
         </Link>
       </div>

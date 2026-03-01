@@ -14,10 +14,13 @@ interface LeaderboardRowProps {
 export function LeaderboardRow({ game, rank }: LeaderboardRowProps) {
   const router = useRouter();
 
+  const href = `/stats/${game.userId}`;
+
   return (
     <TableRow
       className="hover:bg-gray-100 cursor-pointer"
-      onClick={() => router.push(`/stats/${game.userId}`)}
+      onClick={() => router.push(href)}
+      onMouseEnter={() => router.prefetch(href)}
     >
       <TableCell style={{ textAlign: "left" }}>
         {rank === 1 ? (

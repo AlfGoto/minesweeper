@@ -31,7 +31,7 @@ export function StatsHeader({ userName, userImage }: StatsHeaderProps) {
         </div>
       </div>
       <div className="flex gap-2">
-        <Link href="/">
+        <Link href="/" prefetch={true}>
           <Button>Back to game</Button>
         </Link>
         <Button variant="outline" onClick={() => signOut({ callbackUrl: "/" })}>
