@@ -176,7 +176,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           setter(newCell);
         }
       } else if (content.type === "LOSE") {
-        console.log(content);
         gameOnRef.current = false;
         timeRef.current = content.time;
         // Open the lose dialog after 2 seconds
@@ -206,7 +205,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           }
         });
       } else if (content.type === "WIN") {
-        console.log(content);
         gameOnRef.current = false;
         timeRef.current = content.time;
 
@@ -279,7 +277,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       // Send LOGIN immediately if session is available
       const currentSession = sessionRef.current;
       if (currentSession?.user?.email && !hasLoggedInRef.current) {
-        console.log("Sending LOGIN on connect for authenticated user");
         client.send({
           type: "LOGIN",
           userEmail: currentSession.user.email,
@@ -312,7 +309,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       !hasLoggedInRef.current &&
       wsClientRef.current
     ) {
-      console.log("Sending LOGIN for authenticated user");
       wsClientRef.current.send({
         type: "LOGIN",
         userEmail: session.user.email,

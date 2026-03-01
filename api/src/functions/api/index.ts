@@ -5,12 +5,14 @@ import { handle } from "hono/aws-lambda"
 import { HTTPException } from "hono/http-exception"
 import { route as GameRoute } from "./games"
 import { route as StatsRoute } from "./stats"
+import { route as UserStatsRoute } from "./user-stats"
 
 const app = new OpenAPIHono()
 
 const routes = app
   .route("/games", GameRoute)
   .route("/stats", StatsRoute)
+  .route("/users", UserStatsRoute)
   .onError((error, c) => {
     console.error("Error:", JSON.stringify(error, null, 2))
 

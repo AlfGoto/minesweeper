@@ -29,6 +29,7 @@ export const GameSchema = z
 
 export const BestGameSchema = z
   .object({
+    userId: z.string(),
     time: z.number(),
     flags: z.number(),
     date: z.string(),
@@ -60,13 +61,19 @@ export const route = new OpenAPIHono()
       const games = await Promise.all(
         bestGames.map(async game => {
           const user = await User.getUserByEmail(game.userEmail)
+          console.log("User fetched for leaderboard:", JSON.stringify({ userEmail: game.userEmail, userId: user?.userId, user }, null, 2))
           return {
-            ...game,
+            userId: user?.userId ?? "",
+            time: game.time,
+            flags: game.flags,
+            date: game.date,
             userName: user?.userName ?? "",
             userPicture: user?.userPicture ?? "",
           }
         })
       )
+
+      console.log("Final games array:", JSON.stringify(games, null, 2))
 
       return c.json(
         z
