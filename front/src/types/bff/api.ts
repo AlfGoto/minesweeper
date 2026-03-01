@@ -201,7 +201,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/stats/{userEmail}": {
+    "/stats/user/{userEmail}": {
         parameters: {
             query?: never;
             header?: never;

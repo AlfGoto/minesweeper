@@ -21,7 +21,7 @@ interface StatsProps {
 }
 
 export function Stats({ stats, title = "Your stats" }: StatsProps) {
-  if (!stats) return <NoStats />;
+  if (!stats || stats.totalGames === 0) return <NoStats />;
 
   const gameStats = [
     { label: "Total Games", value: stats.totalGames.toString(), emoji: "🎮" },

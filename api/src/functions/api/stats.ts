@@ -73,7 +73,7 @@ export const route = new OpenAPIHono()
   .openapi(
     createRoute({
       method: "get",
-      path: "/{userEmail}",
+      path: "/user/{userEmail}",
       request: {
         params: z.object({
           userEmail: z.string(),
@@ -143,7 +143,7 @@ export const route = new OpenAPIHono()
           totalRevealed: stats.totalRevealed,
           totalBombs: stats.totalBombs,
           totalWin: stats.totalWin,
-          bestTime,
+          bestTime: bestTime?.time ?? 0,
           totalNoFlagsWin: user?.totalNoFlagsWin ?? 0,
           totalRestarts: stats.totalRestarts,
         }),

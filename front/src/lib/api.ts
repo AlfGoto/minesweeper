@@ -11,7 +11,7 @@ export async function getAllStats() {
 }
 
 export async function getStats(userEmail: string) {
-  const response = await client.GET("/stats/{userEmail}", {
+  const response = await client.GET("/stats/user/{userEmail}", {
     params: {
       path: {
         userEmail,
