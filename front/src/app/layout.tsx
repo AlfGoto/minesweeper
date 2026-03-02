@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import { SessionProvider } from "@/components/providers/session-provider";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -160,7 +161,12 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "VideoGame",
               name: "Minesweeper",
-              alternateName: ["Démineur", "Buscaminas", "Mijnenveger", "Campo Minato"],
+              alternateName: [
+                "Démineur",
+                "Buscaminas",
+                "Mijnenveger",
+                "Campo Minato",
+              ],
               url: "https://minesweeper.fr",
               applicationCategory: "GameApplication",
               genre: ["Puzzle", "Strategy", "Logic"],
@@ -204,6 +210,7 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
+        <NextTopLoader color="#4ade80" />
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
