@@ -7,7 +7,8 @@ import { cn } from "@/lib/utils";
 
 export const green = "bg-[limegreen] contrast-[0.8]";
 export const lightGreen = "bg-[lightgreen] contrast-[0.8]";
-const fontSize = "23px";
+/** Scales with board (container query); matches former ~23px at max board size. */
+const cellText = "text-[clamp(10px,2.65cqw,23px)]";
 
 const getNumberColor = (value: number) => {
   const colors = [
@@ -91,7 +92,7 @@ function CellComponent({ id }: { id: number }) {
 
   const size =
     typeof content === "number"
-      ? "text-lg font-medium " + getNumberColor(content)
+      ? "font-medium " + getNumberColor(content)
       : "";
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -126,7 +127,6 @@ function CellComponent({ id }: { id: number }) {
             position: "relative",
             display: "inline-block",
             pointerEvents: "none",
-            fontSize,
           }}
         >
           {content}
@@ -144,7 +144,6 @@ function CellComponent({ id }: { id: number }) {
             position: "relative",
             display: "inline-block",
             pointerEvents: "none",
-            fontSize,
           }}
         >
           {content}
@@ -175,11 +174,12 @@ function CellComponent({ id }: { id: number }) {
     <div
       className={cn(
         color,
+        cellText,
         size,
         revealedClass,
         numberColor,
         isWinning && cellWin,
-        `box-border w-[15px] h-[15px] md:w-[25px] md:h-[25px] lg:w-[30px] lg:h-[30px] xl:w-[37.5px] xl:h-[37.5px] 2xl:w-[45px] 2xl:h-[45px] flex items-center justify-center select-none relative text-[23px] font-bold`,
+        "box-border flex h-full min-h-0 min-w-0 w-full items-center justify-center font-bold select-none relative",
       )}
       style={
         isWinning
