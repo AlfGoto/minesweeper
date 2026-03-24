@@ -179,7 +179,7 @@ function CellComponent({ id }: { id: number }) {
         revealedClass,
         numberColor,
         isWinning && cellWin,
-        `box-border w-[15px] h-[15px] md:w-[25px] md:h-[25px] lg:w-[35px] lg:h-[35px] flex items-center justify-center select-none relative text-[23px] font-bold`,
+        `box-border w-[15px] h-[15px] md:w-[25px] md:h-[25px] lg:w-[30px] lg:h-[30px] xl:w-[37.5px] xl:h-[37.5px] 2xl:w-[45px] 2xl:h-[45px] flex items-center justify-center select-none relative text-[23px] font-bold`,
       )}
       style={
         isWinning
