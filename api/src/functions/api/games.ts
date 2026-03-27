@@ -23,7 +23,7 @@ export const GameSchema = z
     date: z.string(),
     userEmail: z.string(),
     userName: z.string(),
-    userPicture: z.string(),
+    userPicture: z.string()
   })
   .openapi("Game")
 
@@ -34,7 +34,7 @@ export const BestGameSchema = z
     flags: z.number(),
     date: z.string(),
     userName: z.string(),
-    userPicture: z.string(),
+    userPicture: z.string()
   })
   .openapi("BestGame")
 
@@ -48,32 +48,32 @@ export const route = new OpenAPIHono()
           description: "Get best games",
           content: {
             "application/json": {
-              schema: z.array(BestGameSchema),
-            },
-          },
-        },
+              schema: z.array(BestGameSchema)
+            }
+          }
+        }
       },
-      description: "Get best games",
+      description: "Get best games"
     }),
-    async c => {
+    async (c) => {
       const bestGames = await BestGame.getBestGames()
 
       const games = await Promise.all(
-        bestGames.map(async game => {
-          const user = await User.getUserByEmail(game.userEmail)
-          console.log("User fetched for leaderboard:", JSON.stringify({ userEmail: game.userEmail, userId: user?.userId, user }, null, 2))
-          return {
-            userId: user?.userId ?? "",
-            time: game.time,
-            flags: game.flags,
-            date: game.date,
-            userName: user?.userName ?? "",
-            userPicture: user?.userPicture ?? "",
-          }
-        })
+        bestGames
+          .sort((a, b) => a.time - b.time)
+          .slice(0, 10)
+          .map(async (game) => {
+            const user = await User.getUserByEmail(game.userEmail)
+            return {
+              userId: user?.userId ?? "",
+              time: game.time,
+              flags: game.flags,
+              date: game.date,
+              userName: user?.userName ?? "",
+              userPicture: user?.userPicture ?? ""
+            }
+          })
       )
-
-      console.log("Final games array:", JSON.stringify(games, null, 2))
 
       return c.json(
         z
@@ -90,32 +90,34 @@ export const route = new OpenAPIHono()
       path: "/best/{userEmail}",
       request: {
         params: z.object({
-          userEmail: z.string(),
-        }),
+          userEmail: z.string()
+        })
       },
       responses: {
         200: {
           description: "Get best 10 games of a user",
           content: {
             "application/json": {
-              schema: z.array(GameSchema),
-            },
-          },
-        },
+              schema: z.array(GameSchema)
+            }
+          }
+        }
       },
-      description: "Get best 10 games of a user",
+      description: "Get best 10 games of a user"
     }),
-    async c => {
+    async (c) => {
       const { userEmail } = c.req.valid("param")
 
       const games = await Game.get10BestGames(userEmail)
       const user = await User.getUserByEmail(userEmail)
 
-      const gamesWithUser = (games ?? []).map(game => ({
-        ...game,
-        userName: user?.userName ?? "",
-        userPicture: user?.userPicture ?? "",
-      })).sort((a, b) => a.time - b.time)
+      const gamesWithUser = (games ?? [])
+        .map((game) => ({
+          ...game,
+          userName: user?.userName ?? "",
+          userPicture: user?.userPicture ?? ""
+        }))
+        .sort((a, b) => a.time - b.time)
 
       return c.json(z.array(GameSchema).parse(gamesWithUser), 200)
     }
@@ -126,39 +128,39 @@ export const route = new OpenAPIHono()
       path: "/{userEmail}",
       request: {
         params: z.object({
-          userEmail: z.string(),
-        }),
+          userEmail: z.string()
+        })
       },
       responses: {
         200: {
           description: "Get last 10 games of a user",
           content: {
             "application/json": {
-              schema: z.array(GameSchema),
-            },
-          },
+              schema: z.array(GameSchema)
+            }
+          }
         },
         404: {
           description: "user not found",
           content: {
             "application/json": {
-              schema: z.object({ message: z.string() }),
-            },
-          },
-        },
+              schema: z.object({ message: z.string() })
+            }
+          }
+        }
       },
-      description: "Get last 10 games of a user",
+      description: "Get last 10 games of a user"
     }),
-    async c => {
+    async (c) => {
       const { userEmail } = c.req.valid("param")
 
       const games = await Game.getLast10Ofuser(userEmail)
       const user = await User.getUserByEmail(userEmail)
 
-      const gamesWithUser = (games ?? []).map(game => ({
+      const gamesWithUser = (games ?? []).map((game) => ({
         ...game,
         userName: user?.userName ?? "",
-        userPicture: user?.userPicture ?? "",
+        userPicture: user?.userPicture ?? ""
       }))
 
       return c.json(z.array(GameSchema).parse(gamesWithUser), 200)
@@ -172,38 +174,26 @@ export const route = new OpenAPIHono()
         body: {
           content: {
             "application/json": {
-              schema: GameSchema,
-            },
-          },
-        },
+              schema: GameSchema
+            }
+          }
+        }
       },
       responses: {
         200: {
           description: "Create a game",
           content: {
             "application/json": {
-              schema: z.string(),
-            },
-          },
-        },
-      },
-    }),
-    async c => {
-      const game = c.req.valid("json")
-
-      // Check for best game BEFORE creating the new game to avoid comparing against itself
-      const bestGame = game.status === "won" ? await BestGame.getBestOfUser(game.userEmail) : undefined
-
-      await Game.create(game)
-
-      if (game.status === "won") {
-        console.log("Game won, checking best game", { userEmail: game.userEmail, time: game.time, existingBest: bestGame?.time })
-        if (!bestGame || bestGame.time > game.time) {
-          console.log("Updating best game for user", game.userEmail)
-          await BestGame.update(game)
-          console.log("Best game updated successfully")
+              schema: z.string()
+            }
+          }
         }
       }
+    }),
+    async (c) => {
+      const game = c.req.valid("json")
+
+      await Game.create(game)
 
       const user = await User.getUserByEmail(game.userEmail)
 
@@ -217,7 +207,7 @@ export const route = new OpenAPIHono()
         userPicture: game.userPicture || user?.userPicture || "",
         userEmail: game.userEmail,
         userId: user?.userId ?? shortId(),
-        totalNoFlagsWin,
+        totalNoFlagsWin
       })
 
       return c.json("success", 200)

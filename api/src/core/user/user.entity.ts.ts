@@ -8,19 +8,19 @@ export const UserEntity = new Entity({
     userId: string().key(),
     userName: string(),
     userPicture: string(),
-    totalNoFlagsWin: number(),
-  }).and(prevSchema => ({
+    totalNoFlagsWin: number()
+  }).and((prevSchema) => ({
     GSI1PK: string()
       .key()
       .link<typeof prevSchema>(({ userId }) => `USERID#${userId}`),
     GSI1SK: string()
       .key()
-      .link<typeof prevSchema>(({ userId }) => `USERID#${userId}`),
+      .link<typeof prevSchema>(({ userId }) => `USERID#${userId}`)
   })),
   computeKey: ({ userEmail }: { userEmail: string }) => ({
     PK: `USER#${userEmail}`,
-    SK: `USER#${userEmail}`,
+    SK: `USER#${userEmail}`
   }),
-  table: MinesweeperBffTable,
+  table: MinesweeperBffTable
 })
 export type UserEntityType = Omit<InputItem<typeof UserEntity>, "created" | "entity" | "modified">

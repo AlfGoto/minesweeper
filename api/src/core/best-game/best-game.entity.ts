@@ -8,12 +8,15 @@ export const BestGameEntity = new Entity({
     flags: number(),
     revealed: number(),
     date: string(),
-    userEmail: string().key(),
+    userEmail: string().key()
   }),
   computeKey: ({ userEmail }: { userEmail: string }) => ({
     PK: "BEST_GAMES",
-    SK: `BEST#${userEmail}`,
+    SK: `BEST#${userEmail}`
   }),
-  table: MinesweeperBffTable,
+  table: MinesweeperBffTable
 })
-export type BestGameEntityType = Omit<InputItem<typeof BestGameEntity>, "created" | "entity" | "modified">
+export type BestGameEntityType = Omit<
+  InputItem<typeof BestGameEntity>,
+  "created" | "entity" | "modified"
+>

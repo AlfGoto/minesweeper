@@ -3,7 +3,7 @@ import { MinesweeperBff } from "./minesweeper-bff"
 
 const env = {
   account: process.env.CDK_DEPLOY_ACCOUNT ?? process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEPLOY_REGION ?? process.env.CDK_DEFAULT_REGION,
+  region: process.env.CDK_DEPLOY_REGION ?? process.env.CDK_DEFAULT_REGION
 }
 
 const app = new cdk.App()

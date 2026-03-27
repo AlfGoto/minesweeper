@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::180294175556:role/cdk-hnb659fds-deploy-role-180294175556-eu-central-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::180294175556:role/cdk-hnb659fds-cfn-exec-role-180294175556-eu-central-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-180294175556-eu-central-1/cc7b721472bea99dcbef9b35c559ffba409544ed8df78e7f6cbcadad4356f10f.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-180294175556-eu-central-1/35c24defbd7615e2d73826c7972993f46bdfd517da8b4a37ec43b5a9919528a0.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -38,6 +38,54 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "MinesweeperBffTable8C052238"
+          }
+        ],
+        "/prod-minesweeper-bff/Trigger/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TriggerServiceRoleCC02D451"
+          }
+        ],
+        "/prod-minesweeper-bff/Trigger/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TriggerServiceRoleDefaultPolicy57AC9467"
+          }
+        ],
+        "/prod-minesweeper-bff/Trigger/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TriggerD50EE54C"
+          }
+        ],
+        "/prod-minesweeper-bff/Trigger/DynamoDBEventSource:prodminesweeperbffMinesweeperBffTableD7EF5906/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TriggerDynamoDBEventSourceprodminesweeperbffMinesweeperBffTableD7EF59069435AB0E"
+          }
+        ],
+        "/prod-minesweeper-bff/Trigger/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TriggerLogRetentionB68B0970"
+          }
+        ],
+        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
           }
         ],
         "/prod-minesweeper-bff/MinesweeperBffApi/Resource": [
@@ -140,24 +188,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ApiFunctionLogRetentionDCC3A405"
-          }
-        ],
-        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
-          }
-        ],
-        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
-          }
-        ],
-        "/prod-minesweeper-bff/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
           }
         ],
         "/prod-minesweeper-bff/ApiUrl": [

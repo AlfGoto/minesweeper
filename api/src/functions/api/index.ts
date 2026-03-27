@@ -22,9 +22,9 @@ const routes = app
     return c.json(
       {
         code: "internal",
-        message: "Internal server error",
+        message: "Internal server error"
       },
-      500,
+      500
     )
   })
 
@@ -34,14 +34,14 @@ app
     info: {
       version: "1.0.0",
       title: "MinesweeperBff Api",
-      description: "The api used to manage the minesweeper",
-    },
+      description: "The api used to manage the minesweeper"
+    }
   })
   .get(
     "/ui",
     swaggerUI({
-      url: "/doc",
-    }),
+      url: "/doc"
+    })
   )
 
 export type Routes = typeof routes

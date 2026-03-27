@@ -13,7 +13,7 @@ export const MinesweeperBffTable = new Table({
     GSI1: {
       type: "global",
       partitionKey: { name: "GSI1PK", type: "string" },
-      sortKey: { name: "GSI1SK", type: "string" },
-    },
-  },
+      sortKey: { name: "GSI1SK", type: "string" }
+    }
+  }
 })

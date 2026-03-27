@@ -11,7 +11,7 @@ export namespace User {
     const { Items } = await MinesweeperBffTable.build(QueryCommand)
       .query({
         partition: `USERID#${userId}`,
-        index: "GSI1",
+        index: "GSI1"
       })
       .entities(UserEntity)
       .send()
@@ -21,7 +21,7 @@ export namespace User {
   export const getUserByEmail = async (userEmail: string) => {
     const { Items } = await MinesweeperBffTable.build(QueryCommand)
       .query({
-        partition: `USER#${userEmail}`,
+        partition: `USER#${userEmail}`
       })
       .entities(UserEntity)
       .send()

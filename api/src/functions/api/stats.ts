@@ -1,7 +1,5 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { z } from "zod"
-import { BestGame } from "../../core/best-game"
-import { Game } from "../../core/game"
 import { User } from "../../core/user"
 import { UserStatsCache } from "../../core/user-stats-cache"
 
@@ -13,9 +11,9 @@ export const StatsSchema = z
     totalRevealed: z.number(),
     totalBombs: z.number(),
     totalWin: z.number(),
-    bestTime: z.number(),
+    bestTime: z.number().optional(),
     totalNoFlagsWin: z.number(),
-    totalRestarts: z.number(),
+    totalRestarts: z.number()
   })
   .openapi("Stats")
 
@@ -27,13 +25,13 @@ export const StatsAllSchema = z
     totalRevealed: z.number(),
     totalBombs: z.number(),
     totalWin: z.number(),
-    bestTime: z.number(),
+    bestTime: z.number().optional(),
     totalNoFlagsWin: z.number(),
     totalRestarts: z.number(),
 
     userPicture: z.string(),
     userName: z.string(),
-    userId: z.string(),
+    userId: z.string()
   })
   .openapi("StatsAll")
 
@@ -47,23 +45,23 @@ export const route = new OpenAPIHono()
           description: "Get all stats",
           content: {
             "application/json": {
-              schema: z.array(StatsAllSchema),
-            },
-          },
-        },
-      },
+              schema: z.array(StatsAllSchema)
+            }
+          }
+        }
+      }
     }),
-    async c => {
+    async (c) => {
       const stats = await UserStatsCache.getAll()
 
       const statsWithUser = await Promise.all(
-        stats.map(async stat => {
+        stats.map(async (stat) => {
           const user = await User.getUserByEmail(stat.userEmail)
           return {
             ...stat,
             userId: user?.userId ?? "",
             userPicture: user?.userPicture ?? "",
-            userName: user?.userName ?? "",
+            userName: user?.userName ?? ""
           }
         })
       )
@@ -76,78 +74,38 @@ export const route = new OpenAPIHono()
       path: "/user/{userEmail}",
       request: {
         params: z.object({
-          userEmail: z.string(),
-        }),
+          userEmail: z.string()
+        })
       },
       responses: {
         200: {
           description: "Get stats of a user",
           content: {
             "application/json": {
-              schema: StatsSchema,
-            },
-          },
+              schema: StatsSchema
+            }
+          }
         },
         404: {
-          description: "user not found",
+          description: "Stats not found for this user",
           content: {
             "application/json": {
-              schema: z.object({ message: z.string() }),
-            },
-          },
-        },
+              schema: z.object({ message: z.string() })
+            }
+          }
+        }
       },
-      description: "Get stats of a user",
+      description: "Get stats of a user (from cache)"
     }),
-    async c => {
+    async (c) => {
       const { userEmail } = c.req.valid("param")
 
-      const [user, games, bestTime] = await Promise.all([
-        User.getUserByEmail(userEmail),
-        Game.getAllGames(userEmail),
-        BestGame.getBestOfUser(userEmail),
-      ])
+      const cached = await UserStatsCache.getByUserEmail(userEmail)
 
-      const stats = games.reduce(
-        (acc, game) => {
-          acc.totalTime += game.time
-          acc.totalFlags += game.flags
-          acc.totalRevealed += game.revealed
+      if (!cached) {
+        return c.json({ message: "Stats not found" }, 404)
+      }
 
-          acc.totalBombs += game.status === "won" ? 0 : 1
-          acc.totalWin += game.status === "won" ? 1 : 0
-          acc.totalRestarts += game.status === "restarted" ? 1 : 0
-          return acc
-        },
-        { totalTime: 0, totalFlags: 0, totalRevealed: 0, totalBombs: 0, totalWin: 0, totalRestarts: 0 }
-      )
-
-      await UserStatsCache.update({
-        userEmail,
-        bestTime: bestTime?.time ?? 0,
-        totalGames: games.length,
-        totalTime: stats.totalTime,
-        totalFlags: stats.totalFlags,
-        totalRevealed: stats.totalRevealed,
-        totalBombs: stats.totalBombs,
-        totalWin: stats.totalWin,
-        totalNoFlagsWin: user?.totalNoFlagsWin ?? 0,
-        totalRestarts: stats.totalRestarts,
-      })
-
-      return c.json(
-        StatsSchema.parse({
-          totalGames: games.length,
-          totalTime: stats.totalTime,
-          totalFlags: stats.totalFlags,
-          totalRevealed: stats.totalRevealed,
-          totalBombs: stats.totalBombs,
-          totalWin: stats.totalWin,
-          bestTime: bestTime?.time ?? 0,
-          totalNoFlagsWin: user?.totalNoFlagsWin ?? 0,
-          totalRestarts: stats.totalRestarts,
-        }),
-        200
-      )
+      return c.json(StatsSchema.parse(cached), 200)
     }
   )

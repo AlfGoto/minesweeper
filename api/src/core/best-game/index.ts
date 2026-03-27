@@ -10,11 +10,10 @@ export namespace BestGame {
   export const getBestGames = async () => {
     const { Items } = await MinesweeperBffTable.build(QueryCommand)
       .query({
-        partition: "BEST_GAMES",
+        partition: "BEST_GAMES"
       })
       .options({
-        limit: 10,
-        reverse: true,
+        reverse: true
       })
       .entities(BestGameEntity)
       .send()
@@ -24,7 +23,7 @@ export namespace BestGame {
   export const getBestOfUser = async (userEmail: string) => {
     const { Item } = await BestGameEntity.build(GetItemCommand)
       .key({
-        userEmail,
+        userEmail
       })
       .send()
     return Item

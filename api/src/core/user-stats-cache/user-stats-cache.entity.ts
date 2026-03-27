@@ -11,14 +11,17 @@ export const UserStatsCacheEntity = new Entity({
     totalRevealed: number(),
     totalBombs: number(),
     totalWin: number(),
-    bestTime: number(),
+    bestTime: number().optional(),
     totalNoFlagsWin: number(),
-    totalRestarts: number(),
+    totalRestarts: number()
   }),
   computeKey: ({ userEmail }: { userEmail: string }) => ({
     PK: "USER_STATS_CACHE",
-    SK: `USER#${userEmail}`,
+    SK: `USER#${userEmail}`
   }),
-  table: MinesweeperBffTable,
+  table: MinesweeperBffTable
 })
-export type UserStatsCacheEntityType = Omit<InputItem<typeof UserStatsCacheEntity>, "created" | "entity" | "modified">
+export type UserStatsCacheEntityType = Omit<
+  InputItem<typeof UserStatsCacheEntity>,
+  "created" | "entity" | "modified"
+>

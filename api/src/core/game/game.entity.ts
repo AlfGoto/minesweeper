@@ -11,19 +11,19 @@ export const GameEntity = new Entity({
     revealed: number(),
     status: string().enum(...status),
     date: string().key(),
-    userEmail: string().key(),
-  }).and(prevSchema => ({
+    userEmail: string().key()
+  }).and((prevSchema) => ({
     GSI1PK: string()
       .key()
       .link<typeof prevSchema>(({ userEmail }) => `USER_BEST_GAMES#${userEmail}`),
     GSI1SK: string()
       .key()
-      .link<typeof prevSchema>(({ time }) => `TIME#${time}`),
+      .link<typeof prevSchema>(({ time }) => `TIME#${String(time).padStart(10, "0")}`)
   })),
   computeKey: ({ userEmail, date }: { userEmail: string; date: string }) => ({
     PK: `GAME#${userEmail}`,
-    SK: `GAME#${date}`,
+    SK: `GAME#${date}`
   }),
-  table: MinesweeperBffTable,
+  table: MinesweeperBffTable
 })
 export type GameEntityType = Omit<InputItem<typeof GameEntity>, "created" | "entity" | "modified">
