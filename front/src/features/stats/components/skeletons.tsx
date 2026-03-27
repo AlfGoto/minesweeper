@@ -88,7 +88,7 @@ function TableRowSkeleton({ cols }: { cols: number }) {
     <TableRow className="hover:bg-transparent">
       {Array.from({ length: cols }).map((_, i) => (
         <TableCell key={i} style={{ textAlign: "left" }}>
-          <Skeleton className="h-5 w-full max-w-[100px]" />
+          <Skeleton className="h-10 w-full max-w-[100px]" />
         </TableCell>
       ))}
     </TableRow>
