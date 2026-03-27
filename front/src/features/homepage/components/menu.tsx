@@ -1,9 +1,8 @@
-import Link from "next/link";
 import RestartButton from "./restart-button";
-import { Button } from "@/components/ui/button";
 import LoginButton from "./login-button";
 import { getServerSession } from "next-auth";
 import Timer from "./timer";
+import { StatsButton } from "./stats-button";
 
 const buttonClassName = "text-lg w-full px-8 py-6 cursor-pointer";
 
@@ -16,11 +15,12 @@ export default async function Menu() {
         <RestartButton className={buttonClassName} />
         <Timer className={buttonClassName} />
         {session ? (
-          <Link href="/stats" prefetch={true} className="w-full">
-            <Button className={buttonClassName}>Stats</Button>
-          </Link>
+          <StatsButton className={buttonClassName} loggedIn={true} />
         ) : (
-          <LoginButton className={buttonClassName} />
+          <>
+            <LoginButton className={buttonClassName} />
+            <StatsButton className={buttonClassName} loggedIn={false} />
+          </>
         )}
       </div>
     </div>

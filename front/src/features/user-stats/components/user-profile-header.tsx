@@ -21,14 +21,14 @@ export function UserProfileHeader({ userName, userImage }: UserProfileHeaderProp
           />
         )}
         <div>
-          <h2 className="text-2xl font-bold">Profile</h2>
+          <h2 className="text-2xl font-bold">Stats</h2>
           {userName && (
             <p className="text-sm text-muted-foreground">{userName}</p>
           )}
         </div>
       </div>
       <div className="flex gap-2">
-        <Link href="/" prefetch={true}>
+        <Link href="/">
           <Button>Back to game</Button>
         </Link>
         <Link href="/stats" prefetch={true}>

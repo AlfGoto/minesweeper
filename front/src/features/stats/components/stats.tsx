@@ -129,7 +129,7 @@ function NoStats() {
   return (
     <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
       <h2>No stats found</h2>
-      <p>The user has not played any games yet.</p>
+      <p>No games yet. Start playing!</p>
       <Link href="/" prefetch={true}>
         <Button>Back to game</Button>
       </Link>
