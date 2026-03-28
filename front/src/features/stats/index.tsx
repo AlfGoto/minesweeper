@@ -32,7 +32,10 @@ export async function StatsPage() {
       />
 
       <Suspense fallback={<LeaderboardSkeleton />}>
-        <Tabs defaultValue="latest-games" className="w-full border rounded-lg gap-0">
+        <Tabs
+          defaultValue="latest-games"
+          className="w-full border rounded-lg gap-0"
+        >
           <TabsList className="w-fit mx-2 my-4 p-2">
             <TabsTrigger
               value="latest-games"
@@ -73,6 +76,13 @@ export async function StatsPage() {
       <Suspense fallback={<GamesSkeleton />}>
         <UserGames userEmail={userEmail} />
       </Suspense>
+
+      <div className="flex justify-center gap-1 mt-6 text-gray-500 text-sm">
+        You can contact me at
+        <a href="mailto:contact@minesweeper.com" className="underline">
+          alf@minesweeper.com
+        </a>
+      </div>
     </div>
   );
 }
@@ -89,7 +99,10 @@ async function UserGames({ userEmail }: { userEmail: string }) {
   ]);
 
   return (
-    <Tabs defaultValue="latest-games" className="w-full border rounded-lg gap-0">
+    <Tabs
+      defaultValue="latest-games"
+      className="w-full border rounded-lg gap-0"
+    >
       <TabsList className="w-fit mx-2 my-4 p-2">
         <TabsTrigger
           value="latest-games"
