@@ -79,8 +79,8 @@ export async function StatsPage() {
 
       <div className="flex justify-center gap-1 mt-6 text-gray-500 text-sm">
         You can contact me at
-        <a href="mailto:contact@minesweeper.com" className="underline">
-          alf@minesweeper.com
+        <a href="mailto:contact@minesweeper.fr" className="underline">
+          alf@minesweeper.fr
         </a>
       </div>
     </div>
