@@ -156,24 +156,39 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         }
         gameOnRef.current = true;
         const cellId = content.id;
-        const newCell: Cell = {
-          status: "revealed",
-          value: content.value,
-        };
-        
+
         const setter = cellSettersRef.current.get(cellId);
         if (setter) {
-          setter(newCell); // Only this cell re-renders!
+          setter((prevCell) => {
+            if (
+              prevCell.status === "revealed" &&
+              prevCell.value === content.value
+            ) {
+              return prevCell;
+            }
+
+            return {
+              status: "revealed",
+              value: content.value,
+            };
+          });
         }
       } else if (content.type === "FLAG") {
         const cellId = content.id;
-        const newCell: Cell = {
-          status: content.flagged ? "flagged" : "hidden",
-          value: 0,
-        };
+        const nextStatus: Cell["status"] = content.flagged ? "flagged" : "hidden";
+
         const setter = cellSettersRef.current.get(cellId);
         if (setter) {
-          setter(newCell);
+          setter((prevCell) => {
+            if (prevCell.status === nextStatus && prevCell.value === 0) {
+              return prevCell;
+            }
+
+            return {
+              status: nextStatus,
+              value: 0,
+            };
+          });
         }
       } else if (content.type === "LOSE") {
         gameOnRef.current = false;
@@ -385,11 +400,50 @@ export function useCell(id: number) {
     return unregister;
   }, [id, registerCellSetter]);
 
+  const onCellClickWithOptimisticUpdate = useCallback(
+    (cellId: number, clickType: "left" | "right") => {
+      setCell((prevCell) => {
+        if (clickType === "left") {
+          if (prevCell.status !== "hidden") {
+            return prevCell;
+          }
+
+          // Optimistic reveal: immediately switch the background while waiting
+          // for the websocket REVEAL payload with the actual value.
+          return {
+            status: "revealed",
+            value: 0,
+          };
+        }
+
+        // Optimistic flag toggle for hidden/flagged cells.
+        if (prevCell.status === "revealed" || prevCell.status === "winning") {
+          return prevCell;
+        }
+
+        if (prevCell.status === "flagged") {
+          return {
+            status: "hidden",
+            value: 0,
+          };
+        }
+
+        return {
+          status: "flagged",
+          value: 0,
+        };
+      });
+
+      onCellClick(cellId, clickType);
+    },
+    [onCellClick],
+  );
+
   return useMemo(
     () => ({
       cell,
-      onCellClick,
+      onCellClick: onCellClickWithOptimisticUpdate,
     }),
-    [cell, onCellClick],
+    [cell, onCellClickWithOptimisticUpdate],
   );
 }
