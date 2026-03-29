@@ -13,10 +13,12 @@ import { useSession } from "next-auth/react";
 import { Cell } from "@/types/game";
 import { WebSocketClient } from "@/lib/websocket-client";
 import { ServerMessage } from "@/types/websocker-messages";
-import { TOTAL_CELLS } from "@/vars";
+import { HEIGHT, TOTAL_CELLS } from "@/vars";
 
 type GameContextType = {
   getInitialCell: (id: number) => Cell;
+  getCellSnapshot: (id: number) => Cell;
+  cellsRevision: number;
   registerCellSetter: (
     id: number,
     setter: React.Dispatch<React.SetStateAction<Cell>>,
@@ -28,6 +30,10 @@ type GameContextType = {
   isGameOn: () => boolean;
   registerLoseDialogOpener: (opener: (open: boolean) => void) => () => void;
   registerWinDialogOpener: (opener: (open: boolean) => void) => () => void;
+  updateCellOptimistically: (
+    id: number,
+    updater: (prevCell: Cell) => Cell,
+  ) => void;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);
@@ -42,9 +48,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const wsClientRef = useRef<WebSocketClient | null>(null);
   const hasLoggedInRef = useRef(false);
   const isConnectedRef = useRef(false);
+  const [cellsRevision, setCellsRevision] = useState(0);
 
   // Store initial cells in a ref (never changes, just for initial values)
   const initialCellsRef = useRef<Map<number, Cell> | null>(null);
+  const cellsSnapshotRef = useRef<Map<number, Cell>>(new Map());
 
   // Lazy initialization function
   const getInitialCellsMap = useCallback((): Map<number, Cell> => {
@@ -54,9 +62,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         map.set(i, { status: "hidden", value: 0 });
       }
       initialCellsRef.current = map;
+      cellsSnapshotRef.current = new Map(map);
     }
     return initialCellsRef.current;
   }, []);
+
+  const getCellSnapshot = useCallback(
+    (id: number): Cell =>
+      cellsSnapshotRef.current.get(id) || { status: "hidden", value: 0 },
+    [],
+  );
 
   // Map of cell ID -> setState function for that cell
   const cellSettersRef = useRef<
@@ -76,20 +91,80 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     [getInitialCellsMap],
   );
 
+  const refreshNeighborCells = useCallback((id: number) => {
+    const row = Math.floor(id / HEIGHT);
+    const col = id % HEIGHT;
+    const neighborIds: number[] = [];
+
+    for (let dRow = -1; dRow <= 1; dRow++) {
+      for (let dCol = -1; dCol <= 1; dCol++) {
+        if (dRow === 0 && dCol === 0) continue;
+
+        const nRow = row + dRow;
+        const nCol = col + dCol;
+        if (nRow < 0 || nRow >= HEIGHT || nCol < 0 || nCol >= HEIGHT) continue;
+        neighborIds.push(nRow * HEIGHT + nCol);
+      }
+    }
+
+    for (const neighborId of neighborIds) {
+      const neighborSetter = cellSettersRef.current.get(neighborId);
+      if (!neighborSetter) continue;
+
+      // Force a local re-render so skins depending on neighbor context can refresh.
+      neighborSetter((prevCell) => ({ ...prevCell }));
+    }
+  }, []);
+
   // Register a cell's setState function
   const registerCellSetter = useCallback(
     (
       id: number,
       setter: React.Dispatch<React.SetStateAction<Cell>>,
     ): (() => void) => {
-      cellSettersRef.current.set(id, setter);
+      const wrappedSetter: React.Dispatch<React.SetStateAction<Cell>> = (
+        action,
+      ) => {
+        setter((prevCell) => {
+          const baseline = cellsSnapshotRef.current.get(id) || prevCell;
+          const nextCell =
+            typeof action === "function"
+              ? (action as (prevState: Cell) => Cell)(baseline)
+              : action;
+
+          const changed =
+            nextCell.status !== baseline.status ||
+            nextCell.value !== baseline.value;
+
+          if (changed) {
+            cellsSnapshotRef.current.set(id, nextCell);
+            setCellsRevision((prev) => prev + 1);
+            const isRevealAnimationTransition =
+              nextCell.status === "revealed" &&
+              nextCell.value !== "bomb" &&
+              baseline.status !== "revealed";
+
+            if (isRevealAnimationTransition) {
+              setTimeout(() => {
+                refreshNeighborCells(id);
+              }, 120);
+            } else {
+              refreshNeighborCells(id);
+            }
+          }
+
+          return nextCell;
+        });
+      };
+
+      cellSettersRef.current.set(id, wrappedSetter);
 
       // Return unsubscribe function
       return () => {
         cellSettersRef.current.delete(id);
       };
     },
-    [],
+    [refreshNeighborCells],
   );
 
   // Register the function that opens/closes the lose dialog
@@ -122,6 +197,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
     // Reset all registered cells to hidden state
     const hiddenCell: Cell = { status: "hidden", value: 0 };
+    cellsSnapshotRef.current = new Map(getInitialCellsMap());
+    setCellsRevision((prev) => prev + 1);
     cellSettersRef.current.forEach((setter) => {
       setter(hiddenCell);
     });
@@ -169,7 +246,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
             return {
               status: "revealed",
-              value: content.value,
+              value: content.value as Cell["value"],
             };
           });
         }
@@ -269,6 +346,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const updateCellOptimistically = useCallback(
+    (id: number, updater: (prevCell: Cell) => Cell) => {
+      const setter = cellSettersRef.current.get(id);
+      if (!setter) return;
+      setter(updater);
+    },
+    [],
+  );
+
   // Set up websocket connection
   useEffect(() => {
     // Only connect on client side
@@ -353,6 +439,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       getInitialCell,
+      getCellSnapshot,
+      cellsRevision,
       registerCellSetter,
       onCellClick,
       restart,
@@ -361,9 +449,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       isGameOn,
       registerLoseDialogOpener,
       registerWinDialogOpener,
+      updateCellOptimistically,
     }),
     [
       getInitialCell,
+      getCellSnapshot,
+      cellsRevision,
       registerCellSetter,
       onCellClick,
       restart,
@@ -372,6 +463,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       isGameOn,
       registerLoseDialogOpener,
       registerWinDialogOpener,
+      updateCellOptimistically,
     ],
   );
 
@@ -389,7 +481,12 @@ export function useGame() {
 // Custom hook that subscribes to only a specific cell
 // Each cell manages its own state and registers its setter with the provider
 export function useCell(id: number) {
-  const { getInitialCell, registerCellSetter, onCellClick } = useGame();
+  const {
+    getInitialCell,
+    registerCellSetter,
+    onCellClick,
+    updateCellOptimistically,
+  } = useGame();
 
   // Each cell has its own local state
   const [cell, setCell] = useState<Cell>(() => getInitialCell(id));
@@ -402,7 +499,7 @@ export function useCell(id: number) {
 
   const onCellClickWithOptimisticUpdate = useCallback(
     (cellId: number, clickType: "left" | "right") => {
-      setCell((prevCell) => {
+      updateCellOptimistically(cellId, (prevCell) => {
         if (clickType === "left") {
           if (prevCell.status !== "hidden") {
             return prevCell;
@@ -436,7 +533,7 @@ export function useCell(id: number) {
 
       onCellClick(cellId, clickType);
     },
-    [onCellClick],
+    [onCellClick, updateCellOptimistically],
   );
 
   return useMemo(

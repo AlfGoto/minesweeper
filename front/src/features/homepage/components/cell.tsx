@@ -2,31 +2,13 @@
 
 import { HEIGHT } from "@/vars";
 import { memo } from "react";
-import { useCell } from "@/features/homepage/game-provider";
+import { useCell, useGame } from "@/features/homepage/game-provider";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import { CellSkins, getSkin, getUnrevealedNeighborContext } from "./cell-skins";
 
-export const green = "bg-[limegreen] contrast-[0.8]";
-export const lightGreen = "bg-[lightgreen] contrast-[0.8]";
-/** Scales with board (container query); matches former ~23px at max board size. */
 const cellText = "text-[clamp(10px,2.65cqw,23px)]";
 
-const getNumberColor = (value: number) => {
-  const colors = [
-    "",
-    "text-blue-600", // 1
-    "text-green-600", // 2
-    "text-red-600", // 3
-    "text-purple-600", // 4
-    "text-yellow-600", // 5
-    "text-pink-600", // 6
-    "text-orange-600", // 7
-    "text-gray-600", // 8
-  ];
-  return colors[value] || "text-black";
-};
-
-export const gray = "bg-[tan] contrast-[0.9] transition-none";
-export const silver = "bg-[wheat] contrast-[0.9] transition-none";
 export const cellRevealed =
   "animate-[cellReveal_0.10s_ease-out] transition-none";
 export const flagged = "animate-[flagFall_0.15s] transition-none";
@@ -36,6 +18,12 @@ export const cellWinContent = "animate-[cellWinContent_0.6s_ease-out_forwards]";
 
 function CellComponent({ id }: { id: number }) {
   const { cell, onCellClick } = useCell(id);
+  const { getCellSnapshot } = useGame();
+  const { data: session } = useSession();
+
+  const selectedCellSkin =
+    "antic" || session?.skins?.cells || "default";
+  const infernoNoFlags = selectedCellSkin === "inferno-hard";
 
   const cellData = cell || { status: "hidden" as const, value: 0 };
 
@@ -52,20 +40,29 @@ function CellComponent({ id }: { id: number }) {
   const odd = (rowOdd && colOdd) || (!rowOdd && !colOdd);
   const isWinning = cellData.status === "winning";
 
-  const color = isHiddenOrFlagged
-    ? odd
-      ? green
-      : lightGreen
-    : odd
-      ? gray
-      : silver;
+  const unrevealedNeighborContext = getUnrevealedNeighborContext({
+    id,
+    getCellSnapshot,
+  });
+
+  const skin = getSkin({
+    skin: selectedCellSkin,
+    row,
+    col,
+    odd,
+    cellValue: cellData.value,
+    cellStatus: cellData.status,
+    isHiddenOrFlagged,
+    ...unrevealedNeighborContext,
+  });
 
   const winColor = odd ? "limegreen" : "lightgreen";
+  const { flagEmoji = "🚩", bombEmoji = "💣" } = skin.definition;
 
   const content = (() => {
     if (cellData.status === "hidden") return "";
-    if (cellData.status === "flagged") return "🚩";
-    if (cellData.value === "bomb") return "💣";
+    if (cellData.status === "flagged") return flagEmoji;
+    if (cellData.value === "bomb") return bombEmoji;
     if (cellData.status === "revealed") {
       return cellData.value === 0 ? "" : cellData.value;
     }
@@ -75,9 +72,8 @@ function CellComponent({ id }: { id: number }) {
   // For winning animation, show what was there before (number or flag) so it can fade out
   const winningContent = (() => {
     if (cellData.status !== "winning") return null;
-    if (cellData.value === "bomb") return "🚩"; // Was flagged
-    if (typeof cellData.value === "number" && cellData.value > 0)
-      return cellData.value;
+    if (cellData.value === "bomb") return flagEmoji; // Was flagged
+    if (cellData.value > 0) return cellData.value;
     return null;
   })();
 
@@ -88,29 +84,32 @@ function CellComponent({ id }: { id: number }) {
       : "";
 
   const numberColor =
-    cellData.value === "bomb" ? "text-red-600" : getNumberColor(cellData.value);
+    cellData.value === "bomb"
+      ? "text-red-600"
+      : skin.definition.number[cellData.value];
 
   const size =
     typeof content === "number"
-      ? "font-medium " + getNumberColor(content)
+      ? "font-medium " + skin.definition.number[content]
       : "";
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.buttons === 3 || (e.button === 0 && e.buttons === 3)) {
       e.preventDefault();
-      if (content === "🚩") return;
+      if (cellData.status === "flagged") return;
       onCellClick(id, "left");
       return;
     }
 
     if (e.button === 0) {
-      if (content === "🚩") return;
+      if (cellData.status === "flagged") return;
       onCellClick(id, "left");
     }
   };
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (infernoNoFlags) return;
     if (e.buttons !== 3) {
       onCellClick(id, "right");
     }
@@ -123,7 +122,6 @@ function CellComponent({ id }: { id: number }) {
           key={`flag-${id}-${cellData.status}`}
           className={flagged}
           style={{
-            zIndex: 10000,
             position: "relative",
             display: "inline-block",
             pointerEvents: "none",
@@ -140,7 +138,6 @@ function CellComponent({ id }: { id: number }) {
           key={`bomb-${id}-${cellData.value}`}
           className={bomb}
           style={{
-            zIndex: 10000,
             position: "relative",
             display: "inline-block",
             pointerEvents: "none",
@@ -170,10 +167,15 @@ function CellComponent({ id }: { id: number }) {
     return content;
   })();
 
+  const mergedStyle = {
+    ...(skin.style ?? {}),
+    ...(isWinning ? ({ "--win-color": winColor } as React.CSSProperties) : {}),
+  };
+
   return (
     <div
       className={cn(
-        color,
+        skin.className,
         cellText,
         size,
         revealedClass,
@@ -181,11 +183,7 @@ function CellComponent({ id }: { id: number }) {
         isWinning && cellWin,
         "box-border flex h-full min-h-0 min-w-0 w-full items-center justify-center font-bold select-none relative",
       )}
-      style={
-        isWinning
-          ? ({ "--win-color": winColor } as React.CSSProperties)
-          : undefined
-      }
+      style={Object.keys(mergedStyle).length ? mergedStyle : undefined}
       onMouseDown={handleMouseDown}
       onContextMenu={handleContextMenu}
     >

@@ -165,3 +165,30 @@
     opacity: 0;
   }
 }
+
+@keyframes infernoFlame {
+  0% {
+    background-position:
+      18% 96%,
+      82% 98%,
+      50% 50%;
+  }
+  30% {
+    background-position:
+      30% 54%,
+      70% 62%,
+      50% 50%;
+  }
+  65% {
+    background-position:
+      24% 24%,
+      76% 32%,
+      50% 50%;
+  }
+  100% {
+    background-position:
+      18% 96%,
+      82% 98%,
+      50% 50%;
+  }
+}
