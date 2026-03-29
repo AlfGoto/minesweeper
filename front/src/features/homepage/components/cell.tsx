@@ -5,7 +5,7 @@ import { memo } from "react";
 import { useCell, useGame } from "@/features/homepage/game-provider";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-import { CellSkins, getSkin, getUnrevealedNeighborContext } from "./cell-skins";
+import { getSkin, getUnrevealedNeighborContext } from "./cell-skins";
 
 const cellText = "text-[clamp(10px,2.65cqw,23px)]";
 
@@ -21,8 +21,7 @@ function CellComponent({ id }: { id: number }) {
   const { getCellSnapshot } = useGame();
   const { data: session } = useSession();
 
-  const selectedCellSkin =
-    "antic" || session?.skins?.cells || "default";
+  const selectedCellSkin = session?.skins?.cells || "default";
   const infernoNoFlags = selectedCellSkin === "inferno-hard";
 
   const cellData = cell || { status: "hidden" as const, value: 0 };

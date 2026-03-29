@@ -39,9 +39,6 @@ Optional:
 3. **Do not hardcode skin selection in `cell.tsx`**
    - Keep `const selectedCellSkin = session?.skins.cells || "default";`
 
-4. **Keep TypeScript in sync**
-   - When adding/removing a skin, update `CellSkin` in `src/types/skins.ts`.
-
 5. **Avoid visual bleed artifacts**
    - For generated overlays, prefer `backgroundRepeat: "no-repeat"`.
    - If needed, keep pattern centers away from borders.
@@ -55,8 +52,7 @@ Optional:
 2. If using dynamic randomness:
    - Use deterministic seeded randomness from `row`/`col`.
    - Do not use non-deterministic randomness (`Math.random`) directly per render.
-3. Update `CellSkin` union in `src/types/skins.ts`.
-4. Verify in UI that:
+3. Verify in UI that:
    - numbers stay readable,
    - no seams/bleed between cells,
    - unrevealed/revealed contrast remains clear.
@@ -114,6 +110,6 @@ Optional:
 ## Creative Direction (Current)
 
 - Animations are welcome and encouraged when they add personality (Tailwind animation classes are preferred).
-- Keep playful organic overlays inspired by `forest-flowerfloor` (flowers, petals, natural micro-patterns).
+- Keep playful organic overlays inspired by `flowerfloor` (flowers, petals, natural micro-patterns).
 - Use deterministic seeded variation so each cell feels alive, but remains stable across renders.
 - Prefer subtle-to-medium motion intensity; avoid effects that reduce readability of numbers, flags, or bombs.

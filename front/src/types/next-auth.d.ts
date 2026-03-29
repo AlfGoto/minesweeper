@@ -1,5 +1,5 @@
 import type { DefaultSession } from "next-auth";
-import { CellSkin } from "./skins";
+import type { CellSkin } from "@/features/homepage/components/cell-skins";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
