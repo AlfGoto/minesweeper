@@ -4,7 +4,7 @@ import { CellSkinsGallery } from "./components/cell-skins-gallery";
 
 const AUTHORIZED_EMAIL = "alfgoto@gmail.com";
 
-export async function CellSkinsPage() {
+export async function PreviewSkinsPage() {
   const session = await getServerSession();
   const userEmail = session?.user?.email;
 

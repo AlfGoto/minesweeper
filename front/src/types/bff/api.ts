@@ -208,7 +208,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Get stats of a user */
+        /** @description Get stats of a user (from cache) */
         get: {
             parameters: {
                 query?: never;
@@ -229,7 +229,7 @@ export interface paths {
                         "application/json": components["schemas"]["Stats"];
                     };
                 };
-                /** @description user not found */
+                /** @description Stats not found for this user */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -306,7 +306,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Get stats of a user by userId */
+        /** @description Get stats of a user by userId (from cache) */
         get: {
             parameters: {
                 query?: never;
@@ -327,7 +327,7 @@ export interface paths {
                         "application/json": components["schemas"]["UserStats"];
                     };
                 };
-                /** @description User not found */
+                /** @description User or stats not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -446,6 +446,393 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/skins/types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get all skin types */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SkinTypesResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/skins/cells": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get all skins */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            default?: number;
+                            flowerfloor?: number;
+                            "inferno-hard"?: number;
+                            igloo?: number;
+                            "jade-temple"?: number;
+                            "paper-cutout"?: number;
+                            "void-orchid"?: number;
+                            "minimal-zoned"?: number;
+                            antic?: number;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/skins/banners": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get all banners */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get all banners */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            default?: number;
+                            level?: number;
+                            gold?: number;
+                        };
+                    };
+                };
+                /** @description Banners not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/skins/backgrounds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get all backgrounds */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get all backgrounds */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            default?: number;
+                            red?: number;
+                            blue?: number;
+                        };
+                    };
+                };
+                /** @description Backgrounds not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/skins/user/{userEmail}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get skins of a user */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userEmail: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get skins of a user */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserSkins"];
+                    };
+                };
+                /** @description User not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/skins/buy/{userEmail}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userEmail: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        skinType: "cells";
+                        skin: components["schemas"]["CellSkinsNamesEnum"];
+                    } | {
+                        /** @enum {string} */
+                        skinType: "banner";
+                        /** @enum {string} */
+                        skin: "default" | "level" | "gold";
+                    } | {
+                        /** @enum {string} */
+                        skinType: "background";
+                        skin: components["schemas"]["BackgroundSkinsNamesEnum"];
+                    };
+                };
+            };
+            responses: {
+                /** @description Buy a skin */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+                /** @description Not enough coins */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+                /** @description User not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/skins/select/{userEmail}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userEmail: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        skinType: "cells";
+                        skin: components["schemas"]["CellSkinsNamesEnum"];
+                    } | {
+                        /** @enum {string} */
+                        skinType: "banner";
+                        /** @enum {string} */
+                        skin: "default" | "level" | "gold";
+                    } | {
+                        /** @enum {string} */
+                        skinType: "background";
+                        skin: components["schemas"]["BackgroundSkinsNamesEnum"];
+                    };
+                };
+            };
+            responses: {
+                /** @description Select a skin */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+                /** @description Skin not unlocked */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+                /** @description User not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -476,7 +863,7 @@ export interface components {
             totalRevealed: number;
             totalBombs: number;
             totalWin: number;
-            bestTime: number;
+            bestTime?: number;
             totalNoFlagsWin: number;
             totalRestarts: number;
             userPicture: string;
@@ -490,7 +877,7 @@ export interface components {
             totalRevealed: number;
             totalBombs: number;
             totalWin: number;
-            bestTime: number;
+            bestTime?: number;
             totalNoFlagsWin: number;
             totalRestarts: number;
         };
@@ -506,7 +893,7 @@ export interface components {
             totalRevealed: number;
             totalBombs: number;
             totalWin: number;
-            bestTime: number;
+            bestTime?: number;
             totalNoFlagsWin: number;
             totalRestarts: number;
         };
@@ -520,6 +907,35 @@ export interface components {
             userName: string;
             userPicture: string;
         };
+        SkinTypesResponse: components["schemas"]["SkinType"][];
+        /** @enum {string} */
+        SkinType: "cells" | "banner" | "background";
+        UserSkins: {
+            userId: string;
+            userName: string;
+            userPicture: string;
+            coins: number;
+            selectedSkin?: {
+                cells?: components["schemas"]["CellSkin"];
+                banner?: components["schemas"]["BannerSkin"];
+                background?: components["schemas"]["BackgroundSkin"];
+            };
+            unlockedSkins?: {
+                cells?: components["schemas"]["CellSkin"][];
+                banner?: components["schemas"]["BannerSkin"][];
+                background?: components["schemas"]["BackgroundSkin"][];
+            };
+        };
+        /** @enum {string} */
+        CellSkin: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic";
+        /** @enum {string} */
+        BannerSkin: "default" | "level" | "gold";
+        /** @enum {string} */
+        BackgroundSkin: "default" | "red" | "blue";
+        /** @enum {string} */
+        CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic";
+        /** @enum {string} */
+        BackgroundSkinsNamesEnum: "default" | "red" | "blue";
     };
     responses: never;
     parameters: never;

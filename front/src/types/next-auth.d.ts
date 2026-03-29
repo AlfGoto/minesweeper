@@ -1,11 +1,11 @@
 import type { DefaultSession } from "next-auth";
-import type { CellSkin } from "@/features/homepage/components/cell-skins";
+import type { CellSkin, BackgroundSkin, BannerSkin } from "@/types/bff";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
     skins: {
-      background: string;
-      banner: string;
+      background: BackgroundSkin;
+      banner: BannerSkin;
       cells: CellSkin;
     };
   }

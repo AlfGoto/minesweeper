@@ -1,17 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Cell } from "@/types/game";
 import { HEIGHT } from "@/vars";
-
-export type CellSkin =
-  | "default"
-  | "flowerfloor"
-  | "inferno-hard"
-  | "igloo"
-  | "jade-temple"
-  | "paper-cutout"
-  | "void-orchid"
-  | "minimal-zoned"
-  | "antic";
+import { CellSkin } from "@/types/bff";
 
 type NumberSkinMap = Record<number, string>;
 

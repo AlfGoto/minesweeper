@@ -8,11 +8,8 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import type { Cell } from "@/types/game";
-import {
-  CellSkins,
-  type CellSkin,
-  getSkin,
-} from "@/features/homepage/components/cell-skins";
+import { CellSkins, getSkin } from "@/features/skins/cell-skins";
+import { CellSkin } from "@/types/bff";
 
 type PreviewCell = Cell;
 
@@ -158,9 +155,7 @@ function PreviewGrid({
 }) {
   return (
     <div
-      className={cn(
-        "inline-grid overflow-hidden",
-      )}
+      className={cn("inline-grid overflow-hidden")}
       style={{ gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))` }}
     >
       {Array.from({ length: grid.length }).map((_, index) => (
@@ -177,7 +172,7 @@ function PreviewGrid({
   );
 }
 
-function CellSkinPopover({ skin }: { skin: CellSkin }) {
+export function CellSkinPopover({ skin }: { skin: CellSkin }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -191,11 +186,7 @@ function CellSkinPopover({ skin }: { skin: CellSkin }) {
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-2">
-        <PreviewGrid
-          skin={skin}
-          grid={DEMO_GRID}
-          gridSize={DEMO_GRID_SIZE}
-        />
+        <PreviewGrid skin={skin} grid={DEMO_GRID} gridSize={DEMO_GRID_SIZE} />
       </PopoverContent>
     </Popover>
   );

@@ -5,7 +5,7 @@ import { memo } from "react";
 import { useCell, useGame } from "@/features/homepage/game-provider";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-import { getSkin, getUnrevealedNeighborContext } from "./cell-skins";
+import { getSkin, getUnrevealedNeighborContext } from "../../skins/cell-skins";
 
 const cellText = "text-[clamp(10px,2.65cqw,23px)]";
 
@@ -31,13 +31,13 @@ function CellComponent({ id }: { id: number }) {
 
   const rowOdd = row % 2 === 0;
   const colOdd = col % 2 === 0;
+  const isWinning = cellData.status === "winning";
 
   const isHiddenOrFlagged =
     cellData.status === "hidden" ||
     cellData.status === "flagged" ||
     cellData.value === "bomb";
   const odd = (rowOdd && colOdd) || (!rowOdd && !colOdd);
-  const isWinning = cellData.status === "winning";
 
   const unrevealedNeighborContext = getUnrevealedNeighborContext({
     id,
@@ -55,8 +55,8 @@ function CellComponent({ id }: { id: number }) {
     ...unrevealedNeighborContext,
   });
 
-  const winColor = odd ? "limegreen" : "lightgreen";
   const { flagEmoji = "🚩", bombEmoji = "💣" } = skin.definition;
+  const winningBaseClass = odd ? skin.definition.green : skin.definition.lightGreen;
 
   const content = (() => {
     if (cellData.status === "hidden") return "";
@@ -166,15 +166,10 @@ function CellComponent({ id }: { id: number }) {
     return content;
   })();
 
-  const mergedStyle = {
-    ...(skin.style ?? {}),
-    ...(isWinning ? ({ "--win-color": winColor } as React.CSSProperties) : {}),
-  };
-
   return (
     <div
       className={cn(
-        skin.className,
+        isWinning ? winningBaseClass : skin.className,
         cellText,
         size,
         revealedClass,
@@ -182,7 +177,7 @@ function CellComponent({ id }: { id: number }) {
         isWinning && cellWin,
         "box-border flex h-full min-h-0 min-w-0 w-full items-center justify-center font-bold select-none relative",
       )}
-      style={Object.keys(mergedStyle).length ? mergedStyle : undefined}
+      style={skin.style ?? undefined}
       onMouseDown={handleMouseDown}
       onContextMenu={handleContextMenu}
     >

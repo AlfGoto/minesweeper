@@ -9,6 +9,11 @@ export type User = components["schemas"]["User"];
 export type UserStats = components["schemas"]["UserStats"];
 export type UserGame = components["schemas"]["UserGame"];
 
+export type SkinsTypes = components["schemas"]["SkinType"];
+export type CellSkin = components["schemas"]["CellSkin"];
+export type BackgroundSkin = components["schemas"]["BackgroundSkin"];
+export type BannerSkin = components["schemas"]["BannerSkin"];
+
 const REVALIDATE_SECONDS = 120;
 
 export const client = createClient<paths>({

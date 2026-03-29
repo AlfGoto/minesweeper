@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CellSkinsPage } from "@/features/cell-skins";
+import { PreviewSkinsPage } from "@/features/skins";
 
 export const metadata: Metadata = {
   title: "Cell Skins Preview",
@@ -10,4 +10,4 @@ export const metadata: Metadata = {
   },
 };
 
-export default CellSkinsPage;
+export default PreviewSkinsPage;
