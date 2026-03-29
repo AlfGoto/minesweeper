@@ -10,7 +10,7 @@ interface StatsData {
   totalRevealed: number;
   totalBombs: number;
   totalWin: number;
-  bestTime: number;
+  bestTime?: number;
   totalNoFlagsWin: number;
   totalRestarts: number;
 }
@@ -37,7 +37,11 @@ export function Stats({ stats, title = "Your stats" }: StatsProps) {
 
   const timeStats = [
     { label: "Total Time", value: formatTime(stats.totalTime), emoji: "⏱️" },
-    { label: "Best Time", value: formatTime(stats.bestTime), emoji: "⚡" },
+    {
+      label: "Best Time",
+      value: stats.bestTime !== undefined ? formatTime(stats.bestTime) : "N/A",
+      emoji: "⚡",
+    },
     {
       label: "Avg Game Time",
       value: formatTime(stats.totalTime / stats.totalGames),
