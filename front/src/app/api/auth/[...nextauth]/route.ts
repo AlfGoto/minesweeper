@@ -1,4 +1,4 @@
-import { getUser } from "@/types/bff/functions";
+import { getUser } from "@/types/bff/uncached-functions";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
