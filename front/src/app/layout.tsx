@@ -154,6 +154,22 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
 
         <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZSCMNHTS4B"
+        />
+        <Script
+          id="google-tag-manager"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-ZSCMNHTS4B');
+            `,
+          }}
+        />
+
+        <Script
           id="structured-data"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
