@@ -1,10 +1,10 @@
 "use client";
 
 import { HEIGHT } from "@/vars";
+import type { CellSkin } from "@/types/bff";
 import { memo } from "react";
 import { useCell, useGame } from "@/features/homepage/game-provider";
 import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 import { getSkin, getUnrevealedNeighborContext } from "../../skins/cell-skins";
 
 const cellText = "text-[clamp(10px,2.65cqw,23px)]";
@@ -16,12 +16,15 @@ export const bomb = "animate-[bombExplode_0.4s] transition-none";
 export const cellWin = "animate-[cellWin_0.6s_ease-out_forwards]";
 export const cellWinContent = "animate-[cellWinContent_0.6s_ease-out_forwards]";
 
-function CellComponent({ id }: { id: number }) {
+function CellComponent({
+  id,
+  selectedCellSkin,
+}: {
+  id: number;
+  selectedCellSkin: CellSkin;
+}) {
   const { cell, onCellClick } = useCell(id);
   const { getCellSnapshot } = useGame();
-  const { data: session } = useSession();
-
-  const selectedCellSkin = session?.skins?.cells || "default";
   const infernoNoFlags = selectedCellSkin === "inferno-hard";
 
   const cellData = cell || { status: "hidden" as const, value: 0 };
