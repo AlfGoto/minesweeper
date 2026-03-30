@@ -41,6 +41,9 @@ export namespace Game {
       .query({
         partition: `GAME#${userEmail}`
       })
+      .options({
+        maxPages: Infinity
+      })
       .entities(GameEntity)
       .send()
     return Items ?? []

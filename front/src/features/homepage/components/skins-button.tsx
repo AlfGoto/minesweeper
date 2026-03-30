@@ -1,6 +1,6 @@
 import { AuthRouteButton } from "./auth-route-button";
 
-export function StatsButton({
+export function SkinsButton({
   className = "",
   loggedIn = true,
 }: {
@@ -11,9 +11,9 @@ export function StatsButton({
     <AuthRouteButton
       className={className}
       loggedIn={loggedIn}
-      href="/stats"
-      label="Stats"
-      tooltipText="Login to see your stats"
+      href="/skins"
+      label="Skins"
+      tooltipText="Login to open the skins shop"
     />
   );
 }

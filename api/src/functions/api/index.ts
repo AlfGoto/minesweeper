@@ -4,6 +4,7 @@ import middy from "@middy/core"
 import { handle } from "hono/aws-lambda"
 import { HTTPException } from "hono/http-exception"
 import { route as GameRoute } from "./games"
+import { route as SkinsRoute } from "./skins"
 import { route as StatsRoute } from "./stats"
 import { route as UserStatsRoute } from "./user-stats"
 
@@ -13,6 +14,7 @@ const routes = app
   .route("/games", GameRoute)
   .route("/stats", StatsRoute)
   .route("/users", UserStatsRoute)
+  .route("/skins", SkinsRoute)
   .onError((error, c) => {
     console.error("Error:", JSON.stringify(error, null, 2))
 

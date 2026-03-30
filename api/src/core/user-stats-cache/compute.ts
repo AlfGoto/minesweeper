@@ -1,4 +1,5 @@
 import { UserStatsCache } from "."
+import { AlfCoins } from "../alfCoins"
 import { BestGame } from "../best-game"
 import { Game } from "../game"
 import type { UserStatsCacheEntityType } from "./user-stats-cache.entity"
@@ -77,7 +78,14 @@ export async function updateUserStatsCache(game: GameEntityType) {
     ? await computeUserStatsCacheRow(game.userEmail)
     : await addGameToUserStatsCache(game, statCache)
 
-  await UserStatsCache.update(newUserStatsCache)
+  await Promise.all([
+    UserStatsCache.update(newUserStatsCache),
+    AlfCoins.addAlfCoins(
+      game.userEmail,
+      statCache?.totalRevealed ?? 0,
+      newUserStatsCache.totalRevealed
+    )
+  ])
 
   return newUserStatsCache.bestTime
 }

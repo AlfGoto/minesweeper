@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { CellSkinsGallery } from "./components/cell-skins-gallery";
+export { SkinsPage } from "./skins-page";
 
 const AUTHORIZED_EMAIL = "alfgoto@gmail.com";
 

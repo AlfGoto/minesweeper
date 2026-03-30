@@ -3,6 +3,7 @@ import LoginButton from "./login-button";
 import { getServerSession } from "next-auth";
 import Timer from "./timer";
 import { StatsButton } from "./stats-button";
+import { SkinsButton } from "./skins-button";
 
 const buttonClassName = "text-lg w-full px-8 py-6 cursor-pointer";
 
@@ -15,11 +16,15 @@ export default async function Menu() {
         <RestartButton className={buttonClassName} />
         <Timer className={buttonClassName} />
         {session ? (
-          <StatsButton className={buttonClassName} loggedIn={true} />
+          <>
+            <StatsButton className={buttonClassName} loggedIn />
+            <SkinsButton className={buttonClassName} loggedIn />
+          </>
         ) : (
           <>
             <LoginButton className={buttonClassName} />
             <StatsButton className={buttonClassName} loggedIn={false} />
+            <SkinsButton className={buttonClassName} loggedIn={false} />
           </>
         )}
       </div>

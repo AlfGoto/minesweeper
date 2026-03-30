@@ -86,3 +86,8 @@ export async function getUserBestGames(userId: string) {
   });
   return response.data ?? [];
 }
+
+export async function getCellSkinsPrices() {
+  const response = await client.GET("/skins/cells");
+  return response.data ?? {};
+}
