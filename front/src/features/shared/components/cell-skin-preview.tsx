@@ -48,6 +48,12 @@ const DEMO_GRID: PreviewCell[] = [
   { status: "hidden", value: 0 },
 ];
 
+const LARGE_DEMO_GRID_SIZE = 10;
+const LARGE_DEMO_GRID: PreviewCell[] = Array.from(
+  { length: LARGE_DEMO_GRID_SIZE * LARGE_DEMO_GRID_SIZE },
+  (_, index) => DEMO_GRID[index % DEMO_GRID.length] ?? { status: "hidden", value: 0 },
+);
+
 function getCell(grid: PreviewCell[], id: number): PreviewCell {
   return grid[id] ?? { status: "hidden", value: 0 };
 }
@@ -186,5 +192,19 @@ export function CellSkinPreview({ skin }: { skin: CellSkin }) {
         <PreviewGrid skin={skin} grid={DEMO_GRID} gridSize={DEMO_GRID_SIZE} />
       </PopoverContent>
     </Popover>
+  );
+}
+
+export function CellSkinDemoGrid({ skin }: { skin: CellSkin }) {
+  return <PreviewGrid skin={skin} grid={DEMO_GRID} gridSize={DEMO_GRID_SIZE} />;
+}
+
+export function CellSkinLargeDemoGrid({ skin }: { skin: CellSkin }) {
+  return (
+    <PreviewGrid
+      skin={skin}
+      grid={LARGE_DEMO_GRID}
+      gridSize={LARGE_DEMO_GRID_SIZE}
+    />
   );
 }

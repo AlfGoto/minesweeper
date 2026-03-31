@@ -14,7 +14,7 @@ export type CellSkin = components["schemas"]["CellSkin"];
 export type BackgroundSkin = components["schemas"]["BackgroundSkin"];
 export type BannerSkin = components["schemas"]["BannerSkin"];
 
-const REVALIDATE_SECONDS = 120;
+const REVALIDATE_SECONDS = 45;
 
 export const client = createClient<paths>({
   baseUrl: process.env.BFF_URL,

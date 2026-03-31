@@ -3,16 +3,20 @@ import { MinesweeperBffTable } from "../dynamodb"
 
 export const skinTypes = ["cells", "banner", "background"] as const
 
+const CHIP = 15 as const
+const NORMAL = 22 as const
+const RARE = 40 as const
+
 export const cellsSkins = {
   default: 0,
-  flowerfloor: 25,
-  "inferno-hard": 25,
-  igloo: 25,
-  "jade-temple": 25,
-  "paper-cutout": 25,
-  "void-orchid": 25,
-  "minimal-zoned": 25,
-  antic: 25
+  flowerfloor: RARE,
+  "inferno-hard": NORMAL,
+  igloo: RARE,
+  "jade-temple": CHIP,
+  "paper-cutout": CHIP,
+  "void-orchid": CHIP,
+  "minimal-zoned": RARE,
+  antic: NORMAL
 }
 export const cellsSkinsNames = Object.keys(cellsSkins) as Array<keyof typeof cellsSkins>
 export const bannerSkins = {
@@ -51,9 +55,9 @@ export const UserEntity = new Entity({
     }).optional(),
 
     unlockedSkins: map({
-      cells: set(string().enum(...cellsSkinsNames)),
-      banner: set(string().enum(...bannerSkinsNames)),
-      background: set(string().enum(...backgroundSkinsNames))
+      cells: set(string().enum(...cellsSkinsNames)).optional(),
+      banner: set(string().enum(...bannerSkinsNames)).optional(),
+      background: set(string().enum(...backgroundSkinsNames)).optional()
     }).optional(),
 
     totalNoFlagsWin: number().optional() // deprecated

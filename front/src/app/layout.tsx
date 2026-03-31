@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import { SessionProvider } from "@/components/providers/session-provider";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -227,7 +228,10 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <NextTopLoader color="#4ade80" />
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          {children}
+          <Toaster position="top-center" />
+        </SessionProvider>
       </body>
     </html>
   );

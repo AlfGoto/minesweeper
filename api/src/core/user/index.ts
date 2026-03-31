@@ -1,6 +1,6 @@
 import {
-  $add,
   $get,
+  $set,
   QueryCommand,
   UpdateAttributesCommand,
   UpdateTransaction
@@ -50,20 +50,48 @@ export namespace User {
   export const getAddUnlockedSkinTransaction = (
     userEmail: string,
     skinType: SkinType,
-    skin: CellSkinName | BannerSkinName | BackgroundSkinName
+    skin: CellSkinName | BannerSkinName | BackgroundSkinName,
+    currentUser: {
+      unlockedSkins?: {
+        cells?: Set<string>
+        banner?: Set<string>
+        background?: Set<string>
+      }
+      selectedSkin?: {
+        cells?: string
+        banner?: string
+        background?: string
+      }
+    }
   ) => {
-    return UserEntity.build(UpdateTransaction).item({
-      userEmail,
+    console.log("currentUser.unlockedSkins:", currentUser.unlockedSkins)
+    console.log("currentUser.selectedSkin:", currentUser.selectedSkin)
 
+    const existingSet = currentUser.unlockedSkins?.[skinType] ?? new Set<string>()
+    console.log("existingSet:", existingSet)
+
+    const newUnlockedSkins = {
+      ...currentUser.unlockedSkins,
+      [skinType]: new Set([...existingSet, skin])
+    }
+    console.log("newUnlockedSkins:", newUnlockedSkins)
+
+    const newSelectedSkin = {
+      ...currentUser.selectedSkin,
+      [skinType]: skin
+    }
+    console.log("newSelectedSkin:", newSelectedSkin)
+
+    const item = {
+      userEmail,
       userId: $get("userId"),
       userName: $get("userName"),
       userPicture: $get("userPicture"),
-      unlockedSkins: {
-        [skinType]: $add(new Set([skin]))
-      },
-      selectedSkin: {
-        [skinType]: skin
-      }
-    })
+      unlockedSkins: $set(newUnlockedSkins),
+      selectedSkin: $set(newSelectedSkin)
+    }
+    console.log("Transaction item:", JSON.stringify(item, (_, v) => v instanceof Set ? [...v] : v, 2))
+
+    return UserEntity.build(UpdateTransaction).item(item)
   }
 }

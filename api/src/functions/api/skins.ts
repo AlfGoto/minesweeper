@@ -81,6 +81,26 @@ export const UserSchema = z
   })
   .openapi("UserSkins")
 
+const normalizeUnlockedSkinsForResponse = (
+  unlockedSkins:
+    | {
+        cells?: Set<string>
+        banner?: Set<string>
+        background?: Set<string>
+      }
+    | undefined
+) => {
+  if (!unlockedSkins) {
+    return undefined
+  }
+
+  return {
+    cells: unlockedSkins.cells ? Array.from(unlockedSkins.cells) : undefined,
+    banner: unlockedSkins.banner ? Array.from(unlockedSkins.banner) : undefined,
+    background: unlockedSkins.background ? Array.from(unlockedSkins.background) : undefined
+  }
+}
+
 export const route = new OpenAPIHono()
   .openapi(
     createRoute({
@@ -217,7 +237,14 @@ export const route = new OpenAPIHono()
         return c.json({ message: "User not found" }, 404)
       }
 
-      return c.json(UserSchema.parse({ ...user, coins: coins?.points ?? 0 }), 200)
+      return c.json(
+        UserSchema.parse({
+          ...user,
+          coins: coins?.points ?? 0,
+          unlockedSkins: normalizeUnlockedSkinsForResponse(user.unlockedSkins)
+        }),
+        200
+      )
     }
   )
   .openapi(
@@ -263,10 +290,14 @@ export const route = new OpenAPIHono()
       const { userEmail } = c.req.valid("param")
       const { skin, skinType } = c.req.valid("json")
 
+      console.log("Buy skin request:", { userEmail, skin, skinType })
+
       const [coins, user] = await Promise.all([
         AlfCoins.get(userEmail),
         User.getUserByEmail(userEmail)
       ])
+
+      console.log("User data:", { coins, user })
 
       if (!user || !coins) {
         return c.json({ message: "User not found" }, 404)
@@ -284,11 +315,24 @@ export const route = new OpenAPIHono()
       if (coins.points < skinPrice) {
         return c.json({ message: "Not enough coins" }, 400)
       }
-
       const buyTransaction = AlfCoins.createBuyTransaction(userEmail, skinPrice, coins.points)
-      const addSkinTransaction = User.getAddUnlockedSkinTransaction(userEmail, skinType, skin)
+      const addSkinTransaction = User.getAddUnlockedSkinTransaction(userEmail, skinType, skin, {
+        unlockedSkins: user.unlockedSkins,
+        selectedSkin: user.selectedSkin
+      })
 
-      await executeTransactWrite(buyTransaction, addSkinTransaction)
+      try {
+        await executeTransactWrite(buyTransaction, addSkinTransaction)
+        console.log("Transaction successful")
+      } catch (error: any) {
+        console.error("Transaction error message:", error?.message)
+        console.error("Transaction error:", error)
+        console.error("Transaction error stack:", error?.stack)
+        if (error?.CancellationReasons) {
+          console.error("Cancellation reasons:", JSON.stringify(error.CancellationReasons, null, 2))
+        }
+        throw error
+      }
 
       return c.json({ message: "Skin bought" }, 200)
     }
@@ -343,11 +387,12 @@ export const route = new OpenAPIHono()
       }
 
       const isUnlocked =
-        skinType === "cells"
+        skin === "default" ||
+        (skinType === "cells"
           ? user.unlockedSkins?.cells?.has(skin)
           : skinType === "banner"
             ? user.unlockedSkins?.banner?.has(skin)
-            : user.unlockedSkins?.background?.has(skin)
+            : user.unlockedSkins?.background?.has(skin))
 
       if (!isUnlocked) {
         return c.json({ message: "Skin not unlocked" }, 400)

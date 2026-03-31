@@ -24,6 +24,7 @@ export async function buyCellSkinAction(skin: CellSkin): Promise<SkinActionResul
   const response = await buyCellSkin(userEmail, skin);
 
   if (response.error) {
+    console.error(response.error);
     return {
       ok: false,
       message:
@@ -56,6 +57,7 @@ export async function selectCellSkinAction(
   const response = await selectCellSkin(userEmail, skin);
 
   if (response.error) {
+    console.error(response.error);
     return {
       ok: false,
       message:

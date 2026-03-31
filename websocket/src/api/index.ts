@@ -3,7 +3,7 @@ import { components } from "./types";
 export type Game = components["schemas"]["Game"];
 
 export const createGame = async (game: Game, apiUrl: string) => {
-  const tenSeconds = 10 * 1000; // 10 seconds in milliseconds
+  const tenSeconds = 5 * 1000; // 10 seconds in milliseconds
   if (game.time < tenSeconds) return;
   const response = await fetch(`${apiUrl}/games`, {
     method: "POST",
