@@ -5,8 +5,20 @@ import { CellSkins } from "@/features/skins/cell-skins";
 import { CellSkin } from "@/types/bff";
 import { CellSkinPreview } from "@/features/shared/components/cell-skin-preview";
 
-export function CellSkinsGallery() {
-  const skins = useMemo(() => Object.keys(CellSkins) as CellSkin[], []);
+type CellSkinsGalleryProps = {
+  skinsMap?: typeof CellSkins;
+  emptyMessage?: string;
+};
+
+export function CellSkinsGallery({
+  skinsMap = CellSkins,
+  emptyMessage = "No skins yet.",
+}: CellSkinsGalleryProps) {
+  const skins = useMemo(() => Object.keys(skinsMap) as CellSkin[], [skinsMap]);
+
+  if (!skins.length) {
+    return <p className="text-muted-foreground">{emptyMessage}</p>;
+  }
 
   return (
     <div className="flex flex-wrap gap-4">

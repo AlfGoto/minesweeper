@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | Minesweeper Game",
   },
   description:
-    "Play the classic Minesweeper game with modern graphics, compete on the leaderboard, and track your progress with detailed statistics.",
+    "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress with detailed statistics.",
   keywords: [
     // English keywords
     "minesweeper",
@@ -38,6 +38,10 @@ export const metadata: Metadata = {
     "mind game",
     "skill game",
     "classic minesweeper",
+    "minesweeper skins",
+    "minesweeper themes",
+    "custom minesweeper",
+    "minesweeper design",
     // French keywords
     "démineur",
     "jeu de démineur",
@@ -51,6 +55,9 @@ export const metadata: Metadata = {
     "jeu de mines",
     "tableau des scores",
     "statistiques de jeu",
+    "skins démineur",
+    "thèmes démineur",
+    "design démineur",
     // Spanish keywords
     "buscaminas",
     "juego de buscaminas",
@@ -63,6 +70,9 @@ export const metadata: Metadata = {
     "juego de habilidad",
     "juego de puzzle",
     "tabla de clasificación",
+    "skins buscaminas",
+    "temas buscaminas",
+    "diseño buscaminas",
     // Dutch keywords
     "mijnenveger",
     "mijnenveger spel",
@@ -108,7 +118,7 @@ export const metadata: Metadata = {
     url: "/",
     title: "Minesweeper",
     description:
-      "Play the classic Minesweeper game with modern graphics, compete on the leaderboard, and track your progress.",
+      "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
     siteName: "Minesweeper",
     images: [
       {
@@ -123,7 +133,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Minesweeper Game | Test Your Skills",
     description:
-      "Play the classic Minesweeper game with modern graphics, compete on the leaderboard, and track your progress.",
+      "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
     images: ["/twitter-image.png"],
   },
   robots: {
@@ -189,7 +199,7 @@ export default function RootLayout({
               genre: ["Puzzle", "Strategy", "Logic"],
               gamePlatform: ["Web Browser", "Desktop", "Mobile"],
               description:
-                "Play the classic Minesweeper game with modern graphics, compete on the leaderboard, and track your progress.",
+                "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
               inLanguage: ["en", "fr", "es", "nl", "de", "it", "pt"],
               operatingSystem: "Any",
               playMode: "SinglePlayer",
@@ -215,6 +225,7 @@ export default function RootLayout({
                 "Multiple difficulty levels",
                 "Global leaderboard",
                 "Personal statistics",
+                "Unique skins and themes",
                 "Real-time gameplay",
                 "No download required",
               ],

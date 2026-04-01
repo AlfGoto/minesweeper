@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /stats
+Disallow: /stats/
+Disallow: /skins
+Disallow: /skins/
+Disallow: /preview-skins
+Disallow: /preview-skins/
 
 Sitemap: https://minesweeper.fr/sitemap.xml

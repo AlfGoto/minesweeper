@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { CellSkinsGallery } from "./components/cell-skins-gallery";
+import { NonPublishedCellSkinsGallery } from "./components/non-published-cell-skins-gallery";
 export { SkinsPage } from "./skins-page";
 
 const AUTHORIZED_EMAIL = "alfgoto@gmail.com";
@@ -21,7 +22,17 @@ export async function PreviewSkinsPage() {
           Private page for previewing all available cell skin variants.
         </p>
       </div>
-      <CellSkinsGallery />
+      <section className="space-y-3">
+        <h2 className="text-2xl font-semibold">Published Skins</h2>
+        <CellSkinsGallery />
+      </section>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-semibold">Non Published Skins</h2>
+        <p className="text-muted-foreground">
+          Work-in-progress skins to preview before publishing.
+        </p>
+        <NonPublishedCellSkinsGallery />
+      </section>
     </main>
   );
 }

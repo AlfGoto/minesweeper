@@ -10,6 +10,8 @@ Create visually distinct skins while preserving gameplay readability and existin
 
 - Skin definitions live in `cell-skins.ts`.
 - Skin selection and rendering happen in `cell.tsx` via `getSkin(...)`.
+- New skins must be created in `NonPublishedCellSkins` first, then moved to
+  `CellSkins` once validated.
 
 ## Required Skin Shape
 
@@ -48,11 +50,13 @@ Optional:
 
 ## Recommended Workflow
 
-1. Add or update a skin entry in `CellSkins`.
-2. If using dynamic randomness:
+1. Add a new skin entry in `NonPublishedCellSkins` (staging).
+2. Iterate and validate in `/preview-skins`.
+3. Move the validated skin from `NonPublishedCellSkins` to `CellSkins`.
+4. If using dynamic randomness:
    - Use deterministic seeded randomness from `row`/`col`.
    - Do not use non-deterministic randomness (`Math.random`) directly per render.
-3. Verify in UI that:
+5. Verify in UI that:
    - numbers stay readable,
    - no seams/bleed between cells,
    - unrevealed/revealed contrast remains clear.
@@ -106,6 +110,13 @@ Optional:
 - Design skins as a **group composition**, not as isolated cells.
 - Always evaluate how adjacent cells connect (edges, corners, gradients, motifs) so neighborhoods look intentional.
 - Prefer patterns that create coherent clusters/flows across the grid rather than random per-cell noise.
+- A good skin has one coherent theme end-to-end:
+  - unrevealed grid, revealed textures, flag/bomb emoji, and colors should all
+    belong to the same universe.
+  - Example: `igloo` works because hidden cells feel snowy, revealed cells feel
+    icy/igloo-like, and the flag is a snowman.
+  - Example: `flowerfloor` works because the whole ambiance feels floral and
+    organic, not just one isolated effect.
 
 ## Creative Direction (Current)
 
