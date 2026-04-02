@@ -22,7 +22,7 @@ export default async function Icon() {
           borderRadius: "40px",
         }}
       >
-        <span style={{ fontSize: "100px" }}>💣</span>
+        <span style={{ fontSize: "100px" }}>🚩</span>
       </div>
     ),
     {
