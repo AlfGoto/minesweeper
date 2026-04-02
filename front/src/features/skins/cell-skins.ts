@@ -113,6 +113,12 @@ type CellSkinDefinition = {
   getOverlayStyle?: (
     context: CellSkinPatternContext,
   ) => CSSProperties | undefined;
+  // SEO metadata for published skins
+  name?: string;
+  slug?: string;
+  description?: string;
+  longDescription?: string;
+  keywords?: string[];
 };
 
 type GetSkinContext = CellSkinPatternContext & {
@@ -147,6 +153,19 @@ const defaultSkin = {
     7: "text-orange-600",
     8: "text-gray-600",
   },
+  name: "Classic",
+  slug: "classic",
+  description:
+    "The original Minesweeper look with lime green unrevealed cells and warm tan revealed tiles. A timeless design that brings back nostalgic memories.",
+  longDescription:
+    "The Classic skin recreates the beloved original Minesweeper aesthetic that millions of players grew up with. Featuring vibrant lime green cells for unrevealed areas and soft wheat-colored revealed tiles, this skin delivers pure nostalgia. The familiar red flag and bomb emojis complete the authentic experience. Perfect for players who appreciate the timeless design that made Minesweeper a worldwide phenomenon.",
+  keywords: [
+    "classic minesweeper skin",
+    "original minesweeper theme",
+    "retro minesweeper",
+    "nostalgic minesweeper",
+    "traditional minesweeper design",
+  ],
 };
 
 export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
@@ -302,6 +321,20 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         backgroundRepeat: "no-repeat",
       };
     },
+    name: "Flower Floor",
+    slug: "flower-floor",
+    description:
+      "A vibrant garden theme with colorful flowers scattered across unrevealed cells and soft grass edge effects on revealed tiles.",
+    longDescription:
+      "Transform your Minesweeper game into a blooming garden with the Flower Floor skin. Each unrevealed cell features randomly generated flowers in a stunning palette of pinks, yellows, purples, and teals. When cells are revealed, delicate grass blade gradients appear at the edges, creating a natural transition effect. The cherry blossom flag and explosion bomb emojis add charm to this nature-inspired theme. Ideal for players who want a cheerful, relaxing visual experience.",
+    keywords: [
+      "flower minesweeper skin",
+      "garden minesweeper theme",
+      "floral minesweeper",
+      "nature minesweeper skin",
+      "colorful minesweeper theme",
+      "spring minesweeper design",
+    ],
   },
   "inferno-hard": {
     green:
@@ -343,6 +376,20 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         backgroundRepeat: "no-repeat",
       };
     },
+    name: "Inferno",
+    slug: "inferno",
+    description:
+      "A fiery volcanic theme with molten orange and crimson cells, ember particles, and dynamic heat effects for an intense gaming experience.",
+    longDescription:
+      "Ignite your Minesweeper sessions with the Inferno skin. This intense theme features deep crimson unrevealed cells with glowing ember particles and molten orange revealed tiles. Dynamic heat gradient effects simulate rising flames at cell edges. The fire emoji flag and explosion bomb perfectly complement the volcanic atmosphere. Designed for players who want an adrenaline-pumping visual experience that matches the high-stakes nature of Minesweeper gameplay.",
+    keywords: [
+      "fire minesweeper skin",
+      "inferno minesweeper theme",
+      "volcanic minesweeper",
+      "lava minesweeper skin",
+      "intense minesweeper theme",
+      "dark minesweeper design",
+    ],
   },
   igloo: {
     green:
@@ -442,6 +489,20 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         backgroundRepeat: "no-repeat",
       };
     },
+    name: "Jade Temple",
+    slug: "jade-temple",
+    description:
+      "An elegant Asian-inspired theme featuring jade green tones, subtle stone textures, and traditional temple aesthetics.",
+    longDescription:
+      "Enter a serene temple sanctuary with the Jade Temple skin. This elegant theme draws inspiration from traditional Asian architecture with rich jade green unrevealed cells and warm stone-gray revealed tiles. Subtle texture variations evoke ancient temple floors worn smooth by centuries of meditation. The torii gate flag and explosion bomb emojis complete the Zen aesthetic. Perfect for players seeking a calm, focused gaming environment with sophisticated visual design.",
+    keywords: [
+      "jade minesweeper skin",
+      "temple minesweeper theme",
+      "asian minesweeper",
+      "zen minesweeper skin",
+      "green minesweeper theme",
+      "elegant minesweeper design",
+    ],
   },
   "paper-cutout": {
     green:
@@ -481,6 +542,20 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         backgroundRepeat: "no-repeat",
       };
     },
+    name: "Paper Cutout",
+    slug: "paper-cutout",
+    description:
+      "A playful papercraft aesthetic with layered shadows, soft pastel colors, and a handcrafted arts-and-crafts feel.",
+    longDescription:
+      "Discover the charming Paper Cutout skin that transforms Minesweeper into a delightful papercraft creation. Unrevealed cells feature soft pastel cream tones with subtle layered stripe effects, while revealed areas display warm craft paper tones. The entire design evokes the feeling of a lovingly handmade art project. Pin flag and scissors bomb emojis add to the playful atmosphere. Ideal for players who appreciate whimsical, artistic game aesthetics.",
+    keywords: [
+      "paper minesweeper skin",
+      "cutout minesweeper theme",
+      "craft minesweeper",
+      "pastel minesweeper skin",
+      "artistic minesweeper theme",
+      "handmade minesweeper design",
+    ],
   },
   "void-orchid": {
     green:
@@ -534,6 +609,20 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         backgroundRepeat: "no-repeat",
       };
     },
+    name: "Void Orchid",
+    slug: "void-orchid",
+    description:
+      "A mysterious dark theme with deep purple orchid tones, ethereal glow effects, and cosmic void aesthetics.",
+    longDescription:
+      "Embrace the mysterious depths with the Void Orchid skin. This captivating theme features deep violet unrevealed cells with subtle ethereal petal patterns and soft lavender revealed tiles. Cosmic gradient effects create an otherworldly atmosphere, as if playing Minesweeper at the edge of a celestial nebula. The orchid flower flag and sparkle bomb emojis enhance the mystical vibe. Perfect for players who prefer dark themes and appreciate enigmatic, space-inspired aesthetics.",
+    keywords: [
+      "dark minesweeper skin",
+      "purple minesweeper theme",
+      "void minesweeper",
+      "orchid minesweeper skin",
+      "cosmic minesweeper theme",
+      "mystical minesweeper design",
+    ],
   },
   "minimal-zoned": {
     green: "bg-white text-black",
@@ -571,6 +660,20 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         borderLeft: leftIsUnrevealed ? line : "none",
       };
     },
+    name: "Minimal Zoned",
+    slug: "minimal-zoned",
+    description:
+      "A clean, modern minimalist design with crisp zone borders, monochromatic palette, and distraction-free gameplay focus.",
+    longDescription:
+      "Achieve peak focus with the Minimal Zoned skin. This ultra-clean theme strips away visual distractions with a sophisticated white monochromatic palette. Revealed cells feature bold red zone borders that clearly delineate the boundary between safe and unexplored areas, helping you mentally map the grid. The minimal aesthetic keeps everything crisp and scannable. Designed for competitive players and speedrunners who demand a distraction-free interface that lets gameplay take center stage.",
+    keywords: [
+      "minimal minesweeper skin",
+      "clean minesweeper theme",
+      "modern minesweeper",
+      "simple minesweeper skin",
+      "competitive minesweeper theme",
+      "speedrun minesweeper design",
+    ],
   },
   antic: {
     green: "bg-[#0a2614] ring-1 ring-amber-900/30",
@@ -2834,3 +2937,56 @@ export const NonPublishedCellSkins = {
     },
   },
 } as Record<string, CellSkinDefinition>;
+
+// Helper type for published skins with SEO metadata
+export type PublishedSkinMeta = {
+  id: CellSkin;
+  name: string;
+  slug: string;
+  description: string;
+  longDescription: string;
+  keywords: string[];
+};
+
+// Get all published skins that have SEO metadata
+export const getPublishedSkinsWithMeta = (): PublishedSkinMeta[] => {
+  return Object.entries(CellSkins)
+    .filter(
+      ([, skin]) =>
+        skin.name && skin.slug && skin.description && skin.longDescription,
+    )
+    .map(([id, skin]) => ({
+      id: id as CellSkin,
+      name: skin.name!,
+      slug: skin.slug!,
+      description: skin.description!,
+      longDescription: skin.longDescription!,
+      keywords: skin.keywords ?? [],
+    }));
+};
+
+// Get a single skin by slug
+export const getSkinMetaBySlug = (
+  slug: string,
+): PublishedSkinMeta | undefined => {
+  const entry = Object.entries(CellSkins).find(([, skin]) => skin.slug === slug);
+  if (!entry || !entry[1].name || !entry[1].description || !entry[1].longDescription) {
+    return undefined;
+  }
+  const [id, skin] = entry;
+  return {
+    id: id as CellSkin,
+    name: skin.name!,
+    slug: skin.slug!,
+    description: skin.description!,
+    longDescription: skin.longDescription!,
+    keywords: skin.keywords ?? [],
+  };
+};
+
+// Get all skin slugs for static generation
+export const getAllSkinSlugs = (): string[] => {
+  return Object.values(CellSkins)
+    .filter((skin) => skin.slug)
+    .map((skin) => skin.slug!);
+};
