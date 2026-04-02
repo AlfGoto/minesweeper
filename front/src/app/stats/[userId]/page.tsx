@@ -10,14 +10,19 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { userId } = await params;
+  console.log("[generateMetadata] Starting for userId:", userId);
 
   try {
+    console.log("[generateMetadata] Fetching user and stats...");
     const [user, stats] = await Promise.all([
       getUserById(userId),
       getUserStats(userId),
     ]);
+    console.log("[generateMetadata] User:", user);
+    console.log("[generateMetadata] Stats:", stats);
 
     if (!user) {
+      console.log("[generateMetadata] No user found, returning fallback");
       return {
         title: "User Profile",
         description: "View player statistics, game history, and best times.",
@@ -35,6 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ? `View ${userName}'s Minesweeper statistics: ${gamesWon} wins, ${winRate}% win rate, best time ${bestTime}s. Track progress and compare with other players.`
       : `View ${userName}'s Minesweeper statistics: ${gamesPlayed} games played, ${gamesWon} wins, ${winRate}% win rate.`;
 
+    console.log("[generateMetadata] Success, returning metadata for:", userName);
     return {
       title,
       description,
@@ -50,7 +56,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("[generateMetadata] Error:", error);
     // Fallback metadata if API fails
     return {
       title: "User Profile",
@@ -65,5 +72,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   const { userId } = await params;
+  console.log("[Page] Rendering for userId:", userId);
   return <UserProfilePage userId={userId} />;
 }

@@ -44,25 +44,39 @@ export async function getBest10Games(userEmail: string) {
 }
 
 export async function getUserById(userId: string) {
-  const response = await client.GET("/users/{userId}", {
-    params: {
-      path: {
-        userId,
+  try {
+    console.log("[getUserById] Fetching user:", userId);
+    const response = await client.GET("/users/{userId}", {
+      params: {
+        path: {
+          userId,
+        },
       },
-    },
-  });
-  return response.data;
+    });
+    console.log("[getUserById] Response:", response.data, response.error);
+    return response.data;
+  } catch (error) {
+    console.error("[getUserById] Error:", error);
+    return undefined;
+  }
 }
 
 export async function getUserStats(userId: string) {
-  const response = await client.GET("/users/{userId}/stats", {
-    params: {
-      path: {
-        userId,
+  try {
+    console.log("[getUserStats] Fetching stats:", userId);
+    const response = await client.GET("/users/{userId}/stats", {
+      params: {
+        path: {
+          userId,
+        },
       },
-    },
-  });
-  return response.data;
+    });
+    console.log("[getUserStats] Response:", response.data, response.error);
+    return response.data;
+  } catch (error) {
+    console.error("[getUserStats] Error:", error);
+    return undefined;
+  }
 }
 
 export async function getUserLatestGames(userId: string) {
