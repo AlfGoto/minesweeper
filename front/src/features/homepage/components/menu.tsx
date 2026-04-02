@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import Timer from "./timer";
 import { StatsButton } from "./stats-button";
 import { SkinsButton } from "./skins-button";
+import { HowToPlayButton } from "./how-to-play-button";
 
 const buttonClassName = "text-lg w-full px-8 py-6 cursor-pointer";
 
@@ -27,6 +28,7 @@ export default async function Menu() {
             <SkinsButton className={buttonClassName} loggedIn={false} />
           </>
         )}
+        <HowToPlayButton className={buttonClassName} />
       </div>
     </div>
   );

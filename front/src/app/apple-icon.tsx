@@ -1,0 +1,32 @@
+import { ImageResponse } from "next/og";
+
+export const runtime = "edge";
+
+export const size = {
+  width: 180,
+  height: 180,
+};
+export const contentType = "image/png";
+
+export default async function Icon() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "40px",
+        }}
+      >
+        <span style={{ fontSize: "100px" }}>💣</span>
+      </div>
+    ),
+    {
+      ...size,
+    }
+  );
+}

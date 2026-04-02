@@ -18,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: "https://minesweeper.fr/how-to-play",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: "https://minesweeper.fr/skins",
       lastModified: new Date(),
       changeFrequency: "weekly",

@@ -52,20 +52,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       siteName: "Minesweeper",
-      images: [
-        {
-          url: "/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: `${skin.name} Minesweeper Skin Preview`,
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ["/twitter-image.png"],
     },
     robots: {
       index: true,
@@ -93,7 +84,7 @@ export default async function SkinPage({ params }: Props) {
     "@type": "Product",
     name: `${skin.name} Minesweeper Skin`,
     description: skin.longDescription,
-    image: "https://minesweeper.fr/og-image.png",
+    image: "https://minesweeper.fr/opengraph-image",
     brand: {
       "@type": "Brand",
       name: "Minesweeper",

@@ -120,21 +120,12 @@ export const metadata: Metadata = {
     description:
       "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
     siteName: "Minesweeper",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Minesweeper Game",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Minesweeper Game | Test Your Skills",
     description:
       "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
-    images: ["/twitter-image.png"],
   },
   robots: {
     index: true,
@@ -161,7 +152,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
 
         <Script
@@ -213,14 +203,7 @@ export default function RootLayout({
                 priceCurrency: "USD",
                 availability: "https://schema.org/InStock",
               },
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.8",
-                ratingCount: "1000",
-                bestRating: "5",
-                worstRating: "1",
-              },
-              screenshot: "https://minesweeper.fr/og-image.png",
+              screenshot: "https://minesweeper.fr/opengraph-image",
               featureList: [
                 "Multiple difficulty levels",
                 "Global leaderboard",
