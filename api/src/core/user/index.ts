@@ -21,6 +21,19 @@ type BannerSkinName = (typeof bannerSkinsNames)[number]
 type BackgroundSkinName = (typeof backgroundSkinsNames)[number]
 
 export namespace User {
+  type UserSkinState = {
+    unlockedSkins?: {
+      cells?: Set<CellSkinName>
+      banner?: Set<BannerSkinName>
+      background?: Set<BackgroundSkinName>
+    }
+    selectedSkin?: {
+      cells?: CellSkinName
+      banner?: BannerSkinName
+      background?: BackgroundSkinName
+    }
+  }
+
   export const update = async (user: UserEntityType) => {
     await UserEntity.build(UpdateAttributesCommand).item(user).send()
   }
@@ -49,48 +62,54 @@ export namespace User {
 
   export const getAddUnlockedSkinTransaction = (
     userEmail: string,
+    userId: string,
     skinType: SkinType,
     skin: CellSkinName | BannerSkinName | BackgroundSkinName,
-    currentUser: {
-      unlockedSkins?: {
-        cells?: Set<string>
-        banner?: Set<string>
-        background?: Set<string>
-      }
-      selectedSkin?: {
-        cells?: string
-        banner?: string
-        background?: string
-      }
-    }
+    currentUser: UserSkinState
   ) => {
-    console.log("currentUser.unlockedSkins:", currentUser.unlockedSkins)
-    console.log("currentUser.selectedSkin:", currentUser.selectedSkin)
-
-    const existingSet = currentUser.unlockedSkins?.[skinType] ?? new Set<string>()
-    console.log("existingSet:", existingSet)
-
     const newUnlockedSkins = {
-      ...currentUser.unlockedSkins,
-      [skinType]: new Set([...existingSet, skin])
+      cells: currentUser.unlockedSkins?.cells,
+      banner: currentUser.unlockedSkins?.banner,
+      background: currentUser.unlockedSkins?.background
     }
-    console.log("newUnlockedSkins:", newUnlockedSkins)
 
     const newSelectedSkin = {
-      ...currentUser.selectedSkin,
-      [skinType]: skin
+      cells: currentUser.selectedSkin?.cells,
+      banner: currentUser.selectedSkin?.banner,
+      background: currentUser.selectedSkin?.background
     }
-    console.log("newSelectedSkin:", newSelectedSkin)
+
+    if (skinType === "cells") {
+      const nextSkin = skin as CellSkinName
+      newUnlockedSkins.cells = new Set([
+        ...(newUnlockedSkins.cells ?? new Set<CellSkinName>()),
+        nextSkin
+      ])
+      newSelectedSkin.cells = nextSkin
+    } else if (skinType === "banner") {
+      const nextSkin = skin as BannerSkinName
+      newUnlockedSkins.banner = new Set([
+        ...(newUnlockedSkins.banner ?? new Set<BannerSkinName>()),
+        nextSkin
+      ])
+      newSelectedSkin.banner = nextSkin
+    } else {
+      const nextSkin = skin as BackgroundSkinName
+      newUnlockedSkins.background = new Set([
+        ...(newUnlockedSkins.background ?? new Set<BackgroundSkinName>()),
+        nextSkin
+      ])
+      newSelectedSkin.background = nextSkin
+    }
 
     const item = {
       userEmail,
-      userId: $get("userId"),
+      userId,
       userName: $get("userName"),
       userPicture: $get("userPicture"),
       unlockedSkins: $set(newUnlockedSkins),
       selectedSkin: $set(newSelectedSkin)
     }
-    console.log("Transaction item:", JSON.stringify(item, (_, v) => v instanceof Set ? [...v] : v, 2))
 
     return UserEntity.build(UpdateTransaction).item(item)
   }

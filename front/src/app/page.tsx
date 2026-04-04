@@ -38,7 +38,7 @@ const faqStructuredData = {
       name: "What are Minesweeper skins?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Skins are visual themes that change the appearance of the Minesweeper grid. You can unlock and purchase different skins using coins earned by playing games. Skins include themes like Classic, Ocean, Forest, Neon, and many more unique designs.",
+        text: "Skins are visual themes that change the appearance of the Minesweeper grid. You can unlock and purchase different skins using coins earned by playing games. Published skins include classic, floral, inferno, icy, temple, paper, void, minimal, antique, emoji, heart, laughing face, and fruit-inspired themes.",
       },
     },
     {

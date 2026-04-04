@@ -3,38 +3,40 @@ import Script from "next/script";
 import { SkinsPage } from "@/features/skins";
 import { getPublishedSkinsWithMeta } from "@/features/skins/cell-skins";
 
-export const metadata: Metadata = {
-  title: "Minesweeper Skins Shop - Free Themes & Customizations",
-  description:
-    "Browse and unlock 20+ unique Minesweeper skins and themes. Customize your game with Classic, Ocean, Forest, Neon, and many more free designs. Earn coins by playing to unlock new styles.",
-  keywords: [
-    "minesweeper skins",
-    "minesweeper themes",
-    "minesweeper customization",
-    "free minesweeper skins",
-    "minesweeper designs",
-    "custom minesweeper",
-    "minesweeper shop",
-    "game skins",
-    "minesweeper styles",
-  ],
-  alternates: {
-    canonical: "https://minesweeper.fr/skins",
-  },
-  openGraph: {
+export function generateMetadata(): Metadata {
+  const skinCount = getPublishedSkinsWithMeta().length;
+
+  return {
     title: "Minesweeper Skins Shop - Free Themes & Customizations",
-    description:
-      "Browse and unlock 20+ unique Minesweeper skins. Classic, Ocean, Forest, Neon, and more free designs.",
-    url: "https://minesweeper.fr/skins",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Minesweeper Skins Shop",
-    description:
-      "Browse and unlock 20+ unique Minesweeper skins and themes. Customize your game for free!",
-  },
-};
+    description: `Browse and unlock ${skinCount}+ unique Minesweeper skins and themes. Customize your game with playful, dark, minimal, floral, and emoji-inspired designs, then unlock new styles by playing.`,
+    keywords: [
+      "minesweeper skins",
+      "minesweeper themes",
+      "minesweeper customization",
+      "free minesweeper skins",
+      "minesweeper designs",
+      "custom minesweeper",
+      "minesweeper shop",
+      "game skins",
+      "minesweeper styles",
+      "emoji minesweeper skin",
+    ],
+    alternates: {
+      canonical: "https://minesweeper.fr/skins",
+    },
+    openGraph: {
+      title: "Minesweeper Skins Shop - Free Themes & Customizations",
+      description: `Browse ${skinCount}+ published Minesweeper skins, including floral, minimalist, inferno, and emoji-inspired themes.`,
+      url: "https://minesweeper.fr/skins",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Minesweeper Skins Shop",
+      description: `Browse ${skinCount}+ unique Minesweeper skins and themes and unlock new looks for free.`,
+    },
+  };
+}
 
 export default function SkinsPageWrapper() {
   const skins = getPublishedSkinsWithMeta();

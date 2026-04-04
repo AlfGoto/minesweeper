@@ -5,6 +5,28 @@ import { CellSkin } from "@/types/bff";
 
 type NumberSkinMap = Record<number, string>;
 
+type SkinFaq = {
+  question: string;
+  answer: string;
+};
+
+type EmojiTileSkinConfig = {
+  name: string;
+  slug: string;
+  hiddenA: string;
+  hiddenB: string;
+  revealedA: string;
+  revealedB: string;
+  number: NumberSkinMap;
+  emojis: string[];
+  glossRgb: string;
+  shadowRgb: string;
+  description: string;
+  longDescription: string;
+  keywords: string[];
+  faq: SkinFaq[];
+};
+
 type CellSkinPatternContext = {
   row: number;
   col: number;
@@ -119,6 +141,7 @@ type CellSkinDefinition = {
   description?: string;
   longDescription?: string;
   keywords?: string[];
+  faq?: SkinFaq[];
 };
 
 type GetSkinContext = CellSkinPatternContext & {
@@ -134,6 +157,85 @@ const mulberry32 = (seed: number) => {
     return ((n ^ (n >>> 14)) >>> 0) / 4294967296;
   };
 };
+
+const bgLayers = (...layers: string[]): CSSProperties => ({
+  backgroundImage: layers.join(","),
+  backgroundRepeat: "no-repeat",
+});
+
+const svgDataUri = (svg: string) =>
+  `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
+
+const emojiTileLayer = (emoji: string, rotation: number) =>
+  svgDataUri(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <text
+        x="50"
+        y="56"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="88"
+        transform="rotate(${rotation} 50 50)"
+        font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif"
+      >
+        ${emoji}
+      </text>
+    </svg>
+  `);
+
+const createEmojiTileSkin = ({
+  name,
+  slug,
+  hiddenA,
+  hiddenB,
+  revealedA,
+  revealedB,
+  number,
+  emojis,
+  glossRgb,
+  shadowRgb,
+  description,
+  longDescription,
+  keywords,
+  faq,
+}: EmojiTileSkinConfig): CellSkinDefinition => ({
+  green: hiddenA,
+  lightGreen: hiddenB,
+  gray: `${revealedA} transition-none`,
+  silver: `${revealedB} transition-none`,
+  number,
+  getOverlayStyle: ({
+    row,
+    col,
+    cellStatus,
+    isHiddenOrFlagged,
+  }: CellSkinPatternContext): CSSProperties | undefined => {
+    if (!isHiddenOrFlagged || cellStatus === "revealed") return undefined;
+
+    const rand = mulberry32((row + 1) * 14387 + (col + 1) * 58217);
+    const emoji = emojis[Math.floor(rand() * emojis.length)] ?? emojis[0] ?? "🟪";
+    const rotation = Math.floor(-10 + rand() * 21);
+    const glossAngle = Math.floor(105 + rand() * 40);
+    const glossAlpha = (0.05 + rand() * 0.06).toFixed(2);
+    const shadowAlpha = (0.1 + rand() * 0.08).toFixed(2);
+
+    return {
+      ...bgLayers(
+        `linear-gradient(${glossAngle}deg, rgba(${glossRgb},${glossAlpha}) 0%, rgba(${glossRgb},0) 42%)`,
+        `linear-gradient(180deg, rgba(${shadowRgb},0) 0%, rgba(${shadowRgb},${shadowAlpha}) 100%)`,
+        emojiTileLayer(emoji, rotation),
+      ),
+      backgroundPosition: "center",
+      backgroundSize: "100% 100%",
+    };
+  },
+  name,
+  slug,
+  description,
+  longDescription,
+  keywords,
+  faq,
+});
 
 const defaultSkin = {
   green: "bg-[limegreen] contrast-[0.8]",
@@ -168,7 +270,7 @@ const defaultSkin = {
   ],
 };
 
-export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
+export const CellSkins: Record<string, CellSkinDefinition> = {
   default: defaultSkin,
   "flowerfloor": {
     ...defaultSkin,
@@ -259,10 +361,7 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
 
         if (!edgeLayers.length) return undefined;
 
-        return {
-          backgroundImage: edgeLayers.join(","),
-          backgroundRepeat: "no-repeat",
-        };
+        return bgLayers(...edgeLayers);
       }
 
       if (!isHiddenOrFlagged) return undefined;
@@ -316,10 +415,7 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         );
       }
 
-      return {
-        backgroundImage: gradients.join(","),
-        backgroundRepeat: "no-repeat",
-      };
+      return bgLayers(...gradients);
     },
     name: "Flower Floor",
     slug: "flower-floor",
@@ -449,10 +545,7 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         );
       }
 
-      return {
-        backgroundImage: gradients.join(","),
-        backgroundRepeat: "no-repeat",
-      };
+      return bgLayers(...gradients);
     },
   },
   "jade-temple": {
@@ -484,10 +577,11 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
       const dotFade = (Number(dot) + 1 + rand() * 1.2).toFixed(2);
       const angle = Math.floor(rand() * 180);
 
-      return {
-        backgroundImage: `radial-gradient(circle at ${x}% ${y}%, rgba(16,185,129,0) 0 ${ring}%, rgba(16,185,129,0.24) ${ring}% ${ringFade}%, transparent ${ringFade}%), radial-gradient(circle at ${x}% ${y}%, rgba(6,78,59,0.32) 0 ${dot}%, transparent ${dotFade}%), linear-gradient(${angle}deg, rgba(5,150,105,0.07) 0, rgba(16,185,129,0.01) 58%, transparent 100%)`,
-        backgroundRepeat: "no-repeat",
-      };
+      return bgLayers(
+        `radial-gradient(circle at ${x}% ${y}%, rgba(16,185,129,0) 0 ${ring}%, rgba(16,185,129,0.24) ${ring}% ${ringFade}%, transparent ${ringFade}%)`,
+        `radial-gradient(circle at ${x}% ${y}%, rgba(6,78,59,0.32) 0 ${dot}%, transparent ${dotFade}%)`,
+        `linear-gradient(${angle}deg, rgba(5,150,105,0.07) 0, rgba(16,185,129,0.01) 58%, transparent 100%)`,
+      );
     },
     name: "Jade Temple",
     slug: "jade-temple",
@@ -537,10 +631,11 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
       const grainAlpha = (0.03 + rand() * 0.04).toFixed(2);
       const tearY = (20 + rand() * 58).toFixed(1);
 
-      return {
-        backgroundImage: `repeating-linear-gradient(${Math.floor(rand() * 25)}deg, rgba(146,64,14,${stripeAlpha}) 0 1px, transparent 1px 8px), linear-gradient(180deg, transparent 0 ${tearY}%, rgba(120,53,15,0.06) ${tearY}% calc(${tearY}% + 1.2%), transparent calc(${tearY}% + 1.2%) 100%), radial-gradient(circle at ${Math.floor(15 + rand() * 70)}% ${Math.floor(15 + rand() * 70)}%, rgba(255,255,255,${grainAlpha}) 0 12%, transparent 24%)`,
-        backgroundRepeat: "no-repeat",
-      };
+      return bgLayers(
+        `repeating-linear-gradient(${Math.floor(rand() * 25)}deg, rgba(146,64,14,${stripeAlpha}) 0 1px, transparent 1px 8px)`,
+        `linear-gradient(180deg, transparent 0 ${tearY}%, rgba(120,53,15,0.06) ${tearY}% calc(${tearY}% + 1.2%), transparent calc(${tearY}% + 1.2%) 100%)`,
+        `radial-gradient(circle at ${Math.floor(15 + rand() * 70)}% ${Math.floor(15 + rand() * 70)}%, rgba(255,255,255,${grainAlpha}) 0 12%, transparent 24%)`,
+      );
     },
     name: "Paper Cutout",
     slug: "paper-cutout",
@@ -604,10 +699,7 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         `radial-gradient(circle at ${Math.floor(18 + rand() * 64)}% ${Math.floor(18 + rand() * 64)}%, rgba(217,70,239,0.2) 0 6%, transparent 14%)`,
       );
 
-      return {
-        backgroundImage: layers.join(","),
-        backgroundRepeat: "no-repeat",
-      };
+      return bgLayers(...layers);
     },
     name: "Void Orchid",
     slug: "void-orchid",
@@ -743,2200 +835,563 @@ export const CellSkins: Record<CellSkin, CellSkinDefinition> = {
         );
       }
 
-      return {
-        backgroundImage: layers.join(","),
-        backgroundRepeat: "no-repeat",
-      };
+      return bgLayers(...layers);
     },
   },
+  "emoji-tiles": createEmojiTileSkin({
+    name: "Emoji Tiles",
+    slug: "emoji-tiles",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#1f2937_0%,#111827_100%)] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#273449_0%,#172033_100%)] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#f7f7f5_0%,#efeee9_52%,#e6e3db_100%)] text-slate-900 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.18)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#ffffff_0%,#f7f5f0_52%,#eeebe3_100%)] text-slate-900 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.15)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-emerald-700",
+      3: "text-rose-700",
+      4: "text-violet-700",
+      5: "text-amber-700",
+      6: "text-cyan-700",
+      7: "text-orange-700",
+      8: "text-slate-700",
+    },
+    emojis: ["🟥", "🟧", "🟨", "🟩", "🟦", "🟪", "🟫", "⬛"],
+    glossRgb: "255,255,255",
+    shadowRgb: "15,23,42",
+    description:
+      "A playful emoji Minesweeper skin with full-cell square emoji backgrounds on unrevealed tiles and clean revealed cells for sharp readability.",
+    longDescription:
+      "The Emoji Tiles skin turns every unrevealed Minesweeper cell into a bold square emoji tile while keeping revealed cells clean, bright, and easy to scan. The emoji art is rendered in the background layer, so flags still sit clearly on top of hidden cells instead of being covered. That makes this skin playful without hurting gameplay clarity. It is ideal for players who want a fun emoji look, high contrast between hidden and revealed states, and readable number colors during fast games.",
+    keywords: [
+      "emoji minesweeper skin",
+      "emoji tiles minesweeper",
+      "square emoji minesweeper theme",
+      "fun minesweeper skin",
+      "playful minesweeper theme",
+      "readable minesweeper skin",
+    ],
+    faq: [
+      {
+        question: "What is the Emoji Tiles skin in Minesweeper?",
+        answer:
+          "Emoji Tiles is a published Minesweeper skin that fills unrevealed cells with oversized square emoji artwork while keeping revealed cells clean and neutral for easier number reading.",
+      },
+      {
+        question: "Can I still see flags on the Emoji Tiles skin?",
+        answer:
+          "Yes. The square emoji artwork is drawn in the cell background, so the flag stays visible on top of hidden cells and remains easy to recognize during play.",
+      },
+      {
+        question: "Why are the revealed cells plain in the Emoji Tiles theme?",
+        answer:
+          "The revealed cells are intentionally simple so the contrast between hidden and revealed states stays strong and Minesweeper numbers remain readable at gameplay size.",
+      },
+    ],
+  }),
+  "heart-tiles": createEmojiTileSkin({
+    name: "Heart Tiles",
+    slug: "heart-tiles",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#7f1d1d_0%,#4c0519_100%)] text-rose-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#9f1239_0%,#5b0823_100%)] text-rose-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#fff1f2_0%,#ffe4e6_52%,#fecdd3_100%)] text-rose-950 shadow-[inset_0_0_0_1px_rgba(251,113,133,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fff7f7_0%,#ffeef2_52%,#ffd8e4_100%)] text-rose-950 shadow-[inset_0_0_0_1px_rgba(244,114,182,0.15)]",
+    number: {
+      0: "",
+      1: "text-rose-700",
+      2: "text-pink-700",
+      3: "text-red-700",
+      4: "text-fuchsia-700",
+      5: "text-orange-700",
+      6: "text-purple-700",
+      7: "text-amber-700",
+      8: "text-stone-700",
+    },
+    emojis: ["❤️", "💖", "💗", "💘", "💝", "🩷", "💜"],
+    glossRgb: "255,255,255",
+    shadowRgb: "76,5,25",
+    description:
+      "A romantic emoji Minesweeper skin with heart-filled unrevealed cells and soft pastel revealed tiles that keep the board readable.",
+    longDescription:
+      "The Heart Tiles skin fills hidden Minesweeper cells with oversized heart emojis while revealed cells stay soft, bright, and uncluttered. Because the heart artwork lives in the background layer, flags can still be placed clearly on top without losing visibility. The pink and rose palette makes the board feel playful and warm, while the simplified revealed tiles preserve contrast for fast decision-making.",
+    keywords: [
+      "heart minesweeper skin",
+      "heart emoji minesweeper",
+      "pink minesweeper theme",
+      "cute minesweeper skin",
+      "romantic minesweeper theme",
+      "emoji heart game skin",
+    ],
+    faq: [
+      {
+        question: "What is the Heart Tiles skin in Minesweeper?",
+        answer:
+          "Heart Tiles is a published Minesweeper skin that covers unrevealed cells with large heart emoji artwork and keeps revealed cells simple and pastel-toned.",
+      },
+      {
+        question: "Does the Heart Tiles skin make flags harder to see?",
+        answer:
+          "No. The heart emojis are part of the background, so the flag still appears on top and remains easy to identify during gameplay.",
+      },
+      {
+        question: "Who is the Heart Tiles Minesweeper skin for?",
+        answer:
+          "It is ideal for players who want a cute, expressive, emoji-heavy board without sacrificing number readability or hidden-versus-revealed contrast.",
+      },
+    ],
+  }),
+  "laughing-faces": createEmojiTileSkin({
+    name: "Laughing Faces",
+    slug: "laughing-faces",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#854d0e_0%,#713f12_100%)] text-yellow-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#a16207_0%,#78350f_100%)] text-yellow-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#fffbe8_0%,#fef3c7_52%,#fde68a_100%)] text-amber-950 shadow-[inset_0_0_0_1px_rgba(245,158,11,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fffdf0_0%,#fef7d7_52%,#fdeca6_100%)] text-amber-950 shadow-[inset_0_0_0_1px_rgba(234,179,8,0.15)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-lime-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-orange-700",
+      6: "text-cyan-700",
+      7: "text-amber-800",
+      8: "text-stone-700",
+    },
+    emojis: ["😂", "🤣", "😆", "😄", "😹", "😅"],
+    glossRgb: "255,255,255",
+    shadowRgb: "120,53,15",
+    description:
+      "A cheerful emoji Minesweeper skin with laughing faces on unrevealed cells and sunny revealed tiles designed to stay easy to read.",
+    longDescription:
+      "The Laughing Faces skin gives hidden Minesweeper cells a bright, playful personality with oversized laughing emoji backgrounds. Revealed cells stay clean and warm-toned so the grid remains readable even when you are scanning quickly. The emoji art sits behind the gameplay content, which means flags still appear clearly on top and the board keeps the same functional logic as other published skins.",
+    keywords: [
+      "laughing emoji minesweeper skin",
+      "funny minesweeper theme",
+      "laughing faces minesweeper",
+      "happy emoji game skin",
+      "yellow minesweeper theme",
+      "playful minesweeper skin",
+    ],
+    faq: [
+      {
+        question: "What is the Laughing Faces skin in Minesweeper?",
+        answer:
+          "Laughing Faces is a published Minesweeper skin that uses large laughing emoji artwork on unrevealed cells and bright neutral reveals for better readability.",
+      },
+      {
+        question: "Can I still flag cells with the Laughing Faces theme?",
+        answer:
+          "Yes. The emoji faces are rendered behind the gameplay layer, so flags stay visible and do not get replaced by the artwork.",
+      },
+      {
+        question: "Why does the Laughing Faces skin keep revealed cells simple?",
+        answer:
+          "The clean revealed tiles help preserve quick board scanning, which is important in Minesweeper when you need to read numbers and patterns at a glance.",
+      },
+    ],
+  }),
+  "fruit-basket": createEmojiTileSkin({
+    name: "Fruit Basket",
+    slug: "fruit-basket",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#14532d_0%,#052e16_100%)] text-lime-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#166534_0%,#14532d_100%)] text-lime-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#f7fee7_0%,#ecfccb_52%,#d9f99d_100%)] text-lime-950 shadow-[inset_0_0_0_1px_rgba(132,204,22,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fbffe9_0%,#f0fdd8_52%,#dcf7b1_100%)] text-lime-950 shadow-[inset_0_0_0_1px_rgba(101,163,13,0.14)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-emerald-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-amber-700",
+      6: "text-teal-700",
+      7: "text-orange-700",
+      8: "text-stone-700",
+    },
+    emojis: ["🍎", "🍊", "🍋", "🍉", "🍓", "🍒", "🥝", "🍇"],
+    glossRgb: "255,255,255",
+    shadowRgb: "20,46,22",
+    description:
+      "A fresh fruit emoji Minesweeper skin with juicy unrevealed cells and crisp light revealed tiles for clear number reading.",
+    longDescription:
+      "The Fruit Basket skin turns hidden Minesweeper cells into a rotating mix of fruit emojis such as apples, oranges, lemons, watermelons, strawberries, cherries, kiwis, and grapes. Revealed cells stay crisp and lightly tinted so the board remains readable and the color contrast between hidden and revealed states stays obvious. Since the fruit art is painted into the background layer, flags still sit cleanly above the emoji artwork.",
+    keywords: [
+      "fruit minesweeper skin",
+      "fruit emoji minesweeper",
+      "food emoji minesweeper theme",
+      "fresh minesweeper skin",
+      "cute fruit game skin",
+      "green minesweeper emoji theme",
+    ],
+    faq: [
+      {
+        question: "What is the Fruit Basket skin in Minesweeper?",
+        answer:
+          "Fruit Basket is a published Minesweeper skin that decorates unrevealed cells with large fruit emoji artwork while keeping revealed cells light and easy to scan.",
+      },
+      {
+        question: "Which emojis appear in the Fruit Basket skin?",
+        answer:
+          "The Fruit Basket skin uses a seeded mix of fruit emojis including apples, oranges, lemons, watermelons, strawberries, cherries, kiwis, and grapes.",
+      },
+      {
+        question: "Does the Fruit Basket skin still support normal flag placement?",
+        answer:
+          "Yes. The fruit emoji graphics are rendered behind the gameplay content, so flags remain clearly visible on top of hidden cells.",
+      },
+    ],
+  }),
+  "red-burst": createEmojiTileSkin({
+    name: "Red Burst",
+    slug: "red-burst",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#7f1d1d_0%,#450a0a_100%)] text-rose-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#991b1b_0%,#5f1010_100%)] text-rose-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#fff1f2_0%,#ffe4e6_52%,#fecdd3_100%)] text-rose-950 shadow-[inset_0_0_0_1px_rgba(244,63,94,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fff7f7_0%,#ffeef2_52%,#ffd5dd_100%)] text-rose-950 shadow-[inset_0_0_0_1px_rgba(251,113,133,0.15)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-emerald-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-orange-700",
+      6: "text-cyan-700",
+      7: "text-amber-700",
+      8: "text-stone-700",
+    },
+    emojis: ["❤️", "🌹", "🍓", "🍒", "🍎", "🎈", "🧧", "🟥"],
+    glossRgb: "255,255,255",
+    shadowRgb: "69,10,10",
+    description:
+      "A red emoji Minesweeper skin that keeps every unrevealed tile inside a bold crimson palette while revealed cells stay clean and readable.",
+    longDescription:
+      "The Red Burst skin gives hidden Minesweeper cells a fully red emoji pool, mixing symbols like hearts, roses, cherries, strawberries, apples, and other crimson icons. Every unrevealed tile stays in the same color family, which creates a stronger monochrome theme across the board. Revealed cells remain simple and pale so numbers are easy to read and flags still appear clearly over the background artwork.",
+    keywords: [
+      "red emoji minesweeper skin",
+      "red minesweeper theme",
+      "monochrome emoji skin",
+      "red aesthetic minesweeper",
+      "crimson minesweeper skin",
+      "same color emoji theme",
+    ],
+    faq: [
+      {
+        question: "What is the Red Burst skin in Minesweeper?",
+        answer:
+          "Red Burst is a published Minesweeper skin that uses only red-themed emojis on unrevealed cells and keeps revealed cells minimal for easy scanning.",
+      },
+      {
+        question: "Do all emojis in the Red Burst skin share the same color family?",
+        answer:
+          "Yes. The unrevealed tiles in Red Burst use a seeded set of emojis that all stay inside a red or crimson palette.",
+      },
+      {
+        question: "Can I still place flags normally with the Red Burst theme?",
+        answer:
+          "Yes. The emoji artwork is rendered in the background, so the normal flag stays visible on top of hidden cells.",
+      },
+    ],
+  }),
+  "orange-pop": createEmojiTileSkin({
+    name: "Orange Pop",
+    slug: "orange-pop",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#9a3412_0%,#7c2d12_100%)] text-orange-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#c2410c_0%,#9a3412_100%)] text-orange-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#fff7ed_0%,#ffedd5_52%,#fed7aa_100%)] text-orange-950 shadow-[inset_0_0_0_1px_rgba(249,115,22,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fffaf1_0%,#fff0dc_52%,#ffdcb4_100%)] text-orange-950 shadow-[inset_0_0_0_1px_rgba(251,146,60,0.15)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-green-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-orange-700",
+      6: "text-cyan-700",
+      7: "text-amber-800",
+      8: "text-stone-700",
+    },
+    emojis: ["🧡", "🍊", "🥕", "🦊", "🏀", "🔶", "🟧", "🎃"],
+    glossRgb: "255,255,255",
+    shadowRgb: "124,45,18",
+    description:
+      "A vivid orange emoji Minesweeper skin with a same-color emoji pool on hidden cells and warm clean reveals.",
+    longDescription:
+      "Orange Pop keeps every hidden tile inside an orange emoji palette, using icons like oranges, carrots, foxes, basketballs, orange hearts, and orange geometric shapes. Because all of the emoji artwork belongs to the same color family, the board feels cohesive instead of random. Revealed cells stay warm and light to preserve gameplay readability while flags remain clearly layered above the artwork.",
+    keywords: [
+      "orange emoji minesweeper skin",
+      "orange minesweeper theme",
+      "same color emoji minesweeper",
+      "warm minesweeper skin",
+      "orange aesthetic game skin",
+      "emoji color theme minesweeper",
+    ],
+    faq: [
+      {
+        question: "What is the Orange Pop skin in Minesweeper?",
+        answer:
+          "Orange Pop is a published Minesweeper skin that limits unrevealed cells to orange-themed emojis for a consistent color-coded look.",
+      },
+      {
+        question: "Why does the Orange Pop skin feel more unified than mixed emoji skins?",
+        answer:
+          "Because every hidden tile pulls from the same orange color family, the grid reads as one clear theme instead of a rainbow mix.",
+      },
+      {
+        question: "Is the Orange Pop skin still readable during fast games?",
+        answer:
+          "Yes. The revealed cells stay intentionally clean, which keeps number recognition and hidden-versus-revealed contrast strong.",
+      },
+    ],
+  }),
+  "yellow-zest": createEmojiTileSkin({
+    name: "Yellow Zest",
+    slug: "yellow-zest",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#a16207_0%,#713f12_100%)] text-yellow-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#ca8a04_0%,#854d0e_100%)] text-yellow-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#fffde8_0%,#fef9c3_52%,#fde68a_100%)] text-amber-950 shadow-[inset_0_0_0_1px_rgba(234,179,8,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fffef0_0%,#fefad8_52%,#fdeaa7_100%)] text-amber-950 shadow-[inset_0_0_0_1px_rgba(250,204,21,0.15)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-lime-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-orange-700",
+      6: "text-cyan-700",
+      7: "text-amber-800",
+      8: "text-stone-700",
+    },
+    emojis: ["💛", "⭐", "🌙", "☀️", "🍋", "🐥", "🌼", "🟡"],
+    glossRgb: "255,255,255",
+    shadowRgb: "113,63,18",
+    description:
+      "A bright yellow emoji Minesweeper skin with sunshine-colored hidden tiles and crisp pale reveals.",
+    longDescription:
+      "Yellow Zest uses a fully yellow emoji pool for unrevealed Minesweeper cells, mixing stars, moons, suns, lemons, chicks, flowers, and yellow geometric icons. The consistent yellow palette makes the board feel energetic and instantly recognizable. Revealed cells stay restrained and light so the important gameplay information remains easy to read and flags stay visible on top of hidden cells.",
+    keywords: [
+      "yellow emoji minesweeper skin",
+      "yellow minesweeper theme",
+      "sunny emoji minesweeper",
+      "monochrome yellow game skin",
+      "bright minesweeper skin",
+      "same color emoji yellow theme",
+    ],
+    faq: [
+      {
+        question: "What is the Yellow Zest skin in Minesweeper?",
+        answer:
+          "Yellow Zest is a published Minesweeper skin that keeps hidden cells inside a yellow-only emoji palette for a bright monochrome look.",
+      },
+      {
+        question: "Which kinds of emojis appear in Yellow Zest?",
+        answer:
+          "Yellow Zest uses a seeded set of yellow emojis such as stars, moons, suns, lemons, chicks, flowers, and yellow shapes.",
+      },
+      {
+        question: "Does Yellow Zest still prioritize number readability?",
+        answer:
+          "Yes. The revealed tiles are intentionally clean and pale so numbers remain easy to read during normal gameplay.",
+      },
+    ],
+  }),
+  "green-garden": createEmojiTileSkin({
+    name: "Green Garden",
+    slug: "green-garden",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#166534_0%,#14532d_100%)] text-lime-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#15803d_0%,#166534_100%)] text-lime-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#f7fee7_0%,#ecfccb_52%,#d9f99d_100%)] text-lime-950 shadow-[inset_0_0_0_1px_rgba(132,204,22,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fbffef_0%,#f0fdd8_52%,#dcf7b1_100%)] text-lime-950 shadow-[inset_0_0_0_1px_rgba(101,163,13,0.14)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-emerald-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-amber-700",
+      6: "text-teal-700",
+      7: "text-orange-700",
+      8: "text-stone-700",
+    },
+    emojis: ["💚", "🍀", "🌵", "🥝", "🐢", "🐸", "🟢", "🍏"],
+    glossRgb: "255,255,255",
+    shadowRgb: "20,46,22",
+    description:
+      "A green emoji Minesweeper skin with same-color hidden tiles and fresh readable reveals.",
+    longDescription:
+      "Green Garden gives unrevealed Minesweeper cells a monochrome green emoji pool built from clovers, cacti, kiwis, turtles, frogs, green hearts, apples, and green shapes. Every hidden tile stays in the same color family, which makes the board feel calm and coherent. Revealed tiles remain simple and lightly tinted so numbers stand out and flags stay easy to identify above the artwork.",
+    keywords: [
+      "green emoji minesweeper skin",
+      "green minesweeper theme",
+      "garden emoji minesweeper",
+      "same color green emoji skin",
+      "nature minesweeper emoji theme",
+      "monochrome green game skin",
+    ],
+    faq: [
+      {
+        question: "What is the Green Garden skin in Minesweeper?",
+        answer:
+          "Green Garden is a published Minesweeper skin that uses only green-themed emojis on hidden cells for a calm color-coded board.",
+      },
+      {
+        question: "Are all emojis in Green Garden part of the same color family?",
+        answer:
+          "Yes. Its unrevealed tiles use a seeded set of green emojis so the theme stays visually consistent across the grid.",
+      },
+      {
+        question: "Does Green Garden change how flags work?",
+        answer:
+          "No. Flags still work the same way and remain visible because the emoji artwork is placed in the background layer.",
+      },
+    ],
+  }),
+  "blue-lagoon": createEmojiTileSkin({
+    name: "Blue Lagoon",
+    slug: "blue-lagoon",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#1d4ed8_0%,#1e3a8a_100%)] text-sky-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#2563eb_0%,#1d4ed8_100%)] text-sky-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#eff6ff_0%,#dbeafe_52%,#bfdbfe_100%)] text-sky-950 shadow-[inset_0_0_0_1px_rgba(59,130,246,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#f5f9ff_0%,#e3efff_52%,#cfe1ff_100%)] text-sky-950 shadow-[inset_0_0_0_1px_rgba(96,165,250,0.15)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-emerald-700",
+      3: "text-red-700",
+      4: "text-indigo-700",
+      5: "text-amber-700",
+      6: "text-cyan-700",
+      7: "text-slate-700",
+      8: "text-stone-700",
+    },
+    emojis: ["💙", "🫐", "🐟", "🦋", "🧢", "🌊", "🔷", "🟦"],
+    glossRgb: "255,255,255",
+    shadowRgb: "30,58,138",
+    description:
+      "A blue emoji Minesweeper skin with a same-color hidden emoji pool and cool airy revealed tiles.",
+    longDescription:
+      "Blue Lagoon keeps every unrevealed Minesweeper tile inside a blue emoji palette, using icons like blue hearts, blueberries, fish, butterflies, waves, caps, and blue shapes. The result is a cleaner monochrome look that still feels lively because each cell can rotate through different blue symbols. Revealed tiles stay light and cool-toned to preserve number readability and maintain strong contrast against hidden cells.",
+    keywords: [
+      "blue emoji minesweeper skin",
+      "blue minesweeper theme",
+      "ocean emoji minesweeper",
+      "same color blue game skin",
+      "cool minesweeper emoji theme",
+      "monochrome blue minesweeper",
+    ],
+    faq: [
+      {
+        question: "What is the Blue Lagoon skin in Minesweeper?",
+        answer:
+          "Blue Lagoon is a published Minesweeper skin that uses blue-only emojis for hidden cells and clean cool-toned reveals for readability.",
+      },
+      {
+        question: "Why does Blue Lagoon use only blue emojis?",
+        answer:
+          "The single-color emoji pool gives the board a stronger identity and makes the theme feel more intentional than a mixed-color set.",
+      },
+      {
+        question: "Can flags still sit over the Blue Lagoon emoji artwork?",
+        answer:
+          "Yes. The artwork remains in the background layer, so the flag stays visible above the emoji tile.",
+      },
+    ],
+  }),
+  "purple-parade": createEmojiTileSkin({
+    name: "Purple Parade",
+    slug: "purple-parade",
+    hiddenA:
+      "bg-[linear-gradient(160deg,#6b21a8_0%,#4c1d95_100%)] text-fuchsia-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    hiddenB:
+      "bg-[linear-gradient(160deg,#7e22ce_0%,#6b21a8_100%)] text-fuchsia-50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
+    revealedA:
+      "bg-[linear-gradient(145deg,#faf5ff_0%,#f3e8ff_52%,#e9d5ff_100%)] text-purple-950 shadow-[inset_0_0_0_1px_rgba(168,85,247,0.16)]",
+    revealedB:
+      "bg-[linear-gradient(145deg,#fdf8ff_0%,#f6edff_52%,#eddcff_100%)] text-purple-950 shadow-[inset_0_0_0_1px_rgba(192,132,252,0.15)]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-emerald-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-amber-700",
+      6: "text-cyan-700",
+      7: "text-fuchsia-700",
+      8: "text-stone-700",
+    },
+    emojis: ["💜", "🍆", "🔮", "☂️", "🪻", "🦄", "🟣", "🍇"],
+    glossRgb: "255,255,255",
+    shadowRgb: "76,29,149",
+    description:
+      "A purple emoji Minesweeper skin with one-color hidden emoji pools and soft lavender revealed cells.",
+    longDescription:
+      "Purple Parade builds hidden Minesweeper cells from a purple-only emoji set including hearts, grapes, umbrellas, orbs, lavender flowers, eggplants, unicorns, and purple shapes. Keeping every hidden symbol inside one color family makes the board feel cohesive and stylish without changing gameplay behavior. Revealed cells stay pale and uncluttered so numbers remain readable and flags still appear clearly over hidden tiles.",
+    keywords: [
+      "purple emoji minesweeper skin",
+      "purple minesweeper theme",
+      "lavender emoji minesweeper",
+      "same color purple game skin",
+      "violet minesweeper aesthetic",
+      "monochrome emoji theme purple",
+    ],
+    faq: [
+      {
+        question: "What is the Purple Parade skin in Minesweeper?",
+        answer:
+          "Purple Parade is a published Minesweeper skin that uses purple-only emojis on unrevealed cells for a consistent color-first look.",
+      },
+      {
+        question: "Does Purple Parade mix colors on hidden cells?",
+        answer:
+          "No. Its emoji pool is intentionally limited to purple-toned symbols so the board keeps a monochrome identity.",
+      },
+      {
+        question: "Will the Purple Parade theme still be easy to play with?",
+        answer:
+          "Yes. The revealed tiles remain simple and light, which keeps number scanning and flag visibility clear during normal play.",
+      },
+    ],
+  }),
 };
 
 // Staging area for upcoming cell skins before publishing them in CellSkins.
-export const NonPublishedCellSkins = {
-  "sunken-atoll": {
-    green:
-      "bg-[linear-gradient(166deg,#0b3a51_0%,#14617d_52%,#09293a_100%)] text-cyan-50",
-    lightGreen:
-      "bg-[linear-gradient(166deg,#0f4560_0%,#1a7090_52%,#0b3349_100%)] text-cyan-50",
-    gray: "bg-[linear-gradient(145deg,#dbf2f8_0%,#cde6ef_52%,#c0d9e4_100%)] text-sky-900 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#e8f7fc_0%,#dceef5_52%,#cfe4ee_100%)] text-sky-900 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-600",
-      2: "text-emerald-600",
-      3: "text-rose-600",
-      4: "text-indigo-600",
-      5: "text-amber-600",
-      6: "text-cyan-600",
-      7: "text-orange-600",
-      8: "text-slate-600",
-    },
-    flagEmoji: "🪸",
-    bombEmoji: "🦈",
-    getOverlayStyle: ({
-      row,
-      col,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-      isHiddenOrFlagged,
-      cellStatus,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const tideA = (row * 2 + col) % 5;
-      const tideB = (row + col * 2) % 5;
-
-      if (isHiddenOrFlagged) {
-        return {
-          backgroundImage: `linear-gradient(${150 + tideA * 4}deg, transparent 0 26%, rgba(186,230,253,0.18) 36% 56%, transparent 66% 100%), linear-gradient(${28 + tideB * 4}deg, rgba(8,47,73,0.24) 0 18%, transparent 32% 74%, rgba(8,47,73,0.22) 88% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const shoreline: string[] = [];
-      if (topIsUnrevealed) {
-        shoreline.push(
-          "linear-gradient(180deg, rgba(125,211,252,0.34) 0 8%, transparent 14%)",
-        );
-      }
-      if (rightIsUnrevealed) {
-        shoreline.push(
-          "linear-gradient(270deg, rgba(125,211,252,0.34) 0 8%, transparent 14%)",
-        );
-      }
-      if (bottomIsUnrevealed) {
-        shoreline.push(
-          "linear-gradient(0deg, rgba(125,211,252,0.34) 0 8%, transparent 14%)",
-        );
-      }
-      if (leftIsUnrevealed) {
-        shoreline.push(
-          "linear-gradient(90deg, rgba(125,211,252,0.34) 0 8%, transparent 14%)",
-        );
-      }
-
-      if (!shoreline.length) return undefined;
-      return {
-        backgroundImage: shoreline.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  // New mechanic skin: revealed cells draw seam-connected neon traces where
-  // neighboring cells are also revealed, creating deterministic cluster circuits.
-  "neon-circuit": {
-    green:
-      "bg-[linear-gradient(160deg,#09192a_0%,#13324e_52%,#071321_100%)] text-cyan-100",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#0c2236_0%,#19405f_52%,#0a1b2d_100%)] text-cyan-100",
-    gray: "bg-[linear-gradient(145deg,#0b1a2b_0%,#10253a_52%,#0a1827_100%)] text-cyan-100 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#0d1f32_0%,#15304a_52%,#0c1d30_100%)] text-cyan-100 transition-none",
-    number: {
-      0: "",
-      1: "text-sky-300",
-      2: "text-lime-300",
-      3: "text-rose-300",
-      4: "text-violet-300",
-      5: "text-amber-300",
-      6: "text-teal-300",
-      7: "text-orange-300",
-      8: "text-zinc-200",
-    },
-    flagEmoji: "🛰️",
-    bombEmoji: "💥",
-    getOverlayStyle: ({
-      row,
-      col,
-      cellStatus,
-      isHiddenOrFlagged,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged || cellStatus !== "revealed") {
-        const phase = (row * 2 + col) % 4;
-        return {
-          backgroundImage: `linear-gradient(${22 + phase * 8}deg, transparent 0 38%, rgba(34,211,238,0.16) 44% 56%, transparent 62% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      const topOpen = !topIsUnrevealed;
-      const rightOpen = !rightIsUnrevealed;
-      const bottomOpen = !bottomIsUnrevealed;
-      const leftOpen = !leftIsUnrevealed;
-      const openCount = [topOpen, rightOpen, bottomOpen, leftOpen].filter(Boolean)
-        .length;
-
-      if (openCount < 1) return undefined;
-      const segments: string[] = [];
-
-      if (topOpen) {
-        segments.push(
-          "linear-gradient(0deg, transparent 0 48%, rgba(34,211,238,0.5) 48% 54%, rgba(34,211,238,0.22) 54% 100%)",
-        );
-      }
-      if (rightOpen) {
-        segments.push(
-          "linear-gradient(270deg, transparent 0 48%, rgba(45,212,191,0.5) 48% 54%, rgba(45,212,191,0.22) 54% 100%)",
-        );
-      }
-      if (bottomOpen) {
-        segments.push(
-          "linear-gradient(180deg, transparent 0 48%, rgba(34,211,238,0.5) 48% 54%, rgba(34,211,238,0.22) 54% 100%)",
-        );
-      }
-      if (leftOpen) {
-        segments.push(
-          "linear-gradient(90deg, transparent 0 48%, rgba(45,212,191,0.5) 48% 54%, rgba(45,212,191,0.22) 54% 100%)",
-        );
-      }
-      if (openCount >= 2) {
-        segments.push(
-          "linear-gradient(135deg, transparent 0 42%, rgba(16,185,129,0.18) 47% 53%, transparent 58% 100%)",
-        );
-      }
-
-      return {
-        backgroundImage: segments.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "moss-ruins": {
-    green:
-      "bg-[linear-gradient(160deg,#1f341b_0%,#33552d_52%,#162917_100%)] text-lime-100",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#294728_0%,#3f6840_52%,#213c22_100%)] text-lime-100",
-    gray: "bg-[linear-gradient(145deg,#dfe5d1_0%,#d3dbc0_52%,#c6cfb2_100%)] text-lime-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#e9efdc_0%,#dde5cd_52%,#d0dac0_100%)] text-lime-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-teal-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🗿",
-    bombEmoji: "💀",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const seamBand = (row + col) % 3;
-
-      if (isHiddenOrFlagged) {
-        return {
-          backgroundImage: `linear-gradient(${132 + seamBand * 12}deg, rgba(132,204,22,0.16) 0 24%, transparent 34% 100%), linear-gradient(${36 + seamBand * 9}deg, transparent 0 38%, rgba(101,163,13,0.2) 46% 62%, transparent 72% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const revealedEdges: string[] = [];
-      if (topIsUnrevealed) revealedEdges.push("linear-gradient(180deg, rgba(82,82,40,0.32) 0 8%, transparent 12%)");
-      if (rightIsUnrevealed)
-        revealedEdges.push("linear-gradient(270deg, rgba(82,82,40,0.32) 0 8%, transparent 12%)");
-      if (bottomIsUnrevealed) revealedEdges.push("linear-gradient(0deg, rgba(82,82,40,0.32) 0 8%, transparent 12%)");
-      if (leftIsUnrevealed) revealedEdges.push("linear-gradient(90deg, rgba(82,82,40,0.32) 0 8%, transparent 12%)");
-
-      const crackDirection = (row + col) % 2 === 0 ? 32 : 148;
-      revealedEdges.push(
-        `linear-gradient(${crackDirection}deg, transparent 0 34%, rgba(82,82,40,0.2) 42% 48%, transparent 56% 100%)`,
-      );
-
-      if (!revealedEdges.length) return undefined;
-      return {
-        backgroundImage: revealedEdges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "arcade-pop": {
-    green:
-      "bg-[linear-gradient(160deg,#451070_0%,#7a2ec2_52%,#2f0a50_100%)] text-fuchsia-50",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#552088_0%,#9546d8_52%,#3b1260_100%)] text-fuchsia-50",
-    gray: "bg-[linear-gradient(145deg,#fff2fd_0%,#fbe7f7_52%,#f2dbef_100%)] text-fuchsia-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#fff8ff_0%,#fdf0fa_52%,#f5e3f1_100%)] text-fuchsia-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-800",
-    },
-    flagEmoji: "🕹️",
-    bombEmoji: "💣",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const block = (row + col) % 4;
-      const hueA = 286 + block * 10;
-      const hueB = 192 + block * 8;
-
-      if (!isHiddenOrFlagged && cellStatus === "revealed") {
-        return {
-          backgroundImage: `linear-gradient(${38 + block * 16}deg, transparent 0 34%, hsla(${hueA},84%,66%,0.2) 42% 58%, transparent 66% 100%), linear-gradient(${132 + block * 12}deg, transparent 0 38%, hsla(${hueB},86%,62%,0.18) 46% 60%, transparent 68% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (!isHiddenOrFlagged) return undefined;
-      return {
-        backgroundImage: `linear-gradient(${44 + block * 18}deg, transparent 0 32%, hsla(${hueA},94%,72%,0.24) 40% 62%, transparent 70% 100%)`,
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "ember-keep": {
-    green:
-      "bg-[linear-gradient(160deg,#4b2017_0%,#6a2f22_50%,#35140f_100%)] text-orange-50",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#5a2a1f_0%,#7d3d2f_50%,#401910_100%)] text-orange-50",
-    gray: "bg-[linear-gradient(145deg,#efe0d2_0%,#e3d0be_52%,#d8c2ad_100%)] text-orange-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f6eade_0%,#ecdcc9_52%,#e1cfbc_100%)] text-orange-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🏰",
-    bombEmoji: "🌋",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const rowPhase = row % 2;
-      const colPhase = col % 3;
-
-      if (isHiddenOrFlagged) {
-        const jointX = 18 + colPhase * 10;
-        const battlement = rowPhase === 0 ? 18 : 26;
-        return {
-          backgroundImage: `linear-gradient(180deg, rgba(120,53,15,0.26) 0 ${battlement}%, transparent ${battlement}% 100%), linear-gradient(90deg, transparent 0 ${jointX}%, rgba(120,53,15,0.22) ${jointX}% ${jointX + 6}%, transparent ${jointX + 6}% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed) edges.push("linear-gradient(180deg, rgba(120,53,15,0.36) 0 8%, transparent 12%)");
-      if (rightIsUnrevealed)
-        edges.push("linear-gradient(270deg, rgba(120,53,15,0.36) 0 8%, transparent 12%)");
-      if (bottomIsUnrevealed) edges.push("linear-gradient(0deg, rgba(120,53,15,0.36) 0 8%, transparent 12%)");
-      if (leftIsUnrevealed) edges.push("linear-gradient(90deg, rgba(120,53,15,0.36) 0 8%, transparent 12%)");
-      edges.push(
-        `linear-gradient(${rowPhase === 0 ? 26 : 154}deg, transparent 0 34%, rgba(124,45,18,0.18) 44% 52%, transparent 62% 100%)`,
-      );
-
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "petal-parlor": {
-    green:
-      "bg-[linear-gradient(160deg,#3a2a1f_0%,#5a422d_52%,#2b1f15_100%)] text-rose-50",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#4a3728_0%,#6a533a_52%,#37281d_100%)] text-rose-50",
-    gray: "bg-[linear-gradient(145deg,#f4f7ea_0%,#e9f0dd_52%,#dde7d1_100%)] text-rose-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f8faef_0%,#eef4e4_52%,#e3ebd8_100%)] text-rose-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🌷",
-    bombEmoji: "🪲",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const bed = (row + col) % 4;
-      const petalTilt = 26 + bed * 18;
-      const leafTilt = 144 - bed * 14;
-
-      if (isHiddenOrFlagged) {
-        return {
-          backgroundImage: `linear-gradient(${petalTilt}deg, transparent 0 28%, rgba(251,113,133,0.24) 40% 58%, transparent 70% 100%), linear-gradient(${leafTilt}deg, transparent 0 26%, rgba(74,222,128,0.2) 38% 56%, transparent 68% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const bedEdges: string[] = [];
-      if (topIsUnrevealed) bedEdges.push("linear-gradient(180deg, rgba(74,222,128,0.24) 0 8%, transparent 14%)");
-      if (rightIsUnrevealed) bedEdges.push("linear-gradient(270deg, rgba(74,222,128,0.24) 0 8%, transparent 14%)");
-      if (bottomIsUnrevealed) bedEdges.push("linear-gradient(0deg, rgba(74,222,128,0.24) 0 8%, transparent 14%)");
-      if (leftIsUnrevealed) bedEdges.push("linear-gradient(90deg, rgba(74,222,128,0.24) 0 8%, transparent 14%)");
-      bedEdges.push(
-        `linear-gradient(${petalTilt + 50}deg, transparent 0 36%, rgba(244,114,182,0.16) 44% 56%, transparent 64% 100%)`,
-      );
-
-      return {
-        backgroundImage: bedEdges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "harbor-blueprint": {
-    green:
-      "bg-[linear-gradient(168deg,#0a3854_0%,#0f5f87_52%,#07263a_100%)] text-cyan-50",
-    lightGreen:
-      "bg-[linear-gradient(168deg,#0d4261_0%,#16709a_52%,#0a2f45_100%)] text-cyan-50",
-    gray: "bg-[linear-gradient(145deg,#e6f4ff_0%,#d8ebfb_52%,#c8e1f2_100%)] text-sky-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f2f9ff_0%,#e7f2fb_52%,#d8e9f5_100%)] text-sky-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-slate-700",
-    },
-    flagEmoji: "⚓",
-    bombEmoji: "🧨",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const gridPhase = (row % 3) * 3 + (col % 3);
-      const route = 20 + ((row + col) % 4) * 8;
-      const tide = (row * 2 + col) % 5;
-
-      if (isHiddenOrFlagged) {
-        const oceanX = col * 18;
-        const oceanY = row * 14;
-        return {
-          backgroundImage: `linear-gradient(${148 + tide * 4}deg, transparent 0 22%, rgba(186,230,253,0.18) 36% 58%, transparent 72% 100%), linear-gradient(${24 + tide * 4}deg, rgba(8,47,73,0.24) 0 16%, transparent 32% 76%, rgba(8,47,73,0.22) 90% 100%)`,
-          backgroundPosition: `${-oceanX}% ${-oceanY}%, ${-(oceanX * 0.55)}% ${-(oceanY * 0.55)}%`,
-          backgroundSize: "300% 300%, 320% 320%",
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const frame: string[] = [];
-      if (topIsUnrevealed) frame.push("linear-gradient(180deg, rgba(14,116,144,0.3) 0 8%, transparent 14%)");
-      if (rightIsUnrevealed) frame.push("linear-gradient(270deg, rgba(14,116,144,0.3) 0 8%, transparent 14%)");
-      if (bottomIsUnrevealed) frame.push("linear-gradient(0deg, rgba(14,116,144,0.3) 0 8%, transparent 14%)");
-      if (leftIsUnrevealed) frame.push("linear-gradient(90deg, rgba(14,116,144,0.3) 0 8%, transparent 14%)");
-      frame.push(`linear-gradient(${35 + gridPhase * 8}deg, transparent 0 ${route}%, rgba(2,132,199,0.2) ${route}% ${route + 7}%, transparent ${route + 7}% 100%)`);
-      return {
-        backgroundImage: frame.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  // New mechanic skin: deterministic parallax panes shift toward revealed space,
-  // creating directional depth that changes with neighborhood openness.
-  "prism-parallax": {
-    green:
-      "bg-[linear-gradient(165deg,#1a2654_0%,#354587_52%,#121b41_100%)] text-indigo-50",
-    lightGreen:
-      "bg-[linear-gradient(165deg,#232f62_0%,#43539a_52%,#18224f_100%)] text-indigo-50",
-    gray: "bg-[linear-gradient(145deg,#f2f5ff_0%,#e7ecff_52%,#dde4ff_100%)] text-indigo-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f9f9ff_0%,#f0f1ff_52%,#e7e9ff_100%)] text-indigo-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-slate-700",
-    },
-    flagEmoji: "🪩",
-    bombEmoji: "☄️",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const revealTop = Number(!topIsUnrevealed);
-      const revealRight = Number(!rightIsUnrevealed);
-      const revealBottom = Number(!bottomIsUnrevealed);
-      const revealLeft = Number(!leftIsUnrevealed);
-      const openness = revealTop + revealRight + revealBottom + revealLeft;
-      const driftX = (revealRight - revealLeft) * 8 + ((col % 3) - 1) * 3;
-      const driftY = (revealBottom - revealTop) * 8 + ((row % 3) - 1) * 3;
-
-      if (isHiddenOrFlagged) {
-        const hiddenX = driftX * 0.45;
-        const hiddenY = driftY * 0.45;
-        return {
-          backgroundImage:
-            "linear-gradient(140deg, transparent 0 34%, rgba(99,102,241,0.22) 42% 58%, transparent 66% 100%), linear-gradient(45deg, transparent 0 40%, rgba(129,140,248,0.18) 48% 52%, transparent 60% 100%)",
-          backgroundPosition: "0 0, 0 0",
-          backgroundSize: `${100 + hiddenX * 0.2}% ${100 + hiddenY * 0.2}%, ${100 - hiddenX * 0.25}% ${100 - hiddenY * 0.25}%`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const nearX = driftX + openness * 2;
-      const nearY = driftY + openness * 2;
-      const farX = driftX * 0.5;
-      const farY = driftY * 0.5;
-
-      return {
-        backgroundImage:
-          "linear-gradient(135deg, transparent 0 36%, rgba(79,70,229,0.24) 44% 56%, transparent 64% 100%), linear-gradient(45deg, transparent 0 40%, rgba(99,102,241,0.2) 48% 52%, transparent 60% 100%)",
-        backgroundPosition: "0 0, 0 0",
-        backgroundSize: `${100 + nearX * 0.18}% ${100 + nearY * 0.18}%, ${100 - farX * 0.15}% ${100 - farY * 0.15}%`,
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "copper-patina": {
-    green:
-      "bg-[linear-gradient(158deg,#5c2e0a_0%,#8b4513_52%,#3d1d06_100%)] text-amber-50",
-    lightGreen:
-      "bg-[linear-gradient(158deg,#6b3610_0%,#9c4e1e_52%,#4a2308_100%)] text-amber-50",
-    gray: "bg-[linear-gradient(145deg,#c2ddd0_0%,#aed1c1_52%,#9ac5b2_100%)] text-emerald-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#cde5d9_0%,#bbd9ca_52%,#a8cebc_100%)] text-emerald-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-teal-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "⚙️",
-    bombEmoji: "🔔",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const oxideBand = (row * 2 + col) % 5;
-      const flowAngle = 132 + oxideBand * 8;
-
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 41263 + (col + 1) * 73891);
-        const streakAlpha = (0.12 + rand() * 0.14).toFixed(2);
-        const spotX = (20 + rand() * 60).toFixed(1);
-        const spotY = (20 + rand() * 60).toFixed(1);
-        const spotSize = (4 + rand() * 8).toFixed(1);
-
-        return {
-          backgroundImage: `linear-gradient(${flowAngle}deg, transparent 0 28%, rgba(0,128,128,${streakAlpha}) 38% 52%, transparent 62% 100%), radial-gradient(circle at ${spotX}% ${spotY}%, rgba(64,224,208,0.18) 0 ${spotSize}%, transparent ${Number(spotSize) + 4}%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(139,69,19,0.28) 0 8%, transparent 14%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(139,69,19,0.28) 0 8%, transparent 14%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(139,69,19,0.28) 0 8%, transparent 14%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(139,69,19,0.28) 0 8%, transparent 14%)",
-        );
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "bioluminescence": {
-    green:
-      "bg-[linear-gradient(162deg,#020818_0%,#061230_52%,#010510_100%)] text-cyan-100",
-    lightGreen:
-      "bg-[linear-gradient(162deg,#040a20_0%,#0a1a3a_52%,#020814_100%)] text-cyan-100",
-    gray: "bg-[linear-gradient(145deg,#0c1824_0%,#142838_52%,#0a1420_100%)] text-cyan-100 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#10202e_0%,#183040_52%,#0e1a26_100%)] text-cyan-100 transition-none",
-    number: {
-      0: "",
-      1: "text-sky-300",
-      2: "text-lime-300",
-      3: "text-rose-300",
-      4: "text-violet-300",
-      5: "text-amber-300",
-      6: "text-teal-300",
-      7: "text-orange-300",
-      8: "text-zinc-300",
-    },
-    flagEmoji: "🪼",
-    bombEmoji: "🐙",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 83461 + (col + 1) * 29753);
-        if (rand() < 0.08) return undefined;
-
-        const glowColors = [
-          "0,255,255",
-          "0,200,255",
-          "100,255,200",
-          "0,255,180",
-          "80,200,255",
-        ];
-
-        const count = rand() < 0.4 ? 2 : rand() < 0.8 ? 3 : 4;
-        const layers: string[] = [];
-
-        for (let i = 0; i < count; i++) {
-          const color = glowColors[Math.floor(rand() * glowColors.length)];
-          const x = (10 + rand() * 80).toFixed(1);
-          const y = (10 + rand() * 80).toFixed(1);
-          const coreSize = (1 + rand() * 2.5).toFixed(2);
-          const glowSize = (Number(coreSize) + 3 + rand() * 4).toFixed(2);
-          const alpha = (0.5 + rand() * 0.35).toFixed(2);
-          const glowAlpha = (0.12 + rand() * 0.1).toFixed(2);
-
-          layers.push(
-            `radial-gradient(circle at ${x}% ${y}%, rgba(${color},${alpha}) 0 ${coreSize}%, rgba(${color},${glowAlpha}) ${coreSize}% ${glowSize}%, transparent ${glowSize}%)`,
-          );
-        }
-
-        return {
-          backgroundImage: layers.join(","),
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(0,200,255,0.18) 0 8%, transparent 16%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(0,200,255,0.18) 0 8%, transparent 16%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(0,200,255,0.18) 0 8%, transparent 16%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(0,200,255,0.18) 0 8%, transparent 16%)",
-        );
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "honeycomb": {
-    green:
-      "bg-[linear-gradient(155deg,#7a5008_0%,#c8860f_52%,#624006_100%)] text-amber-50",
-    lightGreen:
-      "bg-[linear-gradient(155deg,#886010_0%,#d89618_52%,#705008_100%)] text-amber-50",
-    gray: "bg-[linear-gradient(145deg,#fef3cd_0%,#fde9a8_52%,#fce090_100%)] text-amber-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#fef7d8_0%,#fdefbc_52%,#fce7a0_100%)] text-amber-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-800",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-800",
-    },
-    flagEmoji: "🐝",
-    bombEmoji: "🍯",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const cell = (row + col) % 3;
-
-      if (isHiddenOrFlagged) {
-        const angle1 = 60 + cell * 60;
-        const angle2 = angle1 + 60;
-        return {
-          backgroundImage: `linear-gradient(${angle1}deg, transparent 0 36%, rgba(120,53,15,0.18) 42% 48%, transparent 54% 100%), linear-gradient(${angle2}deg, transparent 0 38%, rgba(120,53,15,0.14) 44% 50%, transparent 56% 100%), radial-gradient(circle at 50% 50%, rgba(255,200,50,0.2) 0 16%, transparent 28%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(180,120,20,0.28) 0 8%, transparent 14%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(180,120,20,0.28) 0 8%, transparent 14%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(180,120,20,0.28) 0 8%, transparent 14%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(180,120,20,0.28) 0 8%, transparent 14%)",
-        );
-      edges.push(
-        "radial-gradient(circle at 50% 50%, rgba(200,150,50,0.1) 0 14%, transparent 24%)",
-      );
-
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  // New mechanic skin: aurora curtain intensity scales with revealed-neighbor
-  // density. Isolated revealed cells show faint single-band green aurora;
-  // deep cluster cells show bright multi-band aurora shifting green → blue → purple.
-  "aurora-veil": {
-    green:
-      "bg-[linear-gradient(170deg,#0a1628_0%,#152340_52%,#060e1c_100%)] text-emerald-100",
-    lightGreen:
-      "bg-[linear-gradient(170deg,#0e1a30_0%,#1c2d4c_52%,#0a1222_100%)] text-emerald-100",
-    gray: "bg-[linear-gradient(145deg,#e8eef6_0%,#dce4f0_52%,#cfd9e8_100%)] text-slate-900 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f0f4fa_0%,#e5ecf5_52%,#d8e2ef_100%)] text-slate-900 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-600",
-      2: "text-green-600",
-      3: "text-red-600",
-      4: "text-purple-600",
-      5: "text-amber-600",
-      6: "text-cyan-600",
-      7: "text-orange-600",
-      8: "text-slate-600",
-    },
-    flagEmoji: "🏔️",
-    bombEmoji: "☄️",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 67331 + (col + 1) * 28057);
-        if (rand() < 0.3) return undefined;
-        const starX = (15 + rand() * 70).toFixed(1);
-        const starY = (10 + rand() * 50).toFixed(1);
-        const starAlpha = (0.3 + rand() * 0.4).toFixed(2);
-        const starSize = (0.8 + rand() * 1.8).toFixed(2);
-
-        return {
-          backgroundImage: `radial-gradient(circle at ${starX}% ${starY}%, rgba(255,255,255,${starAlpha}) 0 ${starSize}%, transparent ${(Number(starSize) + 1.5).toFixed(2)}%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-
-      const revealedCount = [
-        !topIsUnrevealed,
-        !rightIsUnrevealed,
-        !bottomIsUnrevealed,
-        !leftIsUnrevealed,
-      ].filter(Boolean).length;
-
-      const auroraColors = [
-        { r: 74, g: 222, b: 128 },
-        { r: 56, g: 189, b: 248 },
-        { r: 139, g: 92, b: 246 },
-        { r: 244, g: 114, b: 182 },
-      ];
-
-      const bands: string[] = [];
-      const bandCount = Math.max(1, revealedCount);
-      const baseAlpha = 0.08 + revealedCount * 0.04;
-
-      for (let i = 0; i < bandCount; i++) {
-        const color = auroraColors[Math.min(i, auroraColors.length - 1)];
-        const yCenter = 18 + i * 14;
-        const alpha = (baseAlpha + i * 0.02).toFixed(2);
-        const spread = 8 + i * 2;
-
-        bands.push(
-          `linear-gradient(180deg, transparent 0 ${yCenter - spread}%, rgba(${color.r},${color.g},${color.b},${alpha}) ${yCenter - 2}% ${yCenter + 2}%, transparent ${yCenter + spread}% 100%)`,
-        );
-      }
-
-      const wavePhase = (row * 3 + col) % 5;
-      const waveX = 20 + wavePhase * 14;
-      bands.push(
-        `linear-gradient(90deg, transparent 0 ${waveX}%, rgba(74,222,128,0.06) ${waveX}% ${waveX + 12}%, transparent ${waveX + 12}% 100%)`,
-      );
-
-      return {
-        backgroundImage: bands.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "stained-glass": {
-    green:
-      "bg-[#1a1a22] text-amber-100 shadow-[inset_0_0_0_1.5px_rgba(60,60,60,0.85)]",
-    lightGreen:
-      "bg-[#222230] text-amber-100 shadow-[inset_0_0_0_1.5px_rgba(60,60,60,0.85)]",
-    gray: "bg-[linear-gradient(145deg,#ece6f2_0%,#e0d8ec_52%,#d4cce0_100%)] text-purple-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f2ecf8_0%,#e8e0f0_52%,#dcd4e6_100%)] text-purple-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🕯️",
-    bombEmoji: "💎",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (!isHiddenOrFlagged) return undefined;
-
-      const rand = mulberry32((row + 1) * 54301 + (col + 1) * 19927);
-      const jewelColors = [
-        { main: "180,40,40", glow: "220,80,80" },
-        { main: "30,60,180", glow: "80,120,240" },
-        { main: "100,20,160", glow: "160,80,220" },
-        { main: "20,130,60", glow: "60,180,100" },
-        { main: "180,130,20", glow: "220,180,60" },
-        { main: "20,100,130", glow: "60,160,190" },
-      ];
-      const color = jewelColors[Math.floor(rand() * jewelColors.length)];
-      const cx = (38 + rand() * 24).toFixed(1);
-      const cy = (38 + rand() * 24).toFixed(1);
-
-      return {
-        backgroundImage: `radial-gradient(ellipse at ${cx}% ${cy}%, rgba(${color.glow},0.55) 0%, rgba(${color.main},0.4) 28%, rgba(${color.main},0.15) 52%, transparent 70%)`,
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "sandstone-canyon": {
-    green:
-      "bg-[linear-gradient(162deg,#6b3a1a_0%,#9c5428_52%,#4a280f_100%)] text-orange-50",
-    lightGreen:
-      "bg-[linear-gradient(162deg,#7a4220_0%,#ab6030_52%,#553015_100%)] text-orange-50",
-    gray: "bg-[linear-gradient(145deg,#f5e6d0_0%,#eddcc2_52%,#e4d1b5_100%)] text-amber-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f9edd8_0%,#f2e3ca_52%,#e9d8bc_100%)] text-amber-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-teal-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🏜️",
-    bombEmoji: "⛏️",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const strataPhase = row % 4;
-      const strataAlphas = [0.18, 0.14, 0.12, 0.2];
-      const alpha = strataAlphas[strataPhase];
-      const strataY = 32 + strataPhase * 8;
-      const secondY = strataY + 20 + (col % 3) * 4;
-
-      if (isHiddenOrFlagged) {
-        return {
-          backgroundImage: `linear-gradient(0deg, transparent 0 ${strataY}%, rgba(139,69,19,${alpha}) ${strataY}% ${strataY + 5}%, transparent ${strataY + 5}% 100%), linear-gradient(0deg, transparent 0 ${secondY}%, rgba(160,82,45,${(alpha * 0.8).toFixed(2)}) ${secondY}% ${secondY + 3}%, transparent ${secondY + 3}% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(139,90,43,0.24) 0 8%, transparent 14%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(139,90,43,0.24) 0 8%, transparent 14%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(139,90,43,0.24) 0 8%, transparent 14%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(139,90,43,0.24) 0 8%, transparent 14%)",
-        );
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "terracotta-kiln": {
-    green:
-      "bg-[linear-gradient(155deg,#8b3518_0%,#cc5030_52%,#6a2810_100%)] text-orange-50",
-    lightGreen:
-      "bg-[linear-gradient(155deg,#9c3e20_0%,#da5e38_52%,#783218_100%)] text-orange-50",
-    gray: "bg-[linear-gradient(145deg,#faf2e8_0%,#f2e8da_52%,#e8dcc8_100%)] text-amber-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#fdf6f0_0%,#f6eee2_52%,#ede4d4_100%)] text-amber-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🏺",
-    bombEmoji: "💥",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 62147 + (col + 1) * 38923);
-        const glowAlpha = (0.2 + rand() * 0.15).toFixed(2);
-        const crackAngle = Math.floor(rand() * 160);
-        const crackPos = (30 + rand() * 40).toFixed(1);
-        const crackAlpha = (0.08 + rand() * 0.06).toFixed(2);
-
-        return {
-          backgroundImage: `linear-gradient(0deg, rgba(255,120,20,${glowAlpha}) 0%, rgba(255,80,10,0.08) 28%, transparent 48%), linear-gradient(${crackAngle}deg, transparent 0 ${crackPos}%, rgba(60,20,5,${crackAlpha}) ${crackPos}% calc(${crackPos}% + 1.2%), transparent calc(${crackPos}% + 1.2%) 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(139,58,26,0.22) 0 8%, transparent 14%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(139,58,26,0.22) 0 8%, transparent 14%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(139,58,26,0.22) 0 8%, transparent 14%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(139,58,26,0.22) 0 8%, transparent 14%)",
-        );
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  // New mechanic skin: directional field-line arcs emanate from revealed cells
-  // toward revealed neighbors via elliptical gradients. Intensity and center
-  // glow scale with connection count; cross-flux lines form for opposing pairs.
-  "magnetic-field": {
-    green:
-      "bg-[linear-gradient(160deg,#1a1e2e_0%,#2a3048_52%,#12161f_100%)] text-blue-100",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#1e2234_0%,#303850_52%,#161a24_100%)] text-blue-100",
-    gray: "bg-[linear-gradient(145deg,#161a26_0%,#1e2434_52%,#121620_100%)] text-blue-100 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#1a1e2c_0%,#22283a_52%,#141824_100%)] text-blue-100 transition-none",
-    number: {
-      0: "",
-      1: "text-sky-300",
-      2: "text-lime-300",
-      3: "text-rose-300",
-      4: "text-violet-300",
-      5: "text-amber-300",
-      6: "text-teal-300",
-      7: "text-orange-300",
-      8: "text-zinc-300",
-    },
-    flagEmoji: "🧭",
-    bombEmoji: "⚡",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const phase = (row + col * 2) % 4;
-        return {
-          backgroundImage: `linear-gradient(${45 + phase * 22}deg, transparent 0 40%, rgba(96,165,250,0.1) 46% 54%, transparent 60% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-
-      const revealedTop = !topIsUnrevealed;
-      const revealedRight = !rightIsUnrevealed;
-      const revealedBottom = !bottomIsUnrevealed;
-      const revealedLeft = !leftIsUnrevealed;
-      const openCount = [
-        revealedTop,
-        revealedRight,
-        revealedBottom,
-        revealedLeft,
-      ].filter(Boolean).length;
-
-      if (openCount === 0) {
-        return {
-          backgroundImage:
-            "radial-gradient(circle at 50% 50%, rgba(96,165,250,0.2) 0 10%, rgba(96,165,250,0.06) 10% 24%, transparent 30%)",
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      const lines: string[] = [];
-      const intensity = (0.12 + openCount * 0.05).toFixed(2);
-      const innerIntensity = (Number(intensity) * 0.45).toFixed(2);
-
-      if (revealedTop) {
-        lines.push(
-          `radial-gradient(ellipse at 50% 0%, rgba(96,165,250,${intensity}) 0%, transparent 44%)`,
-        );
-        lines.push(
-          `radial-gradient(ellipse at 50% 0%, rgba(147,197,253,${innerIntensity}) 0%, transparent 28%)`,
-        );
-      }
-      if (revealedRight) {
-        lines.push(
-          `radial-gradient(ellipse at 100% 50%, rgba(96,165,250,${intensity}) 0%, transparent 44%)`,
-        );
-        lines.push(
-          `radial-gradient(ellipse at 100% 50%, rgba(147,197,253,${innerIntensity}) 0%, transparent 28%)`,
-        );
-      }
-      if (revealedBottom) {
-        lines.push(
-          `radial-gradient(ellipse at 50% 100%, rgba(96,165,250,${intensity}) 0%, transparent 44%)`,
-        );
-        lines.push(
-          `radial-gradient(ellipse at 50% 100%, rgba(147,197,253,${innerIntensity}) 0%, transparent 28%)`,
-        );
-      }
-      if (revealedLeft) {
-        lines.push(
-          `radial-gradient(ellipse at 0% 50%, rgba(96,165,250,${intensity}) 0%, transparent 44%)`,
-        );
-        lines.push(
-          `radial-gradient(ellipse at 0% 50%, rgba(147,197,253,${innerIntensity}) 0%, transparent 28%)`,
-        );
-      }
-
-      if (revealedTop && revealedBottom) {
-        lines.push(
-          "linear-gradient(0deg, rgba(147,197,253,0.06) 0%, transparent 18%, rgba(147,197,253,0.04) 44% 56%, transparent 82%, rgba(147,197,253,0.06) 100%)",
-        );
-      }
-      if (revealedLeft && revealedRight) {
-        lines.push(
-          "linear-gradient(90deg, rgba(147,197,253,0.06) 0%, transparent 18%, rgba(147,197,253,0.04) 44% 56%, transparent 82%, rgba(147,197,253,0.06) 100%)",
-        );
-      }
-
-      const centerAlpha = (0.1 + openCount * 0.04).toFixed(2);
-      lines.push(
-        `radial-gradient(circle at 50% 50%, rgba(96,165,250,${centerAlpha}) 0 8%, transparent 16%)`,
-      );
-
-      return {
-        backgroundImage: lines.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "mycelium-web": {
-    green:
-      "bg-[linear-gradient(162deg,#0d1a0d_0%,#1a3020_52%,#0a140a_100%)] text-lime-100",
-    lightGreen:
-      "bg-[linear-gradient(162deg,#112218_0%,#1f3a26_52%,#0e1a0e_100%)] text-lime-100",
-    gray: "bg-[linear-gradient(145deg,#f4f0e6_0%,#e8e0d2_52%,#ddd4c4_100%)] text-amber-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f8f4ec_0%,#ede6d8_52%,#e3dcce_100%)] text-amber-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-teal-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🍄",
-    bombEmoji: "☠️",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 47359 + (col + 1) * 91283);
-        if (rand() < 0.06) return undefined;
-
-        const glowColors = [
-          "200,180,60",
-          "180,220,80",
-          "100,200,180",
-          "220,140,180",
-          "160,200,100",
-        ];
-
-        const count = rand() < 0.35 ? 1 : rand() < 0.75 ? 2 : 3;
-        const layers: string[] = [];
-
-        for (let i = 0; i < count; i++) {
-          const color = glowColors[Math.floor(rand() * glowColors.length)];
-          const x = (12 + rand() * 76).toFixed(1);
-          const y = (12 + rand() * 76).toFixed(1);
-          const capSize = (2 + rand() * 4).toFixed(2);
-          const haloSize = (Number(capSize) + 3 + rand() * 3).toFixed(2);
-          const capAlpha = (0.6 + rand() * 0.25).toFixed(2);
-          const haloAlpha = (0.15 + rand() * 0.1).toFixed(2);
-
-          layers.push(
-            `radial-gradient(circle at ${x}% ${y}%, rgba(${color},${capAlpha}) 0 ${capSize}%, rgba(${color},${haloAlpha}) ${capSize}% ${haloSize}%, transparent ${haloSize}%)`,
-          );
-        }
-
-        const threadAngle = Math.floor(rand() * 180);
-        layers.push(
-          `linear-gradient(${threadAngle}deg, transparent 0 40%, rgba(180,200,100,0.08) 46% 54%, transparent 60% 100%)`,
-        );
-
-        return {
-          backgroundImage: layers.join(","),
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const threads: string[] = [];
-      if (!topIsUnrevealed)
-        threads.push(
-          "linear-gradient(0deg, transparent 0 40%, rgba(180,160,100,0.18) 46% 54%, rgba(180,160,100,0.06) 54% 100%)",
-        );
-      if (!rightIsUnrevealed)
-        threads.push(
-          "linear-gradient(270deg, transparent 0 40%, rgba(180,160,100,0.18) 46% 54%, rgba(180,160,100,0.06) 54% 100%)",
-        );
-      if (!bottomIsUnrevealed)
-        threads.push(
-          "linear-gradient(180deg, transparent 0 40%, rgba(180,160,100,0.18) 46% 54%, rgba(180,160,100,0.06) 54% 100%)",
-        );
-      if (!leftIsUnrevealed)
-        threads.push(
-          "linear-gradient(90deg, transparent 0 40%, rgba(180,160,100,0.18) 46% 54%, rgba(180,160,100,0.06) 54% 100%)",
-        );
-
-      if (!threads.length) return undefined;
-      return {
-        backgroundImage: threads.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "obsidian-fracture": {
-    green:
-      "bg-[linear-gradient(160deg,#08040e_0%,#160c24_52%,#06030a_100%)] text-purple-100",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#0c0614_0%,#1e102e_52%,#0a050e_100%)] text-purple-100",
-    gray: "bg-[linear-gradient(145deg,#ede8f4_0%,#e2daea_52%,#d8cee2_100%)] text-purple-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f2eef8_0%,#e8e2ee_52%,#dfd8e8_100%)] text-purple-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-600",
-      2: "text-emerald-600",
-      3: "text-rose-600",
-      4: "text-violet-600",
-      5: "text-amber-600",
-      6: "text-cyan-600",
-      7: "text-orange-600",
-      8: "text-zinc-700",
-    },
-    flagEmoji: "🔮",
-    bombEmoji: "💥",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 58331 + (col + 1) * 42191);
-        const layers: string[] = [];
-        const highlightCount = rand() < 0.5 ? 1 : 2;
-
-        for (let i = 0; i < highlightCount; i++) {
-          const hx = (18 + rand() * 64).toFixed(1);
-          const hy = (18 + rand() * 64).toFixed(1);
-          const hSize = (3 + rand() * 6).toFixed(2);
-          const hAlpha = (0.12 + rand() * 0.14).toFixed(2);
-          layers.push(
-            `radial-gradient(ellipse at ${hx}% ${hy}%, rgba(200,180,255,${hAlpha}) 0 ${hSize}%, transparent ${(Number(hSize) + 6).toFixed(2)}%)`,
-          );
-        }
-
-        const sheenAngle = Math.floor(140 + rand() * 40);
-        layers.push(
-          `linear-gradient(${sheenAngle}deg, transparent 0 20%, rgba(160,140,220,0.08) 34% 46%, transparent 60% 100%)`,
-        );
-
-        return {
-          backgroundImage: layers.join(","),
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const fractures: string[] = [];
-      const fracAngle = (row + col) % 2 === 0 ? 35 : 145;
-
-      if (topIsUnrevealed)
-        fractures.push(
-          "linear-gradient(180deg, rgba(100,60,140,0.28) 0 6%, rgba(100,60,140,0.08) 6% 12%, transparent 16%)",
-        );
-      if (rightIsUnrevealed)
-        fractures.push(
-          "linear-gradient(270deg, rgba(100,60,140,0.28) 0 6%, rgba(100,60,140,0.08) 6% 12%, transparent 16%)",
-        );
-      if (bottomIsUnrevealed)
-        fractures.push(
-          "linear-gradient(0deg, rgba(100,60,140,0.28) 0 6%, rgba(100,60,140,0.08) 6% 12%, transparent 16%)",
-        );
-      if (leftIsUnrevealed)
-        fractures.push(
-          "linear-gradient(90deg, rgba(100,60,140,0.28) 0 6%, rgba(100,60,140,0.08) 6% 12%, transparent 16%)",
-        );
-
-      fractures.push(
-        `linear-gradient(${fracAngle}deg, transparent 0 38%, rgba(100,60,140,0.14) 44% 48%, transparent 54% 100%)`,
-      );
-
-      return {
-        backgroundImage: fractures.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "rice-paddy": {
-    green:
-      "bg-[linear-gradient(158deg,#1a4a18_0%,#2e7028_52%,#153a12_100%)] text-lime-50",
-    lightGreen:
-      "bg-[linear-gradient(158deg,#225420_0%,#3a8032_52%,#1c4418_100%)] text-lime-50",
-    gray: "bg-[linear-gradient(145deg,#f5e8c4_0%,#eddcac_52%,#e4d098_100%)] text-amber-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f9eece_0%,#f2e4b8_52%,#e9d8a4_100%)] text-amber-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-teal-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🌾",
-    bombEmoji: "🐸",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const terrace = row % 3;
-
-      if (isHiddenOrFlagged) {
-        const reflectionY = 28 + terrace * 16;
-        const reflectionAlpha = (0.18 + (col % 2) * 0.06).toFixed(2);
-        return {
-          backgroundImage: `linear-gradient(0deg, transparent 0 ${reflectionY}%, rgba(180,220,255,${reflectionAlpha}) ${reflectionY}% ${reflectionY + 6}%, transparent ${reflectionY + 6}% 100%), linear-gradient(${92 + terrace * 2}deg, rgba(255,255,255,0.06) 0 38%, transparent 42% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(160,120,40,0.3) 0 6%, rgba(160,120,40,0.12) 6% 12%, transparent 16%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(160,120,40,0.3) 0 6%, rgba(160,120,40,0.12) 6% 12%, transparent 16%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(160,120,40,0.3) 0 6%, rgba(160,120,40,0.12) 6% 12%, transparent 16%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(160,120,40,0.3) 0 6%, rgba(160,120,40,0.12) 6% 12%, transparent 16%)",
-        );
-
-      const grainPhase = (row * 2 + col) % 4;
-      edges.push(
-        `linear-gradient(${80 + grainPhase * 12}deg, transparent 0 32%, rgba(180,140,40,0.1) 40% 48%, transparent 56% 100%)`,
-      );
-
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  // New mechanic skin: 8-direction crystal arms grow toward each revealed
-  // neighbor using conic gradients. Cardinal neighbors produce wider/brighter
-  // arms, diagonal neighbors produce narrower/softer arms. No existing skin
-  // uses diagonal neighbors as primary visual drivers on revealed cells.
-  "crystal-lattice": {
-    green:
-      "bg-[linear-gradient(165deg,#0c1830_0%,#182a4a_52%,#08101e_100%)] text-sky-100",
-    lightGreen:
-      "bg-[linear-gradient(165deg,#101e38_0%,#1e3254_52%,#0c1624_100%)] text-sky-100",
-    gray: "bg-[linear-gradient(145deg,#eef2fa_0%,#e2e8f4_52%,#d6deee_100%)] text-indigo-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f4f6fc_0%,#eaeff6_52%,#dee6f0_100%)] text-indigo-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-600",
-      2: "text-emerald-600",
-      3: "text-rose-600",
-      4: "text-violet-600",
-      5: "text-amber-600",
-      6: "text-cyan-600",
-      7: "text-orange-600",
-      8: "text-slate-600",
-    },
-    flagEmoji: "💠",
-    bombEmoji: "✴️",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-      topLeftIsUnrevealed,
-      topRightIsUnrevealed,
-      bottomRightIsUnrevealed,
-      bottomLeftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const facet = (row * 3 + col * 2) % 6;
-        return {
-          backgroundImage: `linear-gradient(${60 + facet * 30}deg, transparent 0 36%, rgba(147,197,253,0.14) 44% 56%, transparent 64% 100%), linear-gradient(${120 + facet * 15}deg, transparent 0 42%, rgba(99,102,241,0.1) 48% 52%, transparent 58% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-
-      const arm = (fromDeg: number, width: number, alpha: number) =>
-        `conic-gradient(from ${fromDeg}deg at 50% 50%, rgba(99,165,255,${alpha}) 0deg ${width}deg, transparent ${width}deg 360deg)`;
-
-      const arms: string[] = [];
-      if (!topIsUnrevealed) arms.push(arm(340, 40, 0.2));
-      if (!topRightIsUnrevealed) arms.push(arm(30, 28, 0.13));
-      if (!rightIsUnrevealed) arms.push(arm(70, 40, 0.2));
-      if (!bottomRightIsUnrevealed) arms.push(arm(120, 28, 0.13));
-      if (!bottomIsUnrevealed) arms.push(arm(160, 40, 0.2));
-      if (!bottomLeftIsUnrevealed) arms.push(arm(210, 28, 0.13));
-      if (!leftIsUnrevealed) arms.push(arm(250, 40, 0.2));
-      if (!topLeftIsUnrevealed) arms.push(arm(300, 28, 0.13));
-
-      if (!arms.length) return undefined;
-
-      const centerAlpha = (0.06 + arms.length * 0.025).toFixed(2);
-      const centerSize = (6 + arms.length * 1.2).toFixed(1);
-      arms.push(
-        `radial-gradient(circle at 50% 50%, rgba(99,165,255,${centerAlpha}) 0 ${centerSize}%, transparent ${(Number(centerSize) + 8).toFixed(1)}%)`,
-      );
-
-      return {
-        backgroundImage: arms.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "sumi-ink": {
-    green:
-      "bg-[linear-gradient(155deg,#121210_0%,#1e1e1a_52%,#0e0e0c_100%)] text-stone-200",
-    lightGreen:
-      "bg-[linear-gradient(155deg,#181816_0%,#282824_52%,#141412_100%)] text-stone-200",
-    gray: "bg-[linear-gradient(145deg,#f4ede0_0%,#ebe2d0_52%,#e0d6c2_100%)] text-stone-900 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f8f2e6_0%,#f0e8d8_52%,#e6dcc8_100%)] text-stone-900 transition-none",
-    number: {
-      0: "",
-      1: "text-indigo-800",
-      2: "text-emerald-800",
-      3: "text-red-800",
-      4: "text-purple-800",
-      5: "text-amber-800",
-      6: "text-teal-800",
-      7: "text-orange-800",
-      8: "text-stone-600",
-    },
-    flagEmoji: "🎌",
-    bombEmoji: "💢",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 52489 + (col + 1) * 38371);
-        const strokeAngle = Math.floor(75 + rand() * 30);
-        const inkAlpha = (0.08 + rand() * 0.12).toFixed(2);
-        const washX = (30 + rand() * 40).toFixed(1);
-        const washY = (30 + rand() * 40).toFixed(1);
-        const washSize = (18 + rand() * 16).toFixed(1);
-        const washAlpha = (0.15 + rand() * 0.12).toFixed(2);
-
-        return {
-          backgroundImage: `linear-gradient(${strokeAngle}deg, transparent 0 24%, rgba(60,50,40,${inkAlpha}) 32% 38%, transparent 46% 100%), radial-gradient(ellipse at ${washX}% ${washY}%, rgba(40,30,20,${washAlpha}) 0 ${washSize}%, transparent ${(Number(washSize) + 12).toFixed(1)}%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(30,20,10,0.2) 0 8%, transparent 16%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(30,20,10,0.2) 0 8%, transparent 16%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(30,20,10,0.2) 0 8%, transparent 16%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(30,20,10,0.2) 0 8%, transparent 16%)",
-        );
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "pressed-tin": {
-    green:
-      "bg-[linear-gradient(155deg,#2a3228_0%,#3e4e38_52%,#1e2820_100%)] text-emerald-50 shadow-[inset_0_0_0_1px_rgba(180,180,160,0.2)]",
-    lightGreen:
-      "bg-[linear-gradient(155deg,#324030_0%,#485a40_52%,#263228_100%)] text-emerald-50 shadow-[inset_0_0_0_1px_rgba(180,180,160,0.18)]",
-    gray: "bg-[linear-gradient(145deg,#d8dce0_0%,#ccd2d8_52%,#c0c6cc_100%)] text-slate-900 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#e4e8ec_0%,#d8dee4_52%,#ccd4da_100%)] text-slate-900 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-600",
-    },
-    flagEmoji: "🔩",
-    bombEmoji: "⚒️",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const phase = (row + col) % 2;
-
-      if (isHiddenOrFlagged) {
-        const crossAlpha = phase === 0 ? 0.16 : 0.12;
-        const medallionAlpha = phase === 0 ? 0.2 : 0.16;
-        return {
-          backgroundImage: `linear-gradient(0deg, transparent 44%, rgba(200,200,180,${crossAlpha}) 44% 56%, transparent 56%), linear-gradient(90deg, transparent 44%, rgba(200,200,180,${crossAlpha}) 44% 56%, transparent 56%), radial-gradient(circle at 50% 50%, rgba(220,210,180,${medallionAlpha}) 0 8%, rgba(200,200,180,0.08) 8% 14%, transparent 18%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(60,60,60,0.2) 0 6%, transparent 14%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(60,60,60,0.2) 0 6%, transparent 14%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(60,60,60,0.2) 0 6%, transparent 14%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(60,60,60,0.2) 0 6%, transparent 14%)",
-        );
-
-      const sheenAngle = 140 + phase * 20;
-      edges.push(
-        `linear-gradient(${sheenAngle}deg, transparent 0 30%, rgba(255,255,255,0.12) 44% 56%, transparent 70% 100%)`,
-      );
-
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "meteor-shower": {
-    green:
-      "bg-[linear-gradient(170deg,#04071a_0%,#0c1430_52%,#030510_100%)] text-blue-100",
-    lightGreen:
-      "bg-[linear-gradient(170deg,#060a20_0%,#101c3a_52%,#050816_100%)] text-blue-100",
-    gray: "bg-[linear-gradient(145deg,#c8c0b0_0%,#bcb4a2_52%,#b0a896_100%)] text-amber-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#d4ccbc_0%,#c8c0ae_52%,#bcb4a4_100%)] text-amber-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-600",
-    },
-    flagEmoji: "🛸",
-    bombEmoji: "🌠",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 73019 + (col + 1) * 51647);
-        const layers: string[] = [];
-
-        if (rand() > 0.25) {
-          const streakAngle = Math.floor(200 + rand() * 50);
-          const streakPos = (20 + rand() * 60).toFixed(1);
-          const streakAlpha = (0.3 + rand() * 0.25).toFixed(2);
-          const trailAlpha = (0.08 + rand() * 0.08).toFixed(2);
-          layers.push(
-            `linear-gradient(${streakAngle}deg, transparent 0 ${streakPos}%, rgba(255,240,200,${streakAlpha}) ${streakPos}% calc(${streakPos}% + 1.5%), rgba(255,180,80,${trailAlpha}) calc(${streakPos}% + 1.5%) calc(${streakPos}% + 8%), transparent calc(${streakPos}% + 8%) 100%)`,
-          );
-        }
-
-        const starCount = 1 + Math.floor(rand() * 2);
-        for (let i = 0; i < starCount; i++) {
-          const sx = (10 + rand() * 80).toFixed(1);
-          const sy = (10 + rand() * 80).toFixed(1);
-          const sAlpha = (0.4 + rand() * 0.4).toFixed(2);
-          const sSize = (0.6 + rand() * 1.2).toFixed(2);
-          layers.push(
-            `radial-gradient(circle at ${sx}% ${sy}%, rgba(255,255,255,${sAlpha}) 0 ${sSize}%, transparent ${(Number(sSize) + 1.5).toFixed(2)}%)`,
-          );
-        }
-
-        if (!layers.length) return undefined;
-        return {
-          backgroundImage: layers.join(","),
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(80,70,50,0.3) 0 6%, rgba(80,70,50,0.1) 6% 14%, transparent 18%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(80,70,50,0.3) 0 6%, rgba(80,70,50,0.1) 6% 14%, transparent 18%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(80,70,50,0.3) 0 6%, rgba(80,70,50,0.1) 6% 14%, transparent 18%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(80,70,50,0.3) 0 6%, rgba(80,70,50,0.1) 6% 14%, transparent 18%)",
-        );
-
-      const rand = mulberry32((row + 1) * 59317 + (col + 1) * 27491);
-      if (rand() > 0.4) {
-        const cx = (30 + rand() * 40).toFixed(1);
-        const cy = (30 + rand() * 40).toFixed(1);
-        const craterSize = (8 + rand() * 10).toFixed(1);
-        edges.push(
-          `radial-gradient(circle at ${cx}% ${cy}%, rgba(60,50,35,0.18) 0 ${craterSize}%, rgba(90,80,60,0.06) ${craterSize}% ${(Number(craterSize) + 8).toFixed(1)}%, transparent ${(Number(craterSize) + 12).toFixed(1)}%)`,
-        );
-      }
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  // New mechanic skin: cellValue drives concentric contour ring density on
-  // revealed cells. 0 = flat terrain (no rings), high values = dense tight
-  // elevation rings with color shift from green to brown. No existing skin
-  // uses cellValue as a visual overlay driver.
-  "contour-map": {
-    green:
-      "bg-[linear-gradient(158deg,#1a4028_0%,#2a6040_52%,#14321e_100%)] text-lime-50",
-    lightGreen:
-      "bg-[linear-gradient(158deg,#225030_0%,#347048_52%,#1c3c24_100%)] text-lime-50",
-    gray: "bg-[linear-gradient(145deg,#f0e8d0_0%,#e6dcc0_52%,#dcd0b2_100%)] text-stone-900 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f5eedc_0%,#ece4cc_52%,#e2d8be_100%)] text-stone-900 transition-none",
-    number: {
-      0: "",
-      1: "text-green-800",
-      2: "text-emerald-700",
-      3: "text-amber-800",
-      4: "text-orange-800",
-      5: "text-red-800",
-      6: "text-rose-700",
-      7: "text-purple-800",
-      8: "text-stone-800",
-    },
-    flagEmoji: "📍",
-    bombEmoji: "🕳️",
-    getOverlayStyle: ({
-      row,
-      col,
-      cellValue,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 62893 + (col + 1) * 43517);
-        const canopyX = (20 + rand() * 60).toFixed(1);
-        const canopyY = (20 + rand() * 60).toFixed(1);
-        const canopyAlpha = (0.18 + rand() * 0.12).toFixed(2);
-        const canopySize = (12 + rand() * 18).toFixed(1);
-
-        return {
-          backgroundImage: `radial-gradient(circle at ${canopyX}% ${canopyY}%, rgba(34,197,94,${canopyAlpha}) 0 ${canopySize}%, transparent ${(Number(canopySize) + 10).toFixed(1)}%), linear-gradient(${Math.floor(140 + rand() * 40)}deg, transparent 0 38%, rgba(22,163,74,0.1) 46% 54%, transparent 62% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const value = typeof cellValue === "number" ? cellValue : 0;
-      const rings: string[] = [];
-
-      if (value > 0) {
-        const ringCount = Math.min(Math.ceil(value / 2), 4);
-        const baseAlpha = 0.12 + (value / 8) * 0.16;
-        const minR = 12;
-        const maxR = 44;
-        const contourColor =
-          value <= 3
-            ? "34,120,60"
-            : value <= 6
-              ? "140,100,30"
-              : "160,50,30";
-
-        for (let i = 0; i < ringCount; i++) {
-          const r = minR + ((maxR - minR) * (i + 1)) / (ringCount + 1);
-          const ringWidth = 1.5;
-          const alpha = (baseAlpha + i * 0.02).toFixed(2);
-          rings.push(
-            `radial-gradient(circle at 50% 50%, transparent 0 ${(r - ringWidth).toFixed(1)}%, rgba(${contourColor},${alpha}) ${(r - ringWidth).toFixed(1)}% ${r.toFixed(1)}%, transparent ${r.toFixed(1)}% 100%)`,
-          );
-        }
-      }
-
-      if (topIsUnrevealed)
-        rings.push(
-          "linear-gradient(180deg, rgba(100,80,40,0.28) 0 6%, transparent 14%)",
-        );
-      if (rightIsUnrevealed)
-        rings.push(
-          "linear-gradient(270deg, rgba(100,80,40,0.28) 0 6%, transparent 14%)",
-        );
-      if (bottomIsUnrevealed)
-        rings.push(
-          "linear-gradient(0deg, rgba(100,80,40,0.28) 0 6%, transparent 14%)",
-        );
-      if (leftIsUnrevealed)
-        rings.push(
-          "linear-gradient(90deg, rgba(100,80,40,0.28) 0 6%, transparent 14%)",
-        );
-
-      if (!rings.length) return undefined;
-      return {
-        backgroundImage: rings.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "tidal-pool": {
-    green:
-      "bg-[linear-gradient(158deg,#1a1e28_0%,#2a323e_52%,#12161e_100%)] text-sky-100",
-    lightGreen:
-      "bg-[linear-gradient(158deg,#222832_0%,#323c48_52%,#1a1e28_100%)] text-sky-100",
-    gray: "bg-[linear-gradient(145deg,#e8dcc8_0%,#ddd0b8_52%,#d2c4a8_100%)] text-stone-900 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f0e4d0_0%,#e5d8c4_52%,#daceb6_100%)] text-stone-900 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-emerald-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-teal-700",
-      7: "text-orange-700",
-      8: "text-stone-600",
-    },
-    flagEmoji: "🐚",
-    bombEmoji: "🦑",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 61843 + (col + 1) * 97321);
-        if (rand() < 0.1) return undefined;
-
-        const anemoneColors = [
-          { body: "180,60,160", tip: "220,120,200" },
-          { body: "240,100,60", tip: "255,160,80" },
-          { body: "60,180,120", tip: "120,220,160" },
-          { body: "100,60,200", tip: "160,120,240" },
-          { body: "220,180,40", tip: "250,220,80" },
-        ];
-        const count = rand() < 0.4 ? 1 : rand() < 0.8 ? 2 : 3;
-        const layers: string[] = [];
-
-        for (let i = 0; i < count; i++) {
-          const color = anemoneColors[Math.floor(rand() * anemoneColors.length)];
-          const x = (14 + rand() * 72).toFixed(1);
-          const y = (14 + rand() * 72).toFixed(1);
-          const bodySize = (3 + rand() * 5).toFixed(2);
-          const tipSize = (Number(bodySize) + 2 + rand() * 3).toFixed(2);
-          const bodyAlpha = (0.55 + rand() * 0.2).toFixed(2);
-          const tipAlpha = (0.2 + rand() * 0.15).toFixed(2);
-
-          layers.push(
-            `radial-gradient(circle at ${x}% ${y}%, rgba(${color.body},${bodyAlpha}) 0 ${bodySize}%, rgba(${color.tip},${tipAlpha}) ${bodySize}% ${tipSize}%, transparent ${tipSize}%)`,
-          );
-        }
-
-        return {
-          backgroundImage: layers.join(","),
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(100,200,220,0.3) 0 6%, rgba(100,200,220,0.1) 6% 14%, transparent 18%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(100,200,220,0.3) 0 6%, rgba(100,200,220,0.1) 6% 14%, transparent 18%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(100,200,220,0.3) 0 6%, rgba(100,200,220,0.1) 6% 14%, transparent 18%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(100,200,220,0.3) 0 6%, rgba(100,200,220,0.1) 6% 14%, transparent 18%)",
-        );
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "woven-textile": {
-    green:
-      "bg-[linear-gradient(160deg,#0e1530_0%,#1c2848_52%,#0a1020_100%)] text-indigo-100",
-    lightGreen:
-      "bg-[linear-gradient(160deg,#141c38_0%,#243252_52%,#0e1628_100%)] text-indigo-100",
-    gray: "bg-[linear-gradient(145deg,#f0e8d6_0%,#e6dcc6_52%,#dcd0b8_100%)] text-stone-900 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#f6eede_0%,#ece4d0_52%,#e2d8c2_100%)] text-stone-900 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-700",
-      2: "text-green-700",
-      3: "text-red-700",
-      4: "text-purple-700",
-      5: "text-amber-700",
-      6: "text-cyan-700",
-      7: "text-orange-700",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🧵",
-    bombEmoji: "✂️",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      const warpPhase = row % 3;
-      const weftPhase = col % 3;
-
-      if (isHiddenOrFlagged) {
-        const warpY = 24 + warpPhase * 18;
-        const weftX = 24 + weftPhase * 18;
-        const warpAlpha = (0.14 + (col % 2) * 0.04).toFixed(2);
-        const weftAlpha = (0.12 + (row % 2) * 0.04).toFixed(2);
-        return {
-          backgroundImage: `linear-gradient(0deg, transparent 0 ${warpY}%, rgba(180,160,220,${warpAlpha}) ${warpY}% ${warpY + 4}%, transparent ${warpY + 4}% 100%), linear-gradient(0deg, transparent 0 ${warpY + 28}%, rgba(160,140,200,${(Number(warpAlpha) * 0.7).toFixed(2)}) ${warpY + 28}% ${warpY + 31}%, transparent ${warpY + 31}% 100%), linear-gradient(90deg, transparent 0 ${weftX}%, rgba(200,180,140,${weftAlpha}) ${weftX}% ${weftX + 4}%, transparent ${weftX + 4}% 100%), linear-gradient(90deg, transparent 0 ${weftX + 28}%, rgba(180,160,120,${(Number(weftAlpha) * 0.7).toFixed(2)}) ${weftX + 28}% ${weftX + 31}%, transparent ${weftX + 31}% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(80,60,40,0.22) 0 6%, rgba(80,60,40,0.06) 6% 14%, transparent 18%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(80,60,40,0.22) 0 6%, rgba(80,60,40,0.06) 6% 14%, transparent 18%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(80,60,40,0.22) 0 6%, rgba(80,60,40,0.06) 6% 14%, transparent 18%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(80,60,40,0.22) 0 6%, rgba(80,60,40,0.06) 6% 14%, transparent 18%)",
-        );
-
-      const revealedWeft = 24 + weftPhase * 18;
-      edges.push(
-        `linear-gradient(90deg, transparent 0 ${revealedWeft}%, rgba(160,140,100,0.1) ${revealedWeft}% ${revealedWeft + 3}%, transparent ${revealedWeft + 3}% 100%)`,
-      );
-
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  "amber-resin": {
-    green:
-      "bg-[linear-gradient(162deg,#6a3a08_0%,#9c5c14_52%,#4a2804_100%)] text-amber-50",
-    lightGreen:
-      "bg-[linear-gradient(162deg,#7a4410_0%,#b06a1c_52%,#563008_100%)] text-amber-50",
-    gray: "bg-[linear-gradient(145deg,#f8ecc8_0%,#f2e2b4_52%,#ecd8a0_100%)] text-amber-950 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#faf2d4_0%,#f6e8c0_52%,#f0deae_100%)] text-amber-950 transition-none",
-    number: {
-      0: "",
-      1: "text-blue-800",
-      2: "text-green-800",
-      3: "text-red-800",
-      4: "text-purple-800",
-      5: "text-amber-900",
-      6: "text-teal-800",
-      7: "text-orange-800",
-      8: "text-stone-700",
-    },
-    flagEmoji: "🦟",
-    bombEmoji: "💥",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const rand = mulberry32((row + 1) * 88397 + (col + 1) * 36551);
-        const layers: string[] = [];
-
-        const bubbleCount = rand() < 0.3 ? 1 : rand() < 0.7 ? 2 : 3;
-        for (let i = 0; i < bubbleCount; i++) {
-          const bx = (12 + rand() * 76).toFixed(1);
-          const by = (12 + rand() * 76).toFixed(1);
-          const bSize = (1.5 + rand() * 3).toFixed(2);
-          const bFade = (Number(bSize) + 1.5 + rand() * 1.5).toFixed(2);
-          const bAlpha = (0.25 + rand() * 0.2).toFixed(2);
-          layers.push(
-            `radial-gradient(circle at ${bx}% ${by}%, rgba(255,240,180,${bAlpha}) 0 ${bSize}%, rgba(255,220,120,${(Number(bAlpha) * 0.3).toFixed(2)}) ${bSize}% ${bFade}%, transparent ${bFade}%)`,
-          );
-        }
-
-        if (rand() > 0.4) {
-          const veinAngle = Math.floor(120 + rand() * 60);
-          const veinPos = (28 + rand() * 44).toFixed(1);
-          const veinAlpha = (0.1 + rand() * 0.08).toFixed(2);
-          layers.push(
-            `linear-gradient(${veinAngle}deg, transparent 0 ${veinPos}%, rgba(120,60,0,${veinAlpha}) ${veinPos}% calc(${veinPos}% + 1.5%), transparent calc(${veinPos}% + 1.5%) 100%)`,
-          );
-        }
-
-        return {
-          backgroundImage: layers.join(","),
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-      const edges: string[] = [];
-      if (topIsUnrevealed)
-        edges.push(
-          "linear-gradient(180deg, rgba(160,100,20,0.24) 0 6%, transparent 14%)",
-        );
-      if (rightIsUnrevealed)
-        edges.push(
-          "linear-gradient(270deg, rgba(160,100,20,0.24) 0 6%, transparent 14%)",
-        );
-      if (bottomIsUnrevealed)
-        edges.push(
-          "linear-gradient(0deg, rgba(160,100,20,0.24) 0 6%, transparent 14%)",
-        );
-      if (leftIsUnrevealed)
-        edges.push(
-          "linear-gradient(90deg, rgba(160,100,20,0.24) 0 6%, transparent 14%)",
-        );
-
-      const rand = mulberry32((row + 1) * 44729 + (col + 1) * 81563);
-      if (rand() > 0.5) {
-        const fx = (30 + rand() * 40).toFixed(1);
-        const fy = (20 + rand() * 60).toFixed(1);
-        edges.push(
-          `radial-gradient(ellipse at ${fx}% ${fy}%, rgba(255,250,220,0.22) 0 8%, transparent 18%)`,
-        );
-      }
-
-      if (!edges.length) return undefined;
-      return {
-        backgroundImage: edges.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-  // New mechanic skin: 8-neighbor state-agreement resonance. Each revealed cell
-  // counts how many of all 8 neighbors are also revealed, yielding a density
-  // score 0-8. Ring count, glow intensity, and hue shift (blue→green→amber)
-  // scale with score. No existing skin uses all 8 neighbors as a continuous
-  // scalar density metric.
-  "resonance-grid": {
-    green:
-      "bg-[linear-gradient(165deg,#0a0e1e_0%,#161e34_52%,#060a14_100%)] text-blue-100",
-    lightGreen:
-      "bg-[linear-gradient(165deg,#0e1224_0%,#1c263e_52%,#0a0e1a_100%)] text-blue-100",
-    gray: "bg-[linear-gradient(145deg,#101828_0%,#182236_52%,#0c1420_100%)] text-blue-100 transition-none",
-    silver:
-      "bg-[linear-gradient(145deg,#141c2e_0%,#1c283c_52%,#101824_100%)] text-blue-100 transition-none",
-    number: {
-      0: "",
-      1: "text-sky-300",
-      2: "text-emerald-300",
-      3: "text-rose-300",
-      4: "text-violet-300",
-      5: "text-amber-300",
-      6: "text-teal-300",
-      7: "text-orange-300",
-      8: "text-zinc-200",
-    },
-    flagEmoji: "📡",
-    bombEmoji: "⚡",
-    getOverlayStyle: ({
-      row,
-      col,
-      isHiddenOrFlagged,
-      cellStatus,
-      topIsUnrevealed,
-      rightIsUnrevealed,
-      bottomIsUnrevealed,
-      leftIsUnrevealed,
-      topLeftIsUnrevealed,
-      topRightIsUnrevealed,
-      bottomRightIsUnrevealed,
-      bottomLeftIsUnrevealed,
-    }: CellSkinPatternContext): CSSProperties | undefined => {
-      if (isHiddenOrFlagged) {
-        const band = (row * 2 + col) % 5;
-        return {
-          backgroundImage: `linear-gradient(${30 + band * 12}deg, transparent 0 38%, rgba(96,165,250,0.12) 44% 56%, transparent 62% 100%), linear-gradient(${150 + band * 8}deg, transparent 0 42%, rgba(56,189,248,0.08) 48% 52%, transparent 58% 100%)`,
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      if (cellStatus !== "revealed") return undefined;
-
-      const revealedNeighbors = [
-        !topIsUnrevealed,
-        !topRightIsUnrevealed,
-        !rightIsUnrevealed,
-        !bottomRightIsUnrevealed,
-        !bottomIsUnrevealed,
-        !bottomLeftIsUnrevealed,
-        !leftIsUnrevealed,
-        !topLeftIsUnrevealed,
-      ].filter(Boolean).length;
-
-      if (revealedNeighbors === 0) {
-        return {
-          backgroundImage:
-            "radial-gradient(circle at 50% 50%, rgba(96,165,250,0.12) 0 6%, transparent 14%)",
-          backgroundRepeat: "no-repeat",
-        };
-      }
-
-      const t = revealedNeighbors / 8;
-      const r = Math.round(96 + t * 160);
-      const g = Math.round(165 + t * (180 - 165) * (1 - t));
-      const b = Math.round(250 * (1 - t * 0.7));
-      const colorStr = `${r},${g},${b}`;
-
-      const rings: string[] = [];
-      const ringCount = Math.min(Math.ceil(revealedNeighbors / 2), 4);
-      const baseAlpha = 0.08 + t * 0.14;
-
-      for (let i = 0; i < ringCount; i++) {
-        const radius = 10 + ((36 - 10) * (i + 1)) / (ringCount + 1);
-        const ringWidth = 1.8;
-        const alpha = (baseAlpha + i * 0.015).toFixed(3);
-        rings.push(
-          `radial-gradient(circle at 50% 50%, transparent 0 ${(radius - ringWidth).toFixed(1)}%, rgba(${colorStr},${alpha}) ${(radius - ringWidth).toFixed(1)}% ${radius.toFixed(1)}%, transparent ${radius.toFixed(1)}% 100%)`,
-        );
-      }
-
-      const glowAlpha = (0.1 + t * 0.2).toFixed(2);
-      const glowSize = (6 + t * 10).toFixed(1);
-      rings.push(
-        `radial-gradient(circle at 50% 50%, rgba(${colorStr},${glowAlpha}) 0 ${glowSize}%, transparent ${(Number(glowSize) + 8).toFixed(1)}%)`,
-      );
-
-      const phase = (row + col * 3) % 6;
-      rings.push(
-        `linear-gradient(${60 + phase * 30}deg, transparent 0 42%, rgba(${colorStr},0.04) 48% 52%, transparent 58% 100%)`,
-      );
-
-      return {
-        backgroundImage: rings.join(","),
-        backgroundRepeat: "no-repeat",
-      };
-    },
-  },
-} as Record<string, CellSkinDefinition>;
+export const NonPublishedCellSkins = {} as Record<string, CellSkinDefinition>;
 
 // Helper type for published skins with SEO metadata
 export type PublishedSkinMeta = {
@@ -2946,6 +1401,7 @@ export type PublishedSkinMeta = {
   description: string;
   longDescription: string;
   keywords: string[];
+  faq: SkinFaq[];
 };
 
 // Get all published skins that have SEO metadata
@@ -2962,6 +1418,7 @@ export const getPublishedSkinsWithMeta = (): PublishedSkinMeta[] => {
       description: skin.description!,
       longDescription: skin.longDescription!,
       keywords: skin.keywords ?? [],
+      faq: skin.faq ?? [],
     }));
 };
 
@@ -2981,6 +1438,7 @@ export const getSkinMetaBySlug = (
     description: skin.description!,
     longDescription: skin.longDescription!,
     keywords: skin.keywords ?? [],
+    faq: skin.faq ?? [],
   };
 };
 

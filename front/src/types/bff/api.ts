@@ -513,6 +513,16 @@ export interface paths {
                             "void-orchid"?: number;
                             "minimal-zoned"?: number;
                             antic?: number;
+                            "emoji-tiles"?: number;
+                            "heart-tiles"?: number;
+                            "laughing-faces"?: number;
+                            "fruit-basket"?: number;
+                            "red-burst"?: number;
+                            "orange-pop"?: number;
+                            "yellow-zest"?: number;
+                            "green-garden"?: number;
+                            "blue-lagoon"?: number;
+                            "purple-parade"?: number;
                         };
                     };
                 };
@@ -927,13 +937,13 @@ export interface components {
             };
         };
         /** @enum {string} */
-        CellSkin: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic";
+        CellSkin: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade";
         /** @enum {string} */
         BannerSkin: "default" | "level" | "gold";
         /** @enum {string} */
         BackgroundSkin: "default" | "red" | "blue";
         /** @enum {string} */
-        CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic";
+        CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade";
         /** @enum {string} */
         BackgroundSkinsNamesEnum: "default" | "red" | "blue";
     };

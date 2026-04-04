@@ -16,7 +16,17 @@ export const cellsSkins = {
   "paper-cutout": CHIP,
   "void-orchid": CHIP,
   "minimal-zoned": RARE,
-  antic: NORMAL
+  antic: NORMAL,
+  "emoji-tiles": CHIP,
+  "heart-tiles": CHIP,
+  "laughing-faces": CHIP,
+  "fruit-basket": CHIP,
+  "red-burst": CHIP,
+  "orange-pop": CHIP,
+  "yellow-zest": CHIP,
+  "green-garden": CHIP,
+  "blue-lagoon": CHIP,
+  "purple-parade": CHIP
 }
 export const cellsSkinsNames = Object.keys(cellsSkins) as Array<keyof typeof cellsSkins>
 export const bannerSkins = {

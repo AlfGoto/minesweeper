@@ -118,6 +118,44 @@ One skin must add a new visual mechanic not used in existing skins. Examples:
 
 Mechanic must still be deterministic and readable.
 
+## Available Helpers (Use These)
+
+Two helpers exist in `cell-skins.ts`. **Always use them** instead of duplicating
+the same patterns.
+
+### `bgLayers(...layers: string[]): CSSProperties`
+
+Returns `{ backgroundImage, backgroundRepeat: "no-repeat" }`. Use instead of
+building that object manually.
+
+```ts
+return bgLayers(...layers);
+return bgLayers(`gradient1(...)`, `gradient2(...)`);
+```
+
+### Cardinal edge gradient pattern
+
+For revealed cells bordering hidden cells, use this concise loop instead of 4
+separate `if` blocks:
+
+```ts
+const edges: string[] = [];
+const sides: [boolean, number][] = [
+  [topIsUnrevealed, 180],
+  [rightIsUnrevealed, 270],
+  [bottomIsUnrevealed, 0],
+  [leftIsUnrevealed, 90],
+];
+for (const [active, deg] of sides) {
+  if (active) edges.push(`linear-gradient(${deg}deg, rgba(R,G,B,A) 0 6%, transparent 14%)`);
+}
+if (!edges.length) return undefined;
+return bgLayers(...edges);
+```
+
+Append extra layers to `edges` before `bgLayers` if the skin needs additional
+texture on revealed cells (e.g. cracks, glow, grain).
+
 ## Determinism and Safety
 
 - Do not use raw `Math.random()` directly in render path.

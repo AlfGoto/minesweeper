@@ -290,14 +290,10 @@ export const route = new OpenAPIHono()
       const { userEmail } = c.req.valid("param")
       const { skin, skinType } = c.req.valid("json")
 
-      console.log("Buy skin request:", { userEmail, skin, skinType })
-
       const [coins, user] = await Promise.all([
         AlfCoins.get(userEmail),
         User.getUserByEmail(userEmail)
       ])
-
-      console.log("User data:", { coins, user })
 
       if (!user || !coins) {
         return c.json({ message: "User not found" }, 404)
@@ -311,23 +307,24 @@ export const route = new OpenAPIHono()
       } else {
         skinPrice = backgroundSkins[skin]
       }
-
       if (coins.points < skinPrice) {
         return c.json({ message: "Not enough coins" }, 400)
       }
       const buyTransaction = AlfCoins.createBuyTransaction(userEmail, skinPrice, coins.points)
-      const addSkinTransaction = User.getAddUnlockedSkinTransaction(userEmail, skinType, skin, {
-        unlockedSkins: user.unlockedSkins,
-        selectedSkin: user.selectedSkin
-      })
+      const addSkinTransaction = User.getAddUnlockedSkinTransaction(
+        userEmail,
+        user.userId,
+        skinType,
+        skin,
+        {
+          unlockedSkins: user.unlockedSkins,
+          selectedSkin: user.selectedSkin
+        }
+      )
 
       try {
         await executeTransactWrite(buyTransaction, addSkinTransaction)
-        console.log("Transaction successful")
       } catch (error: any) {
-        console.error("Transaction error message:", error?.message)
-        console.error("Transaction error:", error)
-        console.error("Transaction error stack:", error?.stack)
         if (error?.CancellationReasons) {
           console.error("Cancellation reasons:", JSON.stringify(error.CancellationReasons, null, 2))
         }

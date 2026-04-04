@@ -71,6 +71,54 @@ Optional:
   - Diagonal: `topLeftIsUnrevealed`, `topRightIsUnrevealed`, `bottomRightIsUnrevealed`, `bottomLeftIsUnrevealed`
 - Keep skin-specific visual logic in skin definitions (`getOverlayClass` / `getOverlayStyle`), not in `cell.tsx`.
 
+## Available Helpers
+
+Two helper functions exist in `cell-skins.ts` to reduce boilerplate in
+`getOverlayStyle` implementations. **Always prefer these over hand-rolling the
+same logic.**
+
+### `bgLayers(...layers: string[]): CSSProperties`
+
+Wraps one or more CSS gradient/image strings into a style object with
+`backgroundRepeat: "no-repeat"`. Use instead of manually building
+`{ backgroundImage: X.join(","), backgroundRepeat: "no-repeat" }`.
+
+```ts
+// Array of layers built in a loop
+return bgLayers(...layers);
+
+// Inline layers as separate arguments
+return bgLayers(
+  `radial-gradient(circle at 50% 50%, rgba(0,0,0,0.2) 0 8%, transparent 16%)`,
+  `linear-gradient(135deg, transparent 0 40%, rgba(0,0,0,0.1) 48% 52%, transparent 60%)`,
+);
+```
+
+### Cardinal edge gradient pattern
+
+Many skins need directional edge gradients on revealed cells that border hidden
+cells. Instead of writing 4 separate `if` blocks, use this concise pattern:
+
+```ts
+const edges: string[] = [];
+const color = "100,80,40";
+const a = 0.28;
+const sides: [boolean, number][] = [
+  [topIsUnrevealed, 180],
+  [rightIsUnrevealed, 270],
+  [bottomIsUnrevealed, 0],
+  [leftIsUnrevealed, 90],
+];
+for (const [active, deg] of sides) {
+  if (active) edges.push(`linear-gradient(${deg}deg, rgba(${color},${a}) 0 6%, transparent 14%)`);
+}
+if (!edges.length) return undefined;
+return bgLayers(...edges);
+```
+
+You can append extra layers (e.g. texture cracks, glow) to `edges` before
+passing to `bgLayers`.
+
 ## Template
 
 ```ts
@@ -92,10 +140,20 @@ Optional:
     7: "...",
     8: "...",
   },
-  getOverlayStyle: ({ row, col, isHiddenOrFlagged }) => {
-    if (!isHiddenOrFlagged) return undefined;
-    // seeded deterministic style here
-    return { backgroundImage: "...", backgroundRepeat: "no-repeat" };
+  getOverlayStyle: ({ row, col, isHiddenOrFlagged, cellStatus,
+    topIsUnrevealed, rightIsUnrevealed, bottomIsUnrevealed, leftIsUnrevealed,
+  }) => {
+    if (isHiddenOrFlagged) {
+      // seeded deterministic style here
+      return bgLayers(`radial-gradient(...)`);
+    }
+    if (cellStatus !== "revealed") return undefined;
+    const edges = cardinalEdgeGradients(
+      { topIsUnrevealed, rightIsUnrevealed, bottomIsUnrevealed, leftIsUnrevealed },
+      { color: "R,G,B", alpha: 0.28, innerStop: 6, fadeStop: 14 },
+    );
+    if (!edges.length) return undefined;
+    return bgLayers(...edges);
   },
 },
 ```

@@ -79,6 +79,26 @@ export default async function SkinPage({ params }: Props) {
     notFound();
   }
 
+  const pageUrl = `https://minesweeper.fr/skins/${skin.slug}`;
+  const faqEntries =
+    skin.faq.length > 0
+      ? skin.faq
+      : [
+          {
+            question: `What is the ${skin.name} skin in Minesweeper?`,
+            answer: skin.longDescription,
+          },
+          {
+            question: `How do I get the ${skin.name} Minesweeper skin?`,
+            answer: `You can unlock the ${skin.name} skin by playing Minesweeper and earning coins. Visit the skins shop in the game to purchase and apply it to your game.`,
+          },
+          {
+            question: "Is Minesweeper free to play?",
+            answer:
+              "Yes, Minesweeper is completely free to play. You can enjoy the classic puzzle game with various skins and themes without any cost.",
+          },
+        ];
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -106,32 +126,33 @@ export default async function SkinPage({ params }: Props) {
   const faqStructuredData = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: `What is the ${skin.name} skin in Minesweeper?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: skin.longDescription,
-        },
+    mainEntity: faqEntries.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer,
       },
-      {
-        "@type": "Question",
-        name: `How do I get the ${skin.name} Minesweeper skin?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `You can unlock the ${skin.name} skin by playing Minesweeper and earning coins. Visit the skins shop in the game to purchase and apply it to your game.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Is Minesweeper free to play?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, Minesweeper is completely free to play. You can enjoy the classic puzzle game with various skins and themes without any cost.",
-        },
-      },
-    ],
+    })),
+  };
+
+  const webPageStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${skin.name} Skin for Minesweeper`,
+    description: skin.description,
+    url: pageUrl,
+    keywords: skin.keywords.join(", "),
+    about: {
+      "@type": "VideoGame",
+      name: "Minesweeper",
+      url: "https://minesweeper.fr",
+    },
+    mainEntity: {
+      "@type": "Product",
+      name: `${skin.name} Minesweeper Skin`,
+      description: skin.longDescription,
+    },
   };
 
   const breadcrumbStructuredData = {
@@ -154,7 +175,7 @@ export default async function SkinPage({ params }: Props) {
         "@type": "ListItem",
         position: 3,
         name: skin.name,
-        item: `https://minesweeper.fr/skins/${skin.slug}`,
+        item: pageUrl,
       },
     ],
   };
@@ -170,6 +191,11 @@ export default async function SkinPage({ params }: Props) {
         id="faq-structured-data"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+      />
+      <Script
+        id="webpage-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageStructuredData) }}
       />
       <Script
         id="breadcrumb-structured-data"
@@ -229,32 +255,14 @@ export default async function SkinPage({ params }: Props) {
               Frequently Asked Questions
             </h2>
             <div className="space-y-6">
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  What is the {skin.name} skin in Minesweeper?
-                </h3>
-                <p className="text-green-700">{skin.longDescription}</p>
-              </div>
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  How do I get the {skin.name} Minesweeper skin?
-                </h3>
-                <p className="text-green-700">
-                  You can unlock the {skin.name} skin by playing Minesweeper and
-                  earning coins. Visit the skins shop in the game to purchase
-                  and apply it to your game.
-                </p>
-              </div>
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  Is Minesweeper free to play?
-                </h3>
-                <p className="text-green-700">
-                  Yes, Minesweeper is completely free to play. You can enjoy the
-                  classic puzzle game with various skins and themes without any
-                  cost.
-                </p>
-              </div>
+              {faqEntries.map((entry) => (
+                <div key={entry.question}>
+                  <h3 className="mb-2 font-medium text-green-900">
+                    {entry.question}
+                  </h3>
+                  <p className="text-green-700">{entry.answer}</p>
+                </div>
+              ))}
             </div>
           </section>
 
