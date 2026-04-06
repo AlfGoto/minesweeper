@@ -545,7 +545,10 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
         );
       }
 
-      return bgLayers(...gradients);
+      return {
+        ...bgLayers(...gradients),
+        backgroundColor: "#ffffff",
+      };
     },
   },
   "jade-temple": {

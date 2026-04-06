@@ -37,8 +37,12 @@ export const bannerSkins = {
 export const bannerSkinsNames = Object.keys(bannerSkins) as Array<keyof typeof bannerSkins>
 export const backgroundSkins = {
   default: 0,
-  red: 10,
-  blue: 10
+  "flower-floor": 15,
+  igloo: 15,
+  "aurora-drift": 15,
+  "retro-grid": 15,
+  "amber-dunes": 15,
+  "deep-reef": 15
 }
 export const backgroundSkinsNames = Object.keys(backgroundSkins) as Array<
   keyof typeof backgroundSkins

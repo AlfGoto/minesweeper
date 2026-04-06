@@ -1,9 +1,9 @@
 "use client";
 
+import { Suspense, type ReactNode } from "react";
 import type { CellSkin } from "@/types/bff";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CellsTab } from "./cells-tab";
-import { BackgroundsTab } from "./backgrounds-tab";
 import { BannersTab } from "./banners-tab";
 
 type CellSkinsShopProps = {
@@ -12,6 +12,7 @@ type CellSkinsShopProps = {
   selectedSkin: CellSkin;
   unlockedSkins: CellSkin[];
   prices: Partial<Record<CellSkin, number>>;
+  backgroundsTabContent: ReactNode;
 };
 
 export function CellSkinsShop({
@@ -20,6 +21,7 @@ export function CellSkinsShop({
   selectedSkin,
   unlockedSkins,
   prices,
+  backgroundsTabContent,
 }: CellSkinsShopProps) {
   return (
     <Tabs
@@ -67,11 +69,13 @@ export function CellSkinsShop({
         <div className="space-y-1">
           <h1 className="text-3xl font-bold">Background Skins</h1>
           <p className="text-muted-foreground">
-            Customize the game background. This section is coming as soon as
-            possible.
+            Customize the game background with your AlfCoins. Click on the
+            square to preview the background.
           </p>
         </div>
-        <BackgroundsTab />
+        <Suspense fallback={<div className="text-muted-foreground">Loading...</div>}>
+          {backgroundsTabContent}
+        </Suspense>
       </TabsContent>
 
       <TabsContent

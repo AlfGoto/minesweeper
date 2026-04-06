@@ -612,8 +612,12 @@ export interface paths {
                     content: {
                         "application/json": {
                             default?: number;
-                            red?: number;
-                            blue?: number;
+                            "flower-floor"?: number;
+                            igloo?: number;
+                            "aurora-drift"?: number;
+                            "retro-grid"?: number;
+                            "amber-dunes"?: number;
+                            "deep-reef"?: number;
                         };
                     };
                 };
@@ -941,11 +945,11 @@ export interface components {
         /** @enum {string} */
         BannerSkin: "default" | "level" | "gold";
         /** @enum {string} */
-        BackgroundSkin: "default" | "red" | "blue";
+        BackgroundSkin: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef";
         /** @enum {string} */
         CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade";
         /** @enum {string} */
-        BackgroundSkinsNamesEnum: "default" | "red" | "blue";
+        BackgroundSkinsNamesEnum: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef";
     };
     responses: never;
     parameters: never;

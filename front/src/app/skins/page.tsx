@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { SkinsPage } from "@/features/skins";
-import { getPublishedSkinsWithMeta } from "@/features/skins/cell-skins";
+import { getPublishedSkinsWithMeta } from "@/features/skins/cells/cell-skins";
 
 export function generateMetadata(): Metadata {
   const skinCount = getPublishedSkinsWithMeta().length;

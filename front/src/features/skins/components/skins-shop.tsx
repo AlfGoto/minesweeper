@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import type { CellSkin } from "@/types/bff";
+import type { BackgroundSkin } from "@/types/bff";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -10,25 +10,25 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { CellSkins } from "@/features/skins/cells/cell-skins";
+import { backgroundSkins } from "@/features/skins/backgrounds/skins";
+import { BackgroundSkinPreview } from "@/features/shared/components/background-skin-preview";
 import {
-  CellSkinLargeDemoGrid,
-  CellSkinPreview,
-} from "@/features/shared/components/cell-skin-preview";
-import { buyCellSkinAction, selectCellSkinAction } from "@/features/skins/actions";
+  buyBackgroundSkinAction,
+  selectBackgroundSkinAction,
+} from "@/features/skins/actions";
 import { OwnedFilter } from "./owned-filter";
 import { toast } from "sonner";
 import { AlfCoinsProgressCard } from "./alf-coins-progress-card";
 
-type CellsTabProps = {
+type BackgroundSkinsShopProps = {
   coins: number;
   revealedCells: number;
-  selectedSkin: CellSkin;
-  unlockedSkins: CellSkin[];
-  prices: Partial<Record<CellSkin, number>>;
+  selectedSkin: BackgroundSkin;
+  unlockedSkins: BackgroundSkin[];
+  prices: Partial<Record<BackgroundSkin, number>>;
 };
 
-function formatSkinLabel(skin: CellSkin) {
+function formatSkinLabel(skin: BackgroundSkin) {
   if (skin === "default") return "Default";
   return skin
     .split("-")
@@ -36,44 +36,44 @@ function formatSkinLabel(skin: CellSkin) {
     .join(" ");
 }
 
-export function CellsTab({
+export function BackgroundSkinsShop({
   coins,
   revealedCells,
   selectedSkin,
   unlockedSkins,
   prices,
-}: CellsTabProps) {
+}: BackgroundSkinsShopProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [optimisticSelectedSkin, setOptimisticSelectedSkin] =
-    useState<CellSkin>(selectedSkin);
+    useState<BackgroundSkin>(selectedSkin);
   const [groupOwned, setGroupOwned] = useState(true);
 
   useEffect(() => {
     setOptimisticSelectedSkin(selectedSkin);
   }, [selectedSkin]);
 
-  const allCellSkins = useMemo(
-    () => Object.keys(CellSkins) as CellSkin[],
+  const allBackgroundSkins = useMemo(
+    () => Object.keys(backgroundSkins) as BackgroundSkin[],
     [],
   );
 
   const normalizedUnlockedSkins = useMemo(() => {
-    const skins = new Set<CellSkin>(["default", ...unlockedSkins]);
-    return allCellSkins.filter((skin) => skins.has(skin));
-  }, [allCellSkins, unlockedSkins]);
+    const skins = new Set<BackgroundSkin>(["default", ...unlockedSkins]);
+    return allBackgroundSkins.filter((skin) => skins.has(skin));
+  }, [allBackgroundSkins, unlockedSkins]);
 
   const groupedSkins = useMemo(() => {
-    const unlockedSet = new Set<CellSkin>(normalizedUnlockedSkins);
-    const owned = allCellSkins.filter((skin) => unlockedSet.has(skin));
-    const notOwned = allCellSkins.filter((skin) => !unlockedSet.has(skin));
+    const unlockedSet = new Set<BackgroundSkin>(normalizedUnlockedSkins);
+    const owned = allBackgroundSkins.filter((skin) => unlockedSet.has(skin));
+    const notOwned = allBackgroundSkins.filter((skin) => !unlockedSet.has(skin));
 
     return { owned, notOwned };
-  }, [allCellSkins, normalizedUnlockedSkins]);
+  }, [allBackgroundSkins, normalizedUnlockedSkins]);
 
-  const onBuy = (skin: CellSkin) => {
+  const onBuy = (skin: BackgroundSkin) => {
     startTransition(async () => {
-      const result = await buyCellSkinAction(skin);
+      const result = await buyBackgroundSkinAction(skin);
       if (result.ok) {
         toast.success(result.message || "Skin bought.");
         router.refresh();
@@ -83,12 +83,12 @@ export function CellsTab({
     });
   };
 
-  const onSelect = (skin: CellSkin) => {
+  const onSelect = (skin: BackgroundSkin) => {
     const previousSkin = optimisticSelectedSkin;
     setOptimisticSelectedSkin(skin);
 
     startTransition(async () => {
-      const result = await selectCellSkinAction(skin);
+      const result = await selectBackgroundSkinAction(skin);
       if (result.ok) {
         toast.success(result.message || "Skin selected.");
         router.refresh();
@@ -99,7 +99,8 @@ export function CellsTab({
     });
   };
 
-  const renderSkinCard = (skin: CellSkin) => {
+  const renderSkinCard = (skin: BackgroundSkin) => {
+    const skinData = backgroundSkins[skin];
     const isOwned = normalizedUnlockedSkins.includes(skin);
     const isSelected = isOwned && skin === optimisticSelectedSkin;
     const isSelectable = isOwned && !isSelected && !isPending;
@@ -133,12 +134,11 @@ export function CellsTab({
             className="pointer-events-none absolute inset-0 overflow-hidden m-0"
             aria-hidden
           >
-            <div className="absolute -inset-16 flex items-center justify-center">
-              <div className="scale-[1.30] translate-y-10 blur-[2px] opacity-45">
-                <CellSkinLargeDemoGrid skin={skin} />
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-background/45" />
+            <div
+              className={`absolute inset-0 ${skinData.value}`}
+              style={skinData.style}
+            />
+            <div className="absolute inset-0 bg-background/60" />
           </div>
         ) : null}
 
@@ -148,7 +148,7 @@ export function CellsTab({
             onClick={(event) => event.stopPropagation()}
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <CellSkinPreview skin={skin} />
+            <BackgroundSkinPreview skin={skinData} />
           </div>
         </div>
 
@@ -193,7 +193,9 @@ export function CellsTab({
       </div>
 
       {!groupOwned ? (
-        <div className="flex flex-wrap gap-4">{allCellSkins.map(renderSkinCard)}</div>
+        <div className="flex flex-wrap gap-4">
+          {allBackgroundSkins.map(renderSkinCard)}
+        </div>
       ) : (
         <>
           <div className="flex flex-wrap gap-4">

@@ -5,7 +5,7 @@ import Script from "next/script";
 import {
   getSkinMetaBySlug,
   getAllSkinSlugs,
-} from "@/features/skins/cell-skins";
+} from "@/features/skins/cells/cell-skins";
 import { CellSkinLargeDemoGrid } from "@/features/shared/components/cell-skin-preview";
 
 type Props = {
@@ -195,7 +195,9 @@ export default async function SkinPage({ params }: Props) {
       <Script
         id="webpage-structured-data"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageStructuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageStructuredData),
+        }}
       />
       <Script
         id="breadcrumb-structured-data"

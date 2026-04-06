@@ -6,6 +6,7 @@ import { getCellSkinsPrices } from "@/lib/api";
 import { getUser, getUserStatsUncached } from "@/types/bff/uncached-functions";
 import { Button } from "@/components/ui/button";
 import { CellSkinsShop } from "./components/tabs";
+import { BackgroundsTab } from "./components/backgrounds-tab";
 
 export async function SkinsPage() {
   const session = await getServerSession();
@@ -38,6 +39,7 @@ export async function SkinsPage() {
           selectedSkin={selectedSkin}
           unlockedSkins={unlockedSkins}
           prices={prices}
+          backgroundsTabContent={<BackgroundsTab />}
         />
       </div>
     </main>

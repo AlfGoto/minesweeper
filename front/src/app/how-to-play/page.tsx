@@ -161,7 +161,7 @@ export default function HowToPlayPage() {
         }}
       />
 
-      <main className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 px-4 py-12">
+      <main className="min-h-screen px-4 py-12">
         <article className="mx-auto max-w-3xl">
           <nav aria-label="Breadcrumb" className="mb-6">
             <ol className="flex items-center gap-2 text-sm text-green-700">

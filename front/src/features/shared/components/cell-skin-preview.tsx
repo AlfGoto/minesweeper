@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import type { Cell } from "@/types/game";
-import { getSkin } from "@/features/skins/cell-skins";
+import { getSkin } from "@/features/skins/cells/cell-skins";
 import { CellSkin } from "@/types/bff";
 
 type PreviewCell = Cell;

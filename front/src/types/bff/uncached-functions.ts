@@ -1,6 +1,6 @@
 import createClient from "openapi-fetch";
 import type { paths } from "./api";
-import type { CellSkin } from "@/types/bff";
+import type { CellSkin, BackgroundSkin } from "@/types/bff";
 import type { components } from "./api";
 
 const uncachedClient = createClient<paths>({
@@ -99,6 +99,30 @@ export const selectCellSkin = async (userEmail: string, skin: CellSkin) => {
     },
     body: {
       skinType: "cells",
+      skin,
+    },
+  });
+};
+
+export const buyBackgroundSkin = async (userEmail: string, skin: BackgroundSkin) => {
+  return uncachedClient.PUT("/skins/buy/{userEmail}", {
+    params: {
+      path: { userEmail },
+    },
+    body: {
+      skinType: "background",
+      skin,
+    },
+  });
+};
+
+export const selectBackgroundSkin = async (userEmail: string, skin: BackgroundSkin) => {
+  return uncachedClient.PUT("/skins/select/{userEmail}", {
+    params: {
+      path: { userEmail },
+    },
+    body: {
+      skinType: "background",
       skin,
     },
   });

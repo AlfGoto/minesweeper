@@ -5,7 +5,10 @@ import type { CellSkin } from "@/types/bff";
 import { memo } from "react";
 import { useCell, useGame } from "@/features/homepage/game-provider";
 import { cn } from "@/lib/utils";
-import { getSkin, getUnrevealedNeighborContext } from "../../skins/cell-skins";
+import {
+  getSkin,
+  getUnrevealedNeighborContext,
+} from "../../skins/cells/cell-skins";
 
 const cellText = "text-[clamp(10px,2.65cqw,23px)]";
 
@@ -59,7 +62,9 @@ function CellComponent({
   });
 
   const { flagEmoji = "🚩", bombEmoji = "💣" } = skin.definition;
-  const winningBaseClass = odd ? skin.definition.green : skin.definition.lightGreen;
+  const winningBaseClass = odd
+    ? skin.definition.green
+    : skin.definition.lightGreen;
 
   const content = (() => {
     if (cellData.status === "hidden") return "";

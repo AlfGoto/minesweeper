@@ -5,6 +5,9 @@ import Script from "next/script";
 import { SessionProvider } from "@/components/providers/session-provider";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
+import { getServerSession } from "next-auth";
+import { getUser } from "@/types/bff/uncached-functions";
+import { backgroundSkins, NonPublishedBackgroundSkins } from "@/features/skins/backgrounds/skins";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -143,11 +146,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
+  const userEmail = session?.user?.email;
+  const user = userEmail ? await getUser(userEmail) : null;
+  const background = user?.selectedSkin?.background ?? "default";
+  const backgroundSkinsUnion = { ...backgroundSkins, ...NonPublishedBackgroundSkins };
   return (
     <html lang="en">
       <head>
@@ -220,7 +228,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>
+      <body
+        className={`${inter.className} ${backgroundSkinsUnion[background].value}`}
+        style={backgroundSkinsUnion[background].style}
+      >
         <NextTopLoader color="#4ade80" />
         <SessionProvider>
           {children}

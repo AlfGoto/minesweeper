@@ -1,20 +1,35 @@
-"use client";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import type { BackgroundSkin } from "@/types/bff";
+import { getBackgroundSkinsPrices } from "@/lib/api";
+import { getUser, getUserStatsUncached } from "@/types/bff/uncached-functions";
+import { BackgroundSkinsShop } from "./skins-shop";
 
-import { useState } from "react";
-import { OwnedFilter } from "./owned-filter";
+export async function BackgroundsTab() {
+  const session = await getServerSession();
+  const userEmail = session?.user?.email;
 
-export function BackgroundsTab() {
-  const [groupOwned, setGroupOwned] = useState(true);
+  if (!userEmail) {
+    redirect("/");
+  }
+
+  const [user, prices, stats] = await Promise.all([
+    getUser(userEmail),
+    getBackgroundSkinsPrices(),
+    getUserStatsUncached(userEmail),
+  ]);
+
+  const unlockedSkins: BackgroundSkin[] = user?.unlockedSkins?.background ?? [];
+  const selectedSkin: BackgroundSkin =
+    user?.selectedSkin?.background ?? "default";
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-end">
-        <OwnedFilter value={groupOwned} onValueChange={setGroupOwned} />
-      </div>
-      <p className="text-muted-foreground text-sm border rounded-lg px-3 py-2">
-        Background skins are in development right now. We are shipping this as
-        soon as possible, thanks for your patience.
-      </p>
-    </div>
+    <BackgroundSkinsShop
+      coins={user?.coins ?? 0}
+      revealedCells={stats?.totalRevealed ?? 0}
+      selectedSkin={selectedSkin}
+      unlockedSkins={unlockedSkins}
+      prices={prices}
+    />
   );
 }

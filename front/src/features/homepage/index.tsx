@@ -15,7 +15,7 @@ export default async function Home() {
 
   return (
     <GameProvider>
-      <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-100">
+      <div className="w-full h-screen flex flex-col items-center justify-center">
 
         <div className="flex items-center justify-center w-full gap-4">
 

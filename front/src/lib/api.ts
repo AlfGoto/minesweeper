@@ -105,3 +105,8 @@ export async function getCellSkinsPrices() {
   const response = await client.GET("/skins/cells");
   return response.data ?? {};
 }
+
+export async function getBackgroundSkinsPrices() {
+  const response = await client.GET("/skins/backgrounds");
+  return response.data ?? {};
+}
