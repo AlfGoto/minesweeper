@@ -7,6 +7,7 @@ import {
   getBackgroundSkinMetaBySlug,
   getPublishedBackgroundSkins,
 } from "@/features/skins/backgrounds/skins";
+import { getBackgroundSkinSeo } from "@/features/skins/seo";
 
 type Props = {
   params: Promise<{ skinName: string }>;
@@ -27,15 +28,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const seoContent = getBackgroundSkinSeo(skin.id);
   const title = `${skin.name} Background Skin for Minesweeper`;
-  const description = skin.description;
+  const description = seoContent?.metaDescription ?? skin.description;
   const url = `https://minesweeper.fr/skins/background/${skin.slug}`;
+  const keywords = seoContent?.keywords ?? skin.keywords;
 
   return {
     title,
     description,
     keywords: [
-      ...skin.keywords,
+      ...keywords,
       "minesweeper background skin",
       "minesweeper background theme",
       "minesweeper customization",
@@ -79,15 +82,16 @@ export default async function BackgroundSkinPage({ params }: Props) {
     notFound();
   }
 
+  const seoContent = getBackgroundSkinSeo(skin.id);
   const publishedBackgroundCount = getPublishedBackgroundSkins().length;
   const pageUrl = `https://minesweeper.fr/skins/background/${skin.slug}`;
-  const faqEntries = skin.faq;
+  const faqEntries = seoContent?.faqs ?? skin.faq;
 
   const productStructuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: `${skin.name} Minesweeper Background Skin`,
-    description: skin.longDescription,
+    description: seoContent?.metaDescription ?? skin.longDescription,
     image: "https://minesweeper.fr/opengraph-image",
     brand: {
       "@type": "Brand",
@@ -124,9 +128,9 @@ export default async function BackgroundSkinPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: `${skin.name} Background Skin for Minesweeper`,
-    description: skin.description,
+    description: seoContent?.metaDescription ?? skin.description,
     url: pageUrl,
-    keywords: skin.keywords.join(", "),
+    keywords: (seoContent?.keywords ?? skin.keywords).join(", "),
     about: {
       "@type": "VideoGame",
       name: "Minesweeper",
@@ -222,9 +226,15 @@ export default async function BackgroundSkinPage({ params }: Props) {
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               {skin.name} Background Skin
             </h1>
-            <p className="mx-auto max-w-3xl text-lg text-slate-600">
-              {skin.description}
-            </p>
+            {seoContent?.heroTagline ? (
+              <p className="mx-auto max-w-3xl text-lg font-medium text-slate-700">
+                {seoContent.heroTagline}
+              </p>
+            ) : (
+              <p className="mx-auto max-w-3xl text-lg text-slate-600">
+                {skin.description}
+              </p>
+            )}
             <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-500">
               This page uses the live {skin.name.toLowerCase()} background as
               the preview, so you can see the full-page effect directly.
@@ -249,14 +259,38 @@ export default async function BackgroundSkinPage({ params }: Props) {
             </div>
           </section>
 
-          <section aria-label="About this background skin" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-slate-900">
-              What Is the {skin.name} Background Skin?
-            </h2>
+          {seoContent?.sections ? (
+            // Render dynamic SEO sections for skins with rich content
+            seoContent.sections.map((section) => (
+              <section
+                key={section.title}
+                aria-label={section.title}
+                className="mb-10"
+              >
+                <h2 className="mb-4 text-2xl font-semibold text-slate-900">
+                  {section.title}
+                </h2>
+                <div className="space-y-4 leading-relaxed text-slate-700">
+                  {section.content.split("\n\n").map((paragraph, pIndex) => (
+                    <p key={pIndex}>{paragraph}</p>
+                  ))}
+                </div>
+              </section>
+            ))
+          ) : (
+            // Fallback for skins without SEO content
+            <section aria-label="About this background skin" className="mb-10">
+              <h2 className="mb-4 text-2xl font-semibold text-slate-900">
+                What Is the {skin.name} Background Skin?
+              </h2>
+              <p className="leading-relaxed text-slate-700">
+                {skin.longDescription}
+              </p>
+            </section>
+          )}
+
+          <section aria-label="Explore more" className="mb-10">
             <p className="leading-relaxed text-slate-700">
-              {skin.longDescription}
-            </p>
-            <p className="mt-4 leading-relaxed text-slate-700">
               If you want to compare it with other looks, you can browse the{" "}
               <Link
                 href="/skins/background"

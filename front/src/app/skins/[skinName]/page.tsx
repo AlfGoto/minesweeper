@@ -7,6 +7,7 @@ import {
   getAllSkinSlugs,
 } from "@/features/skins/cells/cell-skins";
 import { CellSkinLargeDemoGrid } from "@/features/shared/components/cell-skin-preview";
+import { getCellSkinSeo } from "@/features/skins/seo";
 
 type Props = {
   params: Promise<{ skinName: string }>;
@@ -27,15 +28,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const seoContent = getCellSkinSeo(skin.id);
   const title = `${skin.name} Skin for Minesweeper`;
-  const description = skin.description;
+  const description = seoContent?.metaDescription ?? skin.description;
   const url = `https://minesweeper.fr/skins/${skin.slug}`;
+  const keywords = seoContent?.keywords ?? skin.keywords;
 
   return {
     title,
     description,
     keywords: [
-      ...skin.keywords,
+      ...keywords,
       "minesweeper skin",
       "minesweeper theme",
       "minesweeper customization",
@@ -79,9 +82,12 @@ export default async function SkinPage({ params }: Props) {
     notFound();
   }
 
+  const seoContent = getCellSkinSeo(skin.id);
   const pageUrl = `https://minesweeper.fr/skins/${skin.slug}`;
-  const faqEntries =
-    skin.faq.length > 0
+
+  // Use SEO content FAQs if available, otherwise fall back to skin FAQs or generated ones
+  const faqEntries = seoContent?.faqs ??
+    (skin.faq.length > 0
       ? skin.faq
       : [
           {
@@ -97,13 +103,13 @@ export default async function SkinPage({ params }: Props) {
             answer:
               "Yes, Minesweeper is completely free to play. You can enjoy the classic puzzle game with various skins and themes without any cost.",
           },
-        ];
+        ]);
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: `${skin.name} Minesweeper Skin`,
-    description: skin.longDescription,
+    description: seoContent?.metaDescription ?? skin.longDescription,
     image: "https://minesweeper.fr/opengraph-image",
     brand: {
       "@type": "Brand",
@@ -140,9 +146,9 @@ export default async function SkinPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: `${skin.name} Skin for Minesweeper`,
-    description: skin.description,
+    description: seoContent?.metaDescription ?? skin.description,
     url: pageUrl,
-    keywords: skin.keywords.join(", "),
+    keywords: (seoContent?.keywords ?? skin.keywords).join(", "),
     about: {
       "@type": "VideoGame",
       name: "Minesweeper",
@@ -151,7 +157,7 @@ export default async function SkinPage({ params }: Props) {
     mainEntity: {
       "@type": "Product",
       name: `${skin.name} Minesweeper Skin`,
-      description: skin.longDescription,
+      description: seoContent?.metaDescription ?? skin.longDescription,
     },
   };
 
@@ -231,7 +237,13 @@ export default async function SkinPage({ params }: Props) {
             <h1 className="mb-4 text-4xl font-bold text-green-900 md:text-5xl">
               {skin.name} Skin
             </h1>
-            <p className="text-lg text-green-700">{skin.description}</p>
+            {seoContent?.heroTagline ? (
+              <p className="text-lg font-medium text-green-800">
+                {seoContent.heroTagline}
+              </p>
+            ) : (
+              <p className="text-lg text-green-700">{skin.description}</p>
+            )}
           </header>
 
           <section
@@ -243,14 +255,35 @@ export default async function SkinPage({ params }: Props) {
             </div>
           </section>
 
-          <section aria-label="About this skin" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-green-900">
-              About the {skin.name} Skin
-            </h2>
-            <p className="leading-relaxed text-green-800">
-              {skin.longDescription}
-            </p>
-          </section>
+          {seoContent?.sections ? (
+            // Render dynamic SEO sections for skins with rich content
+            seoContent.sections.map((section, index) => (
+              <section
+                key={section.title}
+                aria-label={section.title}
+                className="mb-10"
+              >
+                <h2 className="mb-4 text-2xl font-semibold text-green-900">
+                  {section.title}
+                </h2>
+                <div className="space-y-4 leading-relaxed text-green-800">
+                  {section.content.split("\n\n").map((paragraph, pIndex) => (
+                    <p key={pIndex}>{paragraph}</p>
+                  ))}
+                </div>
+              </section>
+            ))
+          ) : (
+            // Fallback for skins without SEO content
+            <section aria-label="About this skin" className="mb-10">
+              <h2 className="mb-4 text-2xl font-semibold text-green-900">
+                About the {skin.name} Skin
+              </h2>
+              <p className="leading-relaxed text-green-800">
+                {skin.longDescription}
+              </p>
+            </section>
+          )}
 
           <section aria-label="Frequently Asked Questions" className="mb-10">
             <h2 className="mb-6 text-2xl font-semibold text-green-900">
