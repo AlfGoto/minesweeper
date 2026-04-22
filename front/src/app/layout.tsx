@@ -143,6 +143,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/",
+    languages: {
+      "en": "/",
+      "x-default": "/",
+    },
   },
 };
 
@@ -223,7 +227,39 @@ export default async function RootLayout({
               author: {
                 "@type": "Person",
                 name: "AlfGoto",
+                url: "https://minesweeper.fr",
+                sameAs: [
+                  "https://twitter.com/alfgoto",
+                  "https://youtube.com/@alfgoto",
+                  "https://instagram.com/alfgoto",
+                  "https://www.linkedin.com/in/alfred-gauthier/",
+                  "https://facebook.com/alfgoto",
+                ],
               },
+            }),
+          }}
+        />
+        <Script
+          id="organization-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Minesweeper.fr",
+              url: "https://minesweeper.fr",
+              logo: "https://minesweeper.fr/icon.svg",
+              founder: {
+                "@type": "Person",
+                name: "AlfGoto",
+              },
+              sameAs: [
+                "https://twitter.com/alfgoto",
+                "https://youtube.com/@alfgoto",
+                "https://instagram.com/alfgoto",
+                "https://www.linkedin.com/in/alfred-gauthier/",
+                "https://facebook.com/alfgoto",
+              ],
             }),
           }}
         />

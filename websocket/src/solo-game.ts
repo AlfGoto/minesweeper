@@ -97,13 +97,13 @@ export class MinesweeperGame {
         if (this.isLost) return;
         await revealCell(this, msg.id);
         await this.state.storage.put("grid", this.grid, {
-          expirationTtl: 600,
+          expirationTtl: 1800,
         } as any);
       } else if (msg.type === "RIGHT_CLICK") {
         if (this.isLost) return;
         flagCell(this, msg.id);
         await this.state.storage.put("grid", this.grid, {
-          expirationTtl: 600,
+          expirationTtl: 1800,
         } as any);
       } else if (msg.type === "RESTART") {
         await restart(this);
