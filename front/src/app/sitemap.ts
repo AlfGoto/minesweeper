@@ -32,6 +32,12 @@ export function getPages(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: "https://minesweeper.fr/map",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
       url: "https://minesweeper.fr/skins/background",
       lastModified: new Date(),
       changeFrequency: "weekly",
