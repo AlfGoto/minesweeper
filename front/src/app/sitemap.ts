@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllBackgroundSkinSlugs } from "@/features/skins/backgrounds/skins";
 import { getAllSkinSlugs } from "@/features/skins/cells/cell-skins";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export function getPages(): MetadataRoute.Sitemap {
   const skinSlugs = getAllSkinSlugs();
   const backgroundSkinSlugs = getAllBackgroundSkinSlugs();
   const skinPages = skinSlugs.map((slug) => ({
@@ -40,4 +40,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...skinPages,
     ...backgroundSkinPages,
   ];
+}
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return getPages();
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "How to Play Minesweeper - Rules & Strategy Guide",
@@ -151,7 +152,9 @@ export default function HowToPlayPage() {
       <Script
         id="howto-structured-data"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToStructuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(howToStructuredData),
+        }}
       />
       <Script
         id="breadcrumb-structured-data"
@@ -374,6 +377,11 @@ export default function HowToPlayPage() {
             </p>
           </section>
         </article>
+        <div className="text-center w-full pt-2">
+          <Button>
+            <Link href="/map">Sitemap</Link>
+          </Button>
+        </div>
       </main>
     </>
   );
