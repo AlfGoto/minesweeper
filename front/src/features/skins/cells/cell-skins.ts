@@ -1492,7 +1492,6 @@ export const getSkinMetaBySlug = (
   };
 };
 
-// Get all skin slugs for static generation
 export const getAllSkinSlugs = (): string[] => {
   return Object.values(CellSkins)
     .filter((skin) => skin.slug)
