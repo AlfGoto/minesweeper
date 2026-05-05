@@ -523,6 +523,7 @@ export interface paths {
                             "green-garden"?: number;
                             "blue-lagoon"?: number;
                             "purple-parade"?: number;
+                            classic?: number;
                         };
                     };
                 };
@@ -941,13 +942,13 @@ export interface components {
             };
         };
         /** @enum {string} */
-        CellSkin: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade";
+        CellSkin: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade" | "classic";
         /** @enum {string} */
         BannerSkin: "default" | "level" | "gold";
         /** @enum {string} */
         BackgroundSkin: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef";
         /** @enum {string} */
-        CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade";
+        CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade" | "classic";
         /** @enum {string} */
         BackgroundSkinsNamesEnum: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef";
     };

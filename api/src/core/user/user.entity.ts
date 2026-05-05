@@ -26,7 +26,8 @@ export const cellsSkins = {
   "yellow-zest": CHIP,
   "green-garden": CHIP,
   "blue-lagoon": CHIP,
-  "purple-parade": CHIP
+  "purple-parade": CHIP,
+  classic: NORMAL
 }
 export const cellsSkinsNames = Object.keys(cellsSkins) as Array<keyof typeof cellsSkins>
 export const bannerSkins = {

@@ -11,7 +11,7 @@ export default async function Home() {
   const session = await getServerSession();
   const userEmail = session?.user?.email;
   const user = userEmail ? await getUser(userEmail) : null;
-  const selectedCellSkin: CellSkin = user?.selectedSkin?.cells ?? "default";
+  const selectedCellSkin: CellSkin = "classic" ?? user?.selectedSkin?.cells ?? "default";
 
   return (
     <GameProvider>

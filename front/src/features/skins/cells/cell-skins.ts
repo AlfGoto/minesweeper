@@ -102,9 +102,7 @@ export const getUnrevealedNeighborContext = ({
 
 export const getSkin = ({ skin, ...context }: GetSkinContext) => {
   const definition =
-    CellSkins[skin] ??
-    NonPublishedCellSkins[skin] ??
-    defaultSkin;
+    CellSkins[skin] ?? NonPublishedCellSkins[skin] ?? defaultSkin;
   const baseClass = context.isHiddenOrFlagged
     ? context.odd
       ? definition.green
@@ -213,7 +211,8 @@ const createEmojiTileSkin = ({
     if (!isHiddenOrFlagged || cellStatus === "revealed") return undefined;
 
     const rand = mulberry32((row + 1) * 14387 + (col + 1) * 58217);
-    const emoji = emojis[Math.floor(rand() * emojis.length)] ?? emojis[0] ?? "🟪";
+    const emoji =
+      emojis[Math.floor(rand() * emojis.length)] ?? emojis[0] ?? "🟪";
     const rotation = Math.floor(-10 + rand() * 21);
     const glossAngle = Math.floor(105 + rand() * 40);
     const glossAlpha = (0.05 + rand() * 0.06).toFixed(2);
@@ -255,24 +254,58 @@ const defaultSkin = {
     7: "text-orange-600",
     8: "text-gray-600",
   },
-  name: "Classic",
-  slug: "classic",
+  name: "Green Grass",
+  slug: "green-grass",
   description:
-    "The original Minesweeper look with lime green unrevealed cells and warm tan revealed tiles. A timeless design that brings back nostalgic memories.",
+    "A fresh nature-inspired theme with vibrant grass green unrevealed cells and soft earth-toned revealed tiles. Play Minesweeper on a lush meadow.",
   longDescription:
-    "The Classic skin recreates the beloved original Minesweeper aesthetic that millions of players grew up with. Featuring vibrant lime green cells for unrevealed areas and soft wheat-colored revealed tiles, this skin delivers pure nostalgia. The familiar red flag and bomb emojis complete the authentic experience. Perfect for players who appreciate the timeless design that made Minesweeper a worldwide phenomenon.",
+    "The Green Grass skin brings the outdoors to your Minesweeper game with a fresh nature-inspired aesthetic. Unrevealed cells feature vibrant lime and light green tones that evoke a lush grass lawn, while revealed tiles display warm tan and wheat colors reminiscent of sun-dried earth beneath the grass. The classic red flag and bomb emojis complete the outdoor feel. Perfect for players who want a cheerful, natural look that makes every game feel like a walk in the park.",
   keywords: [
-    "classic minesweeper skin",
-    "original minesweeper theme",
-    "retro minesweeper",
-    "nostalgic minesweeper",
-    "traditional minesweeper design",
+    "grass minesweeper skin",
+    "green minesweeper theme",
+    "nature minesweeper",
+    "meadow minesweeper skin",
+    "outdoor minesweeper design",
+    "lawn minesweeper theme",
   ],
 };
 
 export const CellSkins: Record<string, CellSkinDefinition> = {
   default: defaultSkin,
-  "flowerfloor": {
+  classic: {
+    green:
+      "bg-[#c0c0c0] border-3 border-t-[#fefefe] border-l-[#fefefe] border-r-[#818181] border-b-[#818181]",
+    lightGreen:
+      "bg-[#c0c0c0] border-3 border-t-[#fefefe] border-l-[#fefefe] border-r-[#818181] border-b-[#818181]",
+    gray: "bg-[#bfc1be] border-1 border-[#808280]",
+    silver: "bg-[#bfc1be] border-1 border-[#808280]",
+    number: {
+      0: "",
+      1: "text-blue-700",
+      2: "text-green-700",
+      3: "text-red-700",
+      4: "text-violet-700",
+      5: "text-amber-700",
+      6: "text-cyan-700",
+      7: "text-orange-700",
+      8: "text-gray-700",
+    },
+    name: "Classic",
+    slug: "classic",
+    description:
+      "The original Minesweeper look with silver 3D beveled unrevealed cells and flat revealed tiles. A timeless design that brings back nostalgic memories.",
+    longDescription:
+      "The Classic skin recreates the beloved original Minesweeper aesthetic that millions of players grew up with. Featuring iconic silver beveled cells with 3D raised edges for unrevealed areas and flat gray revealed tiles, this skin delivers pure nostalgia. The familiar Windows 95 style design brings back memories of countless hours spent carefully flagging mines. Perfect for players who appreciate the timeless design that made Minesweeper a worldwide phenomenon.",
+    keywords: [
+      "classic minesweeper skin",
+      "original minesweeper theme",
+      "retro minesweeper",
+      "nostalgic minesweeper",
+      "traditional minesweeper design",
+      "windows 95 minesweeper",
+    ],
+  },
+  flowerfloor: {
     ...defaultSkin,
     flagEmoji: "🌸",
     bombEmoji: "💥",
@@ -453,7 +486,9 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
     },
     flagEmoji: "🚫",
     bombEmoji: "🔥",
-    getOverlayClass: ({ isHiddenOrFlagged }: CellSkinPatternContext): string => {
+    getOverlayClass: ({
+      isHiddenOrFlagged,
+    }: CellSkinPatternContext): string => {
       if (!isHiddenOrFlagged) return "";
       return "animate-[infernoFlame_1.7s_ease-in-out_infinite] [background-size:148%_158%,136%_148%,100%_100%]";
     },
@@ -1000,7 +1035,8 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
           "Yes. The emoji faces are rendered behind the gameplay layer, so flags stay visible and do not get replaced by the artwork.",
       },
       {
-        question: "Why does the Laughing Faces skin keep revealed cells simple?",
+        question:
+          "Why does the Laughing Faces skin keep revealed cells simple?",
         answer:
           "The clean revealed tiles help preserve quick board scanning, which is important in Minesweeper when you need to read numbers and patterns at a glance.",
       },
@@ -1055,7 +1091,8 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
           "The Fruit Basket skin uses a seeded mix of fruit emojis including apples, oranges, lemons, watermelons, strawberries, cherries, kiwis, and grapes.",
       },
       {
-        question: "Does the Fruit Basket skin still support normal flag placement?",
+        question:
+          "Does the Fruit Basket skin still support normal flag placement?",
         answer:
           "Yes. The fruit emoji graphics are rendered behind the gameplay content, so flags remain clearly visible on top of hidden cells.",
       },
@@ -1105,7 +1142,8 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
           "Red Burst is a published Minesweeper skin that uses only red-themed emojis on unrevealed cells and keeps revealed cells minimal for easy scanning.",
       },
       {
-        question: "Do all emojis in the Red Burst skin share the same color family?",
+        question:
+          "Do all emojis in the Red Burst skin share the same color family?",
         answer:
           "Yes. The unrevealed tiles in Red Burst use a seeded set of emojis that all stay inside a red or crimson palette.",
       },
@@ -1160,7 +1198,8 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
           "Orange Pop is a published Minesweeper skin that limits unrevealed cells to orange-themed emojis for a consistent color-coded look.",
       },
       {
-        question: "Why does the Orange Pop skin feel more unified than mixed emoji skins?",
+        question:
+          "Why does the Orange Pop skin feel more unified than mixed emoji skins?",
         answer:
           "Because every hidden tile pulls from the same orange color family, the grid reads as one clear theme instead of a rainbow mix.",
       },
@@ -1270,7 +1309,8 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
           "Green Garden is a published Minesweeper skin that uses only green-themed emojis on hidden cells for a calm color-coded board.",
       },
       {
-        question: "Are all emojis in Green Garden part of the same color family?",
+        question:
+          "Are all emojis in Green Garden part of the same color family?",
         answer:
           "Yes. Its unrevealed tiles use a seeded set of green emojis so the theme stays visually consistent across the grid.",
       },
@@ -1429,8 +1469,15 @@ export const getPublishedSkinsWithMeta = (): PublishedSkinMeta[] => {
 export const getSkinMetaBySlug = (
   slug: string,
 ): PublishedSkinMeta | undefined => {
-  const entry = Object.entries(CellSkins).find(([, skin]) => skin.slug === slug);
-  if (!entry || !entry[1].name || !entry[1].description || !entry[1].longDescription) {
+  const entry = Object.entries(CellSkins).find(
+    ([, skin]) => skin.slug === slug,
+  );
+  if (
+    !entry ||
+    !entry[1].name ||
+    !entry[1].description ||
+    !entry[1].longDescription
+  ) {
     return undefined;
   }
   const [id, skin] = entry;
