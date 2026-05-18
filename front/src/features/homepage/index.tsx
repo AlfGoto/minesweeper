@@ -6,12 +6,17 @@ import WinDialog from "./components/win-dialog";
 import { getServerSession } from "next-auth";
 import { getUser } from "@/types/bff/uncached-functions";
 import type { CellSkin } from "@/types/bff";
+import Link from "next/link";
+import { getPublishedSkinsWithMeta } from "@/features/skins/cells/cell-skins";
+import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds/skins";
 
 export default async function Home() {
   const session = await getServerSession();
   const userEmail = session?.user?.email;
   const user = userEmail ? await getUser(userEmail) : null;
   const selectedCellSkin: CellSkin = user?.selectedSkin?.cells ?? "default";
+  const allCellSkins = getPublishedSkinsWithMeta();
+  const allBackgroundSkins = getPublishedBackgroundSkins();
 
   return (
     <GameProvider>
@@ -45,6 +50,30 @@ export default async function Home() {
             On desktop: left-click reveals, right-click flags. On mobile: tap
             reveals, long-press flags.
           </p>
+          <h2>Available Minesweeper Skins</h2>
+          <p>Browse our collection of free cell skins and background themes:</p>
+          <nav aria-label="All skins">
+            <h3>Cell Skins</h3>
+            <ul>
+              {allCellSkins.map((skin) => (
+                <li key={skin.slug}>
+                  <Link href={`/skins/${skin.slug}`}>
+                    {skin.name} Minesweeper Skin - {skin.description}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <h3>Background Skins</h3>
+            <ul>
+              {allBackgroundSkins.map((skin) => (
+                <li key={skin.slug}>
+                  <Link href={`/skins/background/${skin.slug}`}>
+                    {skin.name} Background Skin - {skin.description}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
         <div className="flex items-center justify-center w-full gap-4">
           <Grid selectedCellSkin={selectedCellSkin} />

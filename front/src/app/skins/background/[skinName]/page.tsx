@@ -87,24 +87,21 @@ export default async function BackgroundSkinPage({ params }: Props) {
   const pageUrl = `https://minesweeper.fr/skins/background/${skin.slug}`;
   const faqEntries = seoContent?.faqs ?? skin.faq;
 
-  const productStructuredData = {
+  const softwareStructuredData = {
     "@context": "https://schema.org",
-    "@type": "Product",
+    "@type": "SoftwareApplication",
     name: `${skin.name} Minesweeper Background Skin`,
     description: seoContent?.metaDescription ?? skin.longDescription,
     image: "https://minesweeper.fr/opengraph-image",
-    brand: {
-      "@type": "Brand",
-      name: "Minesweeper",
-    },
+    applicationCategory: "GameApplication",
+    applicationSubCategory: "Game Customization",
+    operatingSystem: "Web Browser",
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
     },
-    category: "Game Customization",
-    isRelatedTo: {
+    isPartOf: {
       "@type": "VideoGame",
       name: "Minesweeper",
       url: "https://minesweeper.fr",
@@ -137,9 +134,9 @@ export default async function BackgroundSkinPage({ params }: Props) {
       url: "https://minesweeper.fr",
     },
     mainEntity: {
-      "@type": "Product",
+      "@type": "SoftwareApplication",
       name: `${skin.name} Minesweeper Background Skin`,
-      description: skin.longDescription,
+      applicationCategory: "GameApplication",
     },
   };
 
@@ -174,7 +171,7 @@ export default async function BackgroundSkinPage({ params }: Props) {
         id="background-product-structured-data"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productStructuredData),
+          __html: JSON.stringify(softwareStructuredData),
         }}
       />
       <Script
@@ -320,6 +317,32 @@ export default async function BackgroundSkinPage({ params }: Props) {
                 </div>
               ))}
             </div>
+          </section>
+
+          <section aria-label="Related background skins" className="mb-10">
+            <h2 className="mb-4 text-2xl font-semibold text-slate-900">
+              More Background Skins
+            </h2>
+            <nav className="flex flex-wrap gap-3">
+              {getPublishedBackgroundSkins()
+                .filter((s) => s.slug !== skin.slug)
+                .slice(0, 5)
+                .map((relatedSkin) => (
+                  <Link
+                    key={relatedSkin.slug}
+                    href={`/skins/background/${relatedSkin.slug}`}
+                    className="rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm text-slate-700 transition-colors hover:border-slate-400 hover:bg-white"
+                  >
+                    {relatedSkin.name}
+                  </Link>
+                ))}
+              <Link
+                href="/skins/background"
+                className="rounded-full border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-medium text-slate-800 transition-colors hover:bg-slate-200"
+              >
+                View all →
+              </Link>
+            </nav>
           </section>
 
           <section aria-label="Call to action" className="text-center">

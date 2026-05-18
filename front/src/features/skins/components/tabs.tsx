@@ -7,6 +7,7 @@ import { CellsTab } from "./cells-tab";
 import { BannersTab } from "./banners-tab";
 
 type CellSkinsShopProps = {
+  isLoggedIn?: boolean;
   coins: number;
   revealedCells: number;
   selectedSkin: CellSkin;
@@ -16,6 +17,7 @@ type CellSkinsShopProps = {
 };
 
 export function CellSkinsShop({
+  isLoggedIn = true,
   coins,
   revealedCells,
   selectedSkin,
@@ -53,6 +55,7 @@ export function CellSkinsShop({
           </p>
         </div>
         <CellsTab
+          isLoggedIn={isLoggedIn}
           coins={coins}
           revealedCells={revealedCells}
           selectedSkin={selectedSkin}

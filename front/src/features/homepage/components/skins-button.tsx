@@ -1,19 +1,14 @@
-import { AuthRouteButton } from "./auth-route-button";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function SkinsButton({
   className = "",
-  loggedIn = true,
 }: {
   className?: string;
-  loggedIn?: boolean;
 }) {
   return (
-    <AuthRouteButton
-      className={className}
-      loggedIn={loggedIn}
-      href="/skins"
-      label="Skins"
-      tooltipText="Login to open the skins shop"
-    />
+    <Link href="/skins" prefetch className="w-full">
+      <Button className={className}>Skins</Button>
+    </Link>
   );
 }

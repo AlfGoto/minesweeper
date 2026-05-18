@@ -35,79 +35,112 @@ export type SkinSeoContent = {
 export const cellSkinsSeo: Record<string, SkinSeoContent> = {
   default: {
     metaDescription:
-      "Play Minesweeper with the Classic skin - the original lime green and tan design from Windows 3.1. Nostalgic visuals with modern gameplay.",
+      "Play Minesweeper with the Green Grass skin featuring vibrant lime green cells and warm tan revealed tiles. A fresh nature-inspired default theme.",
     heroTagline:
-      "The original Minesweeper look that defined a generation of puzzle gaming.",
+      "Fresh meadow colors meet classic Minesweeper gameplay.",
     sections: [
       {
-        title: "A Brief History of Minesweeper's Iconic Design",
-        content: `Minesweeper first appeared in Microsoft Entertainment Pack 1 for Windows 3.0 in 1990, created by Robert Donner and Curt Johnson. The game was bundled with Windows 3.1 in 1992 and became one of the most played computer games in history. The Classic skin recreates this original aesthetic that millions of office workers, students, and casual gamers came to know during their breaks.
+        title: "A Nature-Inspired Default Experience",
+        content: `The Green Grass skin serves as the default Minesweeper experience, greeting new players with vibrant lime green unrevealed cells reminiscent of a sun-dappled lawn. When you clear cells, warm tan and wheat tones appear—like revealing earth beneath freshly cut grass.
 
-The design philosophy was simple: maximize clarity while minimizing distraction. The lime green unrevealed cells provided a fresh, inviting appearance that drew players in, while the warm tan revealed tiles created a satisfying contrast that made the game board easy to read at a glance. This color combination wasn't arbitrary—it was carefully chosen to reduce eye strain during extended play sessions, a consideration that remains relevant today.
-
-By the time Windows XP launched in 2001, Minesweeper had already become a cultural phenomenon. The Classic skin preserves this legacy, letting modern players experience the game exactly as it was meant to be played.`,
+This nature-inspired palette wasn't chosen randomly. Green evokes growth, safety, and calm, making it an ideal color for the unexplored areas of a minefield. The earthy revealed tones provide strong contrast without harsh brightness, keeping your eyes comfortable during extended sessions.`,
       },
       {
-        title: "Why the Classic Design Still Works",
-        content: `The Classic skin's enduring appeal comes down to functional design principles that game developers still follow today. The high contrast between the green hidden cells and tan revealed cells creates an immediate visual distinction between explored and unexplored territory. Your eyes can scan the board quickly without getting lost.
+        title: "Why Green Grass Works for Everyone",
+        content: `The Green Grass skin strikes a balance between visual appeal and functional clarity. The lime and light green alternating pattern adds subtle depth to unrevealed cells without creating distracting patterns. When revealed, the tan and wheat tiles provide warm, neutral backgrounds that let mine counts stand out clearly.
 
-The number colors follow a logical progression: blue for 1 (safe, common), green for 2, red for 3 (danger increases). This color coding helps experienced players process information faster, turning pattern recognition into an almost subconscious skill. The familiar red flag and bomb emojis complete the experience with instantly recognizable symbols.
-
-There's also a psychological comfort factor. For many players, the Classic skin triggers positive memories of simpler computing times. That nostalgia translates into a more relaxed gaming experience, which can actually improve performance by reducing anxiety about mistakes.`,
+Number colors pop against both states: blue for 1, green for 2, red for 3, and so on. This progression from cool to warm colors subtly indicates increasing danger levels, helping your brain process threat information faster with practice.`,
       },
       {
-        title: "Best For: Purists and Competitive Players",
-        content: `The Classic skin is the preferred choice for Minesweeper purists who want the authentic experience, as well as competitive players who need maximum readability. Speedrunners particularly favor this skin because its clean visual hierarchy lets them process the board state with minimal cognitive load.
+        title: "The Perfect Starting Point",
+        content: `As the default skin, Green Grass introduces players to Minesweeper without any visual complexity. There are no animated effects, procedural patterns, or themed decorations—just clean colors optimized for gameplay.
 
-If you're learning Minesweeper for the first time, the Classic skin is an excellent starting point. The clear visual feedback helps you understand the relationship between numbers and adjacent mines without any decorative distractions. Once you've mastered the fundamentals, you can explore other skins knowing you have a solid foundation.
-
-The Classic skin also pairs well with any background skin in the game. Its neutral color palette complements everything from the minimalist default background to more elaborate options, giving you flexibility to customize your experience without sacrificing gameplay clarity.`,
-      },
-      {
-        title: "Technical Details",
-        content: `The Classic skin uses a carefully calibrated color palette: lime green (#32CD32) and light green (#90EE90) for unrevealed cells, with tan and wheat tones for revealed areas. The slight alternating pattern between adjacent cells adds subtle depth without creating visual noise.
-
-Number colors are optimized for accessibility and quick recognition. The contrast ratios meet WCAG guidelines for readability, ensuring the game remains playable for users with various visual abilities. The bomb and flag emojis render consistently across devices, maintaining the intended experience whether you're playing on Windows, Mac, or mobile.`,
+Once comfortable with the mechanics, you can explore the skin shop to find themes matching your personality. But many players return to Green Grass for competitive play, appreciating its distraction-free simplicity.`,
       },
     ],
     faqs: [
       {
-        question: "Is this the same design as the original Windows Minesweeper?",
+        question: "Why is Green Grass the default Minesweeper skin?",
         answer:
-          "The Classic skin recreates the color scheme and visual feel of the original Microsoft Minesweeper from Windows 3.1 and Windows 95. While our version uses modern rendering techniques and emoji symbols, the lime green and tan palette faithfully honors the original design that made Minesweeper famous.",
+          "Green Grass provides an approachable, nature-inspired aesthetic that works well for all skill levels. The high contrast between green unrevealed cells and tan revealed areas makes the game easy to learn while remaining effective for experienced players.",
       },
       {
-        question: "Why do competitive Minesweeper players prefer the Classic skin?",
+        question: "What do the different number colors mean?",
         answer:
-          "Competitive players choose the Classic skin because its high-contrast color scheme allows for faster board scanning. The clean visual hierarchy reduces cognitive load, letting players focus entirely on pattern recognition and strategy rather than processing decorative elements.",
+          "Numbers 1-8 each have distinct colors to help identify threat levels quickly. Blue (1) indicates low danger, green (2) moderate, red (3) and purple (4) increasing risk. The progression helps experienced players read the board almost instantly.",
       },
       {
-        question: "What do the different number colors mean in Minesweeper?",
+        question: "Can I change from the Green Grass default skin?",
         answer:
-          "Each number from 1-8 has a distinct color to help you quickly identify threat levels. Blue (1) indicates low danger, green (2) moderate, red (3) and purple (4) increasing risk. The color progression helps experienced players read the board almost instantly through pattern recognition.",
+          "Yes, visit the Skins shop to browse and unlock alternative themes. You can always return to Green Grass as your selected skin at any time.",
+      },
+    ],
+    keywords: [
+      "green grass minesweeper skin",
+      "default minesweeper theme",
+      "nature minesweeper skin",
+      "lime green minesweeper",
+      "meadow minesweeper design",
+      "beginner minesweeper skin",
+    ],
+  },
+
+  classic: {
+    metaDescription:
+      "Play Minesweeper with the Classic skin featuring iconic silver 3D beveled cells from Windows 95. Pure nostalgia with the original design millions grew up with.",
+    heroTagline:
+      "The iconic Windows 95 Minesweeper design that started it all.",
+    sections: [
+      {
+        title: "The Windows 95 Minesweeper Aesthetic",
+        content: `The Classic skin brings back the unmistakable look of Microsoft's original Minesweeper from Windows 95 and Windows 98. Those distinctive silver beveled cells with raised 3D edges became an icon of desktop computing in the 1990s. Every office worker and student who used Windows during that era instantly recognizes this design.
+
+The beveled effect creates visual depth through careful use of highlight and shadow borders. Light colors on the top and left edges suggest illumination from above-left, while darker borders on the bottom and right create the impression of a raised button. When revealed, cells flatten to show they've been pressed, providing satisfying tactile feedback even though you're clicking a flat screen.`,
       },
       {
-        question: "Can I use the Classic skin with different background themes?",
-        answer:
-          "Yes, the Classic skin's neutral color palette pairs well with all background skins available in the game. Whether you prefer the default background, Retro Grid, or Aurora Drift, the Classic cells will remain clearly visible and readable.",
+        title: "Why Players Love the Classic Look",
+        content: `Nostalgia plays a huge role in the Classic skin's appeal. For many, this design triggers memories of learning to use computers, procrastinating at work, or discovering gaming for the first time. The familiar silver palette feels like coming home.
+
+Beyond sentiment, the design works. The monochromatic scheme reduces visual noise so you can focus on numbers and patterns. The uniform color for all unrevealed cells means nothing distracts from strategic thinking. Speedrunners often prefer Classic because every cell looks identical until revealed—no decorative elements to process.`,
       },
       {
-        question: "When was Minesweeper first released?",
+        title: "Technical Design Details",
+        content: `The Classic skin uses a precise silver gray (#c0c0c0) that matches the original Windows system color. Border widths create the 3D effect: bright white (#fefefe) on top-left edges, medium gray (#818181) on bottom-right. Revealed cells switch to a flatter appearance with subtle single-pixel borders.
+
+Number colors follow the original palette: blue for 1, green for 2, red for 3. These specific shades were chosen for maximum readability against the gray background while maintaining the authentic retro feel.`,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is this the original Windows 95 Minesweeper design?",
         answer:
-          "Minesweeper was created by Robert Donner and Curt Johnson for Microsoft Entertainment Pack 1 in 1990. It was bundled with Windows 3.1 in 1992 and became one of the most widely played computer games in history, introducing millions to logic puzzle gaming.",
+          "The Classic skin faithfully recreates the silver beveled cell aesthetic from Windows 95/98 Minesweeper. While our version uses modern web rendering, the colors and 3D effect match the original design that defined Minesweeper's look for a generation.",
+      },
+      {
+        question: "Why do speedrunners prefer the Classic skin?",
+        answer:
+          "The monochromatic design eliminates visual distractions. Every unrevealed cell looks identical, letting players focus entirely on revealed numbers and patterns without processing decorative elements.",
+      },
+      {
+        question: "What makes the cells look 3D?",
+        answer:
+          "The 3D effect comes from beveled borders—light colors on top-left edges and dark colors on bottom-right simulate lighting from above-left. This technique was common in 1990s interface design.",
+      },
+      {
+        question: "Does the Classic skin work well on modern displays?",
+        answer:
+          "Yes. The clean design scales well to any resolution. The high contrast between revealed and unrevealed states remains readable on both small and large screens.",
       },
     ],
     keywords: [
       "classic minesweeper skin",
+      "windows 95 minesweeper",
+      "retro minesweeper theme",
       "original minesweeper design",
-      "windows minesweeper theme",
-      "retro minesweeper",
+      "silver minesweeper cells",
       "nostalgic minesweeper",
-      "traditional minesweeper look",
-      "minesweeper history",
-      "vintage minesweeper style",
-      "competitive minesweeper skin",
-      "minesweeper for beginners",
+      "beveled minesweeper skin",
+      "vintage minesweeper look",
     ],
   },
 

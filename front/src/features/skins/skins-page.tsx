@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import type { CellSkin } from "@/types/bff";
 import { getCellSkinsPrices } from "@/lib/api";
@@ -11,15 +10,12 @@ import { BackgroundsTab } from "./components/backgrounds-tab";
 export async function SkinsPage() {
   const session = await getServerSession();
   const userEmail = session?.user?.email;
-
-  if (!userEmail) {
-    redirect("/");
-  }
+  const isLoggedIn = !!userEmail;
 
   const [user, prices, stats] = await Promise.all([
-    getUser(userEmail),
+    userEmail ? getUser(userEmail) : null,
     getCellSkinsPrices(),
-    getUserStatsUncached(userEmail),
+    userEmail ? getUserStatsUncached(userEmail) : null,
   ]);
 
   const unlockedSkins: CellSkin[] = user?.unlockedSkins?.cells ?? [];
@@ -34,12 +30,13 @@ export async function SkinsPage() {
       </div>
       <div className="flex-1">
         <CellSkinsShop
+          isLoggedIn={isLoggedIn}
           coins={user?.coins ?? 0}
           revealedCells={stats?.totalRevealed ?? 0}
           selectedSkin={selectedSkin}
           unlockedSkins={unlockedSkins}
           prices={prices}
-          backgroundsTabContent={<BackgroundsTab />}
+          backgroundsTabContent={<BackgroundsTab isLoggedIn={isLoggedIn} />}
         />
       </div>
     </main>

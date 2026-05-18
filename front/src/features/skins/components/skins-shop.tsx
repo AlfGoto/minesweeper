@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { AlfCoinsProgressCard } from "./alf-coins-progress-card";
 
 type BackgroundSkinsShopProps = {
+  isLoggedIn?: boolean;
   coins: number;
   revealedCells: number;
   selectedSkin: BackgroundSkin;
@@ -37,6 +38,7 @@ function formatSkinLabel(skin: BackgroundSkin) {
 }
 
 export function BackgroundSkinsShop({
+  isLoggedIn = true,
   coins,
   revealedCells,
   selectedSkin,
@@ -101,11 +103,11 @@ export function BackgroundSkinsShop({
 
   const renderSkinCard = (skin: BackgroundSkin) => {
     const skinData = backgroundSkins[skin];
-    const isOwned = normalizedUnlockedSkins.includes(skin);
-    const isSelected = isOwned && skin === optimisticSelectedSkin;
-    const isSelectable = isOwned && !isSelected && !isPending;
+    const isOwned = isLoggedIn && normalizedUnlockedSkins.includes(skin);
+    const isSelected = isLoggedIn && isOwned && skin === optimisticSelectedSkin;
+    const isSelectable = isLoggedIn && isOwned && !isSelected && !isPending;
     const price = prices[skin];
-    const canBuy = typeof price === "number" && coins >= price;
+    const canBuy = isLoggedIn && typeof price === "number" && coins >= price;
 
     return (
       <div
@@ -158,26 +160,32 @@ export function BackgroundSkinsShop({
               <Button
                 variant="outline"
                 className="w-full"
-                disabled={isPending || typeof price !== "number"}
+                disabled={!isLoggedIn || isPending || typeof price !== "number"}
               >
-                {typeof price === "number" ? `${price} AlfCoins` : "Unavailable"}
+                {!isLoggedIn
+                  ? "Sign in to unlock"
+                  : typeof price === "number"
+                    ? `${price} AlfCoins`
+                    : "Unavailable"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="space-y-3">
-              <p className="font-semibold">Buy {formatSkinLabel(skin)}?</p>
-              <p className="text-sm text-muted-foreground">
-                {typeof price === "number"
-                  ? `This will cost ${price} AlfCoins.`
-                  : "This skin is not available right now."}
-              </p>
-              <Button
-                className="w-full"
-                disabled={isPending || !canBuy}
-                onClick={() => onBuy(skin)}
-              >
-                Confirm purchase
-              </Button>
-            </PopoverContent>
+            {isLoggedIn && (
+              <PopoverContent className="space-y-3">
+                <p className="font-semibold">Buy {formatSkinLabel(skin)}?</p>
+                <p className="text-sm text-muted-foreground">
+                  {typeof price === "number"
+                    ? `This will cost ${price} AlfCoins.`
+                    : "This skin is not available right now."}
+                </p>
+                <Button
+                  className="w-full"
+                  disabled={isPending || !canBuy}
+                  onClick={() => onBuy(skin)}
+                >
+                  Confirm purchase
+                </Button>
+              </PopoverContent>
+            )}
           </Popover>
         )}
       </div>
@@ -186,13 +194,17 @@ export function BackgroundSkinsShop({
 
   return (
     <div className="space-y-4">
-      <AlfCoinsProgressCard coins={coins} revealedCells={revealedCells} />
+      {isLoggedIn && (
+        <AlfCoinsProgressCard coins={coins} revealedCells={revealedCells} />
+      )}
 
-      <div className="flex items-center justify-end">
-        <OwnedFilter value={groupOwned} onValueChange={setGroupOwned} />
-      </div>
+      {isLoggedIn && (
+        <div className="flex items-center justify-end">
+          <OwnedFilter value={groupOwned} onValueChange={setGroupOwned} />
+        </div>
+      )}
 
-      {!groupOwned ? (
+      {!isLoggedIn || !groupOwned ? (
         <div className="flex flex-wrap gap-4">
           {allBackgroundSkins.map(renderSkinCard)}
         </div>

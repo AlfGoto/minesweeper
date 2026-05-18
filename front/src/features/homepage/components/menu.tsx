@@ -19,13 +19,13 @@ export default async function Menu() {
         {session ? (
           <>
             <StatsButton className={buttonClassName} loggedIn />
-            <SkinsButton className={buttonClassName} loggedIn />
+            <SkinsButton className={buttonClassName} />
           </>
         ) : (
           <>
             <LoginButton className={buttonClassName} />
             <StatsButton className={buttonClassName} loggedIn={false} />
-            <SkinsButton className={buttonClassName} loggedIn={false} />
+            <SkinsButton className={buttonClassName} />
           </>
         )}
         <HowToPlayButton className={buttonClassName} />

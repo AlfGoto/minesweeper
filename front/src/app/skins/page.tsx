@@ -52,15 +52,15 @@ export default function SkinsPageWrapper() {
       "@type": "ListItem",
       position: index + 1,
       item: {
-        "@type": "Product",
+        "@type": "SoftwareApplication",
         name: `${skin.name} Minesweeper Skin`,
         description: skin.description,
         url: `https://minesweeper.fr/skins/${skin.slug}`,
+        applicationCategory: "GameApplication",
         offers: {
           "@type": "Offer",
           price: "0",
           priceCurrency: "USD",
-          availability: "https://schema.org/InStock",
         },
       },
     })),

@@ -1,22 +1,22 @@
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import type { BackgroundSkin } from "@/types/bff";
 import { getBackgroundSkinsPrices } from "@/lib/api";
 import { getUser, getUserStatsUncached } from "@/types/bff/uncached-functions";
 import { BackgroundSkinsShop } from "./skins-shop";
 
-export async function BackgroundsTab() {
+type BackgroundsTabProps = {
+  isLoggedIn?: boolean;
+};
+
+export async function BackgroundsTab({ isLoggedIn }: BackgroundsTabProps) {
   const session = await getServerSession();
   const userEmail = session?.user?.email;
-
-  if (!userEmail) {
-    redirect("/");
-  }
+  const loggedIn = isLoggedIn ?? !!userEmail;
 
   const [user, prices, stats] = await Promise.all([
-    getUser(userEmail),
+    userEmail ? getUser(userEmail) : null,
     getBackgroundSkinsPrices(),
-    getUserStatsUncached(userEmail),
+    userEmail ? getUserStatsUncached(userEmail) : null,
   ]);
 
   const unlockedSkins: BackgroundSkin[] = user?.unlockedSkins?.background ?? [];
@@ -25,6 +25,7 @@ export async function BackgroundsTab() {
 
   return (
     <BackgroundSkinsShop
+      isLoggedIn={loggedIn}
       coins={user?.coins ?? 0}
       revealedCells={stats?.totalRevealed ?? 0}
       selectedSkin={selectedSkin}

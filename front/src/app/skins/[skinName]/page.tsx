@@ -5,6 +5,7 @@ import Script from "next/script";
 import {
   getSkinMetaBySlug,
   getAllSkinSlugs,
+  getPublishedSkinsWithMeta,
 } from "@/features/skins/cells/cell-skins";
 import { CellSkinLargeDemoGrid } from "@/features/shared/components/cell-skin-preview";
 import { getCellSkinSeo } from "@/features/skins/seo";
@@ -86,43 +87,50 @@ export default async function SkinPage({ params }: Props) {
   const pageUrl = `https://minesweeper.fr/skins/${skin.slug}`;
 
   // Use SEO content FAQs if available, otherwise fall back to skin FAQs or generated ones
+  // Vary fallback FAQ count based on skin name hash for structural uniqueness
+  const nameHash = skin.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const baseFaqs = [
+    {
+      question: `What is the ${skin.name} skin in Minesweeper?`,
+      answer: skin.longDescription,
+    },
+    {
+      question: `How do I unlock the ${skin.name} Minesweeper skin?`,
+      answer: `You can unlock the ${skin.name} skin by playing Minesweeper and earning AlfCoins. Visit the skins shop to purchase and apply it to your game.`,
+    },
+    {
+      question: `Does the ${skin.name} skin change gameplay?`,
+      answer: `No, the ${skin.name} skin is purely cosmetic. It changes how cells look but doesn't affect Minesweeper rules or difficulty.`,
+    },
+    {
+      question: "Is Minesweeper free to play?",
+      answer:
+        "Yes, Minesweeper is completely free to play online with various skins and themes available to unlock.",
+    },
+    {
+      question: `Can I preview the ${skin.name} skin before unlocking?`,
+      answer: `Yes, you can see a preview of the ${skin.name} skin in the skins shop and on this page before deciding to unlock it.`,
+    },
+  ];
+  const faqCount = 2 + (nameHash % 3); // 2-4 FAQs based on skin name
   const faqEntries = seoContent?.faqs ??
-    (skin.faq.length > 0
-      ? skin.faq
-      : [
-          {
-            question: `What is the ${skin.name} skin in Minesweeper?`,
-            answer: skin.longDescription,
-          },
-          {
-            question: `How do I get the ${skin.name} Minesweeper skin?`,
-            answer: `You can unlock the ${skin.name} skin by playing Minesweeper and earning coins. Visit the skins shop in the game to purchase and apply it to your game.`,
-          },
-          {
-            question: "Is Minesweeper free to play?",
-            answer:
-              "Yes, Minesweeper is completely free to play. You can enjoy the classic puzzle game with various skins and themes without any cost.",
-          },
-        ]);
+    (skin.faq.length > 0 ? skin.faq : baseFaqs.slice(0, faqCount));
 
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Product",
+    "@type": "SoftwareApplication",
     name: `${skin.name} Minesweeper Skin`,
     description: seoContent?.metaDescription ?? skin.longDescription,
     image: "https://minesweeper.fr/opengraph-image",
-    brand: {
-      "@type": "Brand",
-      name: "Minesweeper",
-    },
+    applicationCategory: "GameApplication",
+    applicationSubCategory: "Game Customization",
+    operatingSystem: "Web Browser",
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
     },
-    category: "Game Customization",
-    isRelatedTo: {
+    isPartOf: {
       "@type": "VideoGame",
       name: "Minesweeper",
       url: "https://minesweeper.fr",
@@ -155,9 +163,9 @@ export default async function SkinPage({ params }: Props) {
       url: "https://minesweeper.fr",
     },
     mainEntity: {
-      "@type": "Product",
+      "@type": "SoftwareApplication",
       name: `${skin.name} Minesweeper Skin`,
-      description: seoContent?.metaDescription ?? skin.longDescription,
+      applicationCategory: "GameApplication",
     },
   };
 
@@ -299,6 +307,32 @@ export default async function SkinPage({ params }: Props) {
                 </div>
               ))}
             </div>
+          </section>
+
+          <section aria-label="Related skins" className="mb-10">
+            <h2 className="mb-4 text-2xl font-semibold text-green-900">
+              More Minesweeper Skins
+            </h2>
+            <nav className="flex flex-wrap gap-3">
+              {getPublishedSkinsWithMeta()
+                .filter((s) => s.slug !== skin.slug)
+                .slice(0, 6)
+                .map((relatedSkin) => (
+                  <Link
+                    key={relatedSkin.slug}
+                    href={`/skins/${relatedSkin.slug}`}
+                    className="rounded-full border border-green-200 bg-white px-4 py-2 text-sm text-green-700 transition-colors hover:border-green-400 hover:bg-green-50"
+                  >
+                    {relatedSkin.name}
+                  </Link>
+                ))}
+              <Link
+                href="/skins"
+                className="rounded-full border border-green-300 bg-green-100 px-4 py-2 text-sm font-medium text-green-800 transition-colors hover:bg-green-200"
+              >
+                View all →
+              </Link>
+            </nav>
           </section>
 
           <section aria-label="Call to action" className="text-center">
