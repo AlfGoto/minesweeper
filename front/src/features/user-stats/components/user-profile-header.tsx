@@ -31,8 +31,8 @@ export function UserProfileHeader({ userName, userImage }: UserProfileHeaderProp
         <Link href="/">
           <Button>Back to game</Button>
         </Link>
-        <Link href="/stats" prefetch={true}>
-          <Button variant="outline">Back to stats</Button>
+        <Link href="/players">
+          <Button variant="outline">Leaderboards</Button>
         </Link>
       </div>
     </div>
