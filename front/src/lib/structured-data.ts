@@ -1,4 +1,5 @@
 import type { User, UserStats } from "@/types/bff";
+import { formatTime } from "./dates";
 
 export function generateProfileJsonLd(
   userId: string,
@@ -18,7 +19,7 @@ export function generateProfileJsonLd(
       image: user.userPicture,
       url: `https://minesweeper.fr/stats/${userId}`,
       description: stats?.bestTime
-        ? `Minesweeper player with ${stats.totalWin} wins and best time of ${stats.bestTime}s`
+        ? `Minesweeper player with ${stats.totalWin} wins and best time of ${formatTime(stats.bestTime)}`
         : `Minesweeper player with ${stats?.totalGames ?? 0} games played`,
     },
     about: {

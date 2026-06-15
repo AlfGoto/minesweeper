@@ -10,15 +10,14 @@ export const formatTime = (milliseconds: number): string => {
   const parts: string[] = [];
 
   if (days) parts.push(`${days}d`);
-  if (hours) parts.push(`${hours}h`);
-  if (min) parts.push(`${min}min`);
-  if (sec) parts.push(`${sec}s`);
+  if (hours) parts.push(`${days ? String(hours).padStart(2, "0") : hours}h`);
+  if (min) parts.push(`${days || hours ? String(min).padStart(2, "0") : min}min`);
+  if (sec) parts.push(`${days || hours || min ? String(sec).padStart(2, "0") : sec}s`);
 
   const isShort = days === 0 && hours === 0 && min === 0;
 
-  if (isShort && ms) parts.push(`${ms}ms`);
+  if (isShort && ms) parts.push(`${sec ? String(ms).padStart(3, "0") : ms}ms`);
 
-  // If no major parts, show all zeros
   if (parts.length === 0) return "0s";
 
   return parts.join(" ");

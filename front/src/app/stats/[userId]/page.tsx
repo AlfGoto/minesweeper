@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { UserProfilePage } from "@/features/user-stats";
 import { getUserById, getUserStats } from "@/lib/api";
+import { formatTime } from "@/lib/dates";
 import { shouldIndexProfile } from "@/lib/seo-config";
 import type { User, UserStats } from "@/types/bff";
 
@@ -32,7 +33,7 @@ function buildProfileMetadata(
 
   const title = `${userName}'s Minesweeper Stats`;
   const description = bestTime
-    ? `${userName}'s Minesweeper profile: ${gamesWon} wins, ${winRate}% win rate, best time ${bestTime}s.`
+    ? `${userName}'s Minesweeper profile: ${gamesWon} wins, ${winRate}% win rate, best time ${formatTime(bestTime)}.`
     : `${userName}'s Minesweeper profile: ${gamesPlayed} games, ${gamesWon} wins, ${winRate}% win rate.`;
 
   return {
@@ -47,6 +48,14 @@ function buildProfileMetadata(
       description,
       type: "profile",
       url: `https://minesweeper.fr/stats/${userId}`,
+      images: [
+        {
+          url: "https://minesweeper.fr/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Minesweeper - Free Online Puzzle Game",
+        },
+      ],
     },
     twitter: {
       card: "summary",
