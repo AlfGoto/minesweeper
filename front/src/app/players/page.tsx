@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getAllStats, getBestGames } from "@/lib/api";
 import { getTopPlayers, filterIndexablePlayers } from "@/lib/seo-config";
 import { generateLeaderboardJsonLd } from "@/lib/structured-data";
+import { formatTime } from "@/lib/dates";
 
 export const metadata: Metadata = {
   title: "Minesweeper Players & Leaderboards",
@@ -39,15 +40,15 @@ export default async function PlayersPage() {
   const jsonLd = generateLeaderboardJsonLd();
 
   return (
-    <div className="max-w-[1200px] mx-auto w-full p-4 md:p-8">
+    <div className="max-w-[1200px] mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">Minesweeper Leaderboards</h1>
-        <p className="text-lg text-muted-foreground">
+        <h1 className="text-4xl font-bold mb-4 text-gray-900">Minesweeper Leaderboards</h1>
+        <p className="text-lg text-gray-600">
           Explore top players ranked by speed, wins, and experience.{" "}
           {indexableCount} players have earned their spot on our leaderboards.
         </p>
@@ -60,7 +61,7 @@ export default async function PlayersPage() {
           players={topByTime}
           statKey="bestTime"
           statLabel="Best"
-          statSuffix="s"
+          formatStat={(v) => formatTime(v)}
         />
 
         <LeaderboardSection
@@ -69,6 +70,7 @@ export default async function PlayersPage() {
           players={topByWins}
           statKey="totalWin"
           statLabel="Wins"
+          formatStat={(v) => String(v)}
         />
 
         <LeaderboardSection
@@ -77,12 +79,13 @@ export default async function PlayersPage() {
           players={topByGames}
           statKey="totalGames"
           statLabel="Games"
+          formatStat={(v) => String(v)}
         />
       </div>
 
       <section className="mt-12">
-        <h2 className="text-2xl font-bold mb-4">Recent Best Games</h2>
-        <p className="text-muted-foreground mb-6">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900">Recent Best Games</h2>
+        <p className="text-gray-600 mb-6">
           The latest record-breaking performances from our community.
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -101,8 +104,8 @@ export default async function PlayersPage() {
               />
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{game.userName}</p>
-                <p className="text-sm text-muted-foreground">
-                  {game.time}s with {game.flags} flags
+                <p className="text-sm text-gray-500">
+                  {formatTime(game.time)} with {game.flags} flags
                 </p>
               </div>
             </Link>
@@ -110,8 +113,8 @@ export default async function PlayersPage() {
         </div>
       </section>
 
-      <section className="mt-12 prose prose-neutral dark:prose-invert max-w-none">
-        <h2>About Minesweeper Rankings</h2>
+      <section className="mt-12 prose prose-gray max-w-none">
+        <h2 className="text-gray-900">About Minesweeper Rankings</h2>
         <p>
           Our leaderboards track player performance across multiple dimensions.
           The <strong>Fastest Times</strong> leaderboard shows players who have
@@ -142,7 +145,7 @@ interface LeaderboardSectionProps {
   }[];
   statKey: "bestTime" | "totalWin" | "totalGames";
   statLabel: string;
-  statSuffix?: string;
+  formatStat: (value: number) => string;
 }
 
 function LeaderboardSection({
@@ -150,13 +153,12 @@ function LeaderboardSection({
   description,
   players,
   statKey,
-  statLabel,
-  statSuffix = "",
+  formatStat,
 }: LeaderboardSectionProps) {
   return (
-    <section className="border rounded-lg p-4">
-      <h2 className="text-xl font-bold mb-1">{title}</h2>
-      <p className="text-sm text-muted-foreground mb-4">{description}</p>
+    <section className="border rounded-lg p-4 bg-white/50">
+      <h2 className="text-xl font-bold mb-1 text-gray-900">{title}</h2>
+      <p className="text-sm text-gray-600 mb-4">{description}</p>
       <ol className="space-y-2">
         {players.map((player, i) => {
           const stat = player[statKey];
@@ -166,9 +168,9 @@ function LeaderboardSection({
             <li key={player.userId}>
               <Link
                 href={`/stats/${player.userId}`}
-                className="flex items-center gap-3 p-2 rounded hover:bg-accent transition-colors"
+                className="flex items-center gap-3 p-2 rounded hover:bg-gray-100 transition-colors"
               >
-                <span className="w-6 text-center font-mono text-muted-foreground">
+                <span className="w-6 text-center font-mono text-gray-500">
                   {i + 1}
                 </span>
                 <Image
@@ -178,10 +180,9 @@ function LeaderboardSection({
                   height={32}
                   className="rounded-full"
                 />
-                <span className="flex-1 truncate">{player.userName}</span>
-                <span className="text-sm font-medium">
-                  {stat}
-                  {statSuffix}
+                <span className="flex-1 truncate text-gray-900">{player.userName}</span>
+                <span className="text-sm font-medium text-gray-700">
+                  {formatStat(stat)}
                 </span>
               </Link>
             </li>

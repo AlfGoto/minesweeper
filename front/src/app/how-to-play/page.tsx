@@ -377,9 +377,12 @@ export default function HowToPlayPage() {
             </p>
           </section>
         </article>
-        <div className="text-center w-full pt-2">
+        <div className="text-center w-full pt-2 flex gap-2 justify-center">
           <Button>
             <Link href="/map">Sitemap</Link>
+          </Button>
+          <Button variant="outline">
+            <Link href="/players">Leaderboards</Link>
           </Button>
         </div>
       </main>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getStaticPages } from "@/app/sitemap";
 import { getAllStats } from "@/lib/api";
 import { filterIndexablePlayers } from "@/lib/seo-config";
+import { formatTime } from "@/lib/dates";
 
 export default async function Sitemap() {
   const [pages, allStats] = await Promise.all([
@@ -31,14 +32,16 @@ export default async function Sitemap() {
       </ul>
 
       <h2 className="text-lg font-bold text-green-900 mt-6">
-        Players ({indexablePlayers.length})
+        <Link href="/players" className="hover:underline">
+          Players ({indexablePlayers.length})
+        </Link>
       </h2>
       <ul>
         {indexablePlayers.map((player) => (
           <li key={player.userId}>
             <Link href={`/stats/${player.userId}`}>
               {player.userName} - {player.totalWin} wins
-              {player.bestTime ? `, best ${player.bestTime}s` : ""}
+              {player.bestTime ? `, best ${formatTime(player.bestTime)}` : ""}
             </Link>
           </li>
         ))}
