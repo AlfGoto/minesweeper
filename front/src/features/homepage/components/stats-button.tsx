@@ -1,19 +1,10 @@
-import { AuthRouteButton } from "./auth-route-button";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export function StatsButton({
-  className = "",
-  loggedIn = true,
-}: {
-  className?: string;
-  loggedIn?: boolean;
-}) {
+export function StatsButton({ className = "" }: { className?: string }) {
   return (
-    <AuthRouteButton
-      className={className}
-      loggedIn={loggedIn}
-      href="/stats"
-      label="Stats"
-      tooltipText="Login to see your stats"
-    />
+    <Link href="/stats" prefetch className="w-full">
+      <Button className={className}>Stats</Button>
+    </Link>
   );
 }

@@ -16,18 +16,9 @@ export default async function Menu() {
       <div className="flex flex-col gap-2 shadow-lg rounded-lg p-4 ">
         <RestartButton className={buttonClassName} />
         <Timer className={buttonClassName} />
-        {session ? (
-          <>
-            <StatsButton className={buttonClassName} loggedIn />
-            <SkinsButton className={buttonClassName} />
-          </>
-        ) : (
-          <>
-            <LoginButton className={buttonClassName} />
-            <StatsButton className={buttonClassName} loggedIn={false} />
-            <SkinsButton className={buttonClassName} />
-          </>
-        )}
+        {!session && <LoginButton className={buttonClassName} />}
+        <StatsButton className={buttonClassName} />
+        <SkinsButton className={buttonClassName} />
         <HowToPlayButton className={buttonClassName} />
       </div>
     </div>

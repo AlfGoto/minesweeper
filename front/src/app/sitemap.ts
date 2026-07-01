@@ -48,6 +48,12 @@ export function getStaticPages(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: "https://minesweeper.fr/stats",
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
       url: "https://minesweeper.fr/skins",
       lastModified: new Date(),
       changeFrequency: "weekly",

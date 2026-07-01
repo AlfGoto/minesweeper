@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { Leaderboard } from "./components/leaderboard";
 import { TotalTimeLeaderboard } from "./components/total-time-leaderboard";
 import { Stats } from "./components/stats";
@@ -14,22 +13,21 @@ import {
   StatsSkeleton,
   GamesSkeleton,
 } from "./components/skeletons";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export async function StatsPage() {
   const session = await getServerSession();
-
-  if (!session?.user?.email) {
-    redirect("/");
-  }
-
-  const userEmail = session.user.email;
+  const userEmail = session?.user?.email;
 
   return (
     <div className="max-w-[1000px] mx-auto w-full h-full flex flex-col justify-center m-4 rounded-lg p-4 gap-6">
-      <StatsHeader
-        userName={session.user.name ?? undefined}
-        userImage={session.user.image ?? undefined}
-      />
+      {userEmail && (
+        <StatsHeader
+          userName={session.user?.name ?? undefined}
+          userImage={session.user?.image ?? undefined}
+        />
+      )}
 
       <Suspense fallback={<LeaderboardSkeleton />}>
         <Tabs
@@ -69,13 +67,19 @@ export async function StatsPage() {
         </Tabs>
       </Suspense>
 
-      <Suspense fallback={<StatsSkeleton />}>
-        <UserStats userEmail={userEmail} />
-      </Suspense>
+      {userEmail ? (
+        <>
+          <Suspense fallback={<StatsSkeleton />}>
+            <UserStats userEmail={userEmail} />
+          </Suspense>
 
-      <Suspense fallback={<GamesSkeleton />}>
-        <UserGames userEmail={userEmail} />
-      </Suspense>
+          <Suspense fallback={<GamesSkeleton />}>
+            <UserGames userEmail={userEmail} />
+          </Suspense>
+        </>
+      ) : (
+        <LoginPrompt />
+      )}
 
       <div className="flex justify-center gap-1 mt-6 text-gray-500 text-sm">
         You can contact me at
@@ -83,6 +87,18 @@ export async function StatsPage() {
           alf@minesweeper.fr
         </a>
       </div>
+    </div>
+  );
+}
+
+function LoginPrompt() {
+  return (
+    <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
+      <h2 className="text-xl font-bold">Your stats</h2>
+      <p>Login to play and track your stats!</p>
+      <Link href="/">
+        <Button>Back to game</Button>
+      </Link>
     </div>
   );
 }
