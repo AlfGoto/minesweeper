@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "How to Play Minesweeper - Rules & Strategy Guide",
@@ -164,228 +163,239 @@ export default function HowToPlayPage() {
         }}
       />
 
-      <main className="min-h-screen px-4 py-12">
-        <article className="mx-auto max-w-3xl">
+      <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+        <div className="container mx-auto px-4 py-12 max-w-4xl">
           <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-2 text-sm text-green-700">
+            <ol className="flex items-center gap-2 text-sm text-gray-400">
               <li>
-                <Link href="/" className="hover:underline">
+                <Link href="/" className="hover:text-green-400">
                   Minesweeper
                 </Link>
               </li>
               <li>/</li>
-              <li className="font-medium text-green-900">How to Play</li>
+              <li className="text-green-400">How to Play</li>
             </ol>
           </nav>
 
           <header className="mb-10 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-green-900 md:text-5xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-green-400">
               How to Play Minesweeper
             </h1>
-            <p className="text-lg text-green-700">
+            <p className="text-xl text-gray-300">
               Master the classic puzzle game with our complete guide
             </p>
           </header>
 
-          <section aria-label="Game objective" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-green-900">
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4 text-green-300">
               Objective
             </h2>
-            <p className="leading-relaxed text-green-800">
-              The goal of Minesweeper is to clear a rectangular board containing
-              hidden mines without detonating any of them. You win by revealing
-              all cells that don&apos;t contain mines.
+            <p className="text-gray-300">
+              Clear a rectangular board containing hidden mines without
+              detonating any. Win by revealing all cells that don&apos;t contain
+              mines.
             </p>
           </section>
 
-          <section aria-label="Basic rules" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-green-900">
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 text-green-300">
               Basic Rules
             </h2>
-            <div className="space-y-4 text-green-800">
-              <div className="rounded-lg bg-white/50 p-4">
-                <h3 className="mb-2 font-medium text-green-900">
-                  1. Click to Reveal
-                </h3>
-                <p>
-                  Click on any cell to reveal what&apos;s underneath. Your first
-                  click is always safe.
-                </p>
-              </div>
-              <div className="rounded-lg bg-white/50 p-4">
-                <h3 className="mb-2 font-medium text-green-900">
-                  2. Numbers Show Adjacent Mines
-                </h3>
-                <p>
-                  When you reveal a cell, a number appears showing how many
-                  mines are in the 8 surrounding cells. A blank cell means no
-                  adjacent mines.
-                </p>
-              </div>
-              <div className="rounded-lg bg-white/50 p-4">
-                <h3 className="mb-2 font-medium text-green-900">
-                  3. Flag Suspected Mines
-                </h3>
-                <p>
-                  Right-click (desktop) or long-press (mobile) to place a flag
-                  on cells you think contain mines.
-                </p>
-              </div>
-              <div className="rounded-lg bg-white/50 p-4">
-                <h3 className="mb-2 font-medium text-green-900">
-                  4. Avoid the Mines
-                </h3>
-                <p>
-                  If you click on a mine, the game is over. Use the numbers to
-                  deduce which cells are safe.
-                </p>
-              </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <RuleCard
+                number="1"
+                title="Click to Reveal"
+                description="Click any cell to reveal what's underneath. Your first click is always safe."
+              />
+              <RuleCard
+                number="2"
+                title="Numbers Show Adjacent Mines"
+                description="A number shows how many mines are in the 8 surrounding cells. Blank means no adjacent mines."
+              />
+              <RuleCard
+                number="3"
+                title="Flag Suspected Mines"
+                description="Right-click (desktop) or long-press (mobile) to flag cells you think contain mines."
+              />
+              <RuleCard
+                number="4"
+                title="Avoid the Mines"
+                description="Click a mine and game over. Use numbers to deduce which cells are safe."
+              />
             </div>
           </section>
 
-          <section aria-label="Number meanings" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-green-900">
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4 text-green-300">
               What the Numbers Mean
             </h2>
-            <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mb-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                 <div
                   key={num}
-                  className="flex aspect-square items-center justify-center rounded-lg bg-white/70 text-2xl font-bold"
+                  className="flex aspect-square items-center justify-center rounded-lg bg-gray-700 text-2xl font-bold"
                   style={{
                     color:
                       num === 1
-                        ? "#2563eb"
+                        ? "#3b82f6"
                         : num === 2
-                          ? "#16a34a"
+                          ? "#22c55e"
                           : num === 3
-                            ? "#dc2626"
+                            ? "#ef4444"
                             : num === 4
-                              ? "#7c3aed"
+                              ? "#8b5cf6"
                               : num === 5
-                                ? "#ca8a04"
+                                ? "#eab308"
                                 : num === 6
-                                  ? "#db2777"
+                                  ? "#ec4899"
                                   : num === 7
-                                    ? "#ea580c"
-                                    : "#4b5563",
+                                    ? "#f97316"
+                                    : "#6b7280",
                   }}
                 >
                   {num}
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-green-800">
-              Each number indicates the count of mines in the 8 adjacent cells
+            <p className="text-gray-400">
+              Each number indicates how many mines are in the 8 adjacent cells
               (including diagonals).
             </p>
           </section>
 
-          <section aria-label="Strategy tips" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-green-900">
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4 text-green-300">
               Strategy Tips
             </h2>
-            <ul className="list-inside list-disc space-y-3 text-green-800">
-              <li>
-                <strong>Start in the center:</strong> Clicking near the middle
-                often reveals more cells at once.
+            <ul className="space-y-3 text-gray-300">
+              <li className="flex items-start">
+                <span className="text-green-400 mr-2">✓</span>
+                <span>
+                  <strong>Start in the center</strong> - Often reveals more
+                  cells at once
+                </span>
               </li>
-              <li>
-                <strong>Look for obvious patterns:</strong> A &quot;1&quot; next
-                to a single hidden cell means that cell is definitely a mine.
+              <li className="flex items-start">
+                <span className="text-green-400 mr-2">✓</span>
+                <span>
+                  <strong>Look for obvious patterns</strong> - A &quot;1&quot;
+                  next to a single hidden cell = mine
+                </span>
               </li>
-              <li>
-                <strong>Use the corners:</strong> Numbers in corners have fewer
-                adjacent cells, making deduction easier.
+              <li className="flex items-start">
+                <span className="text-green-400 mr-2">✓</span>
+                <span>
+                  <strong>Use the corners</strong> - Fewer adjacent cells makes
+                  deduction easier
+                </span>
               </li>
-              <li>
-                <strong>Count remaining mines:</strong> If a number already has
-                enough flagged mines around it, the remaining cells are safe.
+              <li className="flex items-start">
+                <span className="text-green-400 mr-2">✓</span>
+                <span>
+                  <strong>Count remaining mines</strong> - If a number has
+                  enough flagged mines, remaining cells are safe
+                </span>
               </li>
-              <li>
-                <strong>Double-check before clicking:</strong> Take your time on
-                50/50 situations or when unsure.
+              <li className="flex items-start">
+                <span className="text-green-400 mr-2">✓</span>
+                <span>
+                  <strong>Take your time</strong> - No rush on 50/50 situations
+                </span>
               </li>
             </ul>
           </section>
 
-          <section aria-label="FAQ" className="mb-10">
-            <h2 className="mb-6 text-2xl font-semibold text-green-900">
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 text-green-300">
               Frequently Asked Questions
             </h2>
-            <div className="space-y-6">
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  What is the goal of Minesweeper?
-                </h3>
-                <p className="text-green-700">
-                  The goal is to clear the entire board without clicking on any
-                  mines. You must use the numbers revealed on cells to deduce
-                  which cells contain mines and flag them accordingly.
-                </p>
-              </div>
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  What do the numbers mean in Minesweeper?
-                </h3>
-                <p className="text-green-700">
-                  Each number indicates how many mines are adjacent to that cell
-                  (including diagonals). A cell can have 0-8 adjacent mines. Use
-                  these numbers to logically determine where mines are located.
-                </p>
-              </div>
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  How do I flag a mine in Minesweeper?
-                </h3>
-                <p className="text-green-700">
-                  Right-click (on desktop) or long-press (on mobile) on a cell
-                  to place a flag. Flags mark cells you believe contain mines.
-                </p>
-              </div>
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  What happens if I click on a mine?
-                </h3>
-                <p className="text-green-700">
-                  If you click on a cell containing a mine, the game ends and
-                  you lose. All mines on the board are revealed.
-                </p>
-              </div>
-              <div>
-                <h3 className="mb-2 font-medium text-green-900">
-                  What is the best strategy for Minesweeper?
-                </h3>
-                <p className="text-green-700">
-                  Start by clicking near the center of the board. When you see a
-                  1 next to a single unrevealed cell, that cell is a mine. Look
-                  for patterns where the math clearly indicates mine locations.
-                </p>
-              </div>
+            <div className="space-y-4">
+              <FAQItem
+                question="What is the goal of Minesweeper?"
+                answer="Clear the entire board without clicking on any mines. Use numbers to deduce which cells contain mines and flag them."
+              />
+              <FAQItem
+                question="What do the numbers mean?"
+                answer="Each number indicates how many mines are adjacent to that cell (including diagonals). A cell can have 0-8 adjacent mines."
+              />
+              <FAQItem
+                question="How do I flag a mine?"
+                answer="Right-click (desktop) or long-press (mobile) to place a flag. Click again to remove it."
+              />
+              <FAQItem
+                question="What happens if I click on a mine?"
+                answer="Game over. All mines are revealed. To win, reveal all non-mine cells without clicking any mines."
+              />
+              <FAQItem
+                question="What is the best strategy?"
+                answer="Start near the center. When you see a 1 next to a single unrevealed cell, that's a mine. Look for patterns where math clearly indicates mine locations."
+              />
             </div>
           </section>
 
-          <section aria-label="Call to action" className="text-center">
+          <section className="text-center mb-8">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-full bg-green-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:bg-green-700 hover:shadow-xl"
+              className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-colors"
             >
               Play Minesweeper Now
             </Link>
-            <p className="mt-4 text-sm text-green-600">
-              Put your skills to the test in our free online Minesweeper game
-            </p>
           </section>
-        </article>
-        <div className="text-center w-full pt-2 flex gap-2 justify-center">
-          <Button>
-            <Link href="/map">Sitemap</Link>
-          </Button>
-          <Button variant="outline">
-            <Link href="/players">Leaderboards</Link>
-          </Button>
+
+          <section>
+            <h2 className="text-xl font-semibold mb-4 text-green-300">
+              Quick Links
+            </h2>
+            <div className="flex flex-wrap gap-4">
+              <QuickLink href="/" label="Play Game" />
+              <QuickLink href="/skins" label="Browse Skins" />
+              <QuickLink href="/players" label="Leaderboard" />
+              <QuickLink href="/stats" label="My Stats" />
+              <QuickLink href="/map" label="Sitemap" />
+              <QuickLink href="/reddit" label="About" />
+            </div>
+          </section>
         </div>
       </main>
     </>
+  );
+}
+
+function RuleCard({
+  number,
+  title,
+  description,
+}: {
+  number: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+      <h3 className="text-lg font-semibold mb-2 text-white">
+        {number}. {title}
+      </h3>
+      <p className="text-gray-400">{description}</p>
+    </div>
+  );
+}
+
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+      <h3 className="font-medium text-white mb-2">{question}</h3>
+      <p className="text-gray-400">{answer}</p>
+    </div>
+  );
+}
+
+function QuickLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg transition-colors"
+    >
+      {label}
+    </Link>
   );
 }

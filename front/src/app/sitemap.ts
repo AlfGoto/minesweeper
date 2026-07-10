@@ -60,6 +60,12 @@ export function getStaticPages(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: "https://minesweeper.fr/reddit",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
       url: "https://minesweeper.fr/skins/background",
       lastModified: new Date(),
       changeFrequency: "weekly",
