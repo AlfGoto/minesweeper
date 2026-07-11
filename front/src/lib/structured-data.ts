@@ -21,26 +21,31 @@ export function generateProfileJsonLd(
       description: stats?.bestTime
         ? `Minesweeper player with ${stats.totalWin} wins and best time of ${formatTime(stats.bestTime)}`
         : `Minesweeper player with ${stats?.totalGames ?? 0} games played`,
+      ...(stats && {
+        interactionStatistic: [
+          {
+            "@type": "InteractionCounter",
+            interactionType: "https://schema.org/PlayAction",
+            userInteractionCount: stats.totalGames,
+          },
+          {
+            "@type": "InteractionCounter",
+            interactionType: "https://schema.org/WinAction",
+            userInteractionCount: stats.totalWin,
+          },
+          {
+            "@type": "InteractionCounter",
+            interactionType: "https://schema.org/LoseAction",
+            userInteractionCount: stats.totalGames - stats.totalWin - stats.totalRestarts,
+          },
+        ],
+      }),
     },
     about: {
       "@type": "VideoGame",
       name: "Minesweeper",
       url: "https://minesweeper.fr",
     },
-    ...(stats && {
-      interactionStatistic: [
-        {
-          "@type": "InteractionCounter",
-          interactionType: "https://schema.org/PlayAction",
-          userInteractionCount: stats.totalGames,
-        },
-        {
-          "@type": "InteractionCounter",
-          interactionType: "https://schema.org/WinAction",
-          userInteractionCount: stats.totalWin,
-        },
-      ],
-    }),
   };
 }
 
