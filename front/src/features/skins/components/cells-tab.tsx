@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { CellSkin } from "@/types/bff";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { CellSkins } from "@/features/skins/cells/cell-skins";
+import { CellSkins, getLocalizedSkinMeta } from "@/features/skins/cells/skins";
 import {
   CellSkinLargeDemoGrid,
   CellSkinPreview,
@@ -27,10 +28,16 @@ type CellsTabProps = {
   selectedSkin: CellSkin;
   unlockedSkins: CellSkin[];
   prices: Partial<Record<CellSkin, number>>;
+  locale?: string;
 };
 
-function formatSkinLabel(skin: CellSkin) {
-  if (skin === "default") return "Default";
+function formatSkinLabel(skin: CellSkin, locale: string = "en", defaultLabel: string = "Default") {
+  const definition = CellSkins[skin];
+  if (definition) {
+    const localized = getLocalizedSkinMeta(definition, locale);
+    if (localized.name) return localized.name;
+  }
+  if (skin === "default") return defaultLabel;
   return skin
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -44,8 +51,10 @@ export function CellsTab({
   selectedSkin,
   unlockedSkins,
   prices,
+  locale = "en",
 }: CellsTabProps) {
   const router = useRouter();
+  const t = useTranslations("skinsPage");
   const [isPending, startTransition] = useTransition();
   const [optimisticSelectedSkin, setOptimisticSelectedSkin] =
     useState<CellSkin>(selectedSkin);
@@ -77,10 +86,10 @@ export function CellsTab({
     startTransition(async () => {
       const result = await buyCellSkinAction(skin);
       if (result.ok) {
-        toast.success(result.message || "Skin bought.");
+        toast.success(result.message || t("skinBought"));
         router.refresh();
       } else {
-        toast.error(result.message || "Could not buy this skin.");
+        toast.error(result.message || t("couldNotBuy"));
       }
     });
   };
@@ -92,11 +101,11 @@ export function CellsTab({
     startTransition(async () => {
       const result = await selectCellSkinAction(skin);
       if (result.ok) {
-        toast.success(result.message || "Skin selected.");
+        toast.success(result.message || t("skinSelected"));
         router.refresh();
       } else {
         setOptimisticSelectedSkin(previousSkin);
-        toast.error(result.message || "Could not select this skin.");
+        toast.error(result.message || t("couldNotSelect"));
       }
     });
   };
@@ -145,7 +154,7 @@ export function CellsTab({
         ) : null}
 
         <div className="relative z-10 flex items-start justify-between gap-4">
-          <p className="font-semibold">{formatSkinLabel(skin)}</p>
+          <p className="font-semibold">{formatSkinLabel(skin, locale, t("default"))}</p>
           <div
             onClick={(event) => event.stopPropagation()}
             onMouseDown={(event) => event.stopPropagation()}
@@ -163,26 +172,26 @@ export function CellsTab({
                 disabled={!isLoggedIn || isPending || typeof price !== "number"}
               >
                 {!isLoggedIn
-                  ? "Sign in to unlock"
+                  ? t("signInToUnlock")
                   : typeof price === "number"
                     ? `${price} AlfCoins`
-                    : "Unavailable"}
+                    : t("unavailable")}
               </Button>
             </PopoverTrigger>
             {isLoggedIn && (
               <PopoverContent className="space-y-3">
-                <p className="font-semibold">Buy {formatSkinLabel(skin)}?</p>
+                <p className="font-semibold">{t("buyConfirmTitle", { skinName: formatSkinLabel(skin, locale, t("default")) })}</p>
                 <p className="text-sm text-muted-foreground">
                   {typeof price === "number"
-                    ? `This will cost ${price} AlfCoins.`
-                    : "This skin is not available right now."}
+                    ? t("buyConfirmText", { price })
+                    : t("skinNotAvailable")}
                 </p>
                 <Button
                   className="w-full"
                   disabled={isPending || !canBuy}
                   onClick={() => onBuy(skin)}
                 >
-                  Confirm purchase
+                  {t("confirmPurchase")}
                 </Button>
               </PopoverContent>
             )}
@@ -200,7 +209,7 @@ export function CellsTab({
 
       {isLoggedIn && (
         <div className="flex items-center justify-end">
-          <OwnedFilter value={groupOwned} onValueChange={setGroupOwned} />
+          <OwnedFilter value={groupOwned} onValueChange={setGroupOwned} label={t("owned")} />
         </div>
       )}
 

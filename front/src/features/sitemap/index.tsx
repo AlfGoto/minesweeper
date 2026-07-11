@@ -1,9 +1,10 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getStaticPages } from "@/app/sitemap";
 import { getAllStats } from "@/lib/api";
 import { filterIndexablePlayers } from "@/lib/seo-config";
 import { formatTime } from "@/lib/dates";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Sitemap - All Pages & Players",
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Sitemap() {
+  const t = await getTranslations("mapPage");
   const [pages, allStats] = await Promise.all([
     Promise.resolve(getStaticPages()),
     getAllStats(),
@@ -33,34 +35,34 @@ export default async function Sitemap() {
               </Link>
             </li>
             <li>/</li>
-            <li className="text-green-400">Sitemap</li>
+            <li className="text-green-400">{t("breadcrumb")}</li>
           </ol>
         </nav>
 
         <header className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-green-400">
-            Sitemap
+            {t("title")}
           </h1>
-          <p className="text-xl text-gray-300">All pages on Minesweeper.fr</p>
+          <p className="text-xl text-gray-300">{t("subtitle")}</p>
         </header>
 
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4 text-green-300">
-            Quick Links
+            {t("quickLinks")}
           </h2>
           <div className="flex flex-wrap gap-4 mb-8">
-            <QuickLink href="/" label="Play Game" />
-            <QuickLink href="/skins" label="Browse Skins" />
-            <QuickLink href="/players" label="Leaderboard" />
-            <QuickLink href="/stats" label="My Stats" />
-            <QuickLink href="/how-to-play" label="How to Play" />
-            <QuickLink href="/reddit" label="About" />
+            <QuickLink href="/" label={t("playGame")} />
+            <QuickLink href="/skins" label={t("browseSkins")} />
+            <QuickLink href="/players" label={t("leaderboard")} />
+            <QuickLink href="/stats" label={t("myStats")} />
+            <QuickLink href="/how-to-play" label={t("howToPlay")} />
+            <QuickLink href="/reddit" label={t("about")} />
           </div>
         </section>
 
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4 text-green-300">
-            Main Pages
+            {t("mainPages")}
           </h2>
           <div className="bg-gray-800 rounded-lg border border-gray-700 divide-y divide-gray-700">
             {pages.map((page) => (
@@ -78,7 +80,7 @@ export default async function Sitemap() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4 text-green-300">
             <Link href="/players" className="hover:text-green-400">
-              Players ({indexablePlayers.length})
+              {t("players")} ({indexablePlayers.length})
             </Link>
           </h2>
           <div className="bg-gray-800 rounded-lg border border-gray-700 divide-y divide-gray-700 max-h-96 overflow-y-auto">
@@ -90,8 +92,8 @@ export default async function Sitemap() {
               >
                 <span className="text-white">{player.userName}</span>
                 <span className="text-gray-400 ml-2">
-                  {player.totalWin} wins
-                  {player.bestTime ? ` · best ${formatTime(player.bestTime)}` : ""}
+                  {player.totalWin} {t("wins")}
+                  {player.bestTime ? ` · ${t("best")} ${formatTime(player.bestTime)}` : ""}
                 </span>
               </Link>
             ))}
@@ -103,7 +105,7 @@ export default async function Sitemap() {
             href="/"
             className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-colors"
           >
-            Play Minesweeper
+            {t("playMinesweeper")}
           </Link>
         </section>
       </div>

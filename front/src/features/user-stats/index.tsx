@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
 import { getUserLatestGames, getUserBestGames } from "@/lib/api";
 import { Stats } from "@/features/stats/components/stats";
 import { LatestGames } from "@/features/stats/components/latest-games";
@@ -9,19 +10,27 @@ import { UserProfileHeader } from "./components/user-profile-header";
 import { GamesSkeleton } from "@/features/stats/components/skeletons";
 import { generateProfileJsonLd } from "@/lib/structured-data";
 import { shouldIndexProfile } from "@/lib/seo-config";
+import { getTranslations } from "next-intl/server";
 import type { User, UserStats } from "@/types/bff";
 
 interface UserProfilePageProps {
   userId: string;
   user: User | undefined;
   stats: UserStats | undefined;
+  locale?: string;
 }
 
-export function UserProfilePage({ userId, user, stats }: UserProfilePageProps) {
+export async function UserProfilePage({ userId, user, stats, locale = "en" }: UserProfilePageProps) {
   if (!user) {
     notFound();
   }
 
+  const [session, t] = await Promise.all([
+    getServerSession(),
+    getTranslations("statsPage"),
+  ]);
+
+  const isOwnProfile = session?.user?.name === user.userName;
   const statsForIndex = stats ? { ...stats, userId, userName: user.userName, userPicture: user.userPicture } : undefined;
   const { indexable } = shouldIndexProfile(statsForIndex);
   const jsonLd = indexable ? generateProfileJsonLd(userId, user, stats) : null;
@@ -38,18 +47,19 @@ export function UserProfilePage({ userId, user, stats }: UserProfilePageProps) {
       <UserProfileHeader
         userName={user.userName}
         userImage={user.userPicture}
+        isOwnProfile={isOwnProfile}
       />
 
-      <Stats stats={stats} title="Stats" />
+      <Stats stats={stats} />
 
       <Suspense fallback={<GamesSkeleton />}>
-        <UserGamesSection userId={userId} />
+        <UserGamesSection userId={userId} latestGamesLabel={t("latestGames")} bestGamesLabel={t("bestGames")} />
       </Suspense>
     </div>
   );
 }
 
-async function UserGamesSection({ userId }: { userId: string }) {
+async function UserGamesSection({ userId, latestGamesLabel, bestGamesLabel }: { userId: string; latestGamesLabel: string; bestGamesLabel: string }) {
   const [latestGames, bestGames] = await Promise.all([
     getUserLatestGames(userId),
     getUserBestGames(userId),
@@ -63,14 +73,14 @@ async function UserGamesSection({ userId }: { userId: string }) {
           className="flex items-center gap-2 cursor-pointer w-fit"
         >
           <span className="text-2xl">🕹️</span>
-          <h2 className="text-2xl font-bold">Latest Games</h2>
+          <h2 className="text-2xl font-bold">{latestGamesLabel}</h2>
         </TabsTrigger>
         <TabsTrigger
           value="best-games"
           className="flex items-center gap-2 cursor-pointer"
         >
           <span className="text-2xl">🏆</span>
-          <h2 className="text-2xl font-bold">Best Games</h2>
+          <h2 className="text-2xl font-bold">{bestGamesLabel}</h2>
         </TabsTrigger>
       </TabsList>
       <TabsContent

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { BackgroundSkin } from "@/types/bff";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { backgroundSkins } from "@/features/skins/backgrounds/skins";
+import { backgroundSkins } from "@/features/skins/backgrounds";
 import { BackgroundSkinPreview } from "@/features/shared/components/background-skin-preview";
 import {
   buyBackgroundSkinAction,
@@ -29,8 +30,8 @@ type BackgroundSkinsShopProps = {
   prices: Partial<Record<BackgroundSkin, number>>;
 };
 
-function formatSkinLabel(skin: BackgroundSkin) {
-  if (skin === "default") return "Default";
+function formatSkinLabel(skin: BackgroundSkin, defaultLabel: string = "Default") {
+  if (skin === "default") return defaultLabel;
   return skin
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -46,6 +47,7 @@ export function BackgroundSkinsShop({
   prices,
 }: BackgroundSkinsShopProps) {
   const router = useRouter();
+  const t = useTranslations("skinsPage");
   const [isPending, startTransition] = useTransition();
   const [optimisticSelectedSkin, setOptimisticSelectedSkin] =
     useState<BackgroundSkin>(selectedSkin);
@@ -77,10 +79,10 @@ export function BackgroundSkinsShop({
     startTransition(async () => {
       const result = await buyBackgroundSkinAction(skin);
       if (result.ok) {
-        toast.success(result.message || "Skin bought.");
+        toast.success(result.message || t("skinBought"));
         router.refresh();
       } else {
-        toast.error(result.message || "Could not buy this skin.");
+        toast.error(result.message || t("couldNotBuy"));
       }
     });
   };
@@ -92,11 +94,11 @@ export function BackgroundSkinsShop({
     startTransition(async () => {
       const result = await selectBackgroundSkinAction(skin);
       if (result.ok) {
-        toast.success(result.message || "Skin selected.");
+        toast.success(result.message || t("skinSelected"));
         router.refresh();
       } else {
         setOptimisticSelectedSkin(previousSkin);
-        toast.error(result.message || "Could not select this skin.");
+        toast.error(result.message || t("couldNotSelect"));
       }
     });
   };
@@ -145,7 +147,7 @@ export function BackgroundSkinsShop({
         ) : null}
 
         <div className="relative z-10 flex items-start justify-between gap-4">
-          <p className="font-semibold">{formatSkinLabel(skin)}</p>
+          <p className="font-semibold">{skinData.name || formatSkinLabel(skin, t("default"))}</p>
           <div
             onClick={(event) => event.stopPropagation()}
             onMouseDown={(event) => event.stopPropagation()}
@@ -163,26 +165,26 @@ export function BackgroundSkinsShop({
                 disabled={!isLoggedIn || isPending || typeof price !== "number"}
               >
                 {!isLoggedIn
-                  ? "Sign in to unlock"
+                  ? t("signInToUnlock")
                   : typeof price === "number"
                     ? `${price} AlfCoins`
-                    : "Unavailable"}
+                    : t("unavailable")}
               </Button>
             </PopoverTrigger>
             {isLoggedIn && (
               <PopoverContent className="space-y-3">
-                <p className="font-semibold">Buy {formatSkinLabel(skin)}?</p>
+                <p className="font-semibold">{t("buyConfirmTitle", { skinName: skinData.name || formatSkinLabel(skin, t("default")) })}</p>
                 <p className="text-sm text-muted-foreground">
                   {typeof price === "number"
-                    ? `This will cost ${price} AlfCoins.`
-                    : "This skin is not available right now."}
+                    ? t("buyConfirmText", { price })
+                    : t("skinNotAvailable")}
                 </p>
                 <Button
                   className="w-full"
                   disabled={isPending || !canBuy}
                   onClick={() => onBuy(skin)}
                 >
-                  Confirm purchase
+                  {t("confirmPurchase")}
                 </Button>
               </PopoverContent>
             )}
@@ -200,7 +202,7 @@ export function BackgroundSkinsShop({
 
       {isLoggedIn && (
         <div className="flex items-center justify-end">
-          <OwnedFilter value={groupOwned} onValueChange={setGroupOwned} />
+          <OwnedFilter value={groupOwned} onValueChange={setGroupOwned} label={t("owned")} />
         </div>
       )}
 

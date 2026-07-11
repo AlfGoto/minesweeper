@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getTranslations } from "next-intl/server";
 
 export function HeaderSkeleton() {
   return (
@@ -63,40 +64,42 @@ function StatsGroupSkeleton({
   );
 }
 
-const gameStats = [
-  { label: "Total Games", emoji: "🎮" },
-  { label: "Wins", emoji: "🏆" },
-  { label: "Winrate", emoji: "📈" },
-  { label: "No Flags Wins", emoji: "🚫🚩" },
-  { label: "Restarts", emoji: "🔄" },
-];
+export async function StatsSkeleton() {
+  const t = await getTranslations("statsPage.stats");
 
-const timeStats = [
-  { label: "Total Time", emoji: "⏱️" },
-  { label: "Best Time", emoji: "⚡" },
-  { label: "Avg Game Time", emoji: "⏳" },
-];
+  const gameStats = [
+    { label: t("totalGames"), emoji: "🎮" },
+    { label: t("winsLabel"), emoji: "🏆" },
+    { label: t("winrateLabel"), emoji: "📈" },
+    { label: t("noFlagsWins"), emoji: "🚫🚩" },
+    { label: t("restarts"), emoji: "🔄" },
+  ];
 
-const gameplayStats = [
-  { label: "Cells Revealed", emoji: "👆" },
-  { label: "Flags Placed", emoji: "🚩" },
-  { label: "Bombs Hit", emoji: "💣" },
-  { label: "Avg Flags/Game", emoji: "🚩" },
-  { label: "Avg Revealed/Game", emoji: "🔢" },
-];
+  const timeStats = [
+    { label: t("totalTimeLabel"), emoji: "⏱️" },
+    { label: t("bestTime"), emoji: "⚡" },
+    { label: t("avgGameTime"), emoji: "⏳" },
+  ];
 
-export function StatsSkeleton({ title = "Your stats" }: { title?: string }) {
+  const gameplayStats = [
+    { label: t("cellsRevealed"), emoji: "👆" },
+    { label: t("flagsPlaced"), emoji: "🚩" },
+    { label: t("bombsHit"), emoji: "💣" },
+    { label: t("avgFlagsGame"), emoji: "🚩" },
+    { label: t("avgRevealedGame"), emoji: "🔢" },
+  ];
+
   return (
     <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
       <div className="flex items-center gap-2">
         <span className="text-2xl">📊</span>
-        <h2 className="text-2xl font-bold">{title}</h2>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
       </div>
-      <StatsGroupSkeleton title="Games" stats={gameStats} />
+      <StatsGroupSkeleton title={t("games")} stats={gameStats} />
       <Separator />
-      <StatsGroupSkeleton title="Time" stats={timeStats} />
+      <StatsGroupSkeleton title={t("timeSection")} stats={timeStats} />
       <Separator />
-      <StatsGroupSkeleton title="Gameplay" stats={gameplayStats} />
+      <StatsGroupSkeleton title={t("gameplay")} stats={gameplayStats} />
     </div>
   );
 }
@@ -113,7 +116,12 @@ function TableRowSkeleton({ cols }: { cols: number }) {
   );
 }
 
-export function LeaderboardSkeleton() {
+export async function LeaderboardSkeleton() {
+  const [t, tTable] = await Promise.all([
+    getTranslations("statsPage"),
+    getTranslations("statsPage.table"),
+  ]);
+
   return (
     <Tabs defaultValue="leaderboard" className="w-full border rounded-lg gap-0">
       <TabsList className="w-fit mx-2 my-4 p-2">
@@ -122,21 +130,21 @@ export function LeaderboardSkeleton() {
           className="flex items-center gap-2 cursor-pointer w-fit"
         >
           <span className="text-2xl">🏆</span>
-          <h2 className="text-2xl font-bold">Leaderboard</h2>
+          <h2 className="text-2xl font-bold">{t("leaderboard")}</h2>
         </TabsTrigger>
         <TabsTrigger
           value="total-time"
           className="flex items-center gap-2 cursor-pointer"
         >
           <span className="text-2xl">⏱️</span>
-          <h2 className="text-2xl font-bold">Total Time</h2>
+          <h2 className="text-2xl font-bold">{t("totalTime")}</h2>
         </TabsTrigger>
       </TabsList>
       <TabsContent value="leaderboard" className="p-2">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              {["Rank", "Player", "Time", "Flags", "Date"].map((h) => (
+              {[tTable("rank"), tTable("player"), tTable("time"), tTable("flags"), tTable("date")].map((h) => (
                 <TableHead key={h} className="p-0" style={{ textAlign: "left" }}>
                   {h}
                 </TableHead>
@@ -154,7 +162,12 @@ export function LeaderboardSkeleton() {
   );
 }
 
-export function GamesSkeleton() {
+export async function GamesSkeleton() {
+  const [t, tTable] = await Promise.all([
+    getTranslations("statsPage"),
+    getTranslations("statsPage.table"),
+  ]);
+
   return (
     <Tabs defaultValue="latest-games" className="w-full border rounded-lg gap-0">
       <TabsList className="w-fit mx-2 my-4 p-2">
@@ -163,21 +176,21 @@ export function GamesSkeleton() {
           className="flex items-center gap-2 cursor-pointer w-fit"
         >
           <span className="text-2xl">🕹️</span>
-          <h2 className="text-2xl font-bold">Latest Games</h2>
+          <h2 className="text-2xl font-bold">{t("latestGames")}</h2>
         </TabsTrigger>
         <TabsTrigger
           value="best-games"
           className="flex items-center gap-2 cursor-pointer"
         >
           <span className="text-2xl">🏆</span>
-          <h2 className="text-2xl font-bold">Best Games</h2>
+          <h2 className="text-2xl font-bold">{t("bestGames")}</h2>
         </TabsTrigger>
       </TabsList>
       <TabsContent value="latest-games" className="p-2">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              {["Status", "Time", "Flags", "Revealed", "Date"].map((h) => (
+              {[tTable("status"), tTable("time"), tTable("flags"), tTable("revealed"), tTable("date")].map((h) => (
                 <TableHead key={h} className="p-0" style={{ textAlign: "left" }}>
                   {h}
                 </TableHead>

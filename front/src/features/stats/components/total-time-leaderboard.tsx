@@ -8,9 +8,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TotalTimeLeaderboardRow } from "./total-time-leaderboard-row";
+import { getTranslations } from "next-intl/server";
 
 export async function TotalTimeLeaderboard() {
-  const allStats = await getAllStats();
+  const [allStats, t, tEmpty, tPage] = await Promise.all([
+    getAllStats(),
+    getTranslations("statsPage.table"),
+    getTranslations("statsPage.empty"),
+    getTranslations("statsPage"),
+  ]);
 
   const sortedByTotalTime = [...allStats]
     .sort((a, b) => b.totalTime - a.totalTime)
@@ -22,22 +28,22 @@ export async function TotalTimeLeaderboard() {
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Rank
+              {t("rank")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Player
+              {t("player")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Total Time
+              {tPage("totalTime")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Games
+              {t("games")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Wins
+              {t("wins")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Winrate
+              {t("winrate")}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -55,7 +61,7 @@ export async function TotalTimeLeaderboard() {
                 colSpan={6}
                 className="text-center text-muted-foreground py-12"
               >
-                No games yet. Be the first to play!
+                {tEmpty("beFirstToPlay")}
               </TableCell>
             </TableRow>
           )}

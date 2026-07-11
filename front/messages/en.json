@@ -1,0 +1,326 @@
+{
+  "homepage": {
+    "restartButton": "Restart",
+    "howToPlay": "How to Play",
+    "login": "Login",
+    "stats": "Stats",
+    "skins": "Skins",
+    "backToGame": "Back to game",
+    "timer": "Time",
+    "winDialog": {
+      "title": "You Won!",
+      "time": "Time",
+      "playAgain": "Play Again"
+    },
+    "loseDialog": {
+      "title": "Game Over",
+      "playAgain": "Try Again"
+    }
+  },
+  "howToPlayPage": {
+    "breadcrumb": "How to Play",
+    "title": "How to Play Minesweeper",
+    "subtitle": "Master the classic puzzle game with our complete guide",
+    "objective": {
+      "title": "Objective",
+      "description": "Clear a rectangular board containing hidden mines without detonating any. Win by revealing all cells that don't contain mines."
+    },
+    "rules": {
+      "title": "Basic Rules",
+      "clickToReveal": {
+        "title": "Click to Reveal",
+        "description": "Click any cell to reveal what's underneath. Your first click is always safe."
+      },
+      "numbersShow": {
+        "title": "Numbers Show Adjacent Mines",
+        "description": "A number shows how many mines are in the 8 surrounding cells. Blank means no adjacent mines."
+      },
+      "flagMines": {
+        "title": "Flag Suspected Mines",
+        "description": "Right-click (desktop) or long-press (mobile) to flag cells you think contain mines."
+      },
+      "avoidMines": {
+        "title": "Avoid the Mines",
+        "description": "Click a mine and game over. Use numbers to deduce which cells are safe."
+      }
+    },
+    "numbers": {
+      "title": "What the Numbers Mean",
+      "description": "Each number indicates how many mines are in the 8 adjacent cells (including diagonals)."
+    },
+    "strategy": {
+      "title": "Strategy Tips",
+      "startCenter": "Start in the center",
+      "startCenterDesc": "Often reveals more cells at once",
+      "patterns": "Look for obvious patterns",
+      "patternsDesc": "A \"1\" next to a single hidden cell = mine",
+      "corners": "Use the corners",
+      "cornersDesc": "Fewer adjacent cells makes deduction easier",
+      "countMines": "Count remaining mines",
+      "countMinesDesc": "If a number has enough flagged mines, remaining cells are safe",
+      "takeTime": "Take your time",
+      "takeTimeDesc": "No rush on 50/50 situations"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "goal": {
+        "question": "What is the goal of Minesweeper?",
+        "answer": "Clear the entire board without clicking on any mines. Use numbers to deduce which cells contain mines and flag them."
+      },
+      "numbers": {
+        "question": "What do the numbers mean?",
+        "answer": "Each number indicates how many mines are adjacent to that cell (including diagonals). A cell can have 0-8 adjacent mines."
+      },
+      "flag": {
+        "question": "How do I flag a mine?",
+        "answer": "Right-click (desktop) or long-press (mobile) to place a flag. Click again to remove it."
+      },
+      "clickMine": {
+        "question": "What happens if I click on a mine?",
+        "answer": "Game over. All mines are revealed. To win, reveal all non-mine cells without clicking any mines."
+      },
+      "bestStrategy": {
+        "question": "What is the best strategy?",
+        "answer": "Start near the center. When you see a 1 next to a single unrevealed cell, that's a mine. Look for patterns where math clearly indicates mine locations."
+      }
+    },
+    "playNow": "Play Minesweeper Now",
+    "quickLinks": {
+      "title": "Quick Links",
+      "playGame": "Play Game",
+      "browseSkins": "Browse Skins",
+      "leaderboard": "Leaderboard",
+      "myStats": "My Stats",
+      "sitemap": "Sitemap",
+      "about": "About"
+    }
+  },
+  "backgroundSkinsPage": {
+    "title": "Minesweeper Background Skins - Free Cosmetic Themes",
+    "description": "Browse {count}+ public Minesweeper background skins with cosmetic themes ranging from clean classic looks to bold color palettes.",
+    "ogTitle": "Minesweeper Background Skins",
+    "ogDescription": "Browse {count}+ public background skins and preview cosmetic themes for Minesweeper.",
+    "heading": "Minesweeper Background Skins",
+    "intro": "Background skins change the visual backdrop around the game while leaving Minesweeper gameplay untouched. Browse the published themes below and open each page for a full live preview.",
+    "breadcrumb": "Background Skins",
+    "cosmetic": "Cosmetic",
+    "notFound": "Background Skin Not Found",
+    "skinTitle": "{name} Background Skin for Minesweeper",
+    "skinLabel": "Minesweeper Background Skin",
+    "skinBreadcrumb": "{name} Background",
+    "livePreview": "This page uses the live {name} background as the preview, so you can see the full-page effect directly.",
+    "liveFullPage": "Live full-page preview",
+    "publishedCount": "{count} published backgrounds",
+    "purelyCosmetic": "Purely cosmetic customization",
+    "worksWithAll": "Works with every cell skin",
+    "whatIs": "What Is the {name} Background Skin?",
+    "exploreMore": "If you want to compare it with other looks, you can browse the",
+    "fullCollection": "full background skins collection",
+    "orJump": "or jump straight into the",
+    "game": "game",
+    "toTry": "to try the available cosmetic themes.",
+    "faq": "Frequently Asked Questions",
+    "moreBackgrounds": "More Background Skins",
+    "viewAll": "View all →",
+    "playNow": "Play Minesweeper Now",
+    "trySkin": "Try the {name} background skin alongside cell skins and other visual customizations in the free online game."
+  },
+  "gridSkinPage": {
+    "notFound": "Skin Not Found",
+    "skinTitle": "{name} Skin for Minesweeper",
+    "breadcrumbSkins": "Skins",
+    "aboutSkin": "About the {name} Skin",
+    "faq": "Frequently Asked Questions",
+    "moreSkins": "More Minesweeper Skins",
+    "viewAll": "View all →",
+    "playNow": "Play Minesweeper Now",
+    "trySkin": "Try the {name} skin and many more in our free online Minesweeper game"
+  },
+  "skinsPage": {
+    "backToGame": "Back to game",
+    "cells": "Grid",
+    "backgrounds": "Backgrounds",
+    "banners": "Banners",
+    "cellsTitle": "Grid Skins",
+    "cellsDescription": "Buy new skins with your AlfCoins and grow your collection. Click on the 2x2 square to preview the skin.",
+    "backgroundsTitle": "Background Skins",
+    "backgroundsDescription": "Customize the game background with your AlfCoins. Click on the square to preview the background.",
+    "bannersTitle": "Banner Skins",
+    "bannersDescription": "Personalize your banner style. This section is coming as soon as possible.",
+    "loading": "Loading...",
+    "loginToUnlock": "Login to unlock skins",
+    "owned": "Owned",
+    "all": "All",
+    "selected": "Selected",
+    "select": "Select",
+    "unlock": "Unlock",
+    "coins": "coins",
+    "alfCoins": "Alf Coins",
+    "revealedCells": "Revealed cells",
+    "default": "Default",
+    "signInToUnlock": "Sign in to unlock",
+    "unavailable": "Unavailable",
+    "skinBought": "Skin bought.",
+    "skinSelected": "Skin selected.",
+    "couldNotBuy": "Could not buy this skin.",
+    "couldNotSelect": "Could not select this skin.",
+    "buyConfirmTitle": "Buy {skinName}?",
+    "buyConfirmText": "This will cost {price} AlfCoins.",
+    "skinNotAvailable": "This skin is not available right now.",
+    "confirmPurchase": "Confirm purchase"
+  },
+  "mapPage": {
+    "breadcrumb": "Sitemap",
+    "title": "Sitemap",
+    "subtitle": "All pages on Minesweeper.fr",
+    "quickLinks": "Quick Links",
+    "mainPages": "Main Pages",
+    "players": "Players",
+    "playMinesweeper": "Play Minesweeper",
+    "home": "Home",
+    "playGame": "Play Game",
+    "browseSkins": "Browse Skins",
+    "leaderboard": "Leaderboard",
+    "myStats": "My Stats",
+    "howToPlay": "How to Play",
+    "about": "About",
+    "wins": "wins",
+    "best": "best",
+    "gridSkins": "Grid Skins",
+    "backgroundSkins": "Background Skins"
+  },
+  "profilePage": {
+    "title": "User Profile",
+    "description": "View player statistics, game history, and best times.",
+    "playerTitle": "{name}'s Minesweeper Stats",
+    "playerDescription": "{name}'s Minesweeper profile: {wins} wins, {winRate}% win rate, best time {bestTime}.",
+    "playerDescriptionNoBest": "{name}'s Minesweeper profile: {games} games, {wins} wins, {winRate}% win rate.",
+    "ogTitle": "{name} | Minesweeper Player Stats"
+  },
+  "statsPage": {
+    "leaderboard": "Leaderboard",
+    "totalTime": "Total Time",
+    "yourStats": "Your stats",
+    "playerStats": "Stats",
+    "loginPrompt": "Login to play and track your stats!",
+    "backToGame": "Back to game",
+    "latestGames": "Latest Games",
+    "bestGames": "Best Games",
+    "contactMe": "You can contact me at",
+    "logout": "Logout",
+    "table": {
+      "rank": "Rank",
+      "player": "Player",
+      "time": "Time",
+      "flags": "Flags",
+      "date": "Date",
+      "status": "Status",
+      "revealed": "Revealed",
+      "games": "Games",
+      "wins": "Wins",
+      "winrate": "Winrate"
+    },
+    "status": {
+      "won": "Won",
+      "lost": "Lost",
+      "restarted": "Restarted"
+    },
+    "empty": {
+      "noGamesYet": "No games yet. Be the first to win!",
+      "noWinsYet": "No wins yet. Keep playing!",
+      "startPlaying": "No games yet. Start playing!",
+      "beFirstToPlay": "No games yet. Be the first to play!",
+      "noStatsFound": "No stats found"
+    },
+    "stats": {
+      "title": "Stats",
+      "games": "Games",
+      "timeSection": "Time",
+      "gameplay": "Gameplay",
+      "totalGames": "Total Games",
+      "winsLabel": "Wins",
+      "winrateLabel": "Winrate",
+      "noFlagsWins": "No Flags Wins",
+      "restarts": "Restarts",
+      "totalTimeLabel": "Total Time",
+      "bestTime": "Best Time",
+      "avgGameTime": "Avg Game Time",
+      "cellsRevealed": "Cells Revealed",
+      "flagsPlaced": "Flags Placed",
+      "bombsHit": "Bombs Hit",
+      "avgFlagsGame": "Avg Flags/Game",
+      "avgRevealedGame": "Avg Revealed/Game"
+    }
+  },
+  "playersPage": {
+    "title": "Minesweeper Leaderboards",
+    "subtitle": "Explore top players ranked by speed, wins, and experience. {count} players have earned their spot on our leaderboards.",
+    "fastestTimes": "Fastest Times",
+    "fastestTimesDesc": "Players with the quickest wins",
+    "mostWins": "Most Wins",
+    "mostWinsDesc": "Players with the most victories",
+    "mostExperienced": "Most Experienced",
+    "mostExperiencedDesc": "Players with the most games played",
+    "recentBestGames": "Recent Best Games",
+    "recentBestGamesDesc": "The latest record-breaking performances from our community.",
+    "aboutRankings": "About Minesweeper Rankings",
+    "aboutRankingsText1": "Our leaderboards track player performance across multiple dimensions. The Fastest Times leaderboard shows players who have achieved the quickest winning games. Most Wins ranks players by total victories, while Most Experienced highlights dedicated players with the highest game count.",
+    "aboutRankingsText2": "Players are indexed on our site once they reach 50 games played, 10 wins, or record a best time. This ensures our leaderboards showcase committed players while keeping the index focused and crawlable.",
+    "best": "Best",
+    "wins": "Wins",
+    "games": "Games",
+    "flags": "flags"
+  },
+  "redditPage": {
+    "title": "Minesweeper.fr",
+    "subtitle": "The modern Minesweeper experience with skins, stats & leaderboards",
+    "whatIs": {
+      "title": "What is Minesweeper.fr?",
+      "description": "Minesweeper.fr is a free, browser-based Minesweeper game built for the modern web. No downloads, no ads interrupting gameplay, just pure classic Minesweeper with features the community has been asking for."
+    },
+    "playNow": "Play Now",
+    "features": {
+      "title": "Features",
+      "customSkins": {
+        "title": "20+ Custom Skins",
+        "description": "Customize your game with unique cell skins and backgrounds. From classic Windows style to modern themes, pixel art, and more.",
+        "link": "Browse Skins"
+      },
+      "leaderboards": {
+        "title": "Global Leaderboards",
+        "description": "Compete with players worldwide. Track best times across Easy, Medium, and Hard difficulties. See who's the fastest.",
+        "link": "View Leaderboard"
+      },
+      "stats": {
+        "title": "Personal Statistics",
+        "description": "Track your progress with detailed stats: games played, win rate, best times, average time, and historical performance.",
+        "link": "View Stats"
+      },
+      "profiles": {
+        "title": "Player Profiles",
+        "description": "Every player gets a public profile page showing their achievements, rankings, and game history.",
+        "link": "Find Players"
+      }
+    },
+    "why": {
+      "title": "Why Minesweeper.fr?",
+      "free": "Free forever",
+      "freeDesc": "No premium tiers, no paywalls",
+      "noDownload": "No download required",
+      "noDownloadDesc": "Play instantly in your browser",
+      "mobile": "Mobile friendly",
+      "mobileDesc": "Works on desktop, tablet, and phone",
+      "active": "Active development",
+      "activeDesc": "New skins and features added regularly",
+      "privacy": "Privacy focused",
+      "privacyDesc": "Minimal data collection, no tracking ads"
+    },
+    "quickLinks": "Quick Links",
+    "playMinesweeper": "Play Minesweeper",
+    "browseSkins": "Browse Skins",
+    "leaderboard": "Leaderboard",
+    "myStats": "My Stats",
+    "howToPlay": "How to Play",
+    "madeBy": "Made by"
+  }
+}

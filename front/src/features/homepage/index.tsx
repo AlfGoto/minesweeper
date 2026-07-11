@@ -6,9 +6,9 @@ import WinDialog from "./components/win-dialog";
 import { getServerSession } from "next-auth";
 import { getUser } from "@/types/bff/uncached-functions";
 import type { CellSkin } from "@/types/bff";
-import Link from "next/link";
-import { getPublishedSkinsWithMeta } from "@/features/skins/cells/cell-skins";
-import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds/skins";
+import { Link } from "@/i18n/navigation";
+import { getPublishedSkinsWithMeta } from "@/features/skins/cells/skins";
+import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds";
 
 export default async function Home() {
   const session = await getServerSession();

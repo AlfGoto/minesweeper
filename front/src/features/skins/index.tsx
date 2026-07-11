@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { NonPublishedBackgroundSkins } from "./backgrounds/skins";
+import { NonPublishedBackgroundSkins } from "./backgrounds";
 import { BackgroundSkinsGallery } from "./components/background-skins-gallery";
 import { CellSkinsGallery } from "./components/cell-skins-gallery";
 import { NonPublishedCellSkinsGallery } from "./components/non-published-cell-skins-gallery";
@@ -33,16 +33,6 @@ export async function PreviewSkinsPage() {
           Click a square swatch to open a larger background preview.
         </p>
         <BackgroundSkinsGallery />
-      </section>
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold">Non Published Background Skins</h2>
-        <p className="text-muted-foreground">
-          Experimental background skins staged here before publishing.
-        </p>
-        <BackgroundSkinsGallery
-          skinsMap={NonPublishedBackgroundSkins}
-          emptyMessage="No non published background skins yet."
-        />
       </section>
       <div className="space-y-1">
         <h2 className="text-3xl font-bold">Cell Skins</h2>

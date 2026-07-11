@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface StatsHeaderProps {
   userName?: string;
@@ -11,6 +12,7 @@ interface StatsHeaderProps {
 }
 
 export function StatsHeader({ userName, userImage }: StatsHeaderProps) {
+  const t = useTranslations("statsPage");
   return (
     <div className="flex w-full justify-between items-center">
       <div className="flex items-center gap-3">
@@ -24,7 +26,7 @@ export function StatsHeader({ userName, userImage }: StatsHeaderProps) {
           />
         )}
         <div>
-          <h2 className="text-2xl font-bold">Stats</h2>
+          <h2 className="text-2xl font-bold">{t("yourStats")}</h2>
           {userName && (
             <p className="text-sm text-muted-foreground">{userName}</p>
           )}
@@ -32,10 +34,10 @@ export function StatsHeader({ userName, userImage }: StatsHeaderProps) {
       </div>
       <div className="flex gap-2">
         <Link href="/" prefetch={true}>
-          <Button>Back to game</Button>
+          <Button>{t("backToGame")}</Button>
         </Link>
         <Button variant="outline" onClick={() => signOut({ callbackUrl: "/" })}>
-          Logout
+          {t("logout")}
         </Button>
       </div>
     </div>

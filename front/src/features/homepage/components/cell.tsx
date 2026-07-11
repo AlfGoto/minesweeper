@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import {
   getSkin,
   getUnrevealedNeighborContext,
-} from "../../skins/cells/cell-skins";
+} from "../../skins/cells/skins";
 
 const cellText = "text-[clamp(10px,2.65cqw,23px)]";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { CellSkins } from "@/features/skins/cells/cell-skins";
+import { CellSkins } from "@/features/skins/cells/skins";
 import { CellSkin } from "@/types/bff";
 import { CellSkinPreview } from "@/features/shared/components/cell-skin-preview";
 

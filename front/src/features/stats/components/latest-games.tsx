@@ -7,6 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getTranslations } from "next-intl/server";
+
 interface GameData {
   status: "won" | "lost" | "restarted";
   time: number;
@@ -19,25 +21,31 @@ interface LatestGamesProps {
   games: GameData[];
 }
 
-export function LatestGames({ games }: LatestGamesProps) {
+export async function LatestGames({ games }: LatestGamesProps) {
+  const [t, tEmpty, tStatus] = await Promise.all([
+    getTranslations("statsPage.table"),
+    getTranslations("statsPage.empty"),
+    getTranslations("statsPage.status"),
+  ]);
+
   return (
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Status
+            {t("status")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Time
+            {t("time")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Flags
+            {t("flags")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Revealed
+            {t("revealed")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Date
+            {t("date")}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -45,7 +53,7 @@ export function LatestGames({ games }: LatestGamesProps) {
         {games.map((game, index) => (
           <TableRow key={`${game.date}-${index}`} className="hover:bg-gray-100">
             <TableCell style={{ textAlign: "left" }}>
-              <StatusBadge status={game.status} />
+              <StatusBadge status={game.status} label={tStatus(game.status)} />
             </TableCell>
             <TableCell
               className="font-mono font-semibold"
@@ -79,7 +87,7 @@ export function LatestGames({ games }: LatestGamesProps) {
               colSpan={5}
               className="text-center text-muted-foreground py-12"
             >
-              No games yet. Start playing!
+              {tEmpty("startPlaying")}
             </TableCell>
           </TableRow>
         )}
@@ -88,14 +96,20 @@ export function LatestGames({ games }: LatestGamesProps) {
   );
 }
 
-function StatusBadge({ status }: { status: "won" | "lost" | "restarted" }) {
+function StatusBadge({
+  status,
+  label,
+}: {
+  status: "won" | "lost" | "restarted";
+  label: string;
+}) {
   const config = {
-    won: { emoji: "🏆", label: "Won", className: "text-green-600" },
-    lost: { emoji: "💣", label: "Lost", className: "text-red-600" },
-    restarted: { emoji: "🔄", label: "Restarted", className: "text-gray-400" },
+    won: { emoji: "🏆", className: "text-green-600" },
+    lost: { emoji: "💣", className: "text-red-600" },
+    restarted: { emoji: "🔄", className: "text-gray-400" },
   };
 
-  const { emoji, label, className } = config[status];
+  const { emoji, className } = config[status];
 
   return (
     <span className={`font-medium ${className}`}>

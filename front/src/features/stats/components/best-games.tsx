@@ -7,6 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getTranslations } from "next-intl/server";
+
 interface GameData {
   time: number;
   flags: number;
@@ -17,22 +19,27 @@ interface BestGamesProps {
   games: GameData[];
 }
 
-export function BestGames({ games }: BestGamesProps) {
+export async function BestGames({ games }: BestGamesProps) {
+  const [t, tEmpty] = await Promise.all([
+    getTranslations("statsPage.table"),
+    getTranslations("statsPage.empty"),
+  ]);
+
   return (
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Rank
+            {t("rank")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Time
+            {t("time")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Flags
+            {t("flags")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
-            Date
+            {t("date")}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -68,7 +75,7 @@ export function BestGames({ games }: BestGamesProps) {
               colSpan={5}
               className="text-center text-muted-foreground py-12"
             >
-              No wins yet. Keep playing!
+              {tEmpty("noWinsYet")}
             </TableCell>
           </TableRow>
         )}

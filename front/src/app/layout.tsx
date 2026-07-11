@@ -7,7 +7,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
 import { getServerSession } from "next-auth";
 import { getUser } from "@/types/bff/uncached-functions";
-import { backgroundSkins, NonPublishedBackgroundSkins } from "@/features/skins/backgrounds/skins";
+import { backgroundSkins, NonPublishedBackgroundSkins } from "@/features/skins/backgrounds";
 
 const inter = Inter({ subsets: ["latin"] });
 

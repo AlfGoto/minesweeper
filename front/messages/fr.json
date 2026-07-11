@@ -1,0 +1,326 @@
+{
+  "homepage": {
+    "restartButton": "Recommencer",
+    "howToPlay": "Comment jouer",
+    "login": "Connexion",
+    "stats": "Stats",
+    "skins": "Skins",
+    "backToGame": "Retour au jeu",
+    "timer": "Temps",
+    "winDialog": {
+      "title": "Victoire !",
+      "time": "Temps",
+      "playAgain": "Rejouer"
+    },
+    "loseDialog": {
+      "title": "Perdu",
+      "playAgain": "Réessayer"
+    }
+  },
+  "howToPlayPage": {
+    "breadcrumb": "Comment jouer",
+    "title": "Comment jouer au Démineur",
+    "subtitle": "Maîtrisez le jeu de puzzle classique avec notre guide complet",
+    "objective": {
+      "title": "Objectif",
+      "description": "Découvrez toutes les cases d'un plateau rectangulaire sans faire exploser de mine. Gagnez en révélant toutes les cases qui ne contiennent pas de mines."
+    },
+    "rules": {
+      "title": "Règles de base",
+      "clickToReveal": {
+        "title": "Cliquer pour révéler",
+        "description": "Cliquez sur une case pour révéler ce qu'il y a dessous. Votre premier clic est toujours sûr."
+      },
+      "numbersShow": {
+        "title": "Les nombres indiquent les mines adjacentes",
+        "description": "Un nombre indique combien de mines se trouvent dans les 8 cases environnantes. Vide signifie aucune mine adjacente."
+      },
+      "flagMines": {
+        "title": "Marquer les mines suspectées",
+        "description": "Clic droit (ordinateur) ou appui long (mobile) pour marquer les cases que vous pensez contenir des mines."
+      },
+      "avoidMines": {
+        "title": "Éviter les mines",
+        "description": "Cliquez sur une mine et c'est perdu. Utilisez les nombres pour déduire quelles cases sont sûres."
+      }
+    },
+    "numbers": {
+      "title": "Signification des nombres",
+      "description": "Chaque nombre indique combien de mines se trouvent dans les 8 cases adjacentes (diagonales incluses)."
+    },
+    "strategy": {
+      "title": "Conseils stratégiques",
+      "startCenter": "Commencez au centre",
+      "startCenterDesc": "Révèle souvent plus de cases d'un coup",
+      "patterns": "Cherchez les motifs évidents",
+      "patternsDesc": "Un \"1\" à côté d'une seule case cachée = mine",
+      "corners": "Utilisez les coins",
+      "cornersDesc": "Moins de cases adjacentes facilite la déduction",
+      "countMines": "Comptez les mines restantes",
+      "countMinesDesc": "Si un nombre a assez de mines marquées, les cases restantes sont sûres",
+      "takeTime": "Prenez votre temps",
+      "takeTimeDesc": "Pas de précipitation sur les situations 50/50"
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "goal": {
+        "question": "Quel est l'objectif du Démineur ?",
+        "answer": "Découvrir tout le plateau sans cliquer sur une mine. Utilisez les nombres pour déduire quelles cases contiennent des mines et marquez-les."
+      },
+      "numbers": {
+        "question": "Que signifient les nombres ?",
+        "answer": "Chaque nombre indique combien de mines sont adjacentes à cette case (diagonales incluses). Une case peut avoir 0 à 8 mines adjacentes."
+      },
+      "flag": {
+        "question": "Comment marquer une mine ?",
+        "answer": "Clic droit (ordinateur) ou appui long (mobile) pour placer un drapeau. Cliquez à nouveau pour l'enlever."
+      },
+      "clickMine": {
+        "question": "Que se passe-t-il si je clique sur une mine ?",
+        "answer": "Partie terminée. Toutes les mines sont révélées. Pour gagner, révélez toutes les cases sans mines sans cliquer sur aucune mine."
+      },
+      "bestStrategy": {
+        "question": "Quelle est la meilleure stratégie ?",
+        "answer": "Commencez près du centre. Quand vous voyez un 1 à côté d'une seule case non révélée, c'est une mine. Cherchez les motifs où les mathématiques indiquent clairement l'emplacement des mines."
+      }
+    },
+    "playNow": "Jouer au Démineur",
+    "quickLinks": {
+      "title": "Liens rapides",
+      "playGame": "Jouer",
+      "browseSkins": "Skins",
+      "leaderboard": "Classement",
+      "myStats": "Mes stats",
+      "sitemap": "Plan du site",
+      "about": "À propos"
+    }
+  },
+  "backgroundSkinsPage": {
+    "title": "Skins de fond Minesweeper - Thèmes cosmétiques gratuits",
+    "description": "Parcourez {count}+ skins de fond Minesweeper publics avec des thèmes cosmétiques allant des looks classiques épurés aux palettes de couleurs audacieuses.",
+    "ogTitle": "Skins de fond Minesweeper",
+    "ogDescription": "Parcourez {count}+ skins de fond publics et prévisualisez les thèmes cosmétiques pour Minesweeper.",
+    "heading": "Skins de fond Minesweeper",
+    "intro": "Les skins de fond changent l'arrière-plan visuel autour du jeu tout en laissant le gameplay Minesweeper intact. Parcourez les thèmes publiés ci-dessous et ouvrez chaque page pour un aperçu en direct complet.",
+    "breadcrumb": "Skins de fond",
+    "cosmetic": "Cosmétique",
+    "notFound": "Skin de fond introuvable",
+    "skinTitle": "Skin de fond {name} pour Minesweeper",
+    "skinLabel": "Skin de fond Minesweeper",
+    "skinBreadcrumb": "Fond {name}",
+    "livePreview": "Cette page utilise le fond {name} en direct comme aperçu, pour que vous puissiez voir l'effet pleine page directement.",
+    "liveFullPage": "Aperçu pleine page en direct",
+    "publishedCount": "{count} fonds publiés",
+    "purelyCosmetic": "Personnalisation purement cosmétique",
+    "worksWithAll": "Fonctionne avec tous les skins de grille",
+    "whatIs": "Qu'est-ce que le skin de fond {name} ?",
+    "exploreMore": "Si vous voulez le comparer avec d'autres looks, vous pouvez parcourir la",
+    "fullCollection": "collection complète de skins de fond",
+    "orJump": "ou aller directement au",
+    "game": "jeu",
+    "toTry": "pour essayer les thèmes cosmétiques disponibles.",
+    "faq": "Questions fréquentes",
+    "moreBackgrounds": "Plus de skins de fond",
+    "viewAll": "Voir tout →",
+    "playNow": "Jouer au Démineur",
+    "trySkin": "Essayez le skin de fond {name} avec les skins de grille et autres personnalisations visuelles dans le jeu en ligne gratuit."
+  },
+  "gridSkinPage": {
+    "notFound": "Skin introuvable",
+    "skinTitle": "Skin {name} pour Minesweeper",
+    "breadcrumbSkins": "Skins",
+    "aboutSkin": "À propos du skin {name}",
+    "faq": "Questions fréquentes",
+    "moreSkins": "Plus de skins Minesweeper",
+    "viewAll": "Voir tout →",
+    "playNow": "Jouer au Démineur",
+    "trySkin": "Essayez le skin {name} et bien d'autres dans notre jeu Démineur en ligne gratuit"
+  },
+  "skinsPage": {
+    "backToGame": "Retour au jeu",
+    "cells": "Grille",
+    "backgrounds": "Fonds",
+    "banners": "Bannières",
+    "cellsTitle": "Skins de grille",
+    "cellsDescription": "Achetez de nouveaux skins avec vos AlfCoins et agrandissez votre collection. Cliquez sur le carré 2x2 pour prévisualiser le skin.",
+    "backgroundsTitle": "Skins de fond",
+    "backgroundsDescription": "Personnalisez le fond du jeu avec vos AlfCoins. Cliquez sur le carré pour prévisualiser le fond.",
+    "bannersTitle": "Skins de bannière",
+    "bannersDescription": "Personnalisez votre style de bannière. Cette section arrive très bientôt.",
+    "loading": "Chargement...",
+    "loginToUnlock": "Connectez-vous pour débloquer des skins",
+    "owned": "Possédés",
+    "all": "Tous",
+    "selected": "Sélectionné",
+    "select": "Sélectionner",
+    "unlock": "Débloquer",
+    "coins": "pièces",
+    "alfCoins": "Alf Coins",
+    "revealedCells": "Cases révélées",
+    "default": "Par défaut",
+    "signInToUnlock": "Connectez-vous pour débloquer",
+    "unavailable": "Indisponible",
+    "skinBought": "Skin acheté.",
+    "skinSelected": "Skin sélectionné.",
+    "couldNotBuy": "Impossible d'acheter ce skin.",
+    "couldNotSelect": "Impossible de sélectionner ce skin.",
+    "buyConfirmTitle": "Acheter {skinName} ?",
+    "buyConfirmText": "Cela coûtera {price} AlfCoins.",
+    "skinNotAvailable": "Ce skin n'est pas disponible actuellement.",
+    "confirmPurchase": "Confirmer l'achat"
+  },
+  "mapPage": {
+    "breadcrumb": "Plan du site",
+    "title": "Plan du site",
+    "subtitle": "Toutes les pages de Minesweeper.fr",
+    "quickLinks": "Liens rapides",
+    "mainPages": "Pages principales",
+    "players": "Joueurs",
+    "playMinesweeper": "Jouer au Démineur",
+    "home": "Accueil",
+    "playGame": "Jouer",
+    "browseSkins": "Skins",
+    "leaderboard": "Classement",
+    "myStats": "Mes stats",
+    "howToPlay": "Comment jouer",
+    "about": "À propos",
+    "wins": "victoires",
+    "best": "meilleur",
+    "gridSkins": "Skins de grille",
+    "backgroundSkins": "Skins de fond"
+  },
+  "profilePage": {
+    "title": "Profil joueur",
+    "description": "Consultez les statistiques, l'historique des parties et les meilleurs temps.",
+    "playerTitle": "Stats Minesweeper de {name}",
+    "playerDescription": "Profil Minesweeper de {name} : {wins} victoires, {winRate}% de taux de victoire, meilleur temps {bestTime}.",
+    "playerDescriptionNoBest": "Profil Minesweeper de {name} : {games} parties, {wins} victoires, {winRate}% de taux de victoire.",
+    "ogTitle": "{name} | Stats joueur Minesweeper"
+  },
+  "statsPage": {
+    "leaderboard": "Classement",
+    "totalTime": "Temps total",
+    "yourStats": "Vos statistiques",
+    "playerStats": "Statistiques",
+    "loginPrompt": "Connectez-vous pour jouer et suivre vos stats !",
+    "backToGame": "Retour au jeu",
+    "latestGames": "Dernières parties",
+    "bestGames": "Meilleures parties",
+    "contactMe": "Vous pouvez me contacter à",
+    "logout": "Déconnexion",
+    "table": {
+      "rank": "Rang",
+      "player": "Joueur",
+      "time": "Temps",
+      "flags": "Drapeaux",
+      "date": "Date",
+      "status": "Statut",
+      "revealed": "Révélées",
+      "games": "Parties",
+      "wins": "Victoires",
+      "winrate": "Taux de victoire"
+    },
+    "status": {
+      "won": "Gagné",
+      "lost": "Perdu",
+      "restarted": "Recommencé"
+    },
+    "empty": {
+      "noGamesYet": "Aucune partie. Soyez le premier à gagner !",
+      "noWinsYet": "Aucune victoire. Continuez à jouer !",
+      "startPlaying": "Aucune partie. Commencez à jouer !",
+      "beFirstToPlay": "Aucune partie. Soyez le premier à jouer !",
+      "noStatsFound": "Aucune statistique trouvée"
+    },
+    "stats": {
+      "title": "Statistiques",
+      "games": "Parties",
+      "timeSection": "Temps",
+      "gameplay": "Gameplay",
+      "totalGames": "Total parties",
+      "winsLabel": "Victoires",
+      "winrateLabel": "Taux de victoire",
+      "noFlagsWins": "Victoires sans drapeaux",
+      "restarts": "Recommencements",
+      "totalTimeLabel": "Temps total",
+      "bestTime": "Meilleur temps",
+      "avgGameTime": "Temps moyen",
+      "cellsRevealed": "Cases révélées",
+      "flagsPlaced": "Drapeaux placés",
+      "bombsHit": "Bombes touchées",
+      "avgFlagsGame": "Drapeaux/partie",
+      "avgRevealedGame": "Révélées/partie"
+    }
+  },
+  "playersPage": {
+    "title": "Classements Démineur",
+    "subtitle": "Explorez les meilleurs joueurs classés par vitesse, victoires et expérience. {count} joueurs ont gagné leur place dans nos classements.",
+    "fastestTimes": "Temps les plus rapides",
+    "fastestTimesDesc": "Joueurs avec les victoires les plus rapides",
+    "mostWins": "Plus de victoires",
+    "mostWinsDesc": "Joueurs avec le plus de victoires",
+    "mostExperienced": "Plus expérimentés",
+    "mostExperiencedDesc": "Joueurs avec le plus de parties jouées",
+    "recentBestGames": "Meilleures parties récentes",
+    "recentBestGamesDesc": "Les dernières performances record de notre communauté.",
+    "aboutRankings": "À propos des classements",
+    "aboutRankingsText1": "Nos classements suivent les performances des joueurs sur plusieurs dimensions. Le classement Temps les plus rapides montre les joueurs ayant réalisé les parties gagnantes les plus rapides. Plus de victoires classe les joueurs par nombre total de victoires, tandis que Plus expérimentés met en avant les joueurs dévoués avec le plus grand nombre de parties.",
+    "aboutRankingsText2": "Les joueurs sont indexés sur notre site une fois qu'ils atteignent 50 parties jouées, 10 victoires, ou enregistrent un meilleur temps. Cela garantit que nos classements présentent des joueurs engagés tout en gardant l'index ciblé et explorable.",
+    "best": "Meilleur",
+    "wins": "Victoires",
+    "games": "Parties",
+    "flags": "drapeaux"
+  },
+  "redditPage": {
+    "title": "Minesweeper.fr",
+    "subtitle": "L'expérience Démineur moderne avec skins, stats et classements",
+    "whatIs": {
+      "title": "Qu'est-ce que Minesweeper.fr ?",
+      "description": "Minesweeper.fr est un jeu de Démineur gratuit, jouable dans le navigateur, conçu pour le web moderne. Pas de téléchargement, pas de publicités interrompant le jeu, juste le Démineur classique avec les fonctionnalités demandées par la communauté."
+    },
+    "playNow": "Jouer maintenant",
+    "features": {
+      "title": "Fonctionnalités",
+      "customSkins": {
+        "title": "20+ Skins personnalisés",
+        "description": "Personnalisez votre jeu avec des skins de cellules et des fonds uniques. Du style Windows classique aux thèmes modernes, pixel art, et plus encore.",
+        "link": "Parcourir les skins"
+      },
+      "leaderboards": {
+        "title": "Classements mondiaux",
+        "description": "Affrontez des joueurs du monde entier. Suivez les meilleurs temps sur les difficultés Facile, Moyen et Difficile. Voyez qui est le plus rapide.",
+        "link": "Voir le classement"
+      },
+      "stats": {
+        "title": "Statistiques personnelles",
+        "description": "Suivez votre progression avec des stats détaillées : parties jouées, taux de victoire, meilleurs temps, temps moyen et performances historiques.",
+        "link": "Voir les stats"
+      },
+      "profiles": {
+        "title": "Profils joueurs",
+        "description": "Chaque joueur a une page de profil publique montrant ses succès, classements et historique de parties.",
+        "link": "Trouver des joueurs"
+      }
+    },
+    "why": {
+      "title": "Pourquoi Minesweeper.fr ?",
+      "free": "Gratuit pour toujours",
+      "freeDesc": "Pas de niveaux premium, pas de paywall",
+      "noDownload": "Pas de téléchargement",
+      "noDownloadDesc": "Jouez instantanément dans votre navigateur",
+      "mobile": "Compatible mobile",
+      "mobileDesc": "Fonctionne sur ordinateur, tablette et téléphone",
+      "active": "Développement actif",
+      "activeDesc": "Nouveaux skins et fonctionnalités ajoutés régulièrement",
+      "privacy": "Respect de la vie privée",
+      "privacyDesc": "Collecte de données minimale, pas de publicités de suivi"
+    },
+    "quickLinks": "Liens rapides",
+    "playMinesweeper": "Jouer au Démineur",
+    "browseSkins": "Parcourir les skins",
+    "leaderboard": "Classement",
+    "myStats": "Mes stats",
+    "howToPlay": "Comment jouer",
+    "madeBy": "Créé par"
+  }
+}

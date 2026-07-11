@@ -5,6 +5,7 @@ import type { CellSkin } from "@/types/bff";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CellsTab } from "./cells-tab";
 import { BannersTab } from "./banners-tab";
+import { useTranslations } from "next-intl";
 
 type CellSkinsShopProps = {
   isLoggedIn?: boolean;
@@ -13,6 +14,7 @@ type CellSkinsShopProps = {
   selectedSkin: CellSkin;
   unlockedSkins: CellSkin[];
   prices: Partial<Record<CellSkin, number>>;
+  locale?: string;
   backgroundsTabContent: ReactNode;
 };
 
@@ -23,8 +25,10 @@ export function CellSkinsShop({
   selectedSkin,
   unlockedSkins,
   prices,
+  locale = "en",
   backgroundsTabContent,
 }: CellSkinsShopProps) {
+  const t = useTranslations("skinsPage");
   return (
     <Tabs
       defaultValue="cells"
@@ -32,13 +36,13 @@ export function CellSkinsShop({
     >
       <TabsList className="w-[calc(100%-1rem)] mx-2 my-4 p-2">
         <TabsTrigger value="cells" className="cursor-pointer flex-1">
-          Cells
+          {t("cells")}
         </TabsTrigger>
         <TabsTrigger value="backgrounds" className="cursor-pointer flex-1">
-          Backgrounds
+          {t("backgrounds")}
         </TabsTrigger>
         <TabsTrigger value="banners" className="cursor-pointer flex-1">
-          Banners
+          {t("banners")}
         </TabsTrigger>
       </TabsList>
 
@@ -48,11 +52,8 @@ export function CellSkinsShop({
         className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
       >
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold">Cell Skins</h1>
-          <p className="text-muted-foreground">
-            Buy new skins with your AlfCoins and grow your collection. Click on
-            the 2x2 square to preview the skin.
-          </p>
+          <h1 className="text-3xl font-bold">{t("cellsTitle")}</h1>
+          <p className="text-muted-foreground">{t("cellsDescription")}</p>
         </div>
         <CellsTab
           isLoggedIn={isLoggedIn}
@@ -61,6 +62,7 @@ export function CellSkinsShop({
           selectedSkin={selectedSkin}
           unlockedSkins={unlockedSkins}
           prices={prices}
+          locale={locale}
         />
       </TabsContent>
 
@@ -70,13 +72,10 @@ export function CellSkinsShop({
         className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
       >
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold">Background Skins</h1>
-          <p className="text-muted-foreground">
-            Customize the game background with your AlfCoins. Click on the
-            square to preview the background.
-          </p>
+          <h1 className="text-3xl font-bold">{t("backgroundsTitle")}</h1>
+          <p className="text-muted-foreground">{t("backgroundsDescription")}</p>
         </div>
-        <Suspense fallback={<div className="text-muted-foreground">Loading...</div>}>
+        <Suspense fallback={<div className="text-muted-foreground">{t("loading")}</div>}>
           {backgroundsTabContent}
         </Suspense>
       </TabsContent>
@@ -87,11 +86,8 @@ export function CellSkinsShop({
         className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
       >
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold">Banner Skins</h1>
-          <p className="text-muted-foreground">
-            Personalize your banner style. This section is coming as soon as
-            possible.
-          </p>
+          <h1 className="text-3xl font-bold">{t("bannersTitle")}</h1>
+          <p className="text-muted-foreground">{t("bannersDescription")}</p>
         </div>
         <BannersTab />
       </TabsContent>

@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import type { BackgroundSkinPreviewMeta } from "@/features/skins/backgrounds/skins";
+import type { BackgroundSkinPreviewMeta } from "@/features/skins/backgrounds";
 
 function BackgroundPreviewSurface({
   skin,
@@ -25,10 +25,6 @@ function BackgroundPreviewSurface({
       style={skin.style}
     >
       <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.35),transparent_55%)]" />
-      <div className="absolute inset-x-3 bottom-3 grid grid-cols-2 gap-2">
-        <div className="h-5 rounded-md border border-white/60 bg-white/85 shadow-sm" />
-        <div className="h-5 rounded-md border border-white/60 bg-white/65 shadow-sm" />
-      </div>
     </div>
   );
 }

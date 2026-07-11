@@ -5,8 +5,9 @@ import Timer from "./timer";
 import { StatsButton } from "./stats-button";
 import { SkinsButton } from "./skins-button";
 import { HowToPlayButton } from "./how-to-play-button";
+import { LocaleSwitcher } from "./locale-switcher";
 
-const buttonClassName = "text-lg w-full px-8 py-6 cursor-pointer";
+const buttonClassName = "text-lg max-w-[180px] min-w-[180px] w-full px-8 py-6 cursor-pointer";
 
 export default async function Menu() {
   const session = await getServerSession();
@@ -20,6 +21,7 @@ export default async function Menu() {
         <StatsButton className={buttonClassName} />
         <SkinsButton className={buttonClassName} />
         <HowToPlayButton className={buttonClassName} />
+        <LocaleSwitcher className={buttonClassName} />
       </div>
     </div>
   );

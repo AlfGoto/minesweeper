@@ -8,9 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { LeaderboardRow } from "./leaderboard-row";
+import { getTranslations } from "next-intl/server";
 
 export async function Leaderboard() {
-  const bestGames = await getBestGames();
+  const [bestGames, t] = await Promise.all([
+    getBestGames(),
+    getTranslations("statsPage.table"),
+  ]);
+  const tEmpty = await getTranslations("statsPage.empty");
 
   return (
     <div className="flex flex-col gap-4 w-full rounded-xl bg-card">
@@ -18,19 +23,19 @@ export async function Leaderboard() {
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Rank
+              {t("rank")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Player
+              {t("player")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Time
+              {t("time")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Flags
+              {t("flags")}
             </TableHead>
             <TableHead className="p-0" style={{ textAlign: "left" }}>
-              Date
+              {t("date")}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -44,7 +49,7 @@ export async function Leaderboard() {
                 colSpan={5}
                 className="text-center text-muted-foreground py-12"
               >
-                No games yet. Be the first to win!
+                {tEmpty("noGamesYet")}
               </TableCell>
             </TableRow>
           )}

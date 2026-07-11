@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/lib/dates";
 import { Separator } from "@/components/ui/separator";
+import { getTranslations } from "next-intl/server";
 
 interface StatsData {
   totalGames: number;
@@ -20,46 +21,64 @@ interface StatsProps {
   title?: string;
 }
 
-export function Stats({ stats, title = "Your stats" }: StatsProps) {
-  if (!stats || stats.totalGames === 0) return <NoStats />;
+export async function Stats({ stats, title }: StatsProps) {
+  const [t, tEmpty, tPage] = await Promise.all([
+    getTranslations("statsPage.stats"),
+    getTranslations("statsPage.empty"),
+    getTranslations("statsPage"),
+  ]);
+
+  if (!stats || stats.totalGames === 0) {
+    return (
+      <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
+        <h2>{tEmpty("noStatsFound")}</h2>
+        <p>{tEmpty("startPlaying")}</p>
+        <Link href="/" prefetch={true}>
+          <Button>{tPage("backToGame")}</Button>
+        </Link>
+      </div>
+    );
+  }
+
+  const displayTitle = title ?? t("title");
 
   const gameStats = [
-    { label: "Total Games", value: stats.totalGames.toString(), emoji: "🎮" },
-    { label: "Wins", value: stats.totalWin.toString(), emoji: "🏆" },
+    { label: t("totalGames"), value: stats.totalGames.toString(), emoji: "🎮" },
+    { label: t("winsLabel"), value: stats.totalWin.toString(), emoji: "🏆" },
     {
-      label: "Winrate",
+      label: t("winrateLabel"),
       value: ((stats.totalWin / stats.totalGames) * 100).toFixed(2) + "%",
       emoji: "📈",
     },
-    { label: "No Flags Wins", value: stats.totalNoFlagsWin.toString(), emoji: "🚫🚩" },
-    { label: "Restarts", value: stats.totalRestarts.toString(), emoji: "🔄" },
+    { label: t("noFlagsWins"), value: stats.totalNoFlagsWin.toString(), emoji: "🚫🚩" },
+    { label: t("restarts"), value: stats.totalRestarts.toString(), emoji: "🔄" },
   ];
 
   const timeStats = [
-    { label: "Total Time", value: formatTime(stats.totalTime), emoji: "⏱️" },
+    { label: t("totalTimeLabel"), value: formatTime(stats.totalTime), emoji: "⏱️" },
     {
-      label: "Best Time",
+      label: t("bestTime"),
       value: stats.bestTime !== undefined ? formatTime(stats.bestTime) : "N/A",
       emoji: "⚡",
     },
     {
-      label: "Avg Game Time",
+      label: t("avgGameTime"),
       value: formatTime(stats.totalTime / stats.totalGames),
       emoji: "⏳",
     },
   ];
 
   const gameplayStats = [
-    { label: "Cells Revealed", value: stats.totalRevealed.toString(), emoji: "👆" },
-    { label: "Flags Placed", value: stats.totalFlags.toString(), emoji: "🚩" },
-    { label: "Bombs Hit", value: stats.totalBombs.toString(), emoji: "💣" },
+    { label: t("cellsRevealed"), value: stats.totalRevealed.toString(), emoji: "👆" },
+    { label: t("flagsPlaced"), value: stats.totalFlags.toString(), emoji: "🚩" },
+    { label: t("bombsHit"), value: stats.totalBombs.toString(), emoji: "💣" },
     {
-      label: "Avg Flags/Game",
+      label: t("avgFlagsGame"),
       value: (stats.totalFlags / stats.totalGames).toFixed(2),
       emoji: "🚩",
     },
     {
-      label: "Avg Revealed/Game",
+      label: t("avgRevealedGame"),
       value: (stats.totalRevealed / stats.totalGames).toFixed(2),
       emoji: "🔢",
     },
@@ -69,14 +88,14 @@ export function Stats({ stats, title = "Your stats" }: StatsProps) {
     <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
       <div className="flex items-center gap-2">
         <span className="text-2xl">📊</span>
-        <h2 className="text-2xl font-bold">{title}</h2>
+        <h2 className="text-2xl font-bold">{displayTitle}</h2>
       </div>
 
-      <StatsGroup title="Games" stats={gameStats} />
+      <StatsGroup title={t("games")} stats={gameStats} />
       <Separator />
-      <StatsGroup title="Time" stats={timeStats} />
+      <StatsGroup title={t("timeSection")} stats={timeStats} />
       <Separator />
-      <StatsGroup title="Gameplay" stats={gameplayStats} />
+      <StatsGroup title={t("gameplay")} stats={gameplayStats} />
     </div>
   );
 }
@@ -125,18 +144,6 @@ function StatBox({
         {emoji} {label}
       </p>
       <p className="text-lg font-bold text-center">{value}</p>
-    </div>
-  );
-}
-
-function NoStats() {
-  return (
-    <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
-      <h2>No stats found</h2>
-      <p>No games yet. Start playing!</p>
-      <Link href="/" prefetch={true}>
-        <Button>Back to game</Button>
-      </Link>
     </div>
   );
 }

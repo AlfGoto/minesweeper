@@ -6,7 +6,7 @@ import {
   getPublishedBackgroundSkins,
   type BackgroundSkinData,
   type BackgroundSkinPreviewMeta,
-} from "@/features/skins/backgrounds/skins";
+} from "@/features/skins/backgrounds";
 import { BackgroundSkinPreview } from "@/features/shared/components/background-skin-preview";
 
 type BackgroundSkinsGalleryProps = {

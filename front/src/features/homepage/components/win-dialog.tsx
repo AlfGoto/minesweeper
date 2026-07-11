@@ -5,17 +5,17 @@ import { useGame } from "../game-provider";
 import { useState, useEffect } from "react";
 import RestartButton from "./restart-button";
 import { formatTime } from "@/lib/dates";
+import { useTranslations } from "next-intl";
 
 export default function WinDialog() {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState(0);
   const { registerWinDialogOpener, getTime } = useGame();
+  const t = useTranslations("homepage.winDialog");
 
-  // Register the opener/closer function with the provider
   useEffect(() => {
     const unregister = registerWinDialogOpener((open) => {
       if (open) {
-        // Capture the time when dialog opens
         setTime(getTime());
       }
       setOpen(open);
@@ -27,12 +27,9 @@ export default function WinDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
     <DialogContent className="flex flex-col items-center justify-center gap-4 w-fit">
       <DialogHeader>
-        <DialogTitle>{"You Won! 🎉"}</DialogTitle>
+        <DialogTitle>{t("title")} 🎉</DialogTitle>
       </DialogHeader>
-      <DialogDescription> {"Congratulations!"}</DialogDescription>
-
-      You won in {formatTime(time)}, amazing!
-
+      <DialogDescription>{t("time")}: {formatTime(time)}</DialogDescription>
       <RestartButton />
     </DialogContent>
     </Dialog>

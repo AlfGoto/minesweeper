@@ -1,0 +1,326 @@
+{
+  "homepage": {
+    "restartButton": "Reiniciar",
+    "howToPlay": "Cómo jugar",
+    "login": "Iniciar sesión",
+    "stats": "Stats",
+    "skins": "Skins",
+    "backToGame": "Volver al juego",
+    "timer": "Tiempo",
+    "winDialog": {
+      "title": "¡Ganaste!",
+      "time": "Tiempo",
+      "playAgain": "Jugar de nuevo"
+    },
+    "loseDialog": {
+      "title": "Fin del juego",
+      "playAgain": "Intentar de nuevo"
+    }
+  },
+  "howToPlayPage": {
+    "breadcrumb": "Cómo jugar",
+    "title": "Cómo jugar al Buscaminas",
+    "subtitle": "Domina el clásico juego de puzzles con nuestra guía completa",
+    "objective": {
+      "title": "Objetivo",
+      "description": "Despeja un tablero rectangular que contiene minas ocultas sin detonar ninguna. Gana revelando todas las celdas que no contienen minas."
+    },
+    "rules": {
+      "title": "Reglas básicas",
+      "clickToReveal": {
+        "title": "Clic para revelar",
+        "description": "Haz clic en cualquier celda para revelar lo que hay debajo. Tu primer clic siempre es seguro."
+      },
+      "numbersShow": {
+        "title": "Los números muestran minas adyacentes",
+        "description": "Un número muestra cuántas minas hay en las 8 celdas circundantes. Vacío significa que no hay minas adyacentes."
+      },
+      "flagMines": {
+        "title": "Marcar minas sospechosas",
+        "description": "Clic derecho (escritorio) o presión larga (móvil) para marcar las celdas que crees que contienen minas."
+      },
+      "avoidMines": {
+        "title": "Evitar las minas",
+        "description": "Si haces clic en una mina, pierdes. Usa los números para deducir qué celdas son seguras."
+      }
+    },
+    "numbers": {
+      "title": "Qué significan los números",
+      "description": "Cada número indica cuántas minas hay en las 8 celdas adyacentes (incluyendo diagonales)."
+    },
+    "strategy": {
+      "title": "Consejos de estrategia",
+      "startCenter": "Empieza en el centro",
+      "startCenterDesc": "A menudo revela más celdas de una vez",
+      "patterns": "Busca patrones obvios",
+      "patternsDesc": "Un \"1\" junto a una sola celda oculta = mina",
+      "corners": "Usa las esquinas",
+      "cornersDesc": "Menos celdas adyacentes facilita la deducción",
+      "countMines": "Cuenta las minas restantes",
+      "countMinesDesc": "Si un número tiene suficientes minas marcadas, las celdas restantes son seguras",
+      "takeTime": "Tómate tu tiempo",
+      "takeTimeDesc": "Sin prisa en situaciones 50/50"
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "goal": {
+        "question": "¿Cuál es el objetivo del Buscaminas?",
+        "answer": "Despejar todo el tablero sin hacer clic en ninguna mina. Usa los números para deducir qué celdas contienen minas y márcalas."
+      },
+      "numbers": {
+        "question": "¿Qué significan los números?",
+        "answer": "Cada número indica cuántas minas son adyacentes a esa celda (incluyendo diagonales). Una celda puede tener de 0 a 8 minas adyacentes."
+      },
+      "flag": {
+        "question": "¿Cómo marco una mina?",
+        "answer": "Clic derecho (escritorio) o presión larga (móvil) para colocar una bandera. Haz clic de nuevo para quitarla."
+      },
+      "clickMine": {
+        "question": "¿Qué pasa si hago clic en una mina?",
+        "answer": "Fin del juego. Todas las minas se revelan. Para ganar, revela todas las celdas sin minas sin hacer clic en ninguna mina."
+      },
+      "bestStrategy": {
+        "question": "¿Cuál es la mejor estrategia?",
+        "answer": "Empieza cerca del centro. Cuando veas un 1 junto a una sola celda sin revelar, es una mina. Busca patrones donde las matemáticas indiquen claramente la ubicación de las minas."
+      }
+    },
+    "playNow": "Jugar al Buscaminas ahora",
+    "quickLinks": {
+      "title": "Enlaces rápidos",
+      "playGame": "Jugar",
+      "browseSkins": "Skins",
+      "leaderboard": "Clasificación",
+      "myStats": "Mis stats",
+      "sitemap": "Mapa del sitio",
+      "about": "Acerca de"
+    }
+  },
+  "backgroundSkinsPage": {
+    "title": "Skins de fondo Minesweeper - Temas cosméticos gratuitos",
+    "description": "Explora {count}+ skins de fondo públicos de Minesweeper con temas cosméticos que van desde looks clásicos limpios hasta paletas de colores audaces.",
+    "ogTitle": "Skins de fondo Minesweeper",
+    "ogDescription": "Explora {count}+ skins de fondo públicos y previsualiza temas cosméticos para Minesweeper.",
+    "heading": "Skins de fondo Minesweeper",
+    "intro": "Los skins de fondo cambian el fondo visual alrededor del juego mientras dejan el gameplay de Minesweeper intacto. Explora los temas publicados abajo y abre cada página para una vista previa en vivo completa.",
+    "breadcrumb": "Skins de fondo",
+    "cosmetic": "Cosmético",
+    "notFound": "Skin de fondo no encontrado",
+    "skinTitle": "Skin de fondo {name} para Minesweeper",
+    "skinLabel": "Skin de fondo Minesweeper",
+    "skinBreadcrumb": "Fondo {name}",
+    "livePreview": "Esta página usa el fondo {name} en vivo como vista previa, para que puedas ver el efecto de página completa directamente.",
+    "liveFullPage": "Vista previa de página completa en vivo",
+    "publishedCount": "{count} fondos publicados",
+    "purelyCosmetic": "Personalización puramente cosmética",
+    "worksWithAll": "Funciona con todos los skins de cuadrícula",
+    "whatIs": "¿Qué es el skin de fondo {name}?",
+    "exploreMore": "Si quieres compararlo con otros looks, puedes explorar la",
+    "fullCollection": "colección completa de skins de fondo",
+    "orJump": "o ir directamente al",
+    "game": "juego",
+    "toTry": "para probar los temas cosméticos disponibles.",
+    "faq": "Preguntas frecuentes",
+    "moreBackgrounds": "Más skins de fondo",
+    "viewAll": "Ver todo →",
+    "playNow": "Jugar Buscaminas ahora",
+    "trySkin": "Prueba el skin de fondo {name} junto con los skins de cuadrícula y otras personalizaciones visuales en el juego en línea gratuito."
+  },
+  "gridSkinPage": {
+    "notFound": "Skin no encontrado",
+    "skinTitle": "Skin {name} para Minesweeper",
+    "breadcrumbSkins": "Skins",
+    "aboutSkin": "Acerca del skin {name}",
+    "faq": "Preguntas frecuentes",
+    "moreSkins": "Más skins de Minesweeper",
+    "viewAll": "Ver todo →",
+    "playNow": "Jugar Buscaminas ahora",
+    "trySkin": "Prueba el skin {name} y muchos más en nuestro juego de Buscaminas en línea gratuito"
+  },
+  "skinsPage": {
+    "backToGame": "Volver al juego",
+    "cells": "Cuadrícula",
+    "backgrounds": "Fondos",
+    "banners": "Banners",
+    "cellsTitle": "Skins de cuadrícula",
+    "cellsDescription": "Compra nuevos skins con tus AlfCoins y amplía tu colección. Haz clic en el cuadrado 2x2 para previsualizar el skin.",
+    "backgroundsTitle": "Skins de fondo",
+    "backgroundsDescription": "Personaliza el fondo del juego con tus AlfCoins. Haz clic en el cuadrado para previsualizar el fondo.",
+    "bannersTitle": "Skins de banner",
+    "bannersDescription": "Personaliza tu estilo de banner. Esta sección llegará muy pronto.",
+    "loading": "Cargando...",
+    "loginToUnlock": "Inicia sesión para desbloquear skins",
+    "owned": "Poseídos",
+    "all": "Todos",
+    "selected": "Seleccionado",
+    "select": "Seleccionar",
+    "unlock": "Desbloquear",
+    "coins": "monedas",
+    "alfCoins": "Alf Coins",
+    "revealedCells": "Celdas reveladas",
+    "default": "Por defecto",
+    "signInToUnlock": "Inicia sesión para desbloquear",
+    "unavailable": "No disponible",
+    "skinBought": "Skin comprado.",
+    "skinSelected": "Skin seleccionado.",
+    "couldNotBuy": "No se pudo comprar este skin.",
+    "couldNotSelect": "No se pudo seleccionar este skin.",
+    "buyConfirmTitle": "¿Comprar {skinName}?",
+    "buyConfirmText": "Esto costará {price} AlfCoins.",
+    "skinNotAvailable": "Este skin no está disponible ahora.",
+    "confirmPurchase": "Confirmar compra"
+  },
+  "mapPage": {
+    "breadcrumb": "Mapa del sitio",
+    "title": "Mapa del sitio",
+    "subtitle": "Todas las páginas de Minesweeper.fr",
+    "quickLinks": "Enlaces rápidos",
+    "mainPages": "Páginas principales",
+    "players": "Jugadores",
+    "playMinesweeper": "Jugar al Buscaminas",
+    "home": "Inicio",
+    "playGame": "Jugar",
+    "browseSkins": "Skins",
+    "leaderboard": "Clasificación",
+    "myStats": "Mis stats",
+    "howToPlay": "Cómo jugar",
+    "about": "Acerca de",
+    "wins": "victorias",
+    "best": "mejor",
+    "gridSkins": "Skins de cuadrícula",
+    "backgroundSkins": "Skins de fondo"
+  },
+  "profilePage": {
+    "title": "Perfil de jugador",
+    "description": "Ver estadísticas del jugador, historial de partidas y mejores tiempos.",
+    "playerTitle": "Stats de Minesweeper de {name}",
+    "playerDescription": "Perfil de Minesweeper de {name}: {wins} victorias, {winRate}% de tasa de victorias, mejor tiempo {bestTime}.",
+    "playerDescriptionNoBest": "Perfil de Minesweeper de {name}: {games} partidas, {wins} victorias, {winRate}% de tasa de victorias.",
+    "ogTitle": "{name} | Stats de jugador Minesweeper"
+  },
+  "statsPage": {
+    "leaderboard": "Clasificación",
+    "totalTime": "Tiempo total",
+    "yourStats": "Tus estadísticas",
+    "playerStats": "Estadísticas",
+    "loginPrompt": "¡Inicia sesión para jugar y seguir tus stats!",
+    "backToGame": "Volver al juego",
+    "latestGames": "Últimas partidas",
+    "bestGames": "Mejores partidas",
+    "contactMe": "Puedes contactarme en",
+    "logout": "Cerrar sesión",
+    "table": {
+      "rank": "Rango",
+      "player": "Jugador",
+      "time": "Tiempo",
+      "flags": "Banderas",
+      "date": "Fecha",
+      "status": "Estado",
+      "revealed": "Reveladas",
+      "games": "Partidas",
+      "wins": "Victorias",
+      "winrate": "Tasa de victoria"
+    },
+    "status": {
+      "won": "Ganado",
+      "lost": "Perdido",
+      "restarted": "Reiniciado"
+    },
+    "empty": {
+      "noGamesYet": "Sin partidas. ¡Sé el primero en ganar!",
+      "noWinsYet": "Sin victorias. ¡Sigue jugando!",
+      "startPlaying": "Sin partidas. ¡Empieza a jugar!",
+      "beFirstToPlay": "Sin partidas. ¡Sé el primero en jugar!",
+      "noStatsFound": "No se encontraron estadísticas"
+    },
+    "stats": {
+      "title": "Estadísticas",
+      "games": "Partidas",
+      "timeSection": "Tiempo",
+      "gameplay": "Gameplay",
+      "totalGames": "Total partidas",
+      "winsLabel": "Victorias",
+      "winrateLabel": "Tasa de victoria",
+      "noFlagsWins": "Victorias sin banderas",
+      "restarts": "Reinicios",
+      "totalTimeLabel": "Tiempo total",
+      "bestTime": "Mejor tiempo",
+      "avgGameTime": "Tiempo promedio",
+      "cellsRevealed": "Celdas reveladas",
+      "flagsPlaced": "Banderas colocadas",
+      "bombsHit": "Bombas tocadas",
+      "avgFlagsGame": "Banderas/partida",
+      "avgRevealedGame": "Reveladas/partida"
+    }
+  },
+  "playersPage": {
+    "title": "Clasificaciones de Buscaminas",
+    "subtitle": "Explora los mejores jugadores clasificados por velocidad, victorias y experiencia. {count} jugadores han ganado su lugar en nuestras clasificaciones.",
+    "fastestTimes": "Tiempos más rápidos",
+    "fastestTimesDesc": "Jugadores con las victorias más rápidas",
+    "mostWins": "Más victorias",
+    "mostWinsDesc": "Jugadores con más victorias",
+    "mostExperienced": "Más experimentados",
+    "mostExperiencedDesc": "Jugadores con más partidas jugadas",
+    "recentBestGames": "Mejores partidas recientes",
+    "recentBestGamesDesc": "Las últimas actuaciones récord de nuestra comunidad.",
+    "aboutRankings": "Acerca de las clasificaciones",
+    "aboutRankingsText1": "Nuestras clasificaciones rastrean el rendimiento de los jugadores en múltiples dimensiones. La clasificación Tiempos más rápidos muestra a los jugadores que han logrado las partidas ganadoras más rápidas. Más victorias clasifica a los jugadores por victorias totales, mientras que Más experimentados destaca a los jugadores dedicados con el mayor número de partidas.",
+    "aboutRankingsText2": "Los jugadores son indexados en nuestro sitio una vez que alcanzan 50 partidas jugadas, 10 victorias, o registran un mejor tiempo. Esto asegura que nuestras clasificaciones muestren jugadores comprometidos mientras mantiene el índice enfocado y rastreable.",
+    "best": "Mejor",
+    "wins": "Victorias",
+    "games": "Partidas",
+    "flags": "banderas"
+  },
+  "redditPage": {
+    "title": "Minesweeper.fr",
+    "subtitle": "La experiencia moderna de Buscaminas con skins, stats y clasificaciones",
+    "whatIs": {
+      "title": "¿Qué es Minesweeper.fr?",
+      "description": "Minesweeper.fr es un juego de Buscaminas gratuito basado en navegador, construido para la web moderna. Sin descargas, sin anuncios interrumpiendo el juego, solo el clásico Buscaminas con las características que la comunidad ha estado pidiendo."
+    },
+    "playNow": "Jugar ahora",
+    "features": {
+      "title": "Características",
+      "customSkins": {
+        "title": "20+ Skins personalizados",
+        "description": "Personaliza tu juego con skins de celdas y fondos únicos. Desde el estilo clásico de Windows hasta temas modernos, pixel art y más.",
+        "link": "Explorar skins"
+      },
+      "leaderboards": {
+        "title": "Clasificaciones globales",
+        "description": "Compite con jugadores de todo el mundo. Rastrea los mejores tiempos en dificultades Fácil, Medio y Difícil. Ve quién es el más rápido.",
+        "link": "Ver clasificación"
+      },
+      "stats": {
+        "title": "Estadísticas personales",
+        "description": "Rastrea tu progreso con stats detalladas: partidas jugadas, tasa de victorias, mejores tiempos, tiempo promedio y rendimiento histórico.",
+        "link": "Ver stats"
+      },
+      "profiles": {
+        "title": "Perfiles de jugadores",
+        "description": "Cada jugador tiene una página de perfil pública mostrando sus logros, clasificaciones e historial de partidas.",
+        "link": "Encontrar jugadores"
+      }
+    },
+    "why": {
+      "title": "¿Por qué Minesweeper.fr?",
+      "free": "Gratis para siempre",
+      "freeDesc": "Sin niveles premium, sin muros de pago",
+      "noDownload": "Sin descarga requerida",
+      "noDownloadDesc": "Juega instantáneamente en tu navegador",
+      "mobile": "Compatible con móviles",
+      "mobileDesc": "Funciona en escritorio, tablet y teléfono",
+      "active": "Desarrollo activo",
+      "activeDesc": "Nuevos skins y características añadidos regularmente",
+      "privacy": "Enfocado en la privacidad",
+      "privacyDesc": "Recolección mínima de datos, sin anuncios de seguimiento"
+    },
+    "quickLinks": "Enlaces rápidos",
+    "playMinesweeper": "Jugar al Buscaminas",
+    "browseSkins": "Explorar skins",
+    "leaderboard": "Clasificación",
+    "myStats": "Mis stats",
+    "howToPlay": "Cómo jugar",
+    "madeBy": "Hecho por"
+  }
+}

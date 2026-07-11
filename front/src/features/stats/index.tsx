@@ -13,12 +13,14 @@ import {
   StatsSkeleton,
   GamesSkeleton,
 } from "./components/skeletons";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { getTranslations } from "next-intl/server";
 
 export async function StatsPage() {
   const session = await getServerSession();
   const userEmail = session?.user?.email;
+  const t = await getTranslations("statsPage");
 
   return (
     <div className="max-w-[1000px] mx-auto w-full h-full flex flex-col justify-center m-4 rounded-lg p-4 gap-6">
@@ -40,14 +42,14 @@ export async function StatsPage() {
               className="flex items-center gap-2 cursor-pointer w-fit"
             >
               <span className="text-2xl">🏆</span>
-              <h2 className="text-2xl font-bold">Leaderboard</h2>
+              <h2 className="text-2xl font-bold">{t("leaderboard")}</h2>
             </TabsTrigger>
             <TabsTrigger
               value="total-time"
               className="flex items-center gap-2 cursor-pointer"
             >
               <span className="text-2xl">⏱️</span>
-              <h2 className="text-2xl font-bold">Total Time</h2>
+              <h2 className="text-2xl font-bold">{t("totalTime")}</h2>
             </TabsTrigger>
           </TabsList>
           <TabsContent
@@ -82,7 +84,7 @@ export async function StatsPage() {
       )}
 
       <div className="flex justify-center gap-1 mt-6 text-gray-500 text-sm">
-        You can contact me at
+        {t("contactMe")}
         <a href="mailto:contact@minesweeper.fr" className="underline">
           alf@minesweeper.fr
         </a>
@@ -91,24 +93,27 @@ export async function StatsPage() {
   );
 }
 
-function LoginPrompt() {
+async function LoginPrompt() {
+  const t = await getTranslations("statsPage");
   return (
     <div className="flex flex-col gap-4 w-full rounded-xl border border-gray-200 p-4">
-      <h2 className="text-xl font-bold">Your stats</h2>
-      <p>Login to play and track your stats!</p>
+      <h2 className="text-xl font-bold">{t("yourStats")}</h2>
+      <p>{t("loginPrompt")}</p>
       <Link href="/">
-        <Button>Back to game</Button>
+        <Button>{t("backToGame")}</Button>
       </Link>
     </div>
   );
 }
 
 async function UserStats({ userEmail }: { userEmail: string }) {
+  const t = await getTranslations("statsPage");
   const stats = await getStats(userEmail);
-  return <Stats stats={stats} title="Your stats" />;
+  return <Stats stats={stats} title={t("yourStats")} />;
 }
 
 async function UserGames({ userEmail }: { userEmail: string }) {
+  const t = await getTranslations("statsPage");
   const [latestGames, bestGames] = await Promise.all([
     getLatestGames(userEmail),
     getBest10Games(userEmail),
@@ -125,14 +130,14 @@ async function UserGames({ userEmail }: { userEmail: string }) {
           className="flex items-center gap-2 cursor-pointer w-fit"
         >
           <span className="text-2xl">🕹️</span>
-          <h2 className="text-2xl font-bold">Latest Games</h2>
+          <h2 className="text-2xl font-bold">{t("latestGames")}</h2>
         </TabsTrigger>
         <TabsTrigger
           value="best-games"
           className="flex items-center gap-2 cursor-pointer"
         >
           <span className="text-2xl">🏆</span>
-          <h2 className="text-2xl font-bold">Best Games</h2>
+          <h2 className="text-2xl font-bold">{t("bestGames")}</h2>
         </TabsTrigger>
       </TabsList>
       <TabsContent
