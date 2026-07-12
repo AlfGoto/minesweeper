@@ -134,7 +134,16 @@
     "moreSkins": "Plus de skins Minesweeper",
     "viewAll": "Voir tout →",
     "playNow": "Jouer au Démineur",
-    "trySkin": "Essayez le skin {name} et bien d'autres dans notre jeu Démineur en ligne gratuit"
+    "trySkin": "Essayez le skin {name} et bien d'autres dans notre jeu Démineur en ligne gratuit",
+    "faqWhatIs": "Qu'est-ce que le skin {name} dans le Démineur ?",
+    "faqHowUnlock": "Comment débloquer le skin {name} du Démineur ?",
+    "faqHowUnlockAnswer": "Vous pouvez débloquer le skin {name} en jouant au Démineur et en gagnant des AlfCoins. Visitez la boutique de skins pour l'acheter et l'appliquer à votre jeu.",
+    "faqChangeGameplay": "Le skin {name} change-t-il le gameplay ?",
+    "faqChangeGameplayAnswer": "Non, le skin {name} est purement cosmétique. Il change l'apparence des cellules mais n'affecte pas les règles ou la difficulté du Démineur.",
+    "faqFreeToPlay": "Le Démineur est-il gratuit ?",
+    "faqFreeToPlayAnswer": "Oui, le Démineur est entièrement gratuit en ligne avec divers skins et thèmes à débloquer.",
+    "faqPreview": "Puis-je prévisualiser le skin {name} avant de le débloquer ?",
+    "faqPreviewAnswer": "Oui, vous pouvez voir un aperçu du skin {name} dans la boutique de skins et sur cette page avant de décider de le débloquer."
   },
   "skinsPage": {
     "backToGame": "Retour au jeu",

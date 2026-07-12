@@ -40,4 +40,54 @@ export const retroGridSkin: BackgroundSkinData = {
         "No. It is a cosmetic background option only, so gameplay behavior, difficulty, and mechanics stay exactly the same.",
     },
   ],
+  translations: {
+    fr: {
+      name: "Grille Rétro",
+      description:
+        "Un fond de style synthwave néon avec des lignes de grille lumineuses, des dégradés de crépuscule et une énergie d'arcade.",
+      longDescription:
+        "Grille Rétro est inspiré des vieilles affiches d'arcade et des paysages synthwave. Il combine une base de nuit violette sombre, une lueur chaude à l'horizon et des lignes de grille cyan pour créer un arrière-plan futuriste ludique qui garde l'application lisible.",
+      keywords: [
+        "fond démineur grille rétro",
+        "fond jeu synthwave",
+        "thème démineur arcade néon",
+      ],
+      faq: [
+        {
+          question: "Qu'est-ce que le skin de fond Grille Rétro dans le Démineur ?",
+          answer:
+            "Grille Rétro est un skin de fond inspiré du synthwave avec des lignes de grille lumineuses et une énergie d'arcade néon.",
+        },
+        {
+          question: "Le fond Grille Rétro affecte-t-il le gameplay ?",
+          answer:
+            "Non. C'est uniquement une option de fond cosmétique, donc le comportement du jeu, la difficulté et les mécaniques restent exactement les mêmes.",
+        },
+      ],
+    },
+    es: {
+      name: "Rejilla Retro",
+      description:
+        "Un fondo de estilo synthwave neón con líneas de cuadrícula brillantes, gradientes de atardecer y energía de arcade.",
+      longDescription:
+        "Rejilla Retro está inspirado en viejos pósters de arcade y paisajes synthwave. Combina una base de noche púrpura oscura, un brillo cálido en el horizonte y líneas de cuadrícula cian para crear un fondo futurista divertido que mantiene la aplicación legible.",
+      keywords: [
+        "fondo buscaminas rejilla retro",
+        "fondo juego synthwave",
+        "tema buscaminas arcade neón",
+      ],
+      faq: [
+        {
+          question: "¿Qué es el skin de fondo Rejilla Retro en Buscaminas?",
+          answer:
+            "Rejilla Retro es un skin de fondo inspirado en synthwave con líneas de cuadrícula brillantes y energía de arcade neón.",
+        },
+        {
+          question: "¿El fondo Rejilla Retro afecta el gameplay?",
+          answer:
+            "No. Es solo una opción de fondo cosmético, así que el comportamiento del juego, la dificultad y las mecánicas permanecen exactamente iguales.",
+        },
+      ],
+    },
+  },
 };

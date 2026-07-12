@@ -74,4 +74,54 @@ export const flowerFloorSkin: BackgroundSkinData = {
         "No. It is a cosmetic background option only, so gameplay behavior, difficulty, and mechanics stay exactly the same.",
     },
   ],
+  translations: {
+    fr: {
+      name: "Parterre Fleuri",
+      description:
+        "Un skin de fond floral inspiré du skin de cellules Parterre Fleuri, avec des tons de prairie doux et des fleurs éparpillées.",
+      longDescription:
+        "Le fond Parterre Fleuri transpose le joyeux skin de cellules Parterre Fleuri en un arrière-plan de page plus large. Il superpose des verts de prairie, une brume de lumière douce et de petites explosions florales sur la surface pour que la page ait un thème jardin sans submerger le contenu au-dessus.",
+      keywords: [
+        "fond démineur parterre fleuri",
+        "fond démineur floral",
+        "thème démineur jardin",
+      ],
+      faq: [
+        {
+          question: "Qu'est-ce que le skin de fond Parterre Fleuri dans le Démineur ?",
+          answer:
+            "Le skin de fond Parterre Fleuri enveloppe la page dans un arrière-plan inspiré des prairies avec des fleurs éparpillées et des tons verts doux.",
+        },
+        {
+          question: "Le fond Parterre Fleuri affecte-t-il le gameplay ?",
+          answer:
+            "Non. C'est uniquement une option de fond cosmétique, donc le comportement du jeu, la difficulté et les mécaniques restent exactement les mêmes.",
+        },
+      ],
+    },
+    es: {
+      name: "Suelo Florido",
+      description:
+        "Un skin de fondo floral inspirado en el skin de celdas Suelo Florido, con tonos suaves de pradera y flores esparcidas.",
+      longDescription:
+        "El fondo Suelo Florido traduce el alegre skin de celdas Suelo Florido en un fondo de página más amplio. Superpone verdes de pradera, una neblina de luz suave y pequeñas explosiones florales sobre la superficie para que la página tenga un tema de jardín sin abrumar el contenido sobre ella.",
+      keywords: [
+        "fondo buscaminas suelo florido",
+        "fondo buscaminas floral",
+        "tema buscaminas jardín",
+      ],
+      faq: [
+        {
+          question: "¿Qué es el skin de fondo Suelo Florido en Buscaminas?",
+          answer:
+            "El skin de fondo Suelo Florido envuelve la página en un fondo inspirado en praderas con flores esparcidas y tonos verdes suaves.",
+        },
+        {
+          question: "¿El fondo Suelo Florido afecta el gameplay?",
+          answer:
+            "No. Es solo una opción de fondo cosmético, así que el comportamiento del juego, la dificultad y las mecánicas permanecen exactamente iguales.",
+        },
+      ],
+    },
+  },
 };

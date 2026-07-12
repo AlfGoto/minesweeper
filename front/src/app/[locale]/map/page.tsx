@@ -51,7 +51,7 @@ async function MapContent({ locale }: { locale: string }) {
 
   const indexablePlayers = filterIndexablePlayers(allStats);
   const cellSkins = getPublishedSkinsWithMeta(locale);
-  const backgroundSkins = getPublishedBackgroundSkins();
+  const backgroundSkins = getPublishedBackgroundSkins(locale);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">

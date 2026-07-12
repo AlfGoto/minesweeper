@@ -40,4 +40,54 @@ export const deepReefSkin: BackgroundSkinData = {
         "No. It is a cosmetic background option only, so gameplay behavior, difficulty, and mechanics stay exactly the same.",
     },
   ],
+  translations: {
+    fr: {
+      name: "Récif Profond",
+      description:
+        "Un fond de style sous-marin avec une profondeur turquoise, des bandes de lumière caustique fraîches et une atmosphère de récif.",
+      longDescription:
+        "Récif Profond est conçu pour se sentir submergé et lumineux en même temps. Il superpose des bleus océan sombres avec des reflets aqua semblant bouger et des lueurs de récif douces, créant une alternative aquatique plus calme au fond Igloo plus froid.",
+      keywords: [
+        "fond démineur sous-marin",
+        "skin fond jeu océan",
+        "fond démineur thème récif",
+      ],
+      faq: [
+        {
+          question: "Qu'est-ce que le skin de fond Récif Profond dans le Démineur ?",
+          answer:
+            "Récif Profond est un skin de fond de style sous-marin avec une profondeur turquoise et des bandes de lumière caustique fraîches.",
+        },
+        {
+          question: "Le fond Récif Profond affecte-t-il le gameplay ?",
+          answer:
+            "Non. C'est uniquement une option de fond cosmétique, donc le comportement du jeu, la difficulté et les mécaniques restent exactement les mêmes.",
+        },
+      ],
+    },
+    es: {
+      name: "Arrecife Profundo",
+      description:
+        "Un fondo de estilo submarino con profundidad turquesa, bandas de luz cáustica frescas y atmósfera de arrecife.",
+      longDescription:
+        "Arrecife Profundo está diseñado para sentirse sumergido y luminoso al mismo tiempo. Superpone azules de océano oscuro con reflejos aqua que parecen moverse y brillos de arrecife suaves, creando una alternativa acuática más tranquila al fondo Iglú más frío.",
+      keywords: [
+        "fondo buscaminas submarino",
+        "skin fondo juego océano",
+        "fondo buscaminas tema arrecife",
+      ],
+      faq: [
+        {
+          question: "¿Qué es el skin de fondo Arrecife Profundo en Buscaminas?",
+          answer:
+            "Arrecife Profundo es un skin de fondo de estilo submarino con profundidad turquesa y bandas de luz cáustica frescas.",
+        },
+        {
+          question: "¿El fondo Arrecife Profundo afecta el gameplay?",
+          answer:
+            "No. Es solo una opción de fondo cosmético, así que el comportamiento del juego, la dificultad y las mecánicas permanecen exactamente iguales.",
+        },
+      ],
+    },
+  },
 };

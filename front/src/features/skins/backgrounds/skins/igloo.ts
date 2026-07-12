@@ -56,4 +56,54 @@ export const iglooSkin: BackgroundSkinData = {
         "No. It is a cosmetic background option only, so gameplay behavior, difficulty, and mechanics stay exactly the same.",
     },
   ],
+  translations: {
+    fr: {
+      name: "Fond Igloo",
+      description:
+        "Un skin de fond enneigé avec des bleus glacés, des congères poudreuses et des flocons de neige éparpillés inspiré du skin de cellules Igloo.",
+      longDescription:
+        "Le fond Igloo est conçu pour donner à toute la page une sensation froide, aérée et enneigée. Il utilise des bleus glacier pâles, des bancs de neige poudreuse douce et des mouchetures blanches répétées pour suggérer une neige tombante ou balayée par le vent sans rendre l'interface difficile à lire.",
+      keywords: [
+        "fond démineur igloo",
+        "fond démineur neige",
+        "thème démineur hiver",
+      ],
+      faq: [
+        {
+          question: "Qu'est-ce que le skin de fond Igloo dans le Démineur ?",
+          answer:
+            "Le skin de fond Igloo donne à la page une atmosphère froide et enneigée avec des bleus glacés et des flocons de neige éparpillés.",
+        },
+        {
+          question: "Le fond Igloo affecte-t-il le gameplay ?",
+          answer:
+            "Non. C'est uniquement une option de fond cosmétique, donc le comportement du jeu, la difficulté et les mécaniques restent exactement les mêmes.",
+        },
+      ],
+    },
+    es: {
+      name: "Fondo Iglú",
+      description:
+        "Un skin de fondo nevado con azules helados, montículos de nieve en polvo y motas de nieve esparcidas inspirado en el skin de celdas Iglú.",
+      longDescription:
+        "El fondo Iglú está construido para hacer que toda la página se sienta fría, aireada y cubierta de nieve. Usa azules glaciares pálidos, bancos de nieve suave como polvo y motas blancas repetidas para sugerir nieve cayendo o arrastrada por el viento sin hacer la interfaz difícil de leer.",
+      keywords: [
+        "fondo buscaminas iglú",
+        "fondo buscaminas nieve",
+        "tema buscaminas invierno",
+      ],
+      faq: [
+        {
+          question: "¿Qué es el skin de fondo Iglú en Buscaminas?",
+          answer:
+            "El skin de fondo Iglú da a la página una atmósfera fría y nevada con azules helados y motas de nieve esparcidas.",
+        },
+        {
+          question: "¿El fondo Iglú afecta el gameplay?",
+          answer:
+            "No. Es solo una opción de fondo cosmético, así que el comportamiento del juego, la dificultad y las mecánicas permanecen exactamente iguales.",
+        },
+      ],
+    },
+  },
 };

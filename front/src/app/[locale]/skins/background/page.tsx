@@ -60,12 +60,12 @@ export default function BackgroundSkinsIndexPage({
   const { locale } = use(params);
   setRequestLocale(locale);
 
-  return <BackgroundSkinsContent />;
+  return <BackgroundSkinsContent locale={locale} />;
 }
 
-async function BackgroundSkinsContent() {
+async function BackgroundSkinsContent({ locale }: { locale: string }) {
   const t = await getTranslations("backgroundSkinsPage");
-  const backgrounds = getPublishedBackgroundSkins();
+  const backgrounds = getPublishedBackgroundSkins(locale);
 
   const itemListSchema = {
     "@context": "https://schema.org",

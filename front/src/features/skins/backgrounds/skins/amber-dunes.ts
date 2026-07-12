@@ -38,4 +38,54 @@ export const amberDunesSkin: BackgroundSkinData = {
         "No. It is a cosmetic background option only, so gameplay behavior, difficulty, and mechanics stay exactly the same.",
     },
   ],
+  translations: {
+    fr: {
+      name: "Dunes Ambrées",
+      description:
+        "Un fond inspiré du désert chaud avec des dégradés de sable, une brume ensoleillée et des lignes de texture subtiles comme des dunes.",
+      longDescription:
+        "Dunes Ambrées enveloppe la page dans une palette cuite au soleil de crème, or, ambre et orange. Les stries superposées imitent des crêtes de dunes douces, donnant à l'arrière-plan un look balayé par le vent chaud qui semble calme plutôt que rude.",
+      keywords: [
+        "fond démineur désert",
+        "thème jeu sable chaud",
+        "skin fond dunes ambrées",
+      ],
+      faq: [
+        {
+          question: "Qu'est-ce que le skin de fond Dunes Ambrées dans le Démineur ?",
+          answer:
+            "Dunes Ambrées est un skin de fond chaud inspiré du désert avec des dégradés de sable et des textures subtiles comme des dunes.",
+        },
+        {
+          question: "Le fond Dunes Ambrées affecte-t-il le gameplay ?",
+          answer:
+            "Non. C'est uniquement une option de fond cosmétique, donc le comportement du jeu, la difficulté et les mécaniques restent exactement les mêmes.",
+        },
+      ],
+    },
+    es: {
+      name: "Dunas Ámbar",
+      description:
+        "Un fondo cálido inspirado en el desierto con gradientes de arena, neblina soleada y líneas de textura sutiles como dunas.",
+      longDescription:
+        "Dunas Ámbar envuelve la página en una paleta horneada por el sol de crema, oro, ámbar y naranja. Las franjas superpuestas imitan crestas de dunas suaves, dando al fondo un aspecto cálido barrido por el viento que se siente tranquilo en lugar de duro.",
+      keywords: [
+        "fondo buscaminas desierto",
+        "tema juego arena cálida",
+        "skin fondo dunas ámbar",
+      ],
+      faq: [
+        {
+          question: "¿Qué es el skin de fondo Dunas Ámbar en Buscaminas?",
+          answer:
+            "Dunas Ámbar es un skin de fondo cálido inspirado en el desierto con gradientes de arena y texturas sutiles como dunas.",
+        },
+        {
+          question: "¿El fondo Dunas Ámbar afecta el gameplay?",
+          answer:
+            "No. Es solo una opción de fondo cosmético, así que el comportamiento del juego, la dificultad y las mecánicas permanecen exactamente iguales.",
+        },
+      ],
+    },
+  },
 };

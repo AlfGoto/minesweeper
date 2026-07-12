@@ -5,6 +5,14 @@ export type BackgroundSkinFaq = {
   answer: string;
 };
 
+export type BackgroundSkinTranslation = {
+  name?: string;
+  description?: string;
+  longDescription?: string;
+  keywords?: string[];
+  faq?: BackgroundSkinFaq[];
+};
+
 export type BackgroundSkinData = {
   value: string;
   style?: CSSProperties;
@@ -14,4 +22,5 @@ export type BackgroundSkinData = {
   longDescription: string;
   keywords: string[];
   faq: BackgroundSkinFaq[];
+  translations?: Record<string, BackgroundSkinTranslation>;
 };

@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, skinName } = await params;
   const t = await getTranslations({ locale, namespace: "backgroundSkinsPage" });
-  const skin = getBackgroundSkinMetaBySlug(skinName);
+  const skin = getBackgroundSkinMetaBySlug(skinName, locale);
 
   if (!skin) {
     return {
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const seoContent = getBackgroundSkinSeo(skin.id);
+  const seoContent = getBackgroundSkinSeo(skin.id, locale);
   const title = t("skinTitle", { name: skin.name });
   const description = seoContent?.metaDescription ?? skin.description;
   const url = `https://minesweeper.fr/skins/background/${skin.slug}`;
@@ -77,16 +77,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BackgroundSkinPage({ params }: Props) {
-  const { skinName } = await params;
+  const { locale, skinName } = await params;
   const t = await getTranslations("backgroundSkinsPage");
-  const skin = getBackgroundSkinMetaBySlug(skinName);
+  const skin = getBackgroundSkinMetaBySlug(skinName, locale);
 
   if (!skin) {
     notFound();
   }
 
-  const seoContent = getBackgroundSkinSeo(skin.id);
-  const publishedBackgroundCount = getPublishedBackgroundSkins().length;
+  const seoContent = getBackgroundSkinSeo(skin.id, locale);
+  const publishedBackgroundCount = getPublishedBackgroundSkins(locale).length;
   const pageUrl = `https://minesweeper.fr/skins/background/${skin.slug}`;
   const faqEntries = seoContent?.faqs ?? skin.faq;
 
@@ -324,7 +324,7 @@ export default async function BackgroundSkinPage({ params }: Props) {
               {t("moreBackgrounds")}
             </h2>
             <nav className="flex flex-wrap gap-3">
-              {getPublishedBackgroundSkins()
+              {getPublishedBackgroundSkins(locale)
                 .filter((s) => s.slug !== skin.slug)
                 .slice(0, 5)
                 .map((relatedSkin) => (

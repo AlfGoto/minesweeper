@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const seoContent = getCellSkinSeo(skin.id);
+  const seoContent = getCellSkinSeo(skin.id, locale);
   const title = t("skinTitle", { name: skin.name });
   const description = seoContent?.metaDescription ?? skin.description;
   const url = `https://minesweeper.fr/skins/${skin.slug}`;
@@ -86,31 +86,30 @@ export default async function SkinPage({ params }: Props) {
     notFound();
   }
 
-  const seoContent = getCellSkinSeo(skin.id);
+  const seoContent = getCellSkinSeo(skin.id, locale);
   const pageUrl = `https://minesweeper.fr/skins/${skin.slug}`;
 
   const nameHash = skin.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const baseFaqs = [
     {
-      question: `What is the ${skin.name} skin in Minesweeper?`,
+      question: t("faqWhatIs", { name: skin.name }),
       answer: skin.longDescription,
     },
     {
-      question: `How do I unlock the ${skin.name} Minesweeper skin?`,
-      answer: `You can unlock the ${skin.name} skin by playing Minesweeper and earning AlfCoins. Visit the skins shop to purchase and apply it to your game.`,
+      question: t("faqHowUnlock", { name: skin.name }),
+      answer: t("faqHowUnlockAnswer", { name: skin.name }),
     },
     {
-      question: `Does the ${skin.name} skin change gameplay?`,
-      answer: `No, the ${skin.name} skin is purely cosmetic. It changes how cells look but doesn't affect Minesweeper rules or difficulty.`,
+      question: t("faqChangeGameplay", { name: skin.name }),
+      answer: t("faqChangeGameplayAnswer", { name: skin.name }),
     },
     {
-      question: "Is Minesweeper free to play?",
-      answer:
-        "Yes, Minesweeper is completely free to play online with various skins and themes available to unlock.",
+      question: t("faqFreeToPlay"),
+      answer: t("faqFreeToPlayAnswer"),
     },
     {
-      question: `Can I preview the ${skin.name} skin before unlocking?`,
-      answer: `Yes, you can see a preview of the ${skin.name} skin in the skins shop and on this page before deciding to unlock it.`,
+      question: t("faqPreview", { name: skin.name }),
+      answer: t("faqPreviewAnswer", { name: skin.name }),
     },
   ];
   const faqCount = 2 + (nameHash % 3);

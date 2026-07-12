@@ -40,4 +40,54 @@ export const auroraDriftSkin: BackgroundSkinData = {
         "No. It is a cosmetic background option only, so gameplay behavior, difficulty, and mechanics stay exactly the same.",
     },
   ],
+  translations: {
+    fr: {
+      name: "Dérive Aurore",
+      description:
+        "Un fond atmosphérique sombre avec des rubans d'aurores boréales, des tons de minuit profonds et des lueurs froides douces.",
+      longDescription:
+        "Dérive Aurore est construit autour de la sensation de jouer au Démineur sous un ciel polaire nocturne. Il mélange des ombres bleu marine profondes avec des bandes d'aurore flottantes turquoise, bleues et violettes pour que la page soit d'humeur maussade, lumineuse et cinématique sans devenir trop bruyante derrière l'interface.",
+      keywords: [
+        "fond démineur aurore",
+        "fond jeu aurores boréales",
+        "thème démineur atmosphérique sombre",
+      ],
+      faq: [
+        {
+          question: "Qu'est-ce que le skin de fond Dérive Aurore dans le Démineur ?",
+          answer:
+            "Dérive Aurore est un skin de fond sombre présentant des rubans d'aurores boréales et des tons de minuit profonds pour une atmosphère maussade et cinématique.",
+        },
+        {
+          question: "Le fond Dérive Aurore affecte-t-il le gameplay ?",
+          answer:
+            "Non. C'est uniquement une option de fond cosmétique, donc le comportement du jeu, la difficulté et les mécaniques restent exactement les mêmes.",
+        },
+      ],
+    },
+    es: {
+      name: "Deriva Aurora",
+      description:
+        "Un fondo atmosférico oscuro con cintas de auroras boreales, tonos de medianoche profundos y brillos fríos suaves.",
+      longDescription:
+        "Deriva Aurora está construido alrededor de la sensación de jugar Buscaminas bajo un cielo polar nocturno. Mezcla sombras azul marino profundas con bandas de aurora flotantes en turquesa, azul y violeta para que la página se sienta melancólica, luminosa y cinematográfica sin volverse demasiado ruidosa detrás de la interfaz.",
+      keywords: [
+        "fondo buscaminas aurora",
+        "fondo juego auroras boreales",
+        "tema buscaminas atmosférico oscuro",
+      ],
+      faq: [
+        {
+          question: "¿Qué es el skin de fondo Deriva Aurora en Buscaminas?",
+          answer:
+            "Deriva Aurora es un skin de fondo oscuro con cintas de auroras boreales y tonos de medianoche profundos para una atmósfera melancólica y cinematográfica.",
+        },
+        {
+          question: "¿El fondo Deriva Aurora afecta el gameplay?",
+          answer:
+            "No. Es solo una opción de fondo cosmético, así que el comportamiento del juego, la dificultad y las mecánicas permanecen exactamente iguales.",
+        },
+      ],
+    },
+  },
 };

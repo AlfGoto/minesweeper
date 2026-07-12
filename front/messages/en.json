@@ -134,7 +134,16 @@
     "moreSkins": "More Minesweeper Skins",
     "viewAll": "View all →",
     "playNow": "Play Minesweeper Now",
-    "trySkin": "Try the {name} skin and many more in our free online Minesweeper game"
+    "trySkin": "Try the {name} skin and many more in our free online Minesweeper game",
+    "faqWhatIs": "What is the {name} skin in Minesweeper?",
+    "faqHowUnlock": "How do I unlock the {name} Minesweeper skin?",
+    "faqHowUnlockAnswer": "You can unlock the {name} skin by playing Minesweeper and earning AlfCoins. Visit the skins shop to purchase and apply it to your game.",
+    "faqChangeGameplay": "Does the {name} skin change gameplay?",
+    "faqChangeGameplayAnswer": "No, the {name} skin is purely cosmetic. It changes how cells look but doesn't affect Minesweeper rules or difficulty.",
+    "faqFreeToPlay": "Is Minesweeper free to play?",
+    "faqFreeToPlayAnswer": "Yes, Minesweeper is completely free to play online with various skins and themes available to unlock.",
+    "faqPreview": "Can I preview the {name} skin before unlocking?",
+    "faqPreviewAnswer": "Yes, you can see a preview of the {name} skin in the skins shop and on this page before deciding to unlock it."
   },
   "skinsPage": {
     "backToGame": "Back to game",

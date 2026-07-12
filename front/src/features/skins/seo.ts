@@ -1904,17 +1904,25 @@ The background pairs naturally with Blue Lagoon cells for full aquatic immersion
 /**
  * Get SEO content for a cell skin by its ID.
  * Returns undefined if no SEO content exists for the skin.
+ * For non-EN locales, returns undefined so page uses translated skin content.
  */
-export const getCellSkinSeo = (skinId: string): SkinSeoContent | undefined => {
+export const getCellSkinSeo = (
+  skinId: string,
+  locale: string = "en",
+): SkinSeoContent | undefined => {
+  if (locale !== "en") return undefined;
   return cellSkinsSeo[skinId];
 };
 
 /**
  * Get SEO content for a background skin by its ID.
  * Returns undefined if no SEO content exists for the skin.
+ * For non-EN locales, returns undefined so page uses translated skin content.
  */
 export const getBackgroundSkinSeo = (
   skinId: string,
+  locale: string = "en",
 ): SkinSeoContent | undefined => {
+  if (locale !== "en") return undefined;
   return backgroundSkinsSeo[skinId];
 };

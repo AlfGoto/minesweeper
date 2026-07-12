@@ -134,7 +134,16 @@
     "moreSkins": "Más skins de Minesweeper",
     "viewAll": "Ver todo →",
     "playNow": "Jugar Buscaminas ahora",
-    "trySkin": "Prueba el skin {name} y muchos más en nuestro juego de Buscaminas en línea gratuito"
+    "trySkin": "Prueba el skin {name} y muchos más en nuestro juego de Buscaminas en línea gratuito",
+    "faqWhatIs": "¿Qué es el skin {name} en Buscaminas?",
+    "faqHowUnlock": "¿Cómo desbloqueo el skin {name} de Buscaminas?",
+    "faqHowUnlockAnswer": "Puedes desbloquear el skin {name} jugando Buscaminas y ganando AlfCoins. Visita la tienda de skins para comprarlo y aplicarlo a tu juego.",
+    "faqChangeGameplay": "¿El skin {name} cambia el gameplay?",
+    "faqChangeGameplayAnswer": "No, el skin {name} es puramente cosmético. Cambia el aspecto de las celdas pero no afecta las reglas o dificultad del Buscaminas.",
+    "faqFreeToPlay": "¿Es Buscaminas gratis?",
+    "faqFreeToPlayAnswer": "Sí, Buscaminas es completamente gratis en línea con varios skins y temas disponibles para desbloquear.",
+    "faqPreview": "¿Puedo previsualizar el skin {name} antes de desbloquearlo?",
+    "faqPreviewAnswer": "Sí, puedes ver una vista previa del skin {name} en la tienda de skins y en esta página antes de decidir desbloquearlo."
   },
   "skinsPage": {
     "backToGame": "Volver al juego",
