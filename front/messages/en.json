@@ -21,6 +21,7 @@
     "breadcrumb": "How to Play",
     "title": "How to Play Minesweeper",
     "subtitle": "Master the classic puzzle game with our complete guide",
+    "metaDescription": "Learn how to play Minesweeper with our complete guide. Rules, strategy tips, number meanings, and FAQs to help you master the classic puzzle game.",
     "objective": {
       "title": "Objective",
       "description": "Clear a rectangular board containing hidden mines without detonating any. Win by revealing all cells that don't contain mines."
@@ -148,6 +149,7 @@
   "skinsPage": {
     "backToGame": "Back to game",
     "cells": "Grid",
+    "metaDescription": "Browse 20+ free Minesweeper skins and themes. Customize your game with unique cell designs from classic Windows style to modern pixel art and emoji themes.",
     "backgrounds": "Backgrounds",
     "banners": "Banners",
     "cellsTitle": "Grid Skins",
@@ -269,6 +271,7 @@
     "subtitle": "Explore top players ranked by speed, wins, and experience. {count} players have earned their spot on our leaderboards.",
     "fastestTimes": "Fastest Times",
     "fastestTimesDesc": "Players with the quickest wins",
+    "metaDescription": "Compete on Minesweeper leaderboards. See top players ranked by fastest times, most wins, and games played. Track your own ranking.",
     "mostWins": "Most Wins",
     "mostWinsDesc": "Players with the most victories",
     "mostExperienced": "Most Experienced",
@@ -286,6 +289,7 @@
   "redditPage": {
     "title": "Minesweeper.fr",
     "subtitle": "The modern Minesweeper experience with skins, stats & leaderboards",
+    "metaDescription": "Minesweeper.fr is a free browser-based Minesweeper game with 20+ custom skins, global leaderboards, personal statistics, and player profiles. No downloads required.",
     "whatIs": {
       "title": "What is Minesweeper.fr?",
       "description": "Minesweeper.fr is a free, browser-based Minesweeper game built for the modern web. No downloads, no ads interrupting gameplay, just pure classic Minesweeper with features the community has been asking for."

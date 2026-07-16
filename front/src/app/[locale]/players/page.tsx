@@ -19,11 +19,11 @@ export async function generateMetadata({
 
   return {
     title: t("title"),
-    description: t("fastestTimesDesc"),
+    description: t("metaDescription"),
     alternates,
     openGraph: {
       title: t("title"),
-      description: t("fastestTimesDesc"),
+      description: t("metaDescription"),
       type: "website",
       url: alternates.canonical,
       siteName: "Minesweeper",
@@ -39,7 +39,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: t("title"),
-      description: t("fastestTimesDesc"),
+      description: t("metaDescription"),
     },
   };
 }

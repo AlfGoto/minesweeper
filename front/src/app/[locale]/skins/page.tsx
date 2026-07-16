@@ -18,7 +18,7 @@ export async function generateMetadata({
 
   return {
     title: `Minesweeper ${t("cells")} - ${skinCount}+`,
-    description: `${skinCount}+ ${t("cells").toLowerCase()}`,
+    description: t("metaDescription"),
     keywords: [
       "minesweeper skins",
       "minesweeper themes",
@@ -34,7 +34,7 @@ export async function generateMetadata({
     alternates,
     openGraph: {
       title: `Minesweeper ${t("cells")}`,
-      description: `${skinCount}+ ${t("cells").toLowerCase()}`,
+      description: t("metaDescription"),
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
@@ -50,7 +50,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: `Minesweeper ${t("cells")}`,
-      description: `${skinCount}+ ${t("cells").toLowerCase()}`,
+      description: t("metaDescription"),
     },
   };
 }

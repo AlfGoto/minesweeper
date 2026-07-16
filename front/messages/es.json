@@ -21,6 +21,7 @@
     "breadcrumb": "Cómo jugar",
     "title": "Cómo jugar al Buscaminas",
     "subtitle": "Domina el clásico juego de puzzles con nuestra guía completa",
+    "metaDescription": "Aprende a jugar Buscaminas con nuestra guía completa. Reglas, consejos estratégicos, significado de los números y FAQ para dominar este juego de puzzles clásico.",
     "objective": {
       "title": "Objetivo",
       "description": "Despeja un tablero rectangular que contiene minas ocultas sin detonar ninguna. Gana revelando todas las celdas que no contienen minas."
@@ -148,6 +149,7 @@
   "skinsPage": {
     "backToGame": "Volver al juego",
     "cells": "Cuadrícula",
+    "metaDescription": "Explora 20+ skins de Buscaminas gratis. Personaliza tu juego con diseños únicos: estilo Windows clásico, pixel art moderno, temas emoji y más.",
     "backgrounds": "Fondos",
     "banners": "Banners",
     "cellsTitle": "Skins de cuadrícula",
@@ -269,6 +271,7 @@
     "subtitle": "Explora los mejores jugadores clasificados por velocidad, victorias y experiencia. {count} jugadores han ganado su lugar en nuestras clasificaciones.",
     "fastestTimes": "Tiempos más rápidos",
     "fastestTimesDesc": "Jugadores con las victorias más rápidas",
+    "metaDescription": "Clasificaciones de Buscaminas: mejores tiempos, más victorias, partidas jugadas. Compárate con los mejores jugadores y sigue tu progreso.",
     "mostWins": "Más victorias",
     "mostWinsDesc": "Jugadores con más victorias",
     "mostExperienced": "Más experimentados",
@@ -286,6 +289,7 @@
   "redditPage": {
     "title": "Minesweeper.fr",
     "subtitle": "La experiencia moderna de Buscaminas con skins, stats y clasificaciones",
+    "metaDescription": "Minesweeper.fr es un Buscaminas gratuito con 20+ skins personalizados, clasificaciones globales, estadísticas personales y perfiles de jugadores. Juega directamente en tu navegador.",
     "whatIs": {
       "title": "¿Qué es Minesweeper.fr?",
       "description": "Minesweeper.fr es un juego de Buscaminas gratuito basado en navegador, construido para la web moderna. Sin descargas, sin anuncios interrumpiendo el juego, solo el clásico Buscaminas con las características que la comunidad ha estado pidiendo."

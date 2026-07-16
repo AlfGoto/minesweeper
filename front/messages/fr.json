@@ -21,6 +21,7 @@
     "breadcrumb": "Comment jouer",
     "title": "Comment jouer au Démineur",
     "subtitle": "Maîtrisez le jeu de puzzle classique avec notre guide complet",
+    "metaDescription": "Apprenez à jouer au Démineur avec notre guide complet. Règles, astuces stratégiques, signification des nombres et FAQ pour maîtriser ce jeu de puzzle classique.",
     "objective": {
       "title": "Objectif",
       "description": "Découvrez toutes les cases d'un plateau rectangulaire sans faire exploser de mine. Gagnez en révélant toutes les cases qui ne contiennent pas de mines."
@@ -148,6 +149,7 @@
   "skinsPage": {
     "backToGame": "Retour au jeu",
     "cells": "Grille",
+    "metaDescription": "Parcourez 20+ skins Démineur gratuits. Personnalisez votre jeu avec des designs uniques : style Windows classique, pixel art moderne, thèmes emoji et plus.",
     "backgrounds": "Fonds",
     "banners": "Bannières",
     "cellsTitle": "Skins de grille",
@@ -269,6 +271,7 @@
     "subtitle": "Explorez les meilleurs joueurs classés par vitesse, victoires et expérience. {count} joueurs ont gagné leur place dans nos classements.",
     "fastestTimes": "Temps les plus rapides",
     "fastestTimesDesc": "Joueurs avec les victoires les plus rapides",
+    "metaDescription": "Classements Démineur : meilleurs temps, plus de victoires, parties jouées. Comparez-vous aux meilleurs joueurs et suivez votre progression.",
     "mostWins": "Plus de victoires",
     "mostWinsDesc": "Joueurs avec le plus de victoires",
     "mostExperienced": "Plus expérimentés",
@@ -286,6 +289,7 @@
   "redditPage": {
     "title": "Minesweeper.fr",
     "subtitle": "L'expérience Démineur moderne avec skins, stats et classements",
+    "metaDescription": "Minesweeper.fr est un Démineur gratuit avec 20+ skins personnalisés, classements mondiaux, statistiques personnelles et profils joueurs. Jouez directement dans votre navigateur.",
     "whatIs": {
       "title": "Qu'est-ce que Minesweeper.fr ?",
       "description": "Minesweeper.fr est un jeu de Démineur gratuit, jouable dans le navigateur, conçu pour le web moderne. Pas de téléchargement, pas de publicités interrompant le jeu, juste le Démineur classique avec les fonctionnalités demandées par la communauté."

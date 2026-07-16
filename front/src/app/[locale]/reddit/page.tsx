@@ -15,7 +15,7 @@ export async function generateMetadata({
 
   return {
     title: t("title"),
-    description: t("subtitle"),
+    description: t("metaDescription"),
     keywords: [
       "minesweeper reddit",
       "best minesweeper online",
@@ -30,7 +30,7 @@ export async function generateMetadata({
     ],
     openGraph: {
       title: t("title"),
-      description: t("subtitle"),
+      description: t("metaDescription"),
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
@@ -46,7 +46,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: t("title"),
-      description: t("subtitle"),
+      description: t("metaDescription"),
     },
     alternates,
   };
