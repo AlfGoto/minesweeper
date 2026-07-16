@@ -24,7 +24,7 @@ export async function UserProfileHeader({ userName, userImage, isOwnProfile = fa
           />
         )}
         <div>
-          <h2 className="text-2xl font-bold">{userName ?? t("playerStats")}</h2>
+          <h1 className="text-2xl font-bold">{userName ?? t("playerStats")}</h1>
           <p className="text-sm text-muted-foreground">
             {isOwnProfile ? t("yourStats") : t("playerStats")}
           </p>

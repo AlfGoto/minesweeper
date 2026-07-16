@@ -24,6 +24,7 @@ export async function StatsPage() {
 
   return (
     <div className="max-w-[1000px] mx-auto w-full h-full flex flex-col justify-center m-4 rounded-lg p-4 gap-6">
+      {!userEmail && <h1 className="text-3xl font-bold">{t("leaderboard")}</h1>}
       {userEmail && (
         <StatsHeader
           userName={session.user?.name ?? undefined}

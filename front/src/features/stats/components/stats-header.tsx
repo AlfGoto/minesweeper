@@ -26,7 +26,7 @@ export function StatsHeader({ userName, userImage }: StatsHeaderProps) {
           />
         )}
         <div>
-          <h2 className="text-2xl font-bold">{t("yourStats")}</h2>
+          <h1 className="text-2xl font-bold">{t("yourStats")}</h1>
           {userName && (
             <p className="text-sm text-muted-foreground">{userName}</p>
           )}
