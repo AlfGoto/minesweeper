@@ -4,6 +4,7 @@ import { SkinsPage } from "@/features/skins";
 import { getPublishedSkinsWithMeta } from "@/features/skins/cells/skins";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { generateAlternates } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -13,6 +14,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "skinsPage" });
   const skinCount = getPublishedSkinsWithMeta(locale).length;
+  const alternates = generateAlternates("/skins", locale);
 
   return {
     title: `Minesweeper ${t("cells")} - ${skinCount}+`,
@@ -29,13 +31,11 @@ export async function generateMetadata({
       "minesweeper styles",
       "emoji minesweeper skin",
     ],
-    alternates: {
-      canonical: "https://minesweeper.fr/skins",
-    },
+    alternates,
     openGraph: {
       title: `Minesweeper ${t("cells")}`,
       description: `${skinCount}+ ${t("cells").toLowerCase()}`,
-      url: "https://minesweeper.fr/skins",
+      url: alternates.canonical,
       type: "website",
     },
     twitter: {

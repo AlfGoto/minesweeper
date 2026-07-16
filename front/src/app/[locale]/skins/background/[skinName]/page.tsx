@@ -9,6 +9,7 @@ import {
 } from "@/features/skins/backgrounds";
 import { getBackgroundSkinSeo } from "@/features/skins/seo";
 import { getTranslations } from "next-intl/server";
+import { generateAlternates } from "@/lib/seo-config";
 
 type Props = {
   params: Promise<{ locale: string; skinName: string }>;
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoContent = getBackgroundSkinSeo(skin.id, locale);
   const title = t("skinTitle", { name: skin.name });
   const description = seoContent?.metaDescription ?? skin.description;
-  const url = `https://minesweeper.fr/skins/background/${skin.slug}`;
+  const alternates = generateAlternates(`/skins/background/${skin.slug}`, locale);
   const keywords = seoContent?.keywords ?? skin.keywords;
 
   return {
@@ -47,13 +48,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "free minesweeper skins",
       "minesweeper game",
     ],
-    alternates: {
-      canonical: url,
-    },
+    alternates,
     openGraph: {
       type: "website",
       locale: locale === "en" ? "en_US" : locale === "fr" ? "fr_FR" : "es_ES",
-      url,
+      url: alternates.canonical,
       title,
       description,
       siteName: "Minesweeper",

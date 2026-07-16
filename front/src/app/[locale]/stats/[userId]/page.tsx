@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { UserProfilePage } from "@/features/user-stats";
 import { getUserById, getUserStats } from "@/lib/api";
 import { formatTime } from "@/lib/dates";
-import { shouldIndexProfile } from "@/lib/seo-config";
+import { shouldIndexProfile, generateAlternates } from "@/lib/seo-config";
 import { getTranslations } from "next-intl/server";
 import type { User, UserStats } from "@/types/bff";
 
@@ -16,6 +16,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { userId, locale } = await params;
   const t = await getTranslations({ locale, namespace: "profilePage" });
+  const alternates = generateAlternates(`/stats/${userId}`, locale);
 
   try {
     const [user, stats] = await Promise.all([
@@ -49,14 +50,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
-      alternates: {
-        canonical: `https://minesweeper.fr/stats/${userId}`,
-      },
+      alternates,
       openGraph: {
         title: t("ogTitle", { name: userName }),
         description,
         type: "profile",
-        url: `https://minesweeper.fr/stats/${userId}`,
+        url: alternates.canonical,
         images: [
           {
             url: "https://minesweeper.fr/opengraph-image",

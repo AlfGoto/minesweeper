@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getAllStats } from "@/lib/api";
-import { filterIndexablePlayers } from "@/lib/seo-config";
+import { filterIndexablePlayers, generateAlternates } from "@/lib/seo-config";
 import { formatTime } from "@/lib/dates";
 import { Metadata } from "next";
 import { use } from "react";
@@ -15,13 +15,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "mapPage" });
+  const alternates = generateAlternates("/map", locale);
 
   return {
     title: t("title"),
     description: t("subtitle"),
-    alternates: {
-      canonical: "/map",
-    },
+    alternates,
   };
 }
 

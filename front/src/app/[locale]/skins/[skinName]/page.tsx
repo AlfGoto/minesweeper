@@ -10,6 +10,7 @@ import {
 import { CellSkinLargeDemoGrid } from "@/features/shared/components/cell-skin-preview";
 import { getCellSkinSeo } from "@/features/skins/seo";
 import { getTranslations } from "next-intl/server";
+import { generateAlternates } from "@/lib/seo-config";
 
 type Props = {
   params: Promise<{ skinName: string; locale: string }>;
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoContent = getCellSkinSeo(skin.id, locale);
   const title = t("skinTitle", { name: skin.name });
   const description = seoContent?.metaDescription ?? skin.description;
-  const url = `https://minesweeper.fr/skins/${skin.slug}`;
+  const alternates = generateAlternates(`/skins/${skin.slug}`, locale);
   const keywords = seoContent?.keywords ?? skin.keywords;
 
   return {
@@ -48,13 +49,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "free minesweeper skins",
       "minesweeper game",
     ],
-    alternates: {
-      canonical: url,
-    },
+    alternates,
     openGraph: {
       type: "website",
       locale: locale === "en" ? "en_US" : locale === "fr" ? "fr_FR" : "es_ES",
-      url,
+      url: alternates.canonical,
       title,
       description,
       siteName: "Minesweeper",

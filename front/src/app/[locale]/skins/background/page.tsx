@@ -4,6 +4,7 @@ import { use } from "react";
 import { Link } from "@/i18n/navigation";
 import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { generateAlternates } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -13,6 +14,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "backgroundSkinsPage" });
   const backgroundCount = getPublishedBackgroundSkins().length;
+  const alternates = generateAlternates("/skins/background", locale);
 
   return {
     title: t("title"),
@@ -25,13 +27,11 @@ export async function generateMetadata({
       "minesweeper customization",
       "minesweeper visual themes",
     ],
-    alternates: {
-      canonical: "https://minesweeper.fr/skins/background",
-    },
+    alternates,
     openGraph: {
       title: t("ogTitle"),
       description: t("ogDescription", { count: backgroundCount }),
-      url: "https://minesweeper.fr/skins/background",
+      url: alternates.canonical,
       type: "website",
     },
     twitter: {

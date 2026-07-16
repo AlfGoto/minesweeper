@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { StatsPage } from "@/features/stats";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { generateAlternates } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -10,6 +11,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "statsPage" });
+  const alternates = generateAlternates("/stats", locale);
 
   return {
     title: t("leaderboard"),
@@ -24,9 +26,11 @@ export async function generateMetadata({
       "estadísticas buscaminas",
       "mijnenveger statistieken",
     ],
+    alternates,
     openGraph: {
       title: t("leaderboard"),
       description: t("yourStats"),
+      url: alternates.canonical,
     },
   };
 }

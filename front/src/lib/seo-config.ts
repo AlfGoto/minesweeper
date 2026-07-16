@@ -1,10 +1,36 @@
 import type { StatsAll } from "@/types/bff";
+import { routing } from "@/i18n/routing";
+
+export const BASE_URL = "https://minesweeper.fr";
 
 export const SEO_CONFIG = {
   minGamesForIndex: 50,
   minWinsForIndex: 10,
   topPlayersCount: 100,
 } as const;
+
+/**
+ * Generate proper alternates (canonical + hreflang) for a given path and locale.
+ * Path should NOT include locale prefix (e.g., "/skins" not "/fr/skins").
+ */
+export function generateAlternates(path: string, currentLocale: string) {
+  const canonicalPath = currentLocale === routing.defaultLocale
+    ? `${BASE_URL}${path}`
+    : `${BASE_URL}/${currentLocale}${path}`;
+
+  const languages: Record<string, string> = {};
+  for (const locale of routing.locales) {
+    languages[locale] = locale === routing.defaultLocale
+      ? `${BASE_URL}${path}`
+      : `${BASE_URL}/${locale}${path}`;
+  }
+  languages["x-default"] = `${BASE_URL}${path}`;
+
+  return {
+    canonical: canonicalPath,
+    languages,
+  };
+}
 
 export interface IndexablePlayer extends StatsAll {
   isIndexable: boolean;

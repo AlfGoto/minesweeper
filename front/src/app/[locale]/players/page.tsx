@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { getAllStats, getBestGames } from "@/lib/api";
-import { getTopPlayers, filterIndexablePlayers } from "@/lib/seo-config";
+import { getTopPlayers, filterIndexablePlayers, generateAlternates } from "@/lib/seo-config";
 import { generateLeaderboardJsonLd } from "@/lib/structured-data";
 import { formatTime } from "@/lib/dates";
 import { use } from "react";
@@ -15,18 +15,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "playersPage" });
+  const alternates = generateAlternates("/players", locale);
 
   return {
     title: t("title"),
     description: t("fastestTimesDesc"),
-    alternates: {
-      canonical: "https://minesweeper.fr/players",
-    },
+    alternates,
     openGraph: {
       title: t("title"),
       description: t("fastestTimesDesc"),
       type: "website",
-      url: "https://minesweeper.fr/players",
+      url: alternates.canonical,
     },
   };
 }

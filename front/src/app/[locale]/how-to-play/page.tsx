@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Link } from "@/i18n/navigation";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { generateAlternates } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -11,6 +12,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "howToPlayPage" });
+  const alternates = generateAlternates("/how-to-play", locale);
 
   return {
     title: t("title"),
@@ -29,13 +31,11 @@ export async function generateMetadata({
       "regles demineur",
       "como jugar buscaminas",
     ],
-    alternates: {
-      canonical: "https://minesweeper.fr/how-to-play",
-    },
+    alternates,
     openGraph: {
       title: t("title"),
       description: t("subtitle"),
-      url: "https://minesweeper.fr/how-to-play",
+      url: alternates.canonical,
       type: "article",
     },
     twitter: {

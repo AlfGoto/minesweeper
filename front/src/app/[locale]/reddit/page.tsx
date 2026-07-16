@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { generateAlternates } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -10,6 +11,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "redditPage" });
+  const alternates = generateAlternates("/reddit", locale);
 
   return {
     title: t("title"),
@@ -29,11 +31,9 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("subtitle"),
-      url: "https://minesweeper.fr/reddit",
+      url: alternates.canonical,
     },
-    alternates: {
-      canonical: "/reddit",
-    },
+    alternates,
   };
 }
 
