@@ -26,6 +26,20 @@ export async function generateMetadata({
       description: t("fastestTimesDesc"),
       type: "website",
       url: alternates.canonical,
+      siteName: "Minesweeper",
+      images: [
+        {
+          url: "https://minesweeper.fr/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Minesweeper - Free Online Puzzle Game",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("fastestTimesDesc"),
     },
   };
 }

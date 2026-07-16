@@ -21,6 +21,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description:
         "Play Minesweeper with 20+ unique skins. Track your stats, compete on global leaderboards, speedrun your best time. Free to play.",
       url: alternates.canonical,
+      siteName: "Minesweeper",
+      type: "website",
+      images: [
+        {
+          url: "https://minesweeper.fr/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Minesweeper - Free Online Puzzle Game",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Minesweeper - Skins, Stats, Leaderboards & Speedruns",
+      description:
+        "Play Minesweeper with 20+ unique skins. Track your stats, compete on global leaderboards, speedrun your best time. Free to play.",
     },
     alternates,
   };

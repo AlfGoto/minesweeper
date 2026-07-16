@@ -33,7 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const seoContent = getCellSkinSeo(skin.id, locale);
-  const title = t("skinTitle", { name: skin.name });
+  const fullTitle = t("skinTitle", { name: skin.name });
+  const title = fullTitle.length > 60 ? `${skin.name} - Minesweeper Skin` : fullTitle;
   const description = seoContent?.metaDescription ?? skin.description;
   const alternates = generateAlternates(`/skins/${skin.slug}`, locale);
   const keywords = seoContent?.keywords ?? skin.keywords;
@@ -57,6 +58,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       siteName: "Minesweeper",
+      images: [
+        {
+          url: "https://minesweeper.fr/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Minesweeper - Free Online Puzzle Game",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -220,36 +229,36 @@ export default async function SkinPage({ params }: Props) {
         }}
       />
 
-      <main className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 px-4 py-12">
-        <article className="mx-auto max-w-3xl">
+      <div className="max-w-3xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+        <article>
           <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-2 text-sm text-green-700">
+            <ol className="flex items-center gap-2 text-sm text-gray-500">
               <li>
-                <Link href="/" className="hover:underline">
+                <Link href="/" className="hover:text-green-600">
                   Minesweeper
                 </Link>
               </li>
               <li>/</li>
               <li>
-                <Link href="/skins" className="hover:underline">
+                <Link href="/skins" className="hover:text-green-600">
                   {t("breadcrumbSkins")}
                 </Link>
               </li>
               <li>/</li>
-              <li className="font-medium text-green-900">{skin.name}</li>
+              <li className="font-medium text-green-600">{skin.name}</li>
             </ol>
           </nav>
 
-          <header className="mb-8 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-green-900 md:text-5xl">
+          <header className="mb-8">
+            <h1 className="mb-4 text-4xl font-bold text-gray-900">
               {skin.name}
             </h1>
             {seoContent?.heroTagline ? (
-              <p className="text-lg font-medium text-green-800">
+              <p className="text-lg font-medium text-gray-700">
                 {seoContent.heroTagline}
               </p>
             ) : (
-              <p className="text-lg text-green-700">{skin.description}</p>
+              <p className="text-lg text-gray-600">{skin.description}</p>
             )}
           </header>
 
@@ -257,7 +266,7 @@ export default async function SkinPage({ params }: Props) {
             aria-label="Skin Preview"
             className="mb-10 flex justify-center"
           >
-            <div className="overflow-hidden rounded-xl border-4 border-green-200 shadow-2xl">
+            <div className="overflow-hidden rounded-xl border shadow-lg">
               <CellSkinLargeDemoGrid skin={skin.id} />
             </div>
           </section>
@@ -269,10 +278,10 @@ export default async function SkinPage({ params }: Props) {
                 aria-label={section.title}
                 className="mb-10"
               >
-                <h2 className="mb-4 text-2xl font-semibold text-green-900">
+                <h2 className="mb-4 text-2xl font-semibold text-gray-900">
                   {section.title}
                 </h2>
-                <div className="space-y-4 leading-relaxed text-green-800">
+                <div className="space-y-4 leading-relaxed text-gray-600">
                   {section.content.split("\n\n").map((paragraph, pIndex) => (
                     <p key={pIndex}>{paragraph}</p>
                   ))}
@@ -281,33 +290,33 @@ export default async function SkinPage({ params }: Props) {
             ))
           ) : (
             <section aria-label="About this skin" className="mb-10">
-              <h2 className="mb-4 text-2xl font-semibold text-green-900">
+              <h2 className="mb-4 text-2xl font-semibold text-gray-900">
                 {t("aboutSkin", { name: skin.name })}
               </h2>
-              <p className="leading-relaxed text-green-800">
+              <p className="leading-relaxed text-gray-600">
                 {skin.longDescription}
               </p>
             </section>
           )}
 
           <section aria-label="Frequently Asked Questions" className="mb-10">
-            <h2 className="mb-6 text-2xl font-semibold text-green-900">
+            <h2 className="mb-6 text-2xl font-semibold text-gray-900">
               {t("faq")}
             </h2>
             <div className="space-y-6">
               {faqEntries.map((entry) => (
                 <div key={entry.question}>
-                  <h3 className="mb-2 font-medium text-green-900">
+                  <h3 className="mb-2 font-medium text-gray-900">
                     {entry.question}
                   </h3>
-                  <p className="text-green-700">{entry.answer}</p>
+                  <p className="text-gray-600">{entry.answer}</p>
                 </div>
               ))}
             </div>
           </section>
 
           <section aria-label="Related skins" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-green-900">
+            <h2 className="mb-4 text-2xl font-semibold text-gray-900">
               {t("moreSkins")}
             </h2>
             <nav className="flex flex-wrap gap-3">
@@ -318,14 +327,14 @@ export default async function SkinPage({ params }: Props) {
                   <Link
                     key={relatedSkin.slug}
                     href={`/skins/${relatedSkin.slug}`}
-                    className="rounded-full border border-green-200 bg-white px-4 py-2 text-sm text-green-700 transition-colors hover:border-green-400 hover:bg-green-50"
+                    className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 transition-colors hover:border-green-400 hover:bg-green-50"
                   >
                     {relatedSkin.name}
                   </Link>
                 ))}
               <Link
                 href="/skins"
-                className="rounded-full border border-green-300 bg-green-100 px-4 py-2 text-sm font-medium text-green-800 transition-colors hover:bg-green-200"
+                className="rounded-full border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-200"
               >
                 {t("viewAll")}
               </Link>
@@ -335,16 +344,16 @@ export default async function SkinPage({ params }: Props) {
           <section aria-label="Call to action" className="text-center">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-full bg-green-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:bg-green-700 hover:shadow-xl"
+              className="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:bg-green-600 hover:shadow-xl"
             >
               {t("playNow")}
             </Link>
-            <p className="mt-4 text-sm text-green-600">
+            <p className="mt-4 text-sm text-gray-500">
               {t("trySkin", { name: skin.name })}
             </p>
           </section>
         </article>
-      </main>
+      </div>
     </>
   );
 }

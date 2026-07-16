@@ -180,7 +180,8 @@
   },
   "mapPage": {
     "breadcrumb": "Sitemap",
-    "title": "Sitemap",
+    "title": "Minesweeper Sitemap - All Pages & Player Profiles",
+    "description": "Browse all pages on Minesweeper.fr: game modes, 20+ skins, player leaderboards, statistics, and indexed player profiles.",
     "subtitle": "All pages on Minesweeper.fr",
     "quickLinks": "Quick Links",
     "mainPages": "Main Pages",
@@ -210,6 +211,8 @@
     "leaderboard": "Leaderboard",
     "totalTime": "Total Time",
     "yourStats": "Your stats",
+    "metaTitle": "Minesweeper Stats - Track Your Games & Best Times",
+    "metaDescription": "View your Minesweeper statistics: total games, wins, win rate, best time, and detailed gameplay metrics. Login to track your progress.",
     "playerStats": "Stats",
     "loginPrompt": "Login to play and track your stats!",
     "backToGame": "Back to game",
@@ -330,6 +333,6 @@
     "leaderboard": "Leaderboard",
     "myStats": "My Stats",
     "howToPlay": "How to Play",
-    "madeBy": "Made by"
+    "contactMe": "You can contact me at"
   }
 }

@@ -32,7 +32,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const seoContent = getBackgroundSkinSeo(skin.id, locale);
-  const title = t("skinTitle", { name: skin.name });
+  const fullTitle = t("skinTitle", { name: skin.name });
+  const title = fullTitle.length > 60 ? `${skin.name} - Minesweeper Background` : fullTitle;
   const description = seoContent?.metaDescription ?? skin.description;
   const alternates = generateAlternates(`/skins/background/${skin.slug}`, locale);
   const keywords = seoContent?.keywords ?? skin.keywords;
@@ -56,6 +57,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       siteName: "Minesweeper",
+      images: [
+        {
+          url: "https://minesweeper.fr/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Minesweeper - Free Online Puzzle Game",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

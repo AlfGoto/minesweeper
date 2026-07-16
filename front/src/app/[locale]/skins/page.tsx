@@ -36,7 +36,16 @@ export async function generateMetadata({
       title: `Minesweeper ${t("cells")}`,
       description: `${skinCount}+ ${t("cells").toLowerCase()}`,
       url: alternates.canonical,
+      siteName: "Minesweeper",
       type: "website",
+      images: [
+        {
+          url: "https://minesweeper.fr/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Minesweeper - Free Online Puzzle Game",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

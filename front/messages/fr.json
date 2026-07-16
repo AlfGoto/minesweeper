@@ -180,7 +180,8 @@
   },
   "mapPage": {
     "breadcrumb": "Plan du site",
-    "title": "Plan du site",
+    "title": "Plan du site Minesweeper - Toutes les pages et profils",
+    "description": "Parcourez toutes les pages de Minesweeper.fr : modes de jeu, 20+ skins, classements, statistiques et profils de joueurs indexés.",
     "subtitle": "Toutes les pages de Minesweeper.fr",
     "quickLinks": "Liens rapides",
     "mainPages": "Pages principales",
@@ -210,6 +211,8 @@
     "leaderboard": "Classement",
     "totalTime": "Temps total",
     "yourStats": "Vos statistiques",
+    "metaTitle": "Stats Démineur - Suivez vos parties et meilleurs temps",
+    "metaDescription": "Consultez vos statistiques Démineur : parties totales, victoires, taux de réussite, meilleur temps et métriques détaillées. Connectez-vous pour suivre votre progression.",
     "playerStats": "Statistiques",
     "loginPrompt": "Connectez-vous pour jouer et suivre vos stats !",
     "backToGame": "Retour au jeu",
@@ -330,6 +333,6 @@
     "leaderboard": "Classement",
     "myStats": "Mes stats",
     "howToPlay": "Comment jouer",
-    "madeBy": "Créé par"
+    "contactMe": "Vous pouvez me contacter à"
   }
 }

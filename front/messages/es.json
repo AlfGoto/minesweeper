@@ -180,7 +180,8 @@
   },
   "mapPage": {
     "breadcrumb": "Mapa del sitio",
-    "title": "Mapa del sitio",
+    "title": "Mapa del sitio Minesweeper - Todas las páginas y perfiles",
+    "description": "Explora todas las páginas de Minesweeper.fr: modos de juego, 20+ skins, clasificaciones, estadísticas y perfiles de jugadores indexados.",
     "subtitle": "Todas las páginas de Minesweeper.fr",
     "quickLinks": "Enlaces rápidos",
     "mainPages": "Páginas principales",
@@ -210,6 +211,8 @@
     "leaderboard": "Clasificación",
     "totalTime": "Tiempo total",
     "yourStats": "Tus estadísticas",
+    "metaTitle": "Stats Buscaminas - Sigue tus partidas y mejores tiempos",
+    "metaDescription": "Consulta tus estadísticas de Buscaminas: partidas totales, victorias, tasa de victorias, mejor tiempo y métricas detalladas. Inicia sesión para seguir tu progreso.",
     "playerStats": "Estadísticas",
     "loginPrompt": "¡Inicia sesión para jugar y seguir tus stats!",
     "backToGame": "Volver al juego",
@@ -330,6 +333,6 @@
     "leaderboard": "Clasificación",
     "myStats": "Mis stats",
     "howToPlay": "Cómo jugar",
-    "madeBy": "Hecho por"
+    "contactMe": "Puedes contactarme en"
   }
 }

@@ -14,8 +14,8 @@ export async function generateMetadata({
   const alternates = generateAlternates("/stats", locale);
 
   return {
-    title: t("leaderboard"),
-    description: t("yourStats"),
+    title: t("metaTitle"),
+    description: t("metaDescription"),
     keywords: [
       "minesweeper stats",
       "minesweeper leaderboard",
@@ -28,9 +28,24 @@ export async function generateMetadata({
     ],
     alternates,
     openGraph: {
-      title: t("leaderboard"),
-      description: t("yourStats"),
+      title: t("metaTitle"),
+      description: t("metaDescription"),
       url: alternates.canonical,
+      siteName: "Minesweeper",
+      type: "website",
+      images: [
+        {
+          url: "https://minesweeper.fr/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "Minesweeper - Free Online Puzzle Game",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("metaTitle"),
+      description: t("metaDescription"),
     },
   };
 }
