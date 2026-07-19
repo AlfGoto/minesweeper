@@ -5,8 +5,18 @@ export async function getBestGames() {
   return response.data ?? [];
 }
 
+export async function getAllBestGames() {
+  const response = await client.GET("/games/all-best");
+  return response.data ?? [];
+}
+
 export async function getAllStats() {
   const response = await client.GET("/stats/all");
+  return response.data ?? [];
+}
+
+export async function getBestStats() {
+  const response = await client.GET("/stats/best");
   return response.data ?? [];
 }
 

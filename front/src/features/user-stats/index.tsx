@@ -10,6 +10,7 @@ import { UserProfileHeader } from "./components/user-profile-header";
 import { GamesSkeleton } from "@/features/stats/components/skeletons";
 import { generateProfileJsonLd } from "@/lib/structured-data";
 import { shouldIndexProfile } from "@/lib/seo-config";
+import { formatTime } from "@/lib/dates";
 import { getTranslations } from "next-intl/server";
 import type { User, UserStats } from "@/types/bff";
 
@@ -25,15 +26,23 @@ export async function UserProfilePage({ userId, user, stats, locale = "en" }: Us
     notFound();
   }
 
-  const [session, t] = await Promise.all([
+  const [session, t, tProfile] = await Promise.all([
     getServerSession(),
     getTranslations("statsPage"),
+    getTranslations("profilePage"),
   ]);
 
   const isOwnProfile = session?.user?.name === user.userName;
   const statsForIndex = stats ? { ...stats, userId, userName: user.userName, userPicture: user.userPicture } : undefined;
   const { indexable } = shouldIndexProfile(statsForIndex);
   const jsonLd = indexable ? generateProfileJsonLd(userId, user, stats) : null;
+
+  const placement = stats?.placement;
+  const totalPlayers = stats?.totalPlayers ?? 0;
+  const hasPlacement = placement !== undefined && placement > 0;
+  const betterThanPercent = hasPlacement && totalPlayers > 0
+    ? Math.round(((totalPlayers - placement) / totalPlayers) * 100)
+    : 0;
 
   return (
     <div className="max-w-[1000px] mx-auto w-full h-full flex flex-col justify-center m-4 rounded-lg p-4 gap-6">
@@ -49,6 +58,24 @@ export async function UserProfilePage({ userId, user, stats, locale = "en" }: Us
         userImage={user.userPicture}
         isOwnProfile={isOwnProfile}
       />
+
+      <p className="text-gray-600">
+        {hasPlacement && stats?.bestTime
+          ? tProfile("heroDescriptionRanked", {
+              name: user.userName,
+              rank: placement,
+              games: stats.totalGames,
+              bestTime: formatTime(stats.bestTime),
+              betterThan: betterThanPercent,
+            })
+          : stats?.totalGames
+            ? tProfile("heroDescriptionUnranked", {
+                name: user.userName,
+                games: stats.totalGames,
+                wins: stats.totalWin,
+              })
+            : tProfile("heroDescriptionNew", { name: user.userName })}
+      </p>
 
       <Stats stats={stats} />
 

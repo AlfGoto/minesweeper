@@ -40,6 +40,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/games/all-best": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get best games */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get best games */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BestGame"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/games/best/{userEmail}": {
         parameters: {
             query?: never;
@@ -160,6 +196,41 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/stats/best": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get all stats */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["StatsAll"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -895,6 +966,8 @@ export interface components {
             bestTime?: number;
             totalNoFlagsWin: number;
             totalRestarts: number;
+            placement?: number;
+            totalPlayers: number;
         };
         User: {
             userId: string;
@@ -911,6 +984,8 @@ export interface components {
             bestTime?: number;
             totalNoFlagsWin: number;
             totalRestarts: number;
+            placement?: number;
+            totalPlayers: number;
         };
         UserGame: {
             /** @enum {string} */

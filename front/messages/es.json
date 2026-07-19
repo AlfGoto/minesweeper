@@ -207,11 +207,16 @@
     "playerTitle": "Stats de Minesweeper de {name}",
     "playerDescription": "Perfil de Minesweeper de {name}: {wins} victorias, {winRate}% de tasa de victorias, mejor tiempo {bestTime}.",
     "playerDescriptionNoBest": "Perfil de Minesweeper de {name}: {games} partidas, {wins} victorias, {winRate}% de tasa de victorias.",
-    "ogTitle": "{name} | Stats de jugador Minesweeper"
+    "ogTitle": "{name} | Stats de jugador Minesweeper",
+    "heroTitle": "Perfil de {name} - Jugador de Buscaminas",
+    "heroDescriptionRanked": "{name} está clasificado #{rank} en el mundo en Minesweeper.fr, mejor que el {betterThan}% de los jugadores. Ha jugado {games} partidas con un mejor tiempo de {bestTime}.",
+    "heroDescriptionUnranked": "{name} ha jugado {games} partidas en Minesweeper.fr con {wins} victorias. ¡Sigue jugando para obtener una clasificación mundial!",
+    "heroDescriptionNew": "{name} es un nuevo jugador en Minesweeper.fr. ¡Juega partidas para construir tus estadísticas!"
   },
   "statsPage": {
     "leaderboard": "Clasificación",
     "totalTime": "Tiempo total",
+    "viewAll": "Ver todo",
     "yourStats": "Tus estadísticas",
     "metaTitle": "Stats Buscaminas - Sigue tus partidas y mejores tiempos",
     "metaDescription": "Consulta tus estadísticas de Buscaminas: partidas totales, victorias, tasa de victorias, mejor tiempo y métricas detalladas. Inicia sesión para seguir tu progreso.",
@@ -259,6 +264,7 @@
       "totalTimeLabel": "Tiempo total",
       "bestTime": "Mejor tiempo",
       "avgGameTime": "Tiempo promedio",
+      "worldRank": "Clasificación mundial",
       "cellsRevealed": "Celdas reveladas",
       "flagsPlaced": "Banderas colocadas",
       "bombsHit": "Bombas tocadas",
@@ -285,6 +291,19 @@
     "wins": "Victorias",
     "games": "Partidas",
     "flags": "banderas"
+  },
+  "leaderboardPage": {
+    "stats": "Stats",
+    "bestTimes": "Mejores Tiempos",
+    "timePlayed": "Tiempo Jugado",
+    "bestTimesTitle": "Clasificación Mejores Tiempos - Buscaminas",
+    "bestTimesDescription": "Clasificación completa de las partidas de Buscaminas más rápidas. Ver todos los tiempos récord de jugadores de todo el mundo.",
+    "bestTimesSubtitle": "Todas las partidas récord clasificadas por tiempo de finalización",
+    "timePlayedTitle": "Clasificación Tiempo Jugado - Buscaminas",
+    "timePlayedDescription": "Clasificación de los jugadores de Buscaminas más dedicados por tiempo total jugado.",
+    "timePlayedSubtitle": "Jugadores clasificados por tiempo total jugando al Buscaminas",
+    "backToStats": "Volver a Stats",
+    "viewAll": "Ver todo"
   },
   "redditPage": {
     "title": "Minesweeper.fr",

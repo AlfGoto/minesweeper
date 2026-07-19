@@ -2,6 +2,7 @@ import { Link } from "@/i18n/navigation";
 import { getAllStats } from "@/lib/api";
 import { filterIndexablePlayers, generateAlternates } from "@/lib/seo-config";
 import { formatTime } from "@/lib/dates";
+import { createPlayerSlug } from "@/lib/utils";
 import { Metadata } from "next";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
@@ -172,7 +173,7 @@ async function MapContent({ locale }: { locale: string }) {
           {indexablePlayers.map((player) => (
             <Link
               key={player.userId}
-              href={`/stats/${player.userId}`}
+              href={`/players/${createPlayerSlug(player.userName, player.userId)}`}
               className="block px-4 py-3 hover:bg-gray-50 transition-colors"
             >
               <span className="text-gray-900">{player.userName}</span>

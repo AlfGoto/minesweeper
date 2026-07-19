@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { getAllStats, getBestGames } from "@/lib/api";
-import { getTopPlayers, filterIndexablePlayers, generateAlternates } from "@/lib/seo-config";
+import { getBestGames, getBestStats } from "@/lib/api";
+import { filterIndexablePlayers, generateAlternates } from "@/lib/seo-config";
 import { generateLeaderboardJsonLd } from "@/lib/structured-data";
 import { formatTime } from "@/lib/dates";
+import { createPlayerSlug } from "@/lib/utils";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
@@ -57,19 +58,19 @@ export default function PlayersPage({
 
 async function PlayersContent() {
   const t = await getTranslations("playersPage");
-  const [allStats, bestGames] = await Promise.all([
-    getAllStats(),
+  const [bestStats, bestGames] = await Promise.all([
+    getBestStats(),
     getBestGames(),
   ]);
 
-  const topByTime = getTopPlayers(allStats, 10);
-  const topByWins = [...allStats]
+  const topByTime = bestStats.slice(0, 10);
+  const topByWins = [...bestStats]
     .sort((a, b) => b.totalWin - a.totalWin)
     .slice(0, 10);
-  const topByGames = [...allStats]
+  const topByGames = [...bestStats]
     .sort((a, b) => b.totalGames - a.totalGames)
     .slice(0, 10);
-  const indexableCount = filterIndexablePlayers(allStats).length;
+  const indexableCount = filterIndexablePlayers(bestStats).length;
 
   const jsonLd = generateLeaderboardJsonLd();
 
@@ -125,7 +126,7 @@ async function PlayersContent() {
           {bestGames.slice(0, 6).map((game, i) => (
             <Link
               key={`${game.userId}-${i}`}
-              href={`/stats/${game.userId}`}
+              href={`/players/${createPlayerSlug(game.userName, game.userId)}`}
               className="flex items-center gap-3 p-4 border rounded-lg hover:bg-accent transition-colors"
             >
               <Image
@@ -190,7 +191,7 @@ function LeaderboardSection({
           return (
             <li key={player.userId}>
               <Link
-                href={`/stats/${player.userId}`}
+                href={`/players/${createPlayerSlug(player.userName, player.userId)}`}
                 className="flex items-center gap-3 p-2 rounded hover:bg-gray-100 transition-colors"
               >
                 <span className="w-6 text-center font-mono text-gray-500">

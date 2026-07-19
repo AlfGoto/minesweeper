@@ -4,19 +4,19 @@ import { getUserById, getUserStats } from "@/lib/api";
 import { formatTime } from "@/lib/dates";
 import { shouldIndexProfile, generateAlternates } from "@/lib/seo-config";
 import { getTranslations } from "next-intl/server";
-import type { User, UserStats } from "@/types/bff";
+import { extractUserIdFromSlug, createPlayerSlug } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{
     locale: string;
-    userId: string;
+    slug: string;
   }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { userId, locale } = await params;
+  const { slug, locale } = await params;
+  const userId = extractUserIdFromSlug(slug);
   const t = await getTranslations({ locale, namespace: "profilePage" });
-  const alternates = generateAlternates(`/stats/${userId}`, locale);
 
   try {
     const [user, stats] = await Promise.all([
@@ -31,6 +31,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         robots: { index: false, follow: true },
       };
     }
+
+    const playerSlug = createPlayerSlug(user.userName || "player", userId);
+    const alternates = generateAlternates(`/players/${playerSlug}`, locale);
 
     const userName = user.userName || "Player";
     const gamesPlayed = stats?.totalGames ?? 0;
@@ -81,7 +84,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function Page({ params }: PageProps) {
-  const { userId, locale } = await params;
+  const { slug, locale } = await params;
+  const userId = extractUserIdFromSlug(slug);
 
   const [user, stats] = await Promise.all([
     getUserById(userId),

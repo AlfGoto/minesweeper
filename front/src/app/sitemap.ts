@@ -3,6 +3,7 @@ import { getAllBackgroundSkinSlugs } from "@/features/skins/backgrounds";
 import { getAllSkinSlugs } from "@/features/skins/cells/skins";
 import { getAllStats } from "@/lib/api";
 import { filterIndexablePlayers, getTopPlayers } from "@/lib/seo-config";
+import { createPlayerSlug } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
 
 const BASE_URL = "https://minesweeper.fr";
@@ -44,6 +45,8 @@ export function getStaticPages(): MetadataRoute.Sitemap {
     ...createEntries("/map", "weekly", 0.85),
     ...createEntries("/players", "daily", 0.9),
     ...createEntries("/stats", "daily", 0.9),
+    ...createEntries("/stats/leaderboard/best-times", "daily", 0.85),
+    ...createEntries("/stats/leaderboard/time-played", "daily", 0.85),
     ...createEntries("/skins", "weekly", 0.85),
     ...createEntries("/reddit", "monthly", 0.5),
     ...createEntries("/skins/background", "weekly", 0.8),
@@ -62,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const playerPages = indexablePlayers.flatMap((player) =>
     createEntries(
-      `/stats/${player.userId}`,
+      `/players/${createPlayerSlug(player.userName, player.userId)}`,
       "weekly",
       topPlayerIds.has(player.userId) ? 0.8 : 0.6
     )

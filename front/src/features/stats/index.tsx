@@ -59,6 +59,14 @@ export async function StatsPage() {
             className="data-[state=inactive]:hidden p-2"
           >
             <Leaderboard />
+            <div className="text-center mt-4">
+              <Link
+                href="/stats/leaderboard/best-times"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                {t("viewAll")} →
+              </Link>
+            </div>
           </TabsContent>
           <TabsContent
             value="total-time"
@@ -66,6 +74,14 @@ export async function StatsPage() {
             className="data-[state=inactive]:hidden p-2"
           >
             <TotalTimeLeaderboard />
+            <div className="text-center mt-4">
+              <Link
+                href="/stats/leaderboard/time-played"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                {t("viewAll")} →
+              </Link>
+            </div>
           </TabsContent>
         </Tabs>
       </Suspense>

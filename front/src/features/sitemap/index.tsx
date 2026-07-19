@@ -3,6 +3,7 @@ import { getStaticPages } from "@/app/sitemap";
 import { getAllStats } from "@/lib/api";
 import { filterIndexablePlayers } from "@/lib/seo-config";
 import { formatTime } from "@/lib/dates";
+import { createPlayerSlug } from "@/lib/utils";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
@@ -87,7 +88,7 @@ export default async function Sitemap() {
             {indexablePlayers.map((player) => (
               <Link
                 key={player.userId}
-                href={`/stats/${player.userId}`}
+                href={`/players/${createPlayerSlug(player.userName, player.userId)}`}
                 className="block px-4 py-3 hover:bg-gray-700 transition-colors"
               >
                 <span className="text-white">{player.userName}</span>

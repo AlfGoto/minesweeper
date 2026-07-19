@@ -14,6 +14,8 @@ interface StatsData {
   bestTime?: number;
   totalNoFlagsWin: number;
   totalRestarts: number;
+  placement?: number;
+  totalPlayers?: number;
 }
 
 interface StatsProps {
@@ -66,6 +68,15 @@ export async function Stats({ stats, title }: StatsProps) {
       value: formatTime(stats.totalTime / stats.totalGames),
       emoji: "⏳",
     },
+    ...(stats.placement !== undefined && stats.totalPlayers !== undefined
+      ? [
+          {
+            label: t("worldRank"),
+            value: `#${stats.placement} / ${stats.totalPlayers}`,
+            emoji: "🌍",
+          },
+        ]
+      : []),
   ];
 
   const gameplayStats = [

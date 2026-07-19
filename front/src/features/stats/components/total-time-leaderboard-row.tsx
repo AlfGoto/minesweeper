@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { formatTime } from "@/lib/dates";
+import { createPlayerSlug } from "@/lib/utils";
 import { StatsAll } from "@/types/bff";
 
 interface TotalTimeLeaderboardRowProps {
@@ -13,7 +14,7 @@ export function TotalTimeLeaderboardRow({
   stats,
   rank,
 }: TotalTimeLeaderboardRowProps) {
-  const href = `/stats/${stats.userId}`;
+  const href = `/players/${createPlayerSlug(stats.userName, stats.userId)}`;
   const winrate =
     stats.totalGames > 0
       ? ((stats.totalWin / stats.totalGames) * 100).toFixed(1)

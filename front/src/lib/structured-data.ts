@@ -1,5 +1,6 @@
 import type { User, UserStats } from "@/types/bff";
 import { formatTime } from "./dates";
+import { createPlayerSlug } from "./utils";
 
 export function generateProfileJsonLd(
   userId: string,
@@ -10,6 +11,8 @@ export function generateProfileJsonLd(
     ? Math.round((stats.totalWin / stats.totalGames) * 100)
     : 0;
 
+  const playerSlug = createPlayerSlug(user.userName || "player", userId);
+
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
@@ -17,7 +20,7 @@ export function generateProfileJsonLd(
       "@type": "Person",
       name: user.userName,
       image: user.userPicture,
-      url: `https://minesweeper.fr/stats/${userId}`,
+      url: `https://minesweeper.fr/players/${playerSlug}`,
       description: stats?.bestTime
         ? `Minesweeper player with ${stats.totalWin} wins and best time of ${formatTime(stats.bestTime)}`
         : `Minesweeper player with ${stats?.totalGames ?? 0} games played`,

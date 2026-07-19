@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDate, formatTime } from "@/lib/dates";
+import { createPlayerSlug } from "@/lib/utils";
 import { BestGame } from "@/types/bff";
 
 interface LeaderboardRowProps {
@@ -10,7 +11,7 @@ interface LeaderboardRowProps {
 }
 
 export function LeaderboardRow({ game, rank }: LeaderboardRowProps) {
-  const href = `/stats/${game.userId}`;
+  const href = `/players/${createPlayerSlug(game.userName, game.userId)}`;
 
   return (
     <TableRow className="hover:bg-gray-100">

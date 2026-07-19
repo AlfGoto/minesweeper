@@ -207,11 +207,16 @@
     "playerTitle": "Stats Minesweeper de {name}",
     "playerDescription": "Profil Minesweeper de {name} : {wins} victoires, {winRate}% de taux de victoire, meilleur temps {bestTime}.",
     "playerDescriptionNoBest": "Profil Minesweeper de {name} : {games} parties, {wins} victoires, {winRate}% de taux de victoire.",
-    "ogTitle": "{name} | Stats joueur Minesweeper"
+    "ogTitle": "{name} | Stats joueur Minesweeper",
+    "heroTitle": "Profil de {name} - Joueur de démineur",
+    "heroDescriptionRanked": "{name} est classé #{rank} mondial sur Minesweeper.fr, meilleur que {betterThan}% des joueurs. Il a joué {games} parties et son meilleur temps est {bestTime}.",
+    "heroDescriptionUnranked": "{name} a joué {games} parties sur Minesweeper.fr avec {wins} victoires. Continue à jouer pour obtenir un classement mondial !",
+    "heroDescriptionNew": "{name} est un nouveau joueur sur Minesweeper.fr. Joue des parties pour construire tes stats !"
   },
   "statsPage": {
     "leaderboard": "Classement",
     "totalTime": "Temps total",
+    "viewAll": "Voir tout",
     "yourStats": "Vos statistiques",
     "metaTitle": "Stats Démineur - Suivez vos parties et meilleurs temps",
     "metaDescription": "Consultez vos statistiques Démineur : parties totales, victoires, taux de réussite, meilleur temps et métriques détaillées. Connectez-vous pour suivre votre progression.",
@@ -259,6 +264,7 @@
       "totalTimeLabel": "Temps total",
       "bestTime": "Meilleur temps",
       "avgGameTime": "Temps moyen",
+      "worldRank": "Classement mondial",
       "cellsRevealed": "Cases révélées",
       "flagsPlaced": "Drapeaux placés",
       "bombsHit": "Bombes touchées",
@@ -285,6 +291,19 @@
     "wins": "Victoires",
     "games": "Parties",
     "flags": "drapeaux"
+  },
+  "leaderboardPage": {
+    "stats": "Stats",
+    "bestTimes": "Meilleurs Temps",
+    "timePlayed": "Temps Joué",
+    "bestTimesTitle": "Classement Meilleurs Temps - Démineur",
+    "bestTimesDescription": "Classement complet des parties de Démineur les plus rapides. Voir tous les temps records des joueurs du monde entier.",
+    "bestTimesSubtitle": "Toutes les parties record classées par temps de complétion",
+    "timePlayedTitle": "Classement Temps Joué - Démineur",
+    "timePlayedDescription": "Classement des joueurs de Démineur les plus dévoués par temps total joué.",
+    "timePlayedSubtitle": "Joueurs classés par temps total passé à jouer au Démineur",
+    "backToStats": "Retour aux Stats",
+    "viewAll": "Voir tout"
   },
   "redditPage": {
     "title": "Minesweeper.fr",
