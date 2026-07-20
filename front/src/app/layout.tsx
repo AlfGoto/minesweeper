@@ -12,10 +12,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://minesweeper.fr"),
   title: {
     default: "Minesweeper",
-    template: "%s | Minesweeper Game",
+    template: "%s | Minesweeper - Free with Rankings & Skins",
   },
   description:
-    "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress with detailed statistics.",
+    "Play Minesweeper free online. Unlock 20+ skins by playing. Compete on multi-leaderboards, track 15+ stats, see your world ranking percentile.",
   keywords: [
     // English keywords
     "minesweeper",
@@ -109,16 +109,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Minesweeper",
+    title: "Minesweeper - Play. Earn Skins. Climb the Rankings.",
     description:
-      "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
+      "Play Minesweeper free online. Unlock 20+ skins by playing. Compete on multi-leaderboards, track 15+ stats, see your world ranking.",
     siteName: "Minesweeper",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Minesweeper Game | Test Your Skills",
+    title: "Minesweeper - Play. Earn Skins. Climb the Rankings.",
     description:
-      "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
+      "Play Minesweeper free online. Unlock 20+ skins by playing. Multi-leaderboards, 15+ stats, world ranking percentile.",
   },
   robots: {
     index: true,

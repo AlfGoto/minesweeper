@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Minesweeper - Free Online Puzzle Game";
+export const alt = "Minesweeper - Play. Earn Skins. Climb the Rankings.";
 export const size = {
   width: 1200,
   height: 630,
@@ -76,7 +76,7 @@ export default async function Image() {
               maxWidth: "800px",
             }}
           >
-            Free Online Puzzle Game with Skins & Leaderboards
+            Play. Earn Skins. Climb the Rankings.
           </p>
           <div
             style={{
@@ -94,7 +94,7 @@ export default async function Image() {
                 fontSize: "18px",
               }}
             >
-              No Download
+              Earn 20+ Skins
             </span>
             <span
               style={{
@@ -105,7 +105,7 @@ export default async function Image() {
                 fontSize: "18px",
               }}
             >
-              20+ Skins
+              Multi-Leaderboards
             </span>
             <span
               style={{
@@ -116,7 +116,7 @@ export default async function Image() {
                 fontSize: "18px",
               }}
             >
-              Global Rankings
+              World Ranking
             </span>
           </div>
         </div>

@@ -22,34 +22,44 @@ export default async function Home() {
     <GameProvider>
       <div className="w-full h-screen flex flex-col items-center justify-center">
         <div className="sr-only">
-          <h1>Play Minesweeper Online - Free Classic Puzzle Game</h1>
+          <h1>Minesweeper Online - Free with Rankings, Skins & Detailed Stats</h1>
+
+          <h2>Earn & Unlock 20+ Skins</h2>
+          <p>
+            Play Minesweeper and unlock skins by playing. Choose from 20+ unique
+            cell skins and background themes. From classic Windows style to modern
+            pixel art, emoji themes, and more. No purchase required — earn
+            everything by playing.
+          </p>
+
+          <h2>Multi-Dimensional Leaderboards</h2>
+          <p>
+            Compete beyond just speed. Our leaderboards track fastest times, most
+            wins, and most experienced players. Find your strength and climb the
+            rankings that matter to you.
+          </p>
+
+          <h2>15+ Tracked Statistics</h2>
+          <p>
+            Track games played, wins, win rate, best time, average time, no-flags
+            wins, cells revealed, flags placed, bombs hit, and more. See your
+            detailed progress over time.
+          </p>
+
+          <h2>World Ranking Percentile</h2>
+          <p>
+            See how you compare globally. Your profile shows your world rank and
+            what percentage of players you have surpassed. Every player gets a
+            public profile page.
+          </p>
+
           <h2>How to Play Minesweeper</h2>
           <p>
             Left-click to reveal a cell. Numbers show how many mines touch that
             cell. Right-click to flag suspected mines. Clear all safe cells to
-            win.
+            win. On mobile: tap reveals, long-press flags.
           </p>
-          <h2>Game Features</h2>
-          <h3>Multiple Difficulty Levels</h3>
-          <p>
-            Choose from Beginner, Intermediate, or Expert grids. Each level
-            increases the board size and mine count.
-          </p>
-          <h3>Custom Skins and Themes</h3>
-          <p>
-            Unlock unique visual themes by playing. Customize cells and
-            backgrounds to personalize your game.
-          </p>
-          <h3>Global Leaderboard</h3>
-          <p>
-            Compete with players worldwide. Track your best times and climb the
-            rankings.
-          </p>
-          <h2>Game Controls</h2>
-          <p>
-            On desktop: left-click reveals, right-click flags. On mobile: tap
-            reveals, long-press flags.
-          </p>
+
           <h2>Available Minesweeper Skins</h2>
           <p>Browse our collection of free cell skins and background themes:</p>
           <nav aria-label="All skins">
