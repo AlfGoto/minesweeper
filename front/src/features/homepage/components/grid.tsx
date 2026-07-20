@@ -6,7 +6,12 @@ import Cell from "./cell";
 
 export default function Grid({ selectedCellSkin }: { selectedCellSkin: CellSkin }) {
   return (
-    <div className="shadow-lg rounded-lg p-4">
+    <div
+      className="shadow-lg rounded-lg p-4"
+      onContextMenu={(e) => {
+        if (e.target === e.currentTarget) e.preventDefault();
+      }}
+    >
       <div
         className="[container-type:size] box-border [display:grid] aspect-square w-[min(900px,min(94vw,calc(100dvh-7rem)))] grid-cols-[repeat(20,minmax(0,1fr))] grid-rows-[repeat(20,minmax(0,1fr))] overflow-hidden"
       >
