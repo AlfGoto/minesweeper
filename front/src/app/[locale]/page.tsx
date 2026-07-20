@@ -10,22 +10,22 @@ interface PageProps {
 
 const seoByLocale: Record<string, { title: string; description: string; ogAlt: string }> = {
   en: {
-    title: "Minesweeper with Rankings & 20+ Skins | Track Your Stats",
+    title: "Competitive Minesweeper - World Ranking & Skins",
     description:
-      "Play Minesweeper free. Unlock 20+ skins by playing. Compete on multi-leaderboards (speed, wins, experience). Track 15+ stats. See your world ranking.",
-    ogAlt: "Minesweeper - Play. Earn Skins. Climb the Rankings.",
+      "Get your world ranking percentile. Track wins, speed, experience. Unlock 20+ skins by playing. 100% free.",
+    ogAlt: "Competitive Minesweeper - Get Your World Ranking",
   },
   fr: {
-    title: "Démineur avec Classements & 20+ Skins | Suivez vos Stats",
+    title: "Démineur Compétitif - Rang Mondial & Skins",
     description:
-      "Jouez au Démineur gratuitement. Débloquez 20+ skins en jouant. Classements multi-dimensions (vitesse, victoires, expérience). 15+ stats. Rang mondial.",
-    ogAlt: "Démineur - Jouez. Gagnez des Skins. Grimpez les Classements.",
+      "Obtiens ton rang mondial en pourcentage. Suis tes victoires, ta vitesse, ton expérience. Débloque 20+ skins en jouant. 100% gratuit.",
+    ogAlt: "Démineur Compétitif - Obtiens ton Rang Mondial",
   },
   es: {
-    title: "Buscaminas con Rankings & 20+ Skins | Sigue tus Stats",
+    title: "Buscaminas Competitivo - Ranking Mundial & Skins",
     description:
-      "Juega Buscaminas gratis. Desbloquea 20+ skins jugando. Compite en rankings multi-dimensión (velocidad, victorias, experiencia). 15+ estadísticas.",
-    ogAlt: "Buscaminas - Juega. Gana Skins. Sube en los Rankings.",
+      "Obtén tu ranking mundial en porcentaje. Sigue tus victorias, velocidad, experiencia. Desbloquea 20+ skins jugando. 100% gratis.",
+    ogAlt: "Buscaminas Competitivo - Obtén tu Ranking Mundial",
   },
 };
 

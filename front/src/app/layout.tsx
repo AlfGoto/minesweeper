@@ -11,11 +11,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://minesweeper.fr"),
   title: {
-    default: "Minesweeper",
-    template: "%s | Minesweeper - Free with Rankings & Skins",
+    default: "Competitive Minesweeper",
+    template: "%s | Competitive Minesweeper",
   },
   description:
-    "Play Minesweeper free online. Unlock 20+ skins by playing. Compete on multi-leaderboards, track 15+ stats, see your world ranking percentile.",
+    "Get your world ranking percentile. Track wins, speed, experience. Unlock 20+ skins by playing. 100% free competitive Minesweeper.",
   keywords: [
     // English keywords
     "minesweeper",
@@ -109,16 +109,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Minesweeper - Play. Earn Skins. Climb the Rankings.",
+    title: "Competitive Minesweeper - Get Your World Ranking",
     description:
-      "Play Minesweeper free online. Unlock 20+ skins by playing. Compete on multi-leaderboards, track 15+ stats, see your world ranking.",
-    siteName: "Minesweeper",
+      "Get your world ranking percentile. Track wins, speed, experience. Unlock 20+ skins by playing. 100% free.",
+    siteName: "Competitive Minesweeper",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Minesweeper - Play. Earn Skins. Climb the Rankings.",
+    title: "Competitive Minesweeper - Get Your World Ranking",
     description:
-      "Play Minesweeper free online. Unlock 20+ skins by playing. Multi-leaderboards, 15+ stats, world ranking percentile.",
+      "Get your world ranking percentile. Track wins, speed, experience. Unlock 20+ skins by playing. 100% free.",
   },
   robots: {
     index: true,

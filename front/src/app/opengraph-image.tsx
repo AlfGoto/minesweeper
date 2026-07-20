@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Minesweeper - Play. Earn Skins. Climb the Rankings.";
+export const alt = "Competitive Minesweeper - Get Your World Ranking";
 export const size = {
   width: 1200,
   height: 630,
@@ -76,7 +76,7 @@ export default async function Image() {
               maxWidth: "800px",
             }}
           >
-            Play. Earn Skins. Climb the Rankings.
+            Get Your World Ranking
           </p>
           <div
             style={{

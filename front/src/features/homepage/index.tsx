@@ -22,35 +22,33 @@ export default async function Home() {
     <GameProvider>
       <div className="w-full h-screen flex flex-col items-center justify-center">
         <div className="sr-only">
-          <h1>Minesweeper Online - Free with Rankings, Skins & Detailed Stats</h1>
+          <h1>Competitive Minesweeper - Get Your World Ranking</h1>
 
-          <h2>Earn & Unlock 20+ Skins</h2>
+          <h2>World Ranking Percentile</h2>
           <p>
-            Play Minesweeper and unlock skins by playing. Choose from 20+ unique
-            cell skins and background themes. From classic Windows style to modern
-            pixel art, emoji themes, and more. No purchase required — earn
-            everything by playing.
+            See exactly where you stand. Your profile shows your world rank and
+            what percentage of players you have surpassed. Are you top 10%? Top 1%?
+            Every player gets a public profile page with their ranking.
           </p>
 
           <h2>Multi-Dimensional Leaderboards</h2>
           <p>
-            Compete beyond just speed. Our leaderboards track fastest times, most
-            wins, and most experienced players. Find your strength and climb the
-            rankings that matter to you.
+            Compete beyond just speed. Leaderboards track fastest times, most wins,
+            and most experienced players. Find your strength and climb the rankings
+            that matter to you.
           </p>
 
           <h2>15+ Tracked Statistics</h2>
           <p>
             Track games played, wins, win rate, best time, average time, no-flags
-            wins, cells revealed, flags placed, bombs hit, and more. See your
-            detailed progress over time.
+            wins, cells revealed, flags placed, bombs hit, and more. Detailed
+            progress over time.
           </p>
 
-          <h2>World Ranking Percentile</h2>
+          <h2>Unlock 20+ Skins by Playing</h2>
           <p>
-            See how you compare globally. Your profile shows your world rank and
-            what percentage of players you have surpassed. Every player gets a
-            public profile page.
+            Choose from 20+ unique cell skins and background themes. Classic style,
+            pixel art, emoji themes. No purchase — earn everything by playing.
           </p>
 
           <h2>How to Play Minesweeper</h2>
