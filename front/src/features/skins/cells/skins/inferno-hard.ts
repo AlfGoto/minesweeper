@@ -10,6 +10,12 @@ export const infernoHardSkin: CellSkinDefinition = {
   gray: "bg-[linear-gradient(145deg,#2d0707_0%,#200505_52%,#160404_100%)] text-rose-100 transition-none",
   silver:
     "bg-[linear-gradient(145deg,#3a0a0a_0%,#280707_52%,#1d0505_100%)] text-rose-100 transition-none",
+  ogColors: {
+    hidden: "#680b0b",
+    hiddenAlt: "#861414",
+    revealed: "#200505",
+    revealedAlt: "#280707",
+  },
   number: {
     0: "",
     1: "text-sky-300",

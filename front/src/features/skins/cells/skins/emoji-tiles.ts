@@ -26,6 +26,12 @@ export const emojiTilesSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["🟥", "🟧", "🟨", "🟩", "🟦", "🟪", "🟫", "⬛"],
   glossRgb: "255,255,255",
   shadowRgb: "15,23,42",
+  ogColors: {
+    hidden: "#1f2937",
+    hiddenAlt: "#273449",
+    revealed: "#efeee9",
+    revealedAlt: "#f7f5f0",
+  },
   description:
     "A playful emoji Minesweeper skin with full-cell square emoji backgrounds on unrevealed tiles and clean revealed cells for sharp readability.",
   longDescription:

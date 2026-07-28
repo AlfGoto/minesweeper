@@ -26,6 +26,12 @@ export const heartTilesSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["❤️", "💖", "💗", "💘", "💝", "🩷", "💜"],
   glossRgb: "255,255,255",
   shadowRgb: "76,5,25",
+  ogColors: {
+    hidden: "#7f1d1d",
+    hiddenAlt: "#9f1239",
+    revealed: "#ffe4e6",
+    revealedAlt: "#ffeef2",
+  },
   description:
     "A romantic emoji Minesweeper skin with heart-filled unrevealed cells and soft pastel revealed tiles that keep the board readable.",
   longDescription:

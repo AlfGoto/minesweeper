@@ -26,6 +26,12 @@ export const fruitBasketSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["🍎", "🍊", "🍋", "🍉", "🍓", "🍒", "🥝", "🍇"],
   glossRgb: "255,255,255",
   shadowRgb: "20,46,22",
+  ogColors: {
+    hidden: "#14532d",
+    hiddenAlt: "#166534",
+    revealed: "#ecfccb",
+    revealedAlt: "#f0fdd8",
+  },
   description:
     "A fresh fruit emoji Minesweeper skin with juicy unrevealed cells and crisp light revealed tiles for clear number reading.",
   longDescription:

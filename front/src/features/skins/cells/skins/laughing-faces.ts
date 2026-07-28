@@ -26,6 +26,12 @@ export const laughingFacesSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["😂", "🤣", "😆", "😄", "😹", "😅"],
   glossRgb: "255,255,255",
   shadowRgb: "120,53,15",
+  ogColors: {
+    hidden: "#854d0e",
+    hiddenAlt: "#a16207",
+    revealed: "#fef3c7",
+    revealedAlt: "#fef7d7",
+  },
   description:
     "A cheerful emoji Minesweeper skin with laughing faces on unrevealed cells and sunny revealed tiles designed to stay easy to read.",
   longDescription:

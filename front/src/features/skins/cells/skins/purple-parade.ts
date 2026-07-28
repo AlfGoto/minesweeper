@@ -26,6 +26,12 @@ export const purpleParadeSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["💜", "🍆", "🔮", "☂️", "🪻", "🦄", "🟣", "🍇"],
   glossRgb: "255,255,255",
   shadowRgb: "76,29,149",
+  ogColors: {
+    hidden: "#6b21a8",
+    hiddenAlt: "#7e22ce",
+    revealed: "#f3e8ff",
+    revealedAlt: "#f6edff",
+  },
   description:
     "A purple emoji Minesweeper skin with one-color hidden emoji pools and soft lavender revealed cells.",
   longDescription:

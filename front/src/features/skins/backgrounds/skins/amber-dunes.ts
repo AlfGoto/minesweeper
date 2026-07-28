@@ -15,6 +15,7 @@ const amberDunesBackgroundStyle: CSSProperties = {
 export const amberDunesSkin: BackgroundSkinData = {
   value: "bg-amber-200",
   style: amberDunesBackgroundStyle,
+  ogColor: "#fde68a",
   name: "Amber Dunes",
   slug: "amber-dunes-background",
   description:

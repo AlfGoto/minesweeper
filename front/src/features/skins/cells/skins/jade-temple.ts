@@ -11,6 +11,12 @@ export const jadeTempleSkin: CellSkinDefinition = {
   gray: "bg-[linear-gradient(145deg,#d8efe6_0%,#c7e7d9_50%,#b6dccd_100%)] text-emerald-900 transition-none",
   silver:
     "bg-[linear-gradient(145deg,#e2f3eb_0%,#d1ebde_50%,#c2e1d3_100%)] text-emerald-900 transition-none",
+  ogColors: {
+    hidden: "#1d5f49",
+    hiddenAlt: "#236d55",
+    revealed: "#c7e7d9",
+    revealedAlt: "#d1ebde",
+  },
   number: defaultSkin.number,
   flagEmoji: "⛩️",
   bombEmoji: "💥",

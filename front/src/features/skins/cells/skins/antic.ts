@@ -7,6 +7,12 @@ export const anticSkin: CellSkinDefinition = {
   lightGreen: "bg-[#0d2e1a] ring-1 ring-amber-900/25",
   gray: "bg-[#d0dfca] transition-none",
   silver: "bg-[#dce8d6] transition-none",
+  ogColors: {
+    hidden: "#0a2614",
+    hiddenAlt: "#0d2e1a",
+    revealed: "#d0dfca",
+    revealedAlt: "#dce8d6",
+  },
   number: {
     0: "",
     1: "text-blue-700",

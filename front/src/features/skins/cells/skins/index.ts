@@ -10,6 +10,7 @@ import type {
   SkinFaq,
   NumberSkinMap,
   SkinTranslation,
+  OgColors,
 } from "./types";
 
 import { defaultSkin } from "./default";
@@ -40,6 +41,7 @@ export type {
   SkinFaq,
   NumberSkinMap,
   SkinTranslation,
+  OgColors,
 };
 
 type GetUnrevealedNeighborContextArgs = {

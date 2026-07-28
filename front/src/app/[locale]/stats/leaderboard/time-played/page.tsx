@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getBestStats } from "@/lib/api";
+import { getAllStats } from "@/lib/api";
 import { generateAlternates } from "@/lib/seo-config";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
@@ -35,14 +35,6 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
-      images: [
-        {
-          url: "https://minesweeper.fr/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: "Minesweeper - Free Online Puzzle Game",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -65,7 +57,7 @@ export default function TimePlayedLeaderboardPage({
 
 async function TimePlayedContent() {
   const [allStats, t, tTable, tEmpty, tPage] = await Promise.all([
-    getBestStats(),
+    getAllStats(),
     getTranslations("leaderboardPage"),
     getTranslations("statsPage.table"),
     getTranslations("statsPage.empty"),

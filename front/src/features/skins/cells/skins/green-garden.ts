@@ -26,6 +26,12 @@ export const greenGardenSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["💚", "🍀", "🌵", "🥝", "🐢", "🐸", "🟢", "🍏"],
   glossRgb: "255,255,255",
   shadowRgb: "20,46,22",
+  ogColors: {
+    hidden: "#166534",
+    hiddenAlt: "#15803d",
+    revealed: "#ecfccb",
+    revealedAlt: "#f0fdd8",
+  },
   description:
     "A green emoji Minesweeper skin with same-color hidden tiles and fresh readable reveals.",
   longDescription:

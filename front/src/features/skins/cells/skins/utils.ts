@@ -52,12 +52,14 @@ export const createEmojiTileSkin = ({
   keywords,
   faq,
   translations,
+  ogColors,
 }: EmojiTileSkinConfig): CellSkinDefinition => ({
   green: hiddenA,
   lightGreen: hiddenB,
   gray: `${revealedA} transition-none`,
   silver: `${revealedB} transition-none`,
   number,
+  ogColors,
   getOverlayStyle: ({
     row,
     col,

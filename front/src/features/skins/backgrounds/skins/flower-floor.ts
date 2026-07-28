@@ -51,6 +51,7 @@ const flowerFloorBackgroundStyle: CSSProperties = {
 export const flowerFloorSkin: BackgroundSkinData = {
   value: "bg-lime-100",
   style: flowerFloorBackgroundStyle,
+  ogColor: "#b9eb86",
   name: "Flower Floor",
   slug: "flower-floor",
   description:

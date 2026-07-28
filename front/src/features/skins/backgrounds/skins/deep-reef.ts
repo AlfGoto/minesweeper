@@ -17,6 +17,7 @@ const deepReefBackgroundStyle: CSSProperties = {
 export const deepReefSkin: BackgroundSkinData = {
   value: "bg-cyan-950",
   style: deepReefBackgroundStyle,
+  ogColor: "#0f766e",
   name: "Deep Reef",
   slug: "deep-reef-background",
   description:

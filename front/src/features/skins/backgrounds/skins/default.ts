@@ -2,6 +2,7 @@ import type { BackgroundSkinData } from "./types";
 
 export const defaultSkin: BackgroundSkinData = {
   value: "bg-background",
+  ogColor: "#ffffff",
   name: "Classic",
   slug: "classic-background",
   description:

@@ -26,6 +26,12 @@ export const redBurstSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["❤️", "🌹", "🍓", "🍒", "🍎", "🎈", "🧧", "🟥"],
   glossRgb: "255,255,255",
   shadowRgb: "69,10,10",
+  ogColors: {
+    hidden: "#7f1d1d",
+    hiddenAlt: "#991b1b",
+    revealed: "#ffe4e6",
+    revealedAlt: "#ffeef2",
+  },
   description:
     "A red emoji Minesweeper skin that keeps every unrevealed tile inside a bold crimson palette while revealed cells stay clean and readable.",
   longDescription:

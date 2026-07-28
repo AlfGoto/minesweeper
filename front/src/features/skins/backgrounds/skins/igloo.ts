@@ -33,6 +33,7 @@ const iglooBackgroundStyle: CSSProperties = {
 export const iglooSkin: BackgroundSkinData = {
   value: "bg-sky-100",
   style: iglooBackgroundStyle,
+  ogColor: "#dbeafe",
   name: "Igloo Background",
   slug: "igloo-background",
   description:

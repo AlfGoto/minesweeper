@@ -7,6 +7,12 @@ export const classicSkin: CellSkinDefinition = {
     "bg-[#c0c0c0] border-3 border-t-[#fefefe] border-l-[#fefefe] border-r-[#818181] border-b-[#818181]",
   gray: "bg-[#bfc1be] border-1 border-[#808280]",
   silver: "bg-[#bfc1be] border-1 border-[#808280]",
+  ogColors: {
+    hidden: "#c0c0c0",
+    hiddenAlt: "#c0c0c0",
+    revealed: "#bfc1be",
+    revealedAlt: "#bfc1be",
+  },
   number: {
     0: "",
     1: "text-blue-700",

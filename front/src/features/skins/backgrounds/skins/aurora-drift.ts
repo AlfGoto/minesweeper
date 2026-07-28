@@ -17,6 +17,7 @@ const auroraDriftBackgroundStyle: CSSProperties = {
 export const auroraDriftSkin: BackgroundSkinData = {
   value: "bg-slate-950",
   style: auroraDriftBackgroundStyle,
+  ogColor: "#0f172a",
   name: "Aurora Drift",
   slug: "aurora-drift-background",
   description:

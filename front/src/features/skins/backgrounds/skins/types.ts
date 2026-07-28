@@ -23,4 +23,5 @@ export type BackgroundSkinData = {
   keywords: string[];
   faq: BackgroundSkinFaq[];
   translations?: Record<string, BackgroundSkinTranslation>;
+  ogColor: string;
 };

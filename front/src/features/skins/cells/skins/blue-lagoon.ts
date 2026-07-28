@@ -26,6 +26,12 @@ export const blueLagoonSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["💙", "🫐", "🐟", "🦋", "🧢", "🌊", "🔷", "🟦"],
   glossRgb: "255,255,255",
   shadowRgb: "30,58,138",
+  ogColors: {
+    hidden: "#1d4ed8",
+    hiddenAlt: "#2563eb",
+    revealed: "#dbeafe",
+    revealedAlt: "#e3efff",
+  },
   description:
     "A blue emoji Minesweeper skin with a same-color hidden emoji pool and cool airy revealed tiles.",
   longDescription:

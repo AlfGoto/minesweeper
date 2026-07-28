@@ -26,6 +26,12 @@ export const yellowZestSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["💛", "⭐", "🌙", "☀️", "🍋", "🐥", "🌼", "🟡"],
   glossRgb: "255,255,255",
   shadowRgb: "113,63,18",
+  ogColors: {
+    hidden: "#a16207",
+    hiddenAlt: "#ca8a04",
+    revealed: "#fef9c3",
+    revealedAlt: "#fefad8",
+  },
   description:
     "A bright yellow emoji Minesweeper skin with sunshine-colored hidden tiles and crisp pale reveals.",
   longDescription:

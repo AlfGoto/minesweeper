@@ -10,6 +10,12 @@ export const paperCutoutSkin: CellSkinDefinition = {
   gray: "bg-[linear-gradient(145deg,#fffdfa_0%,#fbf4e8_52%,#f3e8d7_100%)] text-amber-950 transition-none",
   silver:
     "bg-[linear-gradient(145deg,#fffefb_0%,#fcf8ee_52%,#f6ecdd_100%)] text-amber-950 transition-none",
+  ogColors: {
+    hidden: "#f4e2c6",
+    hiddenAlt: "#f7e7cb",
+    revealed: "#fbf4e8",
+    revealedAlt: "#fcf8ee",
+  },
   number: {
     0: "",
     1: "text-blue-700",

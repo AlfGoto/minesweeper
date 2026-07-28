@@ -17,6 +17,7 @@ const retroGridBackgroundStyle: CSSProperties = {
 export const retroGridSkin: BackgroundSkinData = {
   value: "bg-indigo-950",
   style: retroGridBackgroundStyle,
+  ogColor: "#0f172a",
   name: "Retro Grid",
   slug: "retro-grid-background",
   description:

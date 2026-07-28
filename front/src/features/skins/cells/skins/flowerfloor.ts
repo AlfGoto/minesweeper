@@ -5,6 +5,12 @@ import { mulberry32, bgLayers } from "./utils";
 
 export const flowerfloorSkin: CellSkinDefinition = {
   ...defaultSkin,
+  ogColors: {
+    hidden: "#32CD32",
+    hiddenAlt: "#90EE90",
+    revealed: "#D2B48C",
+    revealedAlt: "#F5DEB3",
+  },
   flagEmoji: "🌸",
   bombEmoji: "💥",
   getOverlayStyle: ({

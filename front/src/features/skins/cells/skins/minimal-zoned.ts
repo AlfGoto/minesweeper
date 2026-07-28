@@ -6,6 +6,12 @@ export const minimalZonedSkin: CellSkinDefinition = {
   lightGreen: "bg-white text-black",
   gray: "bg-white text-black transition-none",
   silver: "bg-white text-black transition-none",
+  ogColors: {
+    hidden: "#ffffff",
+    hiddenAlt: "#ffffff",
+    revealed: "#ffffff",
+    revealedAlt: "#ffffff",
+  },
   number: {
     0: "text-black",
     1: "text-black",

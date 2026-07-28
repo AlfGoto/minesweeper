@@ -5,6 +5,12 @@ export const defaultSkin: CellSkinDefinition = {
   lightGreen: "bg-[lightgreen] contrast-[0.8]",
   gray: "bg-[tan] contrast-[0.9] transition-none",
   silver: "bg-[wheat] contrast-[0.9] transition-none",
+  ogColors: {
+    hidden: "#32CD32",
+    hiddenAlt: "#90EE90",
+    revealed: "#D2B48C",
+    revealedAlt: "#F5DEB3",
+  },
   flagEmoji: "🚩",
   bombEmoji: "💣",
   number: {

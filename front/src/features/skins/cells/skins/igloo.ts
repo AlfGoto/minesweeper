@@ -10,6 +10,12 @@ export const iglooSkin: CellSkinDefinition = {
   gray: "bg-[linear-gradient(145deg,#f8fcff_0%,#edf6fd_50%,#e2eff9_100%)] text-sky-900 shadow-[inset_0_0_0_1px_rgba(186,230,253,0.85)] transition-none",
   silver:
     "bg-[linear-gradient(145deg,#ffffff_0%,#f3f9ff_50%,#e7f2fb_100%)] text-sky-900 shadow-[inset_0_0_0_1px_rgba(191,219,254,0.85)] transition-none",
+  ogColors: {
+    hidden: "#cfe8f7",
+    hiddenAlt: "#d8edfa",
+    revealed: "#edf6fd",
+    revealedAlt: "#f3f9ff",
+  },
   number: {
     0: "",
     1: "text-blue-500",

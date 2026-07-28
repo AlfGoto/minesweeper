@@ -45,6 +45,13 @@ export type UnrevealedNeighborContext = Pick<
   | "bottomLeftIsUnrevealed"
 >;
 
+export type OgColors = {
+  hidden: string;
+  hiddenAlt: string;
+  revealed: string;
+  revealedAlt: string;
+};
+
 export type CellSkinDefinition = {
   green: string;
   lightGreen: string;
@@ -64,6 +71,7 @@ export type CellSkinDefinition = {
   keywords?: string[];
   faq?: SkinFaq[];
   translations?: Record<string, SkinTranslation>;
+  ogColors?: OgColors;
 };
 
 export type EmojiTileSkinConfig = {
@@ -82,4 +90,5 @@ export type EmojiTileSkinConfig = {
   keywords: string[];
   faq: SkinFaq[];
   translations?: Record<string, SkinTranslation>;
+  ogColors: OgColors;
 };

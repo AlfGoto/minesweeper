@@ -26,6 +26,12 @@ export const orangePopSkin: CellSkinDefinition = createEmojiTileSkin({
   emojis: ["🧡", "🍊", "🥕", "🦊", "🏀", "🔶", "🟧", "🎃"],
   glossRgb: "255,255,255",
   shadowRgb: "124,45,18",
+  ogColors: {
+    hidden: "#9a3412",
+    hiddenAlt: "#c2410c",
+    revealed: "#ffedd5",
+    revealedAlt: "#fff0dc",
+  },
   description:
     "A vivid orange emoji Minesweeper skin with a same-color emoji pool on hidden cells and warm clean reveals.",
   longDescription:

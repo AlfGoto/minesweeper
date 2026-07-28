@@ -10,6 +10,12 @@ export const voidOrchidSkin: CellSkinDefinition = {
   gray: "bg-[linear-gradient(145deg,#f9f1ff_0%,#f0ddff_52%,#e7ccfb_100%)] text-purple-950 transition-none",
   silver:
     "bg-[linear-gradient(145deg,#fff7ff_0%,#f7e9ff_52%,#efdafd_100%)] text-purple-950 transition-none",
+  ogColors: {
+    hidden: "#1d0c29",
+    hiddenAlt: "#28113a",
+    revealed: "#f0ddff",
+    revealedAlt: "#f7e9ff",
+  },
   number: {
     0: "",
     1: "text-blue-600",

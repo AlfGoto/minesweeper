@@ -35,14 +35,6 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
-      images: [
-        {
-          url: "https://minesweeper.fr/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: "Minesweeper - Free Online Puzzle Game",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
