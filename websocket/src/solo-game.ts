@@ -17,11 +17,21 @@ export class MinesweeperGame {
   public userName: string = "";
   public userPicture: string = "";
 
+  private saveTimeout: ReturnType<typeof setTimeout> | null = null;
+
   constructor(
     private state: DurableObjectState,
     private env: unknown,
   ) {
     this.apiUrl = (env as any).API_URL || "";
+  }
+
+  public saveGrid() {
+    if (this.saveTimeout) clearTimeout(this.saveTimeout);
+    this.saveTimeout = setTimeout(() => {
+      this.state.storage.put("grid", this.grid, { expirationTtl: 1800 } as any);
+      this.saveTimeout = null;
+    }, 100);
   }
 
   async fetch(req: Request): Promise<Response> {
@@ -96,15 +106,11 @@ export class MinesweeperGame {
       if (msg.type === "LEFT_CLICK") {
         if (this.isLost) return;
         await revealCell(this, msg.id);
-        await this.state.storage.put("grid", this.grid, {
-          expirationTtl: 1800,
-        } as any);
+        this.saveGrid();
       } else if (msg.type === "RIGHT_CLICK") {
         if (this.isLost) return;
         flagCell(this, msg.id);
-        await this.state.storage.put("grid", this.grid, {
-          expirationTtl: 1800,
-        } as any);
+        this.saveGrid();
       } else if (msg.type === "RESTART") {
         await restart(this);
       } else if (msg.type === "LOGIN") {

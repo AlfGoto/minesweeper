@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib"
 import * as apigw from "aws-cdk-lib/aws-apigatewayv2"
 import * as integrations from "aws-cdk-lib/aws-apigatewayv2-integrations"
 import * as ddb from "aws-cdk-lib/aws-dynamodb"
+import * as iam from "aws-cdk-lib/aws-iam"
 import * as lambda from "aws-cdk-lib/aws-lambda"
 import * as levs from "aws-cdk-lib/aws-lambda-event-sources"
 import * as ln from "aws-cdk-lib/aws-lambda-nodejs"
@@ -53,6 +54,14 @@ export class MinesweeperBff extends cdk.Stack {
     })
     table.grantReadWriteData(trigger)
 
+    const ssmPolicy = new iam.PolicyStatement({
+      actions: ["ssm:GetParameter"],
+      resources: [
+        `arn:aws:ssm:${this.region}:${this.account}:parameter/minesweeper-bff/discord-webhook-url`
+      ]
+    })
+    trigger.addToRolePolicy(ssmPolicy)
+
     const api = new apigw.HttpApi(this, "MinesweeperBffApi", {
       corsPreflight: {
         allowHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With"],
@@ -78,6 +87,7 @@ export class MinesweeperBff extends cdk.Stack {
       memorySize: 512
     })
     table.grantReadWriteData(apiFunction)
+    apiFunction.addToRolePolicy(ssmPolicy)
 
     new cdk.CfnOutput(this, "ApiUrl", {
       value: api.url ?? ""

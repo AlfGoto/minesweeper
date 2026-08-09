@@ -40,4 +40,6 @@ export async function lose(game: MinesweeperGame, id: number) {
       userPicture: game.userPicture,
     }, game.apiUrl);
   }
+
+  game.grid = [];
 }

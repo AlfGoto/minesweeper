@@ -1,5 +1,6 @@
 import { Entity, item, string, InputItem, number, map } from "dynamodb-toolbox"
 import { MinesweeperBffTable } from "../dynamodb"
+import { backgroundSkinsNames, bannerSkinsNames, cellsSkinsNames } from "../skin"
 
 export const status = ["won", "lost", "restarted"]
 
@@ -11,7 +12,19 @@ export const GameEntity = new Entity({
     revealed: number(),
     status: string().enum(...status),
     date: string().key(),
-    userEmail: string().key()
+    userEmail: string().key(),
+
+    selectedSkin: map({
+      cells: string()
+        .enum(...cellsSkinsNames)
+        .optional(),
+      banner: string()
+        .enum(...bannerSkinsNames)
+        .optional(),
+      background: string()
+        .enum(...backgroundSkinsNames)
+        .optional()
+    }).optional()
   }).and((prevSchema) => ({
     GSI1PK: string()
       .key()

@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { z } from "zod"
+import { BestGame } from "../../core/best-game"
 import { Game } from "../../core/game"
 import { status } from "../../core/game/game.entity"
 import { User } from "../../core/user"
@@ -15,7 +16,9 @@ export const StatsSchema = z
     totalWin: z.number(),
     bestTime: z.number().optional(),
     totalNoFlagsWin: z.number(),
-    totalRestarts: z.number()
+    totalRestarts: z.number(),
+    placement: z.number().optional(),
+    totalPlayers: z.number()
   })
   .openapi("UserStats")
 
@@ -126,13 +129,26 @@ export const route = new OpenAPIHono()
         return c.json({ message: "User not found" }, 404)
       }
 
-      const cached = await UserStatsCache.getByUserEmail(user.userEmail)
+      const [cached, bestGames] = await Promise.all([
+        UserStatsCache.getByUserEmail(user.userEmail),
+        BestGame.getBestGames()
+      ])
 
       if (!cached) {
         return c.json({ message: "Stats not found" }, 404)
       }
 
-      return c.json(StatsSchema.parse(cached), 200)
+      const sortedBestGames = bestGames.sort((a, b) => a.time - b.time)
+      const placementIndex = sortedBestGames.findIndex((g) => g.userEmail === user.userEmail)
+
+      return c.json(
+        StatsSchema.parse({
+          ...cached,
+          placement: placementIndex >= 0 ? placementIndex + 1 : undefined,
+          totalPlayers: bestGames.length
+        }),
+        200
+      )
     }
   )
   .openapi(

@@ -1,4 +1,4 @@
-import { GetItemCommand, QueryCommand, UpdateItemCommand } from "dynamodb-toolbox"
+import { GetItemCommand, QueryCommand, UpdateAttributesCommand } from "dynamodb-toolbox"
 import { MinesweeperBffTable } from "../dynamodb"
 import { UserStatsCacheEntity, UserStatsCacheEntityType } from "./user-stats-cache.entity"
 
@@ -14,7 +14,7 @@ export namespace UserStatsCache {
   }
 
   export async function update(userStatsCache: UserStatsCacheEntityType) {
-    await UserStatsCacheEntity.build(UpdateItemCommand).item(userStatsCache).send()
+    await UserStatsCacheEntity.build(UpdateAttributesCommand).item(userStatsCache).send()
   }
 
   export async function getByUserEmail(userEmail: string) {

@@ -7,6 +7,7 @@ import { route as GameRoute } from "./games"
 import { route as SkinsRoute } from "./skins"
 import { route as StatsRoute } from "./stats"
 import { route as UserStatsRoute } from "./user-stats"
+import { notifyError } from "../../core/discord/notify-error"
 
 const app = new OpenAPIHono()
 
@@ -15,12 +16,15 @@ const routes = app
   .route("/stats", StatsRoute)
   .route("/users", UserStatsRoute)
   .route("/skins", SkinsRoute)
-  .onError((error, c) => {
+  .onError(async (error, c) => {
     console.error("Error:", JSON.stringify(error, null, 2))
 
     if (error instanceof HTTPException) {
       return c.json(error.message, error.status)
     }
+
+    await notifyError(error)
+
     return c.json(
       {
         code: "internal",

@@ -5,6 +5,7 @@ import { BestGame } from "../../core/best-game"
 import { Game } from "../../core/game"
 import { status } from "../../core/game/game.entity"
 import { User } from "../../core/user"
+import { chunkPromiseAll } from "../../utils"
 
 function shortId() {
   const hex = randomUUID().replace(/-/g, "")
@@ -58,21 +59,62 @@ export const route = new OpenAPIHono()
     async (c) => {
       const bestGames = await BestGame.getBestGames()
 
-      const games = await Promise.all(
-        bestGames
-          .sort((a, b) => a.time - b.time)
-          .slice(0, 10)
-          .map(async (game) => {
-            const user = await User.getUserByEmail(game.userEmail)
-            return {
-              userId: user?.userId ?? "",
-              time: game.time,
-              flags: game.flags,
-              date: game.date,
-              userName: user?.userName ?? "",
-              userPicture: user?.userPicture ?? ""
+      const games = await chunkPromiseAll(
+        bestGames.sort((a, b) => a.time - b.time).slice(0, 10),
+        async (game) => {
+          const user = await User.getUserByEmail(game.userEmail)
+          return {
+            userId: user?.userId ?? "",
+            time: game.time,
+            flags: game.flags,
+            date: game.date,
+            userName: user?.userName ?? "",
+            userPicture: user?.userPicture ?? ""
+          }
+        }
+      )
+
+      return c.json(
+        z
+          .array(BestGameSchema)
+          .parse(games ?? [])
+          .sort((a, b) => a.time - b.time),
+        200
+      )
+    }
+  )
+  .openapi(
+    createRoute({
+      method: "get",
+      path: "/all-best",
+      responses: {
+        200: {
+          description: "Get best games",
+          content: {
+            "application/json": {
+              schema: z.array(BestGameSchema)
             }
-          })
+          }
+        }
+      },
+      description: "Get best games"
+    }),
+    async (c) => {
+      const bestGames = await BestGame.getBestGames()
+
+      const games = await chunkPromiseAll(
+        bestGames.sort((a, b) => a.time - b.time),
+        async (game) => {
+          const user = await User.getUserByEmail(game.userEmail)
+          return {
+            userId: user?.userId ?? "",
+            time: game.time,
+            flags: game.flags,
+            date: game.date,
+            userName: user?.userName ?? "",
+            userPicture: user?.userPicture ?? ""
+          }
+        }
       )
 
       return c.json(
@@ -192,10 +234,9 @@ export const route = new OpenAPIHono()
     }),
     async (c) => {
       const game = c.req.valid("json")
-
-      await Game.create(game)
-
       const user = await User.getUserByEmail(game.userEmail)
+
+      await Game.create({ ...game, selectedSkin: user?.selectedSkin })
 
       let totalNoFlagsWin = user?.totalNoFlagsWin ?? 0
       if (game.status === "won" && game.flags === 0) {

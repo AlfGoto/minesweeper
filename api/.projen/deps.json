@@ -103,6 +103,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/client-ssm",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-sdk/lib-dynamodb",
       "type": "runtime"
     },
@@ -134,6 +138,10 @@
     {
       "name": "constructs",
       "version": "^10.0.5",
+      "type": "runtime"
+    },
+    {
+      "name": "date-fns",
       "type": "runtime"
     },
     {

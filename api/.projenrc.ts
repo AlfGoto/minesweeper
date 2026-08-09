@@ -5,10 +5,16 @@ const project = new Projalf({
   devDeps: ["projalf", "prettier", "eslint@^8", "@types/aws-lambda"],
   name: "minesweeper-bff",
   projenrcTs: true,
+  tsconfigDev: {
+    compilerOptions: {
+      types: ["node"]
+    }
+  },
 
   deps: [
     "dynamodb-toolbox",
     "@aws-sdk/client-dynamodb",
+    "@aws-sdk/client-ssm",
     "@aws-sdk/lib-dynamodb",
     "@aws-sdk/util-dynamodb",
 
@@ -19,7 +25,8 @@ const project = new Projalf({
     "@middy/core",
     "hono",
     "zod",
-    "aws-lambda"
+    "aws-lambda",
+    "date-fns"
   ]
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // packageName: undefined,  /* The "name" in package.json. */

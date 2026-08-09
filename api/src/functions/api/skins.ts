@@ -11,7 +11,7 @@ import {
   backgroundSkinsNames,
   cellsSkinsNames,
   skinTypes
-} from "../../core/user/user.entity"
+} from "../../core/skin"
 
 export const SkinTypeSchema = z.enum(skinTypes).openapi("SkinType")
 export const SkinTypesResponseSchema = z.array(SkinTypeSchema).openapi("SkinTypesResponse")

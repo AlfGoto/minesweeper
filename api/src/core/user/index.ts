@@ -5,20 +5,9 @@ import {
   UpdateAttributesCommand,
   UpdateTransaction
 } from "dynamodb-toolbox"
-import {
-  UserEntity,
-  UserEntityType,
-  cellsSkinsNames,
-  bannerSkinsNames,
-  backgroundSkinsNames,
-  skinTypes
-} from "./user.entity"
+import { UserEntity, UserEntityType } from "./user.entity"
 import { MinesweeperBffTable } from "../dynamodb"
-
-type SkinType = (typeof skinTypes)[number]
-type CellSkinName = (typeof cellsSkinsNames)[number]
-type BannerSkinName = (typeof bannerSkinsNames)[number]
-type BackgroundSkinName = (typeof backgroundSkinsNames)[number]
+import { BannerSkinName, CellSkinName, BackgroundSkinName, SkinType } from "../skin"
 
 export namespace User {
   type UserSkinState = {

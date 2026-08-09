@@ -29,8 +29,8 @@ export async function revealCell(game: MinesweeperGame, id: number) {
 
   if (game.grid[id].value === 0) {
     for (const nearby of getNearbySquares(id)) {
-      setTimeout(async () => {
-        await revealCell(game, nearby);
+      setTimeout(() => {
+        revealCell(game, nearby).catch(console.error);
       }, 40);
     }
   }
@@ -52,7 +52,6 @@ export async function revealAdjacentCells(game: MinesweeperGame, id: number) {
     (index) => game.grid[index].status === "flagged",
   ).length;
 
-  console.log(`Cell ${id}: flags=${nearbyFlags}, need=${totalFlagsToMatch}`);
 
   if (nearbyFlags === totalFlagsToMatch) {
     // First check if any unflagged bomb would be revealed - that's a loss

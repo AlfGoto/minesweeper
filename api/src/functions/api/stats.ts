@@ -1,7 +1,9 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { z } from "zod"
+import { BestGame } from "../../core/best-game"
 import { User } from "../../core/user"
 import { UserStatsCache } from "../../core/user-stats-cache"
+import { chunkPromiseAll } from "../../utils"
 
 export const StatsSchema = z
   .object({
@@ -13,7 +15,9 @@ export const StatsSchema = z
     totalWin: z.number(),
     bestTime: z.number().optional(),
     totalNoFlagsWin: z.number(),
-    totalRestarts: z.number()
+    totalRestarts: z.number(),
+    placement: z.number().optional(),
+    totalPlayers: z.number()
   })
   .openapi("Stats")
 
@@ -39,7 +43,7 @@ export const route = new OpenAPIHono()
   .openapi(
     createRoute({
       method: "get",
-      path: "/all",
+      path: "/best",
       responses: {
         200: {
           description: "Get all stats",
@@ -55,7 +59,43 @@ export const route = new OpenAPIHono()
       const stats = await UserStatsCache.getAll()
 
       const statsWithUser = await Promise.all(
-        stats.map(async (stat) => {
+        stats
+          .sort((a, b) => b.totalTime - a.totalTime)
+          .slice(0, 10)
+          .map(async (stat) => {
+            const user = await User.getUserByEmail(stat.userEmail)
+            return {
+              ...stat,
+              userId: user?.userId ?? "",
+              userPicture: user?.userPicture ?? "",
+              userName: user?.userName ?? ""
+            }
+          })
+      )
+      return c.json(z.array(StatsAllSchema).parse(statsWithUser), 200)
+    }
+  )
+  .openapi(
+    createRoute({
+      method: "get",
+      path: "/all",
+      responses: {
+        200: {
+          description: "Get all stats",
+          content: {
+            "application/json": {
+              schema: z.array(StatsAllSchema)
+            }
+          }
+        }
+      }
+    }),
+    async (c) => {
+      const stats = await UserStatsCache.getAll()
+
+      const statsWithUser = await chunkPromiseAll(
+        stats.sort((a, b) => b.totalTime - a.totalTime),
+        async (stat) => {
           const user = await User.getUserByEmail(stat.userEmail)
           return {
             ...stat,
@@ -63,7 +103,7 @@ export const route = new OpenAPIHono()
             userPicture: user?.userPicture ?? "",
             userName: user?.userName ?? ""
           }
-        })
+        }
       )
       return c.json(z.array(StatsAllSchema).parse(statsWithUser), 200)
     }
@@ -100,12 +140,25 @@ export const route = new OpenAPIHono()
     async (c) => {
       const { userEmail } = c.req.valid("param")
 
-      const cached = await UserStatsCache.getByUserEmail(userEmail)
+      const [cached, bestGames] = await Promise.all([
+        UserStatsCache.getByUserEmail(userEmail),
+        BestGame.getBestGames()
+      ])
 
       if (!cached) {
         return c.json({ message: "Stats not found" }, 404)
       }
 
-      return c.json(StatsSchema.parse(cached), 200)
+      const sortedBestGames = bestGames.sort((a, b) => a.time - b.time)
+      const placementIndex = sortedBestGames.findIndex((g) => g.userEmail === userEmail)
+
+      return c.json(
+        StatsSchema.parse({
+          ...cached,
+          placement: placementIndex >= 0 ? placementIndex + 1 : undefined,
+          totalPlayers: bestGames.length
+        }),
+        200
+      )
     }
   )

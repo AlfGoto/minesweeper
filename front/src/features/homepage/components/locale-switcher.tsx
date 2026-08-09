@@ -36,7 +36,7 @@ export function LocaleSwitcher({ className = "" }: { className?: string }) {
     <Select defaultValue={currentLocale} onValueChange={onLocaleChange}>
       <SelectTrigger
         className={cn(
-          "bg-primary text-primary-foreground hover:bg-primary/90 w-[150px] justify-between",
+          "w-[150px] justify-between border-input bg-background text-black",
           className,
           "px-4",
         )}
