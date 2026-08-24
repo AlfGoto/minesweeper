@@ -9,7 +9,7 @@ import {
 } from "@/features/skins/backgrounds";
 import { getBackgroundSkinSeo } from "@/features/skins/seo";
 import { getTranslations } from "next-intl/server";
-import { generateAlternates } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
 type Props = {
   params: Promise<{ locale: string; skinName: string }>;
@@ -57,6 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       siteName: "Minesweeper",
+      images: generateOgImages(`/skins/background/${skin.slug}`, title),
     },
     twitter: {
       card: "summary_large_image",

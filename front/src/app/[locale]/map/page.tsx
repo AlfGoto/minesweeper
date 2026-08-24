@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getAllStats } from "@/lib/api";
-import { filterIndexablePlayers, generateAlternates } from "@/lib/seo-config";
+import { filterIndexablePlayers, generateAlternates, generateOgImages } from "@/lib/seo-config";
 import { formatTime } from "@/lib/dates";
 import { createPlayerSlug } from "@/lib/utils";
 import { Metadata } from "next";
@@ -28,6 +28,7 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
+      images: generateOgImages("/map", t("title")),
     },
     twitter: {
       card: "summary_large_image",

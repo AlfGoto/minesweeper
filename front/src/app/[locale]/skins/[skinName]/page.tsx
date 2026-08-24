@@ -10,7 +10,7 @@ import {
 import { CellSkinLargeDemoGrid } from "@/features/shared/components/cell-skin-preview";
 import { getCellSkinSeo } from "@/features/skins/seo";
 import { getTranslations } from "next-intl/server";
-import { generateAlternates } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
 type Props = {
   params: Promise<{ skinName: string; locale: string }>;
@@ -58,6 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       siteName: "Minesweeper",
+      images: generateOgImages(`/skins/${skin.slug}`, title),
     },
     twitter: {
       card: "summary_large_image",

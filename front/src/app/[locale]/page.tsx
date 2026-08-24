@@ -2,7 +2,7 @@ import { use } from "react";
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import HomeComponent from "@/features/homepage";
-import { generateAlternates, BASE_URL } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -43,14 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
-      images: [
-        {
-          url: "https://minesweeper.fr/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: seo.ogAlt,
-        },
-      ],
+      images: generateOgImages("", seo.ogAlt),
     },
     twitter: {
       card: "summary_large_image",

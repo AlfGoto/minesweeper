@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { UserProfilePage } from "@/features/user-stats";
 import { getUserById, getUserStats } from "@/lib/api";
 import { formatTime } from "@/lib/dates";
-import { shouldIndexProfile, generateAlternates } from "@/lib/seo-config";
+import { shouldIndexProfile, generateAlternates, generateOgImages } from "@/lib/seo-config";
 import { getTranslations } from "next-intl/server";
 import { extractUserIdFromSlug, createPlayerSlug } from "@/lib/utils";
 
@@ -59,14 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description,
         type: "profile",
         url: alternates.canonical,
-        images: [
-          {
-            url: "https://minesweeper.fr/opengraph-image",
-            width: 1200,
-            height: 630,
-            alt: "Minesweeper - Free Online Puzzle Game",
-          },
-        ],
+        images: generateOgImages(`/players/${playerSlug}`, title),
       },
       twitter: {
         card: "summary",

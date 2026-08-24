@@ -4,7 +4,7 @@ import { SkinsPage } from "@/features/skins";
 import { getPublishedSkinsWithMeta } from "@/features/skins/cells/skins";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { generateAlternates } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -38,14 +38,7 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Competitive Minesweeper",
       type: "website",
-      images: [
-        {
-          url: "https://minesweeper.fr/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: "Minesweeper Skins - Unlock by Playing",
-        },
-      ],
+      images: generateOgImages("/skins", "Minesweeper Skins - Unlock by Playing"),
     },
     twitter: {
       card: "summary_large_image",

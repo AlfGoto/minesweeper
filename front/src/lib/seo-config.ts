@@ -13,6 +13,17 @@ export const SEO_CONFIG = {
  * Generate proper alternates (canonical + hreflang) for a given path and locale.
  * Path should NOT include locale prefix (e.g., "/skins" not "/fr/skins").
  */
+export function generateOgImages(path: string, alt: string) {
+  return [
+    {
+      url: `${BASE_URL}${path}/opengraph-image`,
+      width: 1200,
+      height: 630,
+      alt,
+    },
+  ];
+}
+
 export function generateAlternates(path: string, currentLocale: string) {
   const canonicalPath = currentLocale === routing.defaultLocale
     ? `${BASE_URL}${path}`

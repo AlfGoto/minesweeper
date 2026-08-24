@@ -4,7 +4,7 @@ import { use } from "react";
 import { Link } from "@/i18n/navigation";
 import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { generateAlternates } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -34,14 +34,7 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
-      images: [
-        {
-          url: "https://minesweeper.fr/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: "Minesweeper - Free Online Puzzle Game",
-        },
-      ],
+      images: generateOgImages("/skins/background", t("ogTitle")),
     },
     twitter: {
       card: "summary_large_image",

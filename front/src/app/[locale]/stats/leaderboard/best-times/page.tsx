@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getAllBestGames } from "@/lib/api";
-import { generateAlternates } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import {
@@ -35,6 +35,7 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
+      images: generateOgImages("/stats/leaderboard/best-times", t("bestTimesTitle")),
     },
     twitter: {
       card: "summary_large_image",

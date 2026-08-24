@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Link } from "@/i18n/navigation";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { generateAlternates } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -38,6 +38,7 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "article",
+      images: generateOgImages("/how-to-play", t("title")),
     },
     twitter: {
       card: "summary_large_image",

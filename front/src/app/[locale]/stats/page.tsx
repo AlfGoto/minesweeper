@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { StatsPage } from "@/features/stats";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { generateAlternates } from "@/lib/seo-config";
+import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
 export async function generateMetadata({
   params,
@@ -33,6 +33,7 @@ export async function generateMetadata({
       url: alternates.canonical,
       siteName: "Minesweeper",
       type: "website",
+      images: generateOgImages("/stats", t("metaTitle")),
     },
     twitter: {
       card: "summary_large_image",
