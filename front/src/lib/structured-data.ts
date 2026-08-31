@@ -5,22 +5,24 @@ import { createPlayerSlug } from "./utils";
 export function generateProfileJsonLd(
   userId: string,
   user: User,
-  stats: UserStats | undefined
+  stats: UserStats | undefined,
+  locale: string = "en"
 ) {
-  const winRate = stats && stats.totalGames > 0
-    ? Math.round((stats.totalWin / stats.totalGames) * 100)
-    : 0;
-
   const playerSlug = createPlayerSlug(user.userName || "player", userId);
+  const localePath = locale === "en" ? "" : `/${locale}`;
+  const playerUrl = `https://minesweeper.fr${localePath}/players/${playerSlug}`;
 
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
+    ...(stats?.createdAt && { dateCreated: stats.createdAt }),
+    dateModified: stats?.updatedAt ?? new Date().toISOString(),
     mainEntity: {
       "@type": "Person",
       name: user.userName,
+      identifier: userId,
       image: user.userPicture,
-      url: `https://minesweeper.fr/players/${playerSlug}`,
+      url: playerUrl,
       description: stats?.bestTime
         ? `Minesweeper player with ${stats.totalWin} wins and best time of ${formatTime(stats.bestTime)}`
         : `Minesweeper player with ${stats?.totalGames ?? 0} games played`,

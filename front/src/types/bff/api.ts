@@ -986,6 +986,8 @@ export interface components {
             totalRestarts: number;
             placement?: number;
             totalPlayers: number;
+            createdAt: string;
+            updatedAt: string;
         };
         UserGame: {
             /** @enum {string} */

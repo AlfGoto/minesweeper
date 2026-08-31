@@ -35,7 +35,7 @@ export async function UserProfilePage({ userId, user, stats, locale = "en" }: Us
   const isOwnProfile = session?.user?.name === user.userName;
   const statsForIndex = stats ? { ...stats, userId, userName: user.userName, userPicture: user.userPicture } : undefined;
   const { indexable } = shouldIndexProfile(statsForIndex);
-  const jsonLd = indexable ? generateProfileJsonLd(userId, user, stats) : null;
+  const jsonLd = indexable ? generateProfileJsonLd(userId, user, stats, locale) : null;
 
   const placement = stats?.placement;
   const totalPlayers = stats?.totalPlayers ?? 0;
