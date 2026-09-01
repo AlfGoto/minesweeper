@@ -5,6 +5,89 @@ import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
+async function getFaqStructuredData(locale: string) {
+  const t = await getTranslations({ locale, namespace: "howToPlayPage" });
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: t("faq.goal.question"),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: t("faq.goal.answer"),
+        },
+      },
+      {
+        "@type": "Question",
+        name: t("faq.numbers.question"),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: t("faq.numbers.answer"),
+        },
+      },
+      {
+        "@type": "Question",
+        name: t("faq.flag.question"),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: t("faq.flag.answer"),
+        },
+      },
+      {
+        "@type": "Question",
+        name: t("faq.clickMine.question"),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: t("faq.clickMine.answer"),
+        },
+      },
+      {
+        "@type": "Question",
+        name: t("faq.bestStrategy.question"),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: t("faq.bestStrategy.answer"),
+        },
+      },
+    ],
+  };
+}
+
+async function getHowToStructuredData(locale: string) {
+  const t = await getTranslations({ locale, namespace: "howToPlayPage" });
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: t("title"),
+    description: t("metaDescription"),
+    totalTime: "PT5M",
+    step: [
+      {
+        "@type": "HowToStep",
+        name: t("rules.clickToReveal.title"),
+        text: t("rules.clickToReveal.description"),
+      },
+      {
+        "@type": "HowToStep",
+        name: t("rules.numbersShow.title"),
+        text: t("rules.numbersShow.description"),
+      },
+      {
+        "@type": "HowToStep",
+        name: t("rules.flagMines.title"),
+        text: t("rules.flagMines.description"),
+      },
+      {
+        "@type": "HowToStep",
+        name: t("rules.avoidMines.title"),
+        text: t("rules.avoidMines.description"),
+      },
+    ],
+  };
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -14,8 +97,14 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "howToPlayPage" });
   const alternates = generateAlternates("/how-to-play", locale);
 
+  const titlesByLocale: Record<string, string> = {
+    en: "How to Play Minesweeper",
+    fr: "Comment jouer au Démineur",
+    es: "Cómo jugar al Buscaminas",
+  };
+
   return {
-    title: t("title"),
+    title: titlesByLocale[locale] || titlesByLocale.en,
     description: t("metaDescription"),
     keywords: [
       "how to play minesweeper",
@@ -27,13 +116,13 @@ export async function generateMetadata({
       "minesweeper for beginners",
       "learn minesweeper",
       "minesweeper help",
-      "comment jouer au demineur",
-      "regles demineur",
-      "como jugar buscaminas",
+      "comment jouer au démineur",
+      "règles démineur",
+      "cómo jugar al buscaminas",
     ],
     alternates,
     openGraph: {
-      title: t("title"),
+      title: titlesByLocale[locale] || titlesByLocale.en,
       description: t("metaDescription"),
       url: alternates.canonical,
       siteName: "Minesweeper",
@@ -42,94 +131,11 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: t("title"),
+      title: titlesByLocale[locale] || titlesByLocale.en,
       description: t("metaDescription"),
     },
   };
 }
-
-const faqStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is the goal of Minesweeper?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The goal of Minesweeper is to clear the entire board without clicking on any mines. You must use the numbers revealed on cells to deduce which cells contain mines and flag them accordingly.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What do the numbers mean in Minesweeper?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Each number on a revealed cell indicates how many mines are adjacent to that cell (including diagonals). A cell can have 0-8 adjacent mines. Use these numbers to logically determine where mines are located.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I flag a mine in Minesweeper?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Right-click (on desktop) or long-press (on mobile) on a cell to place a flag. Flags mark cells you believe contain mines. You can remove a flag by right-clicking or long-pressing again.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What happens if I click on a mine?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "If you click on a cell containing a mine, the game ends and you lose. All mines on the board are revealed. To win, you must reveal all non-mine cells without clicking on any mines.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What is the best strategy for Minesweeper?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Start by clicking near the center of the board. When you see a 1 next to a single unrevealed cell, that cell is a mine. Look for patterns where the math clearly indicates mine locations. If stuck, look for cells that are definitely safe based on the numbers around them.",
-      },
-    },
-  ],
-};
-
-const howToStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  name: "How to Play Minesweeper",
-  description:
-    "Learn the rules and strategies to master Minesweeper, the classic puzzle game.",
-  totalTime: "PT5M",
-  step: [
-    {
-      "@type": "HowToStep",
-      name: "Start the game",
-      text: "Click any cell to start. The first click is always safe and will never reveal a mine.",
-    },
-    {
-      "@type": "HowToStep",
-      name: "Read the numbers",
-      text: "Each number tells you how many mines are in the 8 cells surrounding it (horizontally, vertically, and diagonally).",
-    },
-    {
-      "@type": "HowToStep",
-      name: "Flag suspected mines",
-      text: "Right-click (desktop) or long-press (mobile) to place a flag on cells you think contain mines.",
-    },
-    {
-      "@type": "HowToStep",
-      name: "Use logic to deduce",
-      text: "Combine information from multiple numbers to determine which cells are safe and which contain mines.",
-    },
-    {
-      "@type": "HowToStep",
-      name: "Clear the board",
-      text: "Reveal all non-mine cells to win. Be careful - clicking a mine ends the game!",
-    },
-  ],
-};
 
 const breadcrumbStructuredData = {
   "@context": "https://schema.org",
@@ -158,11 +164,13 @@ export default function HowToPlayPage({
   const { locale } = use(params);
   setRequestLocale(locale);
 
-  return <HowToPlayContent />;
+  return <HowToPlayContent locale={locale} />;
 }
 
-async function HowToPlayContent() {
+async function HowToPlayContent({ locale }: { locale: string }) {
   const t = await getTranslations("howToPlayPage");
+  const faqStructuredData = await getFaqStructuredData(locale);
+  const howToStructuredData = await getHowToStructuredData(locale);
 
   return (
     <>
