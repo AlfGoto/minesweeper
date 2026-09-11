@@ -58,12 +58,17 @@ function getCell(grid: PreviewCell[], id: number): PreviewCell {
   return grid[id] ?? { status: "hidden", value: 0 };
 }
 
-function getNeighborContext(grid: PreviewCell[], id: number, gridSize: number) {
+function getNeighborContext(
+  grid: PreviewCell[],
+  id: number,
+  gridSize: number,
+  rowCount: number = gridSize,
+) {
   const row = Math.floor(id / gridSize);
   const col = id % gridSize;
 
   const isUnrevealed = (r: number, c: number) => {
-    if (r < 0 || r >= gridSize || c < 0 || c >= gridSize) return false;
+    if (r < 0 || r >= rowCount || c < 0 || c >= gridSize) return false;
     const neighbor = getCell(grid, r * gridSize + c);
     return neighbor.status === "hidden" || neighbor.status === "flagged";
   };
@@ -85,12 +90,14 @@ function SkinCell({
   id,
   grid,
   gridSize,
+  rows = gridSize,
   compact,
 }: {
   skin: CellSkin;
   id: number;
   grid: PreviewCell[];
   gridSize: number;
+  rows?: number;
   compact?: boolean;
 }) {
   const cell = getCell(grid, id);
@@ -113,7 +120,7 @@ function SkinCell({
     cellValue: cell.value,
     cellStatus: cell.status,
     isHiddenOrFlagged,
-    ...getNeighborContext(grid, id, gridSize),
+    ...getNeighborContext(grid, id, gridSize, rows),
   });
   const { flagEmoji = "🚩", bombEmoji = "💣" } = skinData.definition;
 
@@ -149,11 +156,13 @@ export function PreviewGrid({
   skin,
   grid,
   gridSize,
+  rows = gridSize,
   compact,
 }: {
   skin: CellSkin;
   grid: PreviewCell[];
   gridSize: number;
+  rows?: number;
   compact?: boolean;
 }) {
   return (
@@ -168,6 +177,7 @@ export function PreviewGrid({
           id={index}
           grid={grid}
           gridSize={gridSize}
+          rows={rows}
           compact={compact}
         />
       ))}

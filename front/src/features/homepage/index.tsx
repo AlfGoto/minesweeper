@@ -1,6 +1,7 @@
 import Grid from "@/features/homepage/components/grid";
 import { GameProvider } from "./game-provider";
 import Menu from "./components/menu";
+import MenuMobile from "./components/menu-mobile";
 import LoseDialog from "./components/lose-dialog";
 import WinDialog from "./components/win-dialog";
 import { getServerSession } from "next-auth";
@@ -22,7 +23,7 @@ export default async function Home() {
 
   return (
     <GameProvider>
-      <div className="w-full h-screen flex flex-col items-center justify-center">
+      <div className="w-full h-screen flex flex-col items-center justify-center px-2 md:px-0">
         <div className="sr-only">
           <h1>{t("h1")}</h1>
 
@@ -85,8 +86,9 @@ export default async function Home() {
             </ul>
           </nav>
         </div>
-        <div className="flex items-center justify-center w-full gap-4">
+        <div className="flex flex-col md:flex-row items-center justify-center w-full gap-2 md:gap-4">
           <Grid selectedCellSkin={selectedCellSkin} />
+          <MenuMobile />
           <Menu />
           <LoseDialog />
           <WinDialog />

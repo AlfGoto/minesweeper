@@ -13,7 +13,7 @@ export default async function Menu() {
   const session = await getServerSession();
 
   return (
-    <div className="h-full">
+    <div className="hidden md:block h-full">
       <div className="flex flex-col gap-2 shadow-lg rounded-lg p-4 ">
         <RestartButton className={buttonClassName} />
         <Timer className={buttonClassName} />
