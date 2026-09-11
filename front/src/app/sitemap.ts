@@ -5,6 +5,7 @@ import { getAllStats } from "@/lib/api";
 import { filterIndexablePlayers, getTopPlayers } from "@/lib/seo-config";
 import { createPlayerSlug } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
+import { getAllPages } from "@basalf/cms-next";
 
 const BASE_URL = "https://minesweeper.fr";
 
@@ -50,9 +51,34 @@ export function getStaticPages(): MetadataRoute.Sitemap {
     ...createEntries("/skins", "weekly", 0.85),
     ...createEntries("/reddit", "monthly", 0.5),
     ...createEntries("/skins/background", "weekly", 0.8),
+    ...createEntries("/blog", "weekly", 0.7),
     ...skinPages,
     ...backgroundSkinPages,
   ];
+}
+
+// Blog articles are published per-locale in the CMS: an article can exist in
+// /fr/blog/slug without an /en/blog/slug counterpart. So each entry uses only
+// the locale it actually has, instead of createEntries' "same path for every
+// locale" assumption.
+async function getBlogPages(): Promise<MetadataRoute.Sitemap> {
+  const allPages = await getAllPages();
+
+  return allPages
+    .filter((page) => routing.locales.includes(page.locale as (typeof routing.locales)[number]))
+    .map((page) => {
+      const path = `/blog${page.url.startsWith("/") ? "" : "/"}${page.url}`;
+      const url = page.locale === routing.defaultLocale
+        ? `${BASE_URL}${path}`
+        : `${BASE_URL}/${page.locale}${path}`;
+
+      return {
+        url,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      };
+    });
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -71,5 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
   );
 
-  return [...staticPages, ...playerPages];
+  const blogPages = await getBlogPages();
+
+  return [...staticPages, ...playerPages, ...blogPages];
 }

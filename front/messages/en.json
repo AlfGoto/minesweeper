@@ -93,7 +93,8 @@
       "leaderboard": "Leaderboard",
       "myStats": "My Stats",
       "sitemap": "Sitemap",
-      "about": "About"
+      "about": "About",
+      "blog": "Blog"
     }
   },
   "backgroundSkinsPage": {
@@ -357,5 +358,17 @@
     "myStats": "My Stats",
     "howToPlay": "How to Play",
     "contactMe": "You can contact me at"
+  },
+  "footer": {
+    "home": "Home",
+    "skins": "Skins",
+    "stats": "Stats"
+  },
+  "blogPage": {
+    "title": "Blog",
+    "metaDescription": "Guides, tips and updates about Minesweeper.fr.",
+    "subtitle": "Guides, tips and updates about the game.",
+    "empty": "No articles yet. Check back soon!",
+    "playNow": "Play Now"
   }
 }

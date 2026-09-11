@@ -367,6 +367,7 @@ async function HowToPlayContent() {
             <QuickLink href="/stats" label={t("quickLinks.myStats")} />
             <QuickLink href="/map" label={t("quickLinks.sitemap")} />
             <QuickLink href="/reddit" label={t("quickLinks.about")} />
+            <QuickLink href="/blog" label={t("quickLinks.blog")} />
           </div>
         </section>
       </div>
