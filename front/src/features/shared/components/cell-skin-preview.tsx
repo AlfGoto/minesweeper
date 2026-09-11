@@ -19,8 +19,8 @@ const PREVIEW_2X2_CELLS: PreviewCell[] = [
   { status: "revealed", value: 1 },
 ];
 
-const DEMO_GRID_SIZE = 5;
-const DEMO_GRID: PreviewCell[] = [
+export const DEMO_GRID_SIZE = 5;
+export const DEMO_GRID: PreviewCell[] = [
   { status: "hidden", value: 0 },
   { status: "hidden", value: 0 },
   { status: "hidden", value: 0 },
@@ -48,8 +48,8 @@ const DEMO_GRID: PreviewCell[] = [
   { status: "hidden", value: 0 },
 ];
 
-const LARGE_DEMO_GRID_SIZE = 10;
-const LARGE_DEMO_GRID: PreviewCell[] = Array.from(
+export const LARGE_DEMO_GRID_SIZE = 10;
+export const LARGE_DEMO_GRID: PreviewCell[] = Array.from(
   { length: LARGE_DEMO_GRID_SIZE * LARGE_DEMO_GRID_SIZE },
   (_, index) => DEMO_GRID[index % DEMO_GRID.length] ?? { status: "hidden", value: 0 },
 );
@@ -145,7 +145,7 @@ function SkinCell({
   );
 }
 
-function PreviewGrid({
+export function PreviewGrid({
   skin,
   grid,
   gridSize,

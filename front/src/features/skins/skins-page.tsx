@@ -29,6 +29,7 @@ export async function SkinsPage({ locale = "en" }: SkinsPageProps) {
 
   return (
     <main className="mx-auto w-full max-w-4xl p-4 md:p-8 flex flex-col gap-4">
+      <h1 className="sr-only">{t("pageTitle")}</h1>
       <div className="flex justify-end">
         <Link href="/" prefetch>
           <Button>{t("backToGame")}</Button>

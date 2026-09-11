@@ -1,4 +1,5 @@
 import type { StatsAll } from "@/types/bff";
+import type { AllPages } from "@basalf/cms-next";
 import { routing } from "@/i18n/routing";
 
 export const BASE_URL = "https://minesweeper.fr";
@@ -81,4 +82,22 @@ export function getTopPlayers(allStats: StatsAll[], limit: number = SEO_CONFIG.t
   return [...allStats]
     .sort((a, b) => (a.bestTime ?? Infinity) - (b.bestTime ?? Infinity))
     .slice(0, limit);
+}
+
+/**
+ * The CMS has no draft/scheduled-publish field: a page goes live the moment
+ * it's created. We reuse the article schema's `date` as a soft publish date -
+ * a page dated in the future is treated as unpublished (hidden from the blog
+ * index, the sitemap, and 404s directly) until that date passes.
+ */
+export function isBlogPagePublished(page: Pick<AllPages[number], "seo">): boolean {
+  const articleSchema = page.seo.schemas.find(
+    (schema): schema is Extract<typeof schema, { type: "article" }> => schema.type === "article"
+  );
+  if (!articleSchema?.date) return true;
+
+  const publishDate = new Date(articleSchema.date);
+  if (Number.isNaN(publishDate.getTime())) return true;
+
+  return publishDate.getTime() <= Date.now();
 }

@@ -52,7 +52,7 @@ export function CellSkinsShop({
         className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
       >
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold">{t("cellsTitle")}</h1>
+          <h2 className="text-3xl font-bold">{t("cellsTitle")}</h2>
           <p className="text-muted-foreground">{t("cellsDescription")}</p>
         </div>
         <CellsTab
@@ -72,7 +72,7 @@ export function CellSkinsShop({
         className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
       >
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold">{t("backgroundsTitle")}</h1>
+          <h2 className="text-3xl font-bold">{t("backgroundsTitle")}</h2>
           <p className="text-muted-foreground">{t("backgroundsDescription")}</p>
         </div>
         <Suspense fallback={<div className="text-muted-foreground">{t("loading")}</div>}>
@@ -86,7 +86,7 @@ export function CellSkinsShop({
         className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
       >
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold">{t("bannersTitle")}</h1>
+          <h2 className="text-3xl font-bold">{t("bannersTitle")}</h2>
           <p className="text-muted-foreground">{t("bannersDescription")}</p>
         </div>
         <BannersTab />

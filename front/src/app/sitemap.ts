@@ -2,12 +2,14 @@ import type { MetadataRoute } from "next";
 import { getAllBackgroundSkinSlugs } from "@/features/skins/backgrounds";
 import { getAllSkinSlugs } from "@/features/skins/cells/skins";
 import { getAllStats } from "@/lib/api";
-import { filterIndexablePlayers, getTopPlayers } from "@/lib/seo-config";
+import { filterIndexablePlayers, getTopPlayers, isBlogPagePublished } from "@/lib/seo-config";
 import { createPlayerSlug } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
 import { getAllPages } from "@basalf/cms-next";
 
 const BASE_URL = "https://minesweeper.fr";
+
+export const revalidate = 86400; // 1 day
 
 function createEntries(
   path: string,
@@ -66,6 +68,7 @@ async function getBlogPages(): Promise<MetadataRoute.Sitemap> {
 
   return allPages
     .filter((page) => routing.locales.includes(page.locale as (typeof routing.locales)[number]))
+    .filter(isBlogPagePublished)
     .map((page) => {
       const path = `/blog${page.url.startsWith("/") ? "" : "/"}${page.url}`;
       const url = page.locale === routing.defaultLocale
@@ -93,7 +96,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     createEntries(
       `/players/${createPlayerSlug(player.userName, player.userId)}`,
       "weekly",
-      topPlayerIds.has(player.userId) ? 0.8 : 0.6
+      topPlayerIds.has(player.userId) ? 0.3 : 0.1
     )
   );
 
