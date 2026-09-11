@@ -10,10 +10,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://minesweeper.fr"),
-  title: {
-    default: "Competitive Minesweeper",
-    template: "%s | Competitive Minesweeper",
-  },
+  title: "Competitive Minesweeper",
   description:
     "Get your world ranking percentile. Track wins, speed, experience. Unlock 20+ skins by playing. 100% free competitive Minesweeper.",
   keywords: [

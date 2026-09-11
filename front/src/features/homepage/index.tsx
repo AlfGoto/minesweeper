@@ -9,8 +9,10 @@ import type { CellSkin } from "@/types/bff";
 import { Link } from "@/i18n/navigation";
 import { getPublishedSkinsWithMeta } from "@/features/skins/cells/skins";
 import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds";
+import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
+  const t = await getTranslations("homepage");
   const session = await getServerSession();
   const userEmail = session?.user?.email;
   const user = userEmail ? await getUser(userEmail) : null;
@@ -22,7 +24,7 @@ export default async function Home() {
     <GameProvider>
       <div className="w-full h-screen flex flex-col items-center justify-center">
         <div className="sr-only">
-          <h1>Competitive Minesweeper - Get Your World Ranking</h1>
+          <h1>{t("h1")}</h1>
 
           <h2>World Ranking Percentile</h2>
           <p>
