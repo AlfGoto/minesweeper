@@ -33,6 +33,7 @@ import { yellowZestSkin } from "./yellow-zest";
 import { greenGardenSkin } from "./green-garden";
 import { blueLagoonSkin } from "./blue-lagoon";
 import { purpleParadeSkin } from "./purple-parade";
+import { beachSkin } from "./beach";
 
 export type {
   CellSkinDefinition,
@@ -114,15 +115,16 @@ export const getSkin = ({ skin, ...context }: GetSkinContext) => {
 };
 
 export const CellSkins: Record<string, CellSkinDefinition> = {
-  default: defaultSkin,
   classic: classicSkin,
   flowerfloor: flowerfloorSkin,
-  "inferno-hard": infernoHardSkin,
+  beach: beachSkin,
   igloo: iglooSkin,
+  "minimal-zoned": minimalZonedSkin,
+  default: defaultSkin,
+  "inferno-hard": infernoHardSkin,
   "jade-temple": jadeTempleSkin,
   "paper-cutout": paperCutoutSkin,
   "void-orchid": voidOrchidSkin,
-  "minimal-zoned": minimalZonedSkin,
   antic: anticSkin,
   "emoji-tiles": emojiTilesSkin,
   "heart-tiles": heartTilesSkin,
@@ -136,7 +138,7 @@ export const CellSkins: Record<string, CellSkinDefinition> = {
   "purple-parade": purpleParadeSkin,
 };
 
-export const NonPublishedCellSkins = {} as Record<string, CellSkinDefinition>;
+export const NonPublishedCellSkins: Record<string, CellSkinDefinition> = {};
 
 export type LocalizedSkinMeta = {
   name: string;

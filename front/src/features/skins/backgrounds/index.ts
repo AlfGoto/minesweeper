@@ -18,8 +18,12 @@ import { auroraDriftSkin } from "./skins/aurora-drift";
 import { retroGridSkin } from "./skins/retro-grid";
 import { amberDunesSkin } from "./skins/amber-dunes";
 import { deepReefSkin } from "./skins/deep-reef";
+import { beachSeaSkin } from "./skins/beach-sea";
+import { beachSandSkin } from "./skins/beach-sand";
 
 export const backgroundSkins: Record<BackgroundSkin, BackgroundSkinData> = {
+  "beach-sea": beachSeaSkin,
+  "beach-sand": beachSandSkin,
   default: defaultSkin,
   "flower-floor": flowerFloorSkin,
   igloo: iglooSkin,

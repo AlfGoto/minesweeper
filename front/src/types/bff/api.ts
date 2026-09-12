@@ -1019,15 +1019,15 @@ export interface components {
             };
         };
         /** @enum {string} */
-        CellSkin: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade" | "classic";
+        CellSkin: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade" | "classic" | "beach";
         /** @enum {string} */
         BannerSkin: "default" | "level" | "gold";
         /** @enum {string} */
-        BackgroundSkin: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef";
+        BackgroundSkin: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef" | "beach-sea" | "beach-sand";
         /** @enum {string} */
-        CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade" | "classic";
+        CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade" | "classic" | "beach";
         /** @enum {string} */
-        BackgroundSkinsNamesEnum: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef";
+        BackgroundSkinsNamesEnum: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef" | "beach-sea" | "beach-sand";
     };
     responses: never;
     parameters: never;
