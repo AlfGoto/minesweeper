@@ -34,7 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const seoContent = getCellSkinSeo(skin.id, locale);
   const fullTitle = t("skinTitle", { name: skin.name });
-  const title = fullTitle.length > 60 ? `${skin.name} - Minesweeper Skin` : fullTitle;
+  const title =
+    seoContent?.title ?? (fullTitle.length > 60 ? `${skin.name} - Minesweeper Skin` : fullTitle);
   const description = seoContent?.metaDescription ?? skin.description;
   const alternates = generateAlternates(`/skins/${skin.slug}`, locale);
   const keywords = seoContent?.keywords ?? skin.keywords;

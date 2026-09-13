@@ -17,7 +17,7 @@ export async function generateMetadata({
   const alternates = generateAlternates("/skins", locale);
 
   return {
-    title: `Minesweeper Skins - ${skinCount}+ Free Themes`,
+    title: `${skinCount}+ Minesweeper Skins - Free Themes to Unlock`,
     description: t("metaDescription"),
     keywords: [
       "minesweeper skins",
@@ -33,7 +33,7 @@ export async function generateMetadata({
     ],
     alternates,
     openGraph: {
-      title: `Minesweeper Skins - ${skinCount}+ Free Themes`,
+      title: `${skinCount}+ Minesweeper Skins - Free Themes to Unlock`,
       description: t("metaDescription"),
       url: alternates.canonical,
       siteName: "Competitive Minesweeper",
@@ -42,7 +42,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `Minesweeper Skins - ${skinCount}+ Free Themes`,
+      title: `${skinCount}+ Minesweeper Skins - Free Themes to Unlock`,
       description: t("metaDescription"),
     },
   };

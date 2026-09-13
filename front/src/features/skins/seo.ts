@@ -16,6 +16,8 @@ export type SkinSeoFaq = {
 };
 
 export type SkinSeoContent = {
+  /** Optional <title> override - falls back to the generic "{name} Skin for Minesweeper" template */
+  title?: string;
   /** Meta description for search engines (~155 chars) */
   metaDescription: string;
   /** Short tagline displayed under the h1 */
@@ -34,6 +36,7 @@ export type SkinSeoContent = {
  */
 export const cellSkinsSeo: Record<string, SkinSeoContent> = {
   default: {
+    title: "Green Grass - A Better Minesweeper Skin",
     metaDescription:
       "Play Minesweeper with the Green Grass skin featuring vibrant lime green cells and warm tan revealed tiles. A fresh nature-inspired default theme.",
     heroTagline:
@@ -86,8 +89,9 @@ Once comfortable with the mechanics, you can explore the skin shop to find theme
   },
 
   classic: {
+    title: "Classic Minesweeper Skin - Gray Colors & Windows 95 Theme",
     metaDescription:
-      "Play Minesweeper with the Classic skin featuring iconic silver 3D beveled cells from Windows 95. Pure nostalgia with the original design millions grew up with.",
+      "Play Minesweeper with the Classic skin: gray, monochrome 3D beveled cells straight from Windows 95. One of 20+ free minesweeper skins and colors to unlock.",
     heroTagline:
       "The iconic Windows 95 Minesweeper design that started it all.",
     sections: [
@@ -480,6 +484,7 @@ Small bright spots scattered across cells simulate the way light catches paper t
   },
 
   "void-orchid": {
+    title: "Void Orchid Minesweeper Skin - Purple Cosmic Theme",
     metaDescription:
       "Embrace the mystery with Void Orchid Minesweeper skin. Deep purple cosmos, ethereal petals, and cosmic elegance for enigmatic gameplay.",
     heroTagline:
