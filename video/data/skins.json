@@ -1,0 +1,102 @@
+[
+  {
+    "id": "classic",
+    "slug": "classic",
+    "name": "Classic"
+  },
+  {
+    "id": "flowerfloor",
+    "slug": "flower-floor",
+    "name": "Flower Floor"
+  },
+  {
+    "id": "beach",
+    "slug": "beach",
+    "name": "Beach"
+  },
+  {
+    "id": "igloo",
+    "slug": "igloo",
+    "name": "Igloo"
+  },
+  {
+    "id": "minimal-zoned",
+    "slug": "minimal-zoned",
+    "name": "Minimal Zoned"
+  },
+  {
+    "id": "default",
+    "slug": "green-grass",
+    "name": "Green Grass"
+  },
+  {
+    "id": "inferno-hard",
+    "slug": "inferno",
+    "name": "Inferno"
+  },
+  {
+    "id": "jade-temple",
+    "slug": "jade-temple",
+    "name": "Jade Temple"
+  },
+  {
+    "id": "paper-cutout",
+    "slug": "paper-cutout",
+    "name": "Paper Cutout"
+  },
+  {
+    "id": "void-orchid",
+    "slug": "void-orchid",
+    "name": "Void Orchid"
+  },
+  {
+    "id": "emoji-tiles",
+    "slug": "emoji-tiles",
+    "name": "Emoji Tiles"
+  },
+  {
+    "id": "heart-tiles",
+    "slug": "heart-tiles",
+    "name": "Heart Tiles"
+  },
+  {
+    "id": "laughing-faces",
+    "slug": "laughing-faces",
+    "name": "Laughing Faces"
+  },
+  {
+    "id": "fruit-basket",
+    "slug": "fruit-basket",
+    "name": "Fruit Basket"
+  },
+  {
+    "id": "red-burst",
+    "slug": "red-burst",
+    "name": "Red Burst"
+  },
+  {
+    "id": "orange-pop",
+    "slug": "orange-pop",
+    "name": "Orange Pop"
+  },
+  {
+    "id": "yellow-zest",
+    "slug": "yellow-zest",
+    "name": "Yellow Zest"
+  },
+  {
+    "id": "green-garden",
+    "slug": "green-garden",
+    "name": "Green Garden"
+  },
+  {
+    "id": "blue-lagoon",
+    "slug": "blue-lagoon",
+    "name": "Blue Lagoon"
+  },
+  {
+    "id": "purple-parade",
+    "slug": "purple-parade",
+    "name": "Purple Parade"
+  }
+]

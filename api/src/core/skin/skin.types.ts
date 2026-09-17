@@ -24,7 +24,8 @@ export const cellsSkins = {
   "green-garden": CHIP,
   "blue-lagoon": CHIP,
   "purple-parade": CHIP,
-  classic: NORMAL
+  classic: NORMAL,
+  beach: RARE
 }
 export const cellsSkinsNames = Object.keys(cellsSkins) as Array<keyof typeof cellsSkins>
 
@@ -42,7 +43,9 @@ export const backgroundSkins = {
   "aurora-drift": 15,
   "retro-grid": 15,
   "amber-dunes": 15,
-  "deep-reef": 15
+  "deep-reef": 15,
+  "beach-sea": 15,
+  "beach-sand": 15
 }
 export const backgroundSkinsNames = Object.keys(backgroundSkins) as Array<
   keyof typeof backgroundSkins

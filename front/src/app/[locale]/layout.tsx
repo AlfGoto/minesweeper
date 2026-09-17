@@ -38,7 +38,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <head>
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/flag.png" type="image/png" />
         <link rel="manifest" href="/manifest.json" />
 
         <Script
@@ -123,7 +123,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               "@type": "Organization",
               name: "Minesweeper.fr",
               url: "https://minesweeper.fr",
-              logo: "https://minesweeper.fr/icon.svg",
+              logo: "https://minesweeper.fr/flag.png",
               founder: {
                 "@type": "Person",
                 name: "AlfGoto",

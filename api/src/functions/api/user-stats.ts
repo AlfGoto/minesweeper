@@ -18,7 +18,9 @@ export const StatsSchema = z
     totalNoFlagsWin: z.number(),
     totalRestarts: z.number(),
     placement: z.number().optional(),
-    totalPlayers: z.number()
+    totalPlayers: z.number(),
+    createdAt: z.string(),
+    updatedAt: z.string()
   })
   .openapi("UserStats")
 
@@ -145,7 +147,9 @@ export const route = new OpenAPIHono()
         StatsSchema.parse({
           ...cached,
           placement: placementIndex >= 0 ? placementIndex + 1 : undefined,
-          totalPlayers: bestGames.length
+          totalPlayers: bestGames.length,
+          createdAt: cached.created,
+          updatedAt: cached.modified
         }),
         200
       )

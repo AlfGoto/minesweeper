@@ -1,0 +1,11 @@
+/* Reuse front's real design tokens/keyframes (some skins, e.g. inferno-hard,
+   animate via @keyframes defined in globals.css) instead of duplicating them. */
+@import "../../front/src/app/globals.css";
+
+/* Skin classes (bg-[...], text-*) live in front/src as data, not literal JSX
+   in this package, so Tailwind's scanner needs to be told to look there too. */
+@source "../../front/src";
+
+/* Importing the CSS above shifts Tailwind's auto-detected content root into
+   front/src/app, so it stops scanning this package's own JSX — say so explicitly. */
+@source ".";

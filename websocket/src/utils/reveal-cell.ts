@@ -5,6 +5,7 @@ import { checkWin } from "./check-win";
 import { lose } from "./lose";
 
 export async function revealCell(game: MinesweeperGame, id: number) {
+  if (game.isLost) return;
   if (game.grid.length === 0) game.grid = generateGrid(game, id);
 
   if (game.grid[id].value === "bomb" && game.grid[id].status !== "flagged") {
