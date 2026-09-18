@@ -38,10 +38,16 @@ export async function LatestGames({ games }: LatestGamesProps) {
           <TableHead className="p-0" style={{ textAlign: "left" }}>
             {t("time")}
           </TableHead>
-          <TableHead className="p-0" style={{ textAlign: "left" }}>
+          <TableHead
+            className="p-0 hidden sm:table-cell"
+            style={{ textAlign: "left" }}
+          >
             {t("flags")}
           </TableHead>
-          <TableHead className="p-0" style={{ textAlign: "left" }}>
+          <TableHead
+            className="p-0 hidden sm:table-cell"
+            style={{ textAlign: "left" }}
+          >
             {t("revealed")}
           </TableHead>
           <TableHead className="p-0" style={{ textAlign: "left" }}>
@@ -62,13 +68,13 @@ export async function LatestGames({ games }: LatestGamesProps) {
               {formatTime(game.time)}
             </TableCell>
             <TableCell
-              className="text-muted-foreground"
+              className="text-muted-foreground hidden sm:table-cell"
               style={{ textAlign: "left" }}
             >
               🚩 {game.flags}
             </TableCell>
             <TableCell
-              className="text-muted-foreground"
+              className="text-muted-foreground hidden sm:table-cell"
               style={{ textAlign: "left" }}
             >
               ⬜ {game.revealed}

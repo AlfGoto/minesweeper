@@ -99,8 +99,8 @@ async function BestTimesContent() {
               <TableHead style={{ textAlign: "left" }}>{tTable("rank")}</TableHead>
               <TableHead style={{ textAlign: "left" }}>{tTable("player")}</TableHead>
               <TableHead style={{ textAlign: "left" }}>{tTable("time")}</TableHead>
-              <TableHead style={{ textAlign: "left" }}>{tTable("flags")}</TableHead>
-              <TableHead style={{ textAlign: "left" }}>{tTable("date")}</TableHead>
+              <TableHead className="hidden sm:table-cell" style={{ textAlign: "left" }}>{tTable("flags")}</TableHead>
+              <TableHead className="hidden sm:table-cell" style={{ textAlign: "left" }}>{tTable("date")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -140,12 +140,12 @@ async function BestTimesContent() {
                       {formatTime(game.time)}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground" style={{ textAlign: "left" }}>
+                  <TableCell className="text-muted-foreground hidden sm:table-cell" style={{ textAlign: "left" }}>
                     <Link href={href} className="block">
                       {game.flags}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground" style={{ textAlign: "left" }}>
+                  <TableCell className="text-muted-foreground hidden sm:table-cell" style={{ textAlign: "left" }}>
                     <Link href={href} className="block">
                       {formatDate(game.date)}
                     </Link>

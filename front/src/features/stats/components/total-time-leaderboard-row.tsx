@@ -56,7 +56,7 @@ export function TotalTimeLeaderboardRow({
         </Link>
       </TableCell>
       <TableCell
-        className="text-muted-foreground"
+        className="text-muted-foreground hidden sm:table-cell"
         style={{ textAlign: "left" }}
       >
         <Link href={href} className="block">
@@ -64,7 +64,7 @@ export function TotalTimeLeaderboardRow({
         </Link>
       </TableCell>
       <TableCell
-        className="text-muted-foreground"
+        className="text-muted-foreground hidden sm:table-cell"
         style={{ textAlign: "left" }}
       >
         <Link href={href} className="block">
@@ -72,7 +72,7 @@ export function TotalTimeLeaderboardRow({
         </Link>
       </TableCell>
       <TableCell
-        className="text-muted-foreground"
+        className="text-muted-foreground hidden sm:table-cell"
         style={{ textAlign: "left" }}
       >
         <Link href={href} className="block">

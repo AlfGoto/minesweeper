@@ -14,7 +14,7 @@ interface StatsHeaderProps {
 export function StatsHeader({ userName, userImage }: StatsHeaderProps) {
   const t = useTranslations("statsPage");
   return (
-    <div className="flex w-full justify-between items-center">
+    <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
         {userImage && (
           <Image
@@ -32,11 +32,15 @@ export function StatsHeader({ userName, userImage }: StatsHeaderProps) {
           )}
         </div>
       </div>
-      <div className="flex gap-2">
-        <Link href="/" prefetch={true}>
-          <Button>{t("backToGame")}</Button>
+      <div className="flex w-full gap-2 sm:w-auto">
+        <Link href="/" prefetch={true} className="flex-1 sm:flex-none">
+          <Button className="w-full">{t("backToGame")}</Button>
         </Link>
-        <Button variant="outline" onClick={() => signOut({ callbackUrl: "/" })}>
+        <Button
+          variant="outline"
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="flex-1 sm:flex-none"
+        >
           {t("logout")}
         </Button>
       </div>

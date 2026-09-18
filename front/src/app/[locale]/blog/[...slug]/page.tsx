@@ -63,7 +63,7 @@ export default async function BlogArticlePage({
   const url = generateAlternates(`/blog/${pageSlug}`, locale).canonical;
 
   return (
-    <div className="max-w-4xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+    <div className="cms-content max-w-4xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
       <Page
         slug={pageSlug}
         locale={locale}

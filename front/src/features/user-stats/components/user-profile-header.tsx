@@ -12,7 +12,7 @@ interface UserProfileHeaderProps {
 export async function UserProfileHeader({ userName, userImage, isOwnProfile = false }: UserProfileHeaderProps) {
   const t = await getTranslations("statsPage");
   return (
-    <div className="flex w-full justify-between items-center">
+    <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
         {userImage && (
           <Image
@@ -30,12 +30,14 @@ export async function UserProfileHeader({ userName, userImage, isOwnProfile = fa
           </p>
         </div>
       </div>
-      <div className="flex gap-2">
-        <Link href="/">
-          <Button>{t("backToGame")}</Button>
+      <div className="flex w-full gap-2 sm:w-auto">
+        <Link href="/" className="flex-1 sm:flex-none">
+          <Button className="w-full">{t("backToGame")}</Button>
         </Link>
-        <Link href="/stats">
-          <Button variant="outline">{t("leaderboard")}</Button>
+        <Link href="/stats" className="flex-1 sm:flex-none">
+          <Button variant="outline" className="w-full">
+            {t("leaderboard")}
+          </Button>
         </Link>
       </div>
     </div>

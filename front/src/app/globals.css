@@ -92,6 +92,13 @@
   }
 }
 
+/* CMS-rendered tables (blog content) set width:100% on <table>, which fights the
+   overflow-x-auto wrapper and squishes columns instead of scrolling on mobile. */
+.cms-content table {
+  width: max-content;
+  min-width: 100%;
+}
+
 .game-grid {
   width: 600px;
   height: 600px;

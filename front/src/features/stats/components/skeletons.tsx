@@ -13,7 +13,7 @@ import { getTranslations } from "next-intl/server";
 
 export function HeaderSkeleton() {
   return (
-    <div className="flex w-full justify-between items-center">
+    <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
         <Skeleton className="h-10 w-10 rounded-full" />
         <div className="flex flex-col gap-1">
@@ -21,9 +21,9 @@ export function HeaderSkeleton() {
           <Skeleton className="h-4 w-32" />
         </div>
       </div>
-      <div className="flex gap-2">
-        <Skeleton className="h-9 w-28 rounded-md" />
-        <Skeleton className="h-9 w-20 rounded-md" />
+      <div className="flex w-full gap-2 sm:w-auto">
+        <Skeleton className="h-9 flex-1 sm:w-28 sm:flex-none rounded-md" />
+        <Skeleton className="h-9 flex-1 sm:w-20 sm:flex-none rounded-md" />
       </div>
     </div>
   );
@@ -104,11 +104,21 @@ export async function StatsSkeleton() {
   );
 }
 
-function TableRowSkeleton({ cols }: { cols: number }) {
+function TableRowSkeleton({
+  cols,
+  hiddenOnMobile = [],
+}: {
+  cols: number;
+  hiddenOnMobile?: number[];
+}) {
   return (
     <TableRow className="hover:bg-transparent">
       {Array.from({ length: cols }).map((_, i) => (
-        <TableCell key={i} style={{ textAlign: "left" }}>
+        <TableCell
+          key={i}
+          className={hiddenOnMobile.includes(i) ? "hidden sm:table-cell" : undefined}
+          style={{ textAlign: "left" }}
+        >
           <Skeleton className="h-10 w-full max-w-[100px]" />
         </TableCell>
       ))}
@@ -124,7 +134,10 @@ export async function LeaderboardSkeleton() {
 
   return (
     <Tabs defaultValue="leaderboard" className="w-full border rounded-lg gap-0">
-      <TabsList className="w-fit mx-2 my-4 p-2">
+      <div className="mx-2 my-4 sm:hidden">
+        <Skeleton className="h-9 w-full rounded-md" />
+      </div>
+      <TabsList className="w-fit mx-2 my-4 p-2 hidden sm:inline-flex">
         <TabsTrigger
           value="leaderboard"
           className="flex items-center gap-2 cursor-pointer w-fit"
@@ -144,8 +157,12 @@ export async function LeaderboardSkeleton() {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              {[tTable("rank"), tTable("player"), tTable("time"), tTable("flags"), tTable("date")].map((h) => (
-                <TableHead key={h} className="p-0" style={{ textAlign: "left" }}>
+              {[tTable("rank"), tTable("player"), tTable("time"), tTable("flags"), tTable("date")].map((h, i) => (
+                <TableHead
+                  key={h}
+                  className={i >= 3 ? "p-0 hidden sm:table-cell" : "p-0"}
+                  style={{ textAlign: "left" }}
+                >
                   {h}
                 </TableHead>
               ))}
@@ -153,7 +170,7 @@ export async function LeaderboardSkeleton() {
           </TableHeader>
           <TableBody>
             {Array.from({ length: 10 }).map((_, i) => (
-              <TableRowSkeleton key={i} cols={5} />
+              <TableRowSkeleton key={i} cols={5} hiddenOnMobile={[3, 4]} />
             ))}
           </TableBody>
         </Table>
@@ -170,7 +187,10 @@ export async function GamesSkeleton() {
 
   return (
     <Tabs defaultValue="latest-games" className="w-full border rounded-lg gap-0">
-      <TabsList className="w-fit mx-2 my-4 p-2">
+      <div className="mx-2 my-4 sm:hidden">
+        <Skeleton className="h-9 w-full rounded-md" />
+      </div>
+      <TabsList className="w-fit mx-2 my-4 p-2 hidden sm:inline-flex">
         <TabsTrigger
           value="latest-games"
           className="flex items-center gap-2 cursor-pointer w-fit"
@@ -190,8 +210,12 @@ export async function GamesSkeleton() {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              {[tTable("status"), tTable("time"), tTable("flags"), tTable("revealed"), tTable("date")].map((h) => (
-                <TableHead key={h} className="p-0" style={{ textAlign: "left" }}>
+              {[tTable("status"), tTable("time"), tTable("flags"), tTable("revealed"), tTable("date")].map((h, i) => (
+                <TableHead
+                  key={h}
+                  className={i === 2 || i === 3 ? "p-0 hidden sm:table-cell" : "p-0"}
+                  style={{ textAlign: "left" }}
+                >
                   {h}
                 </TableHead>
               ))}
@@ -199,7 +223,7 @@ export async function GamesSkeleton() {
           </TableHeader>
           <TableBody>
             {Array.from({ length: 10 }).map((_, i) => (
-              <TableRowSkeleton key={i} cols={5} />
+              <TableRowSkeleton key={i} cols={5} hiddenOnMobile={[2, 3]} />
             ))}
           </TableBody>
         </Table>

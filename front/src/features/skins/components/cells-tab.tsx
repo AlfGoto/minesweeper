@@ -120,7 +120,7 @@ export function CellsTab({
     return (
       <div
         key={skin}
-        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 w-[250px] ${
+        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 flex-1 min-w-[200px] sm:w-[250px] sm:flex-none ${
           isSelected ? "bg-muted/70" : ""
         } ${
           isSelectable ? "cursor-pointer hover:bg-muted/40 transition-colors" : ""

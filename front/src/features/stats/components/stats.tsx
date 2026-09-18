@@ -148,7 +148,7 @@ function StatBox({
 }) {
   return (
     <div
-      className="gap-2 flex flex-col items-center border border-gray-200 p-4 rounded-xl"
+      className="gap-2 flex flex-1 flex-col items-center border border-gray-200 p-4 rounded-xl sm:flex-none"
       style={{ minWidth: 160 }}
     >
       <p className="text-sm text-gray-500 text-center">

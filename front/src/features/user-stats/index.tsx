@@ -5,7 +5,7 @@ import { getUserLatestGames, getUserBestGames } from "@/lib/api";
 import { Stats } from "@/features/stats/components/stats";
 import { LatestGames } from "@/features/stats/components/latest-games";
 import { BestGames } from "@/features/stats/components/best-games";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ResponsiveTabs } from "@/features/stats/components/responsive-tabs";
 import { UserProfileHeader } from "./components/user-profile-header";
 import { GamesSkeleton } from "@/features/stats/components/skeletons";
 import { generateProfileJsonLd } from "@/lib/structured-data";
@@ -93,37 +93,33 @@ async function UserGamesSection({ userId, latestGamesLabel, bestGamesLabel }: { 
   ]);
 
   return (
-    <Tabs defaultValue="latest-games" className="w-full border rounded-lg">
-      <TabsList className="w-fit mx-2 my-4 p-2">
-        <TabsTrigger
-          value="latest-games"
-          className="flex items-center gap-2 cursor-pointer w-fit"
-        >
-          <span className="text-2xl">🕹️</span>
-          <h2 className="text-2xl font-bold">{latestGamesLabel}</h2>
-        </TabsTrigger>
-        <TabsTrigger
-          value="best-games"
-          className="flex items-center gap-2 cursor-pointer"
-        >
-          <span className="text-2xl">🏆</span>
-          <h2 className="text-2xl font-bold">{bestGamesLabel}</h2>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent
-        value="latest-games"
-        forceMount
-        className="data-[state=inactive]:hidden p-2"
-      >
-        <LatestGames games={latestGames} />
-      </TabsContent>
-      <TabsContent
-        value="best-games"
-        forceMount
-        className="data-[state=inactive]:hidden p-2"
-      >
-        <BestGames games={bestGames} />
-      </TabsContent>
-    </Tabs>
+    <ResponsiveTabs
+      defaultValue="latest-games"
+      className="w-full border rounded-lg"
+      items={[
+        {
+          value: "latest-games",
+          label: `🕹️ ${latestGamesLabel}`,
+          trigger: (
+            <>
+              <span className="text-2xl">🕹️</span>
+              <h2 className="text-2xl font-bold">{latestGamesLabel}</h2>
+            </>
+          ),
+          content: <LatestGames games={latestGames} />,
+        },
+        {
+          value: "best-games",
+          label: `🏆 ${bestGamesLabel}`,
+          trigger: (
+            <>
+              <span className="text-2xl">🏆</span>
+              <h2 className="text-2xl font-bold">{bestGamesLabel}</h2>
+            </>
+          ),
+          content: <BestGames games={bestGames} />,
+        },
+      ]}
+    />
   );
 }

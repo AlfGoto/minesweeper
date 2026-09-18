@@ -48,12 +48,18 @@ export function LeaderboardRow({ game, rank }: LeaderboardRowProps) {
           {formatTime(game.time)}
         </Link>
       </TableCell>
-      <TableCell className="text-muted-foreground" style={{ textAlign: "left" }}>
+      <TableCell
+        className="text-muted-foreground hidden sm:table-cell"
+        style={{ textAlign: "left" }}
+      >
         <Link href={href} className="block">
           {game.flags}
         </Link>
       </TableCell>
-      <TableCell className="text-muted-foreground" style={{ textAlign: "left" }}>
+      <TableCell
+        className="text-muted-foreground hidden sm:table-cell"
+        style={{ textAlign: "left" }}
+      >
         <Link href={href} className="block">
           {formatDate(game.date)}
         </Link>

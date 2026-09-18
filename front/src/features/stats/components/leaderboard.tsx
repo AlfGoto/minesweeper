@@ -31,10 +31,16 @@ export async function Leaderboard() {
             <TableHead className="p-0" style={{ textAlign: "left" }}>
               {t("time")}
             </TableHead>
-            <TableHead className="p-0" style={{ textAlign: "left" }}>
+            <TableHead
+              className="p-0 hidden sm:table-cell"
+              style={{ textAlign: "left" }}
+            >
               {t("flags")}
             </TableHead>
-            <TableHead className="p-0" style={{ textAlign: "left" }}>
+            <TableHead
+              className="p-0 hidden sm:table-cell"
+              style={{ textAlign: "left" }}
+            >
               {t("date")}
             </TableHead>
           </TableRow>

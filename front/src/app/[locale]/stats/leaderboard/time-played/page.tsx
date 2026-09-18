@@ -102,9 +102,9 @@ async function TimePlayedContent() {
               <TableHead style={{ textAlign: "left" }}>{tTable("rank")}</TableHead>
               <TableHead style={{ textAlign: "left" }}>{tTable("player")}</TableHead>
               <TableHead style={{ textAlign: "left" }}>{tPage("totalTime")}</TableHead>
-              <TableHead style={{ textAlign: "left" }}>{tTable("games")}</TableHead>
-              <TableHead style={{ textAlign: "left" }}>{tTable("wins")}</TableHead>
-              <TableHead style={{ textAlign: "left" }}>{tTable("winrate")}</TableHead>
+              <TableHead className="hidden sm:table-cell" style={{ textAlign: "left" }}>{tTable("games")}</TableHead>
+              <TableHead className="hidden sm:table-cell" style={{ textAlign: "left" }}>{tTable("wins")}</TableHead>
+              <TableHead className="hidden sm:table-cell" style={{ textAlign: "left" }}>{tTable("winrate")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -148,17 +148,17 @@ async function TimePlayedContent() {
                       {formatTime(stats.totalTime)}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground" style={{ textAlign: "left" }}>
+                  <TableCell className="text-muted-foreground hidden sm:table-cell" style={{ textAlign: "left" }}>
                     <Link href={href} className="block">
                       {stats.totalGames}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground" style={{ textAlign: "left" }}>
+                  <TableCell className="text-muted-foreground hidden sm:table-cell" style={{ textAlign: "left" }}>
                     <Link href={href} className="block">
                       {stats.totalWin}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground" style={{ textAlign: "left" }}>
+                  <TableCell className="text-muted-foreground hidden sm:table-cell" style={{ textAlign: "left" }}>
                     <Link href={href} className="block">
                       {winrate}%
                     </Link>

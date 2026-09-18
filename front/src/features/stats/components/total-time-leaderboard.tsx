@@ -36,13 +36,22 @@ export async function TotalTimeLeaderboard() {
             <TableHead className="p-0" style={{ textAlign: "left" }}>
               {tPage("totalTime")}
             </TableHead>
-            <TableHead className="p-0" style={{ textAlign: "left" }}>
+            <TableHead
+              className="p-0 hidden sm:table-cell"
+              style={{ textAlign: "left" }}
+            >
               {t("games")}
             </TableHead>
-            <TableHead className="p-0" style={{ textAlign: "left" }}>
+            <TableHead
+              className="p-0 hidden sm:table-cell"
+              style={{ textAlign: "left" }}
+            >
               {t("wins")}
             </TableHead>
-            <TableHead className="p-0" style={{ textAlign: "left" }}>
+            <TableHead
+              className="p-0 hidden sm:table-cell"
+              style={{ textAlign: "left" }}
+            >
               {t("winrate")}
             </TableHead>
           </TableRow>

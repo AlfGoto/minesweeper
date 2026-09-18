@@ -5,7 +5,7 @@ import { TotalTimeLeaderboard } from "./components/total-time-leaderboard";
 import { Stats } from "./components/stats";
 import { LatestGames } from "./components/latest-games";
 import { BestGames } from "./components/best-games";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ResponsiveTabs } from "./components/responsive-tabs";
 import { StatsHeader } from "./components/stats-header";
 import { getStats, getLatestGames, getBest10Games } from "@/lib/api";
 import {
@@ -33,57 +33,57 @@ export async function StatsPage() {
       )}
 
       <Suspense fallback={<LeaderboardSkeleton />}>
-        <Tabs
+        <ResponsiveTabs
           defaultValue="latest-games"
-          className="w-full border rounded-lg gap-0"
-        >
-          <TabsList className="w-fit mx-2 my-4 p-2">
-            <TabsTrigger
-              value="latest-games"
-              className="flex items-center gap-2 cursor-pointer w-fit"
-            >
-              <span className="text-2xl">🏆</span>
-              <h2 className="text-2xl font-bold">{t("leaderboard")}</h2>
-            </TabsTrigger>
-            <TabsTrigger
-              value="total-time"
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <span className="text-2xl">⏱️</span>
-              <h2 className="text-2xl font-bold">{t("totalTime")}</h2>
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent
-            value="latest-games"
-            forceMount
-            className="data-[state=inactive]:hidden p-2"
-          >
-            <Leaderboard />
-            <div className="text-center mt-4">
-              <Link
-                href="/stats/leaderboard/best-times"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                {t("viewAll")} →
-              </Link>
-            </div>
-          </TabsContent>
-          <TabsContent
-            value="total-time"
-            forceMount
-            className="data-[state=inactive]:hidden p-2"
-          >
-            <TotalTimeLeaderboard />
-            <div className="text-center mt-4">
-              <Link
-                href="/stats/leaderboard/time-played"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                {t("viewAll")} →
-              </Link>
-            </div>
-          </TabsContent>
-        </Tabs>
+          items={[
+            {
+              value: "latest-games",
+              label: `🏆 ${t("leaderboard")}`,
+              trigger: (
+                <>
+                  <span className="text-2xl">🏆</span>
+                  <h2 className="text-2xl font-bold">{t("leaderboard")}</h2>
+                </>
+              ),
+              content: (
+                <>
+                  <Leaderboard />
+                  <div className="text-center mt-4">
+                    <Link
+                      href="/stats/leaderboard/best-times"
+                      className="text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      {t("viewAll")} →
+                    </Link>
+                  </div>
+                </>
+              ),
+            },
+            {
+              value: "total-time",
+              label: `⏱️ ${t("totalTime")}`,
+              trigger: (
+                <>
+                  <span className="text-2xl">⏱️</span>
+                  <h2 className="text-2xl font-bold">{t("totalTime")}</h2>
+                </>
+              ),
+              content: (
+                <>
+                  <TotalTimeLeaderboard />
+                  <div className="text-center mt-4">
+                    <Link
+                      href="/stats/leaderboard/time-played"
+                      className="text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      {t("viewAll")} →
+                    </Link>
+                  </div>
+                </>
+              ),
+            },
+          ]}
+        />
       </Suspense>
 
       {userEmail ? (
@@ -137,40 +137,32 @@ async function UserGames({ userEmail }: { userEmail: string }) {
   ]);
 
   return (
-    <Tabs
+    <ResponsiveTabs
       defaultValue="latest-games"
-      className="w-full border rounded-lg gap-0"
-    >
-      <TabsList className="w-fit mx-2 my-4 p-2">
-        <TabsTrigger
-          value="latest-games"
-          className="flex items-center gap-2 cursor-pointer w-fit"
-        >
-          <span className="text-2xl">🕹️</span>
-          <h2 className="text-2xl font-bold">{t("latestGames")}</h2>
-        </TabsTrigger>
-        <TabsTrigger
-          value="best-games"
-          className="flex items-center gap-2 cursor-pointer"
-        >
-          <span className="text-2xl">🏆</span>
-          <h2 className="text-2xl font-bold">{t("bestGames")}</h2>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent
-        value="latest-games"
-        forceMount
-        className="data-[state=inactive]:hidden p-2"
-      >
-        <LatestGames games={latestGames} />
-      </TabsContent>
-      <TabsContent
-        value="best-games"
-        forceMount
-        className="data-[state=inactive]:hidden p-2"
-      >
-        <BestGames games={bestGames} />
-      </TabsContent>
-    </Tabs>
+      items={[
+        {
+          value: "latest-games",
+          label: `🕹️ ${t("latestGames")}`,
+          trigger: (
+            <>
+              <span className="text-2xl">🕹️</span>
+              <h2 className="text-2xl font-bold">{t("latestGames")}</h2>
+            </>
+          ),
+          content: <LatestGames games={latestGames} />,
+        },
+        {
+          value: "best-games",
+          label: `🏆 ${t("bestGames")}`,
+          trigger: (
+            <>
+              <span className="text-2xl">🏆</span>
+              <h2 className="text-2xl font-bold">{t("bestGames")}</h2>
+            </>
+          ),
+          content: <BestGames games={bestGames} />,
+        },
+      ]}
+    />
   );
 }
