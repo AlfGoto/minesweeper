@@ -8,6 +8,8 @@ import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { getPublishedSkinsWithMeta } from "@/features/skins/cells/skins";
 import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds";
+import { PageContainer } from "@/components/page-container";
+import { PlayCta } from "@/components/play-cta";
 
 export async function generateMetadata({
   params,
@@ -67,7 +69,7 @@ async function MapContent({ locale }: { locale: string }) {
   const backgroundSkins = getPublishedBackgroundSkins(locale);
 
   return (
-    <div className="max-w-4xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+    <PageContainer>
       <nav aria-label="Breadcrumb" className="mb-6">
         <ol className="flex items-center gap-2 text-sm text-gray-500">
           <li>
@@ -182,14 +184,9 @@ async function MapContent({ locale }: { locale: string }) {
       </section>
 
       <section className="text-center">
-        <Link
-          href="/"
-          className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-colors"
-        >
-          {t("playMinesweeper")}
-        </Link>
+        <PlayCta>{t("playMinesweeper")}</PlayCta>
       </section>
-    </div>
+    </PageContainer>
   );
 }
 

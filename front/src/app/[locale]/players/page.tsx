@@ -8,6 +8,7 @@ import { formatTime } from "@/lib/dates";
 import { createPlayerSlug } from "@/lib/utils";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { PageContainer } from "@/components/page-container";
 
 export async function generateMetadata({
   params,
@@ -68,7 +69,7 @@ async function PlayersContent() {
   const jsonLd = generateLeaderboardJsonLd();
 
   return (
-    <div className="max-w-[1200px] mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+    <PageContainer size="wide">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -140,12 +141,12 @@ async function PlayersContent() {
         </div>
       </section>
 
-      <section className="mt-12 prose prose-gray max-w-none">
-        <h2 className="text-gray-900">{t("aboutRankings")}</h2>
-        <p>{t("aboutRankingsText1")}</p>
-        <p>{t("aboutRankingsText2")}</p>
+      <section className="mt-12 space-y-4">
+        <h2 className="text-2xl font-bold text-gray-900">{t("aboutRankings")}</h2>
+        <p className="text-gray-600">{t("aboutRankingsText1")}</p>
+        <p className="text-gray-600">{t("aboutRankingsText2")}</p>
       </section>
-    </div>
+    </PageContainer>
   );
 }
 

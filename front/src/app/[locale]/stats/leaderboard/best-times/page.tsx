@@ -15,6 +15,8 @@ import { formatDate, formatTime } from "@/lib/dates";
 import { createPlayerSlug } from "@/lib/utils";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { PageContainer } from "@/components/page-container";
+import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
   params,
@@ -65,7 +67,7 @@ async function BestTimesContent() {
   ]);
 
   return (
-    <div className="max-w-[1000px] mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+    <PageContainer>
       <nav aria-label="Breadcrumb" className="mb-6">
         <ol className="flex items-center gap-2 text-sm text-gray-500">
           <li>
@@ -165,13 +167,10 @@ async function BestTimesContent() {
       </div>
 
       <div className="mt-8 text-center">
-        <Link
-          href="/stats"
-          className="text-green-600 hover:text-green-700 font-medium"
-        >
-          ← {t("backToStats")}
-        </Link>
+        <Button asChild variant="outline">
+          <Link href="/stats">← {t("backToStats")}</Link>
+        </Button>
       </div>
-    </div>
+    </PageContainer>
   );
 }

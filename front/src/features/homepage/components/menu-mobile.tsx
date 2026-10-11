@@ -17,11 +17,9 @@ export default async function MenuMobile() {
         {!session ? (
           <LoginButton className={buttonClassName} />
         ) : (
-          <>
-            <StatsButton className={buttonClassName} />
-            <SkinsButton className={buttonClassName} />
-          </>
+          <StatsButton className={buttonClassName} />
         )}
+        <SkinsButton className={buttonClassName} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { BackgroundSkin } from "@/types/bff";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { backgroundSkins } from "@/features/skins/backgrounds";
+import {
+  backgroundSkins,
+  getLocalizedBackgroundSkinMeta,
+} from "@/features/skins/backgrounds";
 import { BackgroundSkinPreview } from "@/features/shared/components/background-skin-preview";
 import {
   buyBackgroundSkinAction,
@@ -19,7 +22,11 @@ import {
 } from "@/features/skins/actions";
 import { OwnedFilter } from "./owned-filter";
 import { toast } from "sonner";
+import { signIn } from "next-auth/react";
+import { SkinName } from "./skin-name";
 import { AlfCoinsProgressCard } from "./alf-coins-progress-card";
+
+const gridClassName = "grid grid-cols-1 min-[440px]:grid-cols-2 sm:grid-cols-3 gap-4";
 
 type BackgroundSkinsShopProps = {
   isLoggedIn?: boolean;
@@ -47,7 +54,9 @@ export function BackgroundSkinsShop({
   prices,
 }: BackgroundSkinsShopProps) {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations("skinsPage");
+  const tHome = useTranslations("homepage");
   const [isPending, startTransition] = useTransition();
   const [optimisticSelectedSkin, setOptimisticSelectedSkin] =
     useState<BackgroundSkin>(selectedSkin);
@@ -105,6 +114,8 @@ export function BackgroundSkinsShop({
 
   const renderSkinCard = (skin: BackgroundSkin) => {
     const skinData = backgroundSkins[skin];
+    const skinLabel =
+      getLocalizedBackgroundSkinMeta(skinData, locale).name || formatSkinLabel(skin, t("default"));
     const isOwned = isLoggedIn && normalizedUnlockedSkins.includes(skin);
     const isSelected = isLoggedIn && isOwned && skin === optimisticSelectedSkin;
     const isSelectable = isLoggedIn && isOwned && !isSelected && !isPending;
@@ -114,7 +125,7 @@ export function BackgroundSkinsShop({
     return (
       <div
         key={skin}
-        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 flex-1 min-w-[200px] sm:w-[250px] sm:flex-none ${
+        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 ${
           isSelected ? "bg-muted/70" : ""
         } ${
           isSelectable ? "cursor-pointer hover:bg-muted/40 transition-colors" : ""
@@ -147,7 +158,7 @@ export function BackgroundSkinsShop({
         ) : null}
 
         <div className="relative z-10 flex items-start justify-between gap-4">
-          <p className="font-semibold">{skinData.name || formatSkinLabel(skin, t("default"))}</p>
+          <SkinName href={skinData.slug && `/skins/background/${skinData.slug}`}>{skinLabel}</SkinName>
           <div
             onClick={(event) => event.stopPropagation()}
             onMouseDown={(event) => event.stopPropagation()}
@@ -162,18 +173,21 @@ export function BackgroundSkinsShop({
               <Button
                 variant="outline"
                 className="w-full"
-                disabled={!isLoggedIn || isPending || typeof price !== "number"}
+                disabled={isPending || typeof price !== "number"}
               >
-                {!isLoggedIn
-                  ? t("signInToUnlock")
-                  : typeof price === "number"
-                    ? `${price} AlfCoins`
-                    : t("unavailable")}
+                {typeof price === "number" ? `${price} AlfCoins` : t("unavailable")}
               </Button>
             </PopoverTrigger>
-            {isLoggedIn && (
+            {!isLoggedIn ? (
               <PopoverContent className="space-y-3">
-                <p className="font-semibold">{t("buyConfirmTitle", { skinName: skinData.name || formatSkinLabel(skin, t("default")) })}</p>
+                <p className="text-sm text-muted-foreground">{t("loginToUnlock")}</p>
+                <Button className="w-full" onClick={() => signIn("google")}>
+                  {tHome("login")}
+                </Button>
+              </PopoverContent>
+            ) : (
+              <PopoverContent className="space-y-3">
+                <p className="font-semibold">{t("buyConfirmTitle", { skinName: skinLabel })}</p>
                 <p className="text-sm text-muted-foreground">
                   {typeof price === "number"
                     ? t("buyConfirmText", { price })
@@ -207,18 +221,18 @@ export function BackgroundSkinsShop({
       )}
 
       {!isLoggedIn || !groupOwned ? (
-        <div className="flex flex-wrap gap-4">
+        <div className={gridClassName}>
           {allBackgroundSkins.map(renderSkinCard)}
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap gap-4">
+          <div className={gridClassName}>
             {groupedSkins.owned.map(renderSkinCard)}
           </div>
           {groupedSkins.owned.length > 0 && groupedSkins.notOwned.length > 0 ? (
             <Separator className="my-6" />
           ) : null}
-          <div className="flex flex-wrap gap-4">
+          <div className={gridClassName}>
             {groupedSkins.notOwned.map(renderSkinCard)}
           </div>
         </>

@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { Page, getAllPages, getPageBySlug, getPageMetadata, type GetHref } from "@basalf/cms-next";
 import { routing } from "@/i18n/routing";
 import { generateAlternates, isBlogPagePublished } from "@/lib/seo-config";
+import { PageContainer } from "@/components/page-container";
 
 const AUTHOR = { name: "AlfGoto", url: "https://minesweeper.fr" };
 
@@ -63,7 +64,7 @@ export default async function BlogArticlePage({
   const url = generateAlternates(`/blog/${pageSlug}`, locale).canonical;
 
   return (
-    <div className="cms-content max-w-4xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+    <PageContainer className="cms-content">
       <Page
         slug={pageSlug}
         locale={locale}
@@ -71,6 +72,6 @@ export default async function BlogArticlePage({
         getHref={getHref}
         author={AUTHOR}
       />
-    </div>
+    </PageContainer>
   );
 }

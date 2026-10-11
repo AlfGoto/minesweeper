@@ -18,7 +18,7 @@ function BackgroundPreviewSurface({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl",
+        "relative overflow-hidden rounded-xl ring-1 ring-inset ring-black/5",
         large ? "size-115 rounded-2xl" : "size-14",
         skin.value,
       )}

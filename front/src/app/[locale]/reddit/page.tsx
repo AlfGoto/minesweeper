@@ -3,6 +3,8 @@ import { Link } from "@/i18n/navigation";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
+import { PageContainer } from "@/components/page-container";
+import { PlayCta } from "@/components/play-cta";
 
 export async function generateMetadata({
   params,
@@ -60,7 +62,7 @@ async function RedditContent() {
   const t = await getTranslations("redditPage");
 
   return (
-    <div className="max-w-4xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+    <PageContainer>
       <h1 className="text-4xl font-bold mb-4 text-gray-900">
         {t("title")}
       </h1>
@@ -72,12 +74,7 @@ async function RedditContent() {
         </h2>
         <p className="text-gray-600 mb-4">{t("whatIs.description")}</p>
         <div className="flex justify-center">
-          <Link
-            href="/"
-            className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-colors"
-          >
-            {t("playNow")}
-          </Link>
+          <PlayCta>{t("playNow")}</PlayCta>
         </div>
       </section>
 
@@ -179,7 +176,7 @@ async function RedditContent() {
           </a>
         </p>
       </section>
-    </div>
+    </PageContainer>
   );
 }
 

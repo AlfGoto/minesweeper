@@ -4,6 +4,8 @@ import { Link } from "@/i18n/navigation";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
+import { PageContainer } from "@/components/page-container";
+import { PlayCta } from "@/components/play-cta";
 
 async function getFaqStructuredData(locale: string) {
   const t = await getTranslations({ locale, namespace: "howToPlayPage" });
@@ -194,7 +196,7 @@ async function HowToPlayContent({ locale }: { locale: string }) {
         }}
       />
 
-      <div className="max-w-4xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+      <PageContainer>
         <nav aria-label="Breadcrumb" className="mb-6">
           <ol className="flex items-center gap-2 text-sm text-gray-500">
             <li>
@@ -356,12 +358,7 @@ async function HowToPlayContent({ locale }: { locale: string }) {
         </section>
 
         <section className="text-center mb-8">
-          <Link
-            href="/"
-            className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-colors"
-          >
-            {t("playNow")}
-          </Link>
+          <PlayCta>{t("playNow")}</PlayCta>
         </section>
 
         <section>
@@ -378,7 +375,7 @@ async function HowToPlayContent({ locale }: { locale: string }) {
             <QuickLink href="/blog" label={t("quickLinks.blog")} />
           </div>
         </section>
-      </div>
+      </PageContainer>
     </>
   );
 }

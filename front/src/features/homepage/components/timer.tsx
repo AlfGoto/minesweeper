@@ -40,7 +40,7 @@ export default function Timer({ className }: { className?: string }) {
   }, [getStartTime, isGameOn]);
 
   return (
-    <Button variant="outline" disabled className={cn(className, "px-0")}>
+    <Button variant="outline" disabled className={cn(className, "px-0 tabular-nums disabled:opacity-100")}>
       {displayTime}
     </Button>
   );

@@ -38,7 +38,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <head>
-        <link rel="icon" href="/flag.png" type="image/png" />
+        <link rel="icon" href="/flagIcon.png" type="image/png" />
         <link rel="manifest" href="/manifest.json" />
 
         <Script

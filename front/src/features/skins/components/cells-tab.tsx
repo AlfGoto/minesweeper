@@ -11,7 +11,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { CellSkins, getLocalizedSkinMeta } from "@/features/skins/cells/skins";
+import {
+  CellSkins,
+  getLocalizedSkinMeta,
+  getPublishedSkinsWithMeta,
+} from "@/features/skins/cells/skins";
 import {
   CellSkinLargeDemoGrid,
   CellSkinPreview,
@@ -19,7 +23,11 @@ import {
 import { buyCellSkinAction, selectCellSkinAction } from "@/features/skins/actions";
 import { OwnedFilter } from "./owned-filter";
 import { toast } from "sonner";
+import { signIn } from "next-auth/react";
+import { SkinName } from "./skin-name";
 import { AlfCoinsProgressCard } from "./alf-coins-progress-card";
+
+const gridClassName = "grid grid-cols-1 min-[440px]:grid-cols-2 sm:grid-cols-3 gap-4";
 
 type CellsTabProps = {
   isLoggedIn?: boolean;
@@ -55,6 +63,7 @@ export function CellsTab({
 }: CellsTabProps) {
   const router = useRouter();
   const t = useTranslations("skinsPage");
+  const tHome = useTranslations("homepage");
   const [isPending, startTransition] = useTransition();
   const [optimisticSelectedSkin, setOptimisticSelectedSkin] =
     useState<CellSkin>(selectedSkin);
@@ -66,6 +75,12 @@ export function CellsTab({
 
   const allCellSkins = useMemo(
     () => Object.keys(CellSkins) as CellSkin[],
+    [],
+  );
+
+  // Only published skins have an SEO page to link to.
+  const slugBySkin = useMemo(
+    () => new Map(getPublishedSkinsWithMeta().map((skin) => [skin.id, skin.slug])),
     [],
   );
 
@@ -120,7 +135,7 @@ export function CellsTab({
     return (
       <div
         key={skin}
-        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 flex-1 min-w-[200px] sm:w-[250px] sm:flex-none ${
+        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 ${
           isSelected ? "bg-muted/70" : ""
         } ${
           isSelectable ? "cursor-pointer hover:bg-muted/40 transition-colors" : ""
@@ -154,7 +169,9 @@ export function CellsTab({
         ) : null}
 
         <div className="relative z-10 flex items-start justify-between gap-4">
-          <p className="font-semibold">{formatSkinLabel(skin, locale, t("default"))}</p>
+          <SkinName href={slugBySkin.get(skin) && `/skins/${slugBySkin.get(skin)}`}>
+            {formatSkinLabel(skin, locale, t("default"))}
+          </SkinName>
           <div
             onClick={(event) => event.stopPropagation()}
             onMouseDown={(event) => event.stopPropagation()}
@@ -169,16 +186,19 @@ export function CellsTab({
               <Button
                 variant="outline"
                 className="w-full"
-                disabled={!isLoggedIn || isPending || typeof price !== "number"}
+                disabled={isPending || typeof price !== "number"}
               >
-                {!isLoggedIn
-                  ? t("signInToUnlock")
-                  : typeof price === "number"
-                    ? `${price} AlfCoins`
-                    : t("unavailable")}
+                {typeof price === "number" ? `${price} AlfCoins` : t("unavailable")}
               </Button>
             </PopoverTrigger>
-            {isLoggedIn && (
+            {!isLoggedIn ? (
+              <PopoverContent className="space-y-3">
+                <p className="text-sm text-muted-foreground">{t("loginToUnlock")}</p>
+                <Button className="w-full" onClick={() => signIn("google")}>
+                  {tHome("login")}
+                </Button>
+              </PopoverContent>
+            ) : (
               <PopoverContent className="space-y-3">
                 <p className="font-semibold">{t("buyConfirmTitle", { skinName: formatSkinLabel(skin, locale, t("default")) })}</p>
                 <p className="text-sm text-muted-foreground">
@@ -214,16 +234,16 @@ export function CellsTab({
       )}
 
       {!isLoggedIn || !groupOwned ? (
-        <div className="flex flex-wrap gap-4">{allCellSkins.map(renderSkinCard)}</div>
+        <div className={gridClassName}>{allCellSkins.map(renderSkinCard)}</div>
       ) : (
         <>
-          <div className="flex flex-wrap gap-4">
+          <div className={gridClassName}>
             {groupedSkins.owned.map(renderSkinCard)}
           </div>
           {groupedSkins.owned.length > 0 && groupedSkins.notOwned.length > 0 ? (
             <Separator className="my-6" />
           ) : null}
-          <div className="flex flex-wrap gap-4">
+          <div className={gridClassName}>
             {groupedSkins.notOwned.map(renderSkinCard)}
           </div>
         </>

@@ -3,6 +3,8 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { getAllPages } from "@basalf/cms-next";
 import { Link } from "@/i18n/navigation";
 import { generateAlternates, generateOgImages, isBlogPagePublished } from "@/lib/seo-config";
+import { PageContainer } from "@/components/page-container";
+import { PlayCta } from "@/components/play-cta";
 
 export async function generateMetadata({
   params,
@@ -45,7 +47,7 @@ export default async function BlogIndexPage({
   const pages = (await getAllPages(locale)).filter(isBlogPagePublished);
 
   return (
-    <div className="max-w-4xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+    <PageContainer>
       <h1 className="text-4xl font-bold mb-4 text-gray-900">{t("title")}</h1>
       <p className="text-lg text-gray-600 mb-12">{t("subtitle")}</p>
 
@@ -70,13 +72,8 @@ export default async function BlogIndexPage({
       )}
 
       <section className="text-center mt-12">
-        <Link
-          href="/"
-          className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-colors"
-        >
-          {t("playNow")}
-        </Link>
+        <PlayCta>{t("playNow")}</PlayCta>
       </section>
-    </div>
+    </PageContainer>
   );
 }

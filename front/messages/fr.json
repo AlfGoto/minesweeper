@@ -181,7 +181,10 @@
     "buyConfirmTitle": "Acheter {skinName} ?",
     "buyConfirmText": "Cela coûtera {price} AlfCoins.",
     "skinNotAvailable": "Ce skin n'est pas disponible actuellement.",
-    "confirmPurchase": "Confirmer l'achat"
+    "confirmPurchase": "Confirmer l'achat",
+    "yourAlfCoins": "Vos AlfCoins",
+    "toNextAlfCoin": "{revealed}/{step} cases révélées avant le prochain AlfCoin",
+    "bannersComingSoon": "Les skins de bannière sont en cours de développement. Ils arrivent dès que possible, merci de votre patience."
   },
   "mapPage": {
     "breadcrumb": "Plan du site",

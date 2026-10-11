@@ -11,6 +11,8 @@ import { CellSkinLargeDemoGrid } from "@/features/shared/components/cell-skin-pr
 import { getCellSkinSeo } from "@/features/skins/seo";
 import { getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
+import { PageContainer } from "@/components/page-container";
+import { PlayCta } from "@/components/play-cta";
 
 type Props = {
   params: Promise<{ skinName: string; locale: string }>;
@@ -223,7 +225,7 @@ export default async function SkinPage({ params }: Props) {
         }}
       />
 
-      <div className="max-w-3xl mx-auto w-full p-4 md:p-8 bg-white/90 rounded-lg min-h-screen">
+      <PageContainer size="narrow">
         <article>
           <nav aria-label="Breadcrumb" className="mb-6">
             <ol className="flex items-center gap-2 text-sm text-gray-500">
@@ -336,18 +338,13 @@ export default async function SkinPage({ params }: Props) {
           </section>
 
           <section aria-label="Call to action" className="text-center">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:bg-green-600 hover:shadow-xl"
-            >
-              {t("playNow")}
-            </Link>
+            <PlayCta>{t("playNow")}</PlayCta>
             <p className="mt-4 text-sm text-gray-500">
               {t("trySkin", { name: skin.name })}
             </p>
           </section>
         </article>
-      </div>
+      </PageContainer>
     </>
   );
 }
