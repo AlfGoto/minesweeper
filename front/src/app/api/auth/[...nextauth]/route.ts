@@ -1,7 +1,13 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-console.log("NEXTAUTH_SECRET exists:", Boolean(process.env.NEXTAUTH_SECRET));
+const env = getCloudflareContext().env as CloudflareEnv & {
+  NEXTAUTH_SECRET?: string;
+};
+
+console.log("Secret in Worker env:", Boolean(env.NEXTAUTH_SECRET));
+console.log("Secret in process.env:", Boolean(process.env.NEXTAUTH_SECRET));
 
 const handler = NextAuth({
   providers: [
