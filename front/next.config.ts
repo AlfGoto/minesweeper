@@ -13,15 +13,14 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  serverExternalPackages: ["@swc/core"],
-
   outputFileTracingExcludes: {
     "*": [
-      "./node_modules/@swc/core/**",
-      "./node_modules/@swc/core-*/**",
-      "./node_modules/@parcel/watcher/**",
-      "./node_modules/@parcel/watcher-*/**",
-      "./node_modules/next-intl-swc-plugin-extractor/**",
+      "**/node_modules/@swc/**",
+      "**/node_modules/@swc/core/**",
+      "**/node_modules/@swc/core-*/**",
+      "**/node_modules/@parcel/watcher/**",
+      "**/node_modules/@parcel/watcher-*/**",
+      "**/node_modules/next-intl-swc-plugin-extractor/**",
     ],
   },
 };
