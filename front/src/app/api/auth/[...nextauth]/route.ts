@@ -2,13 +2,6 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-const env = getCloudflareContext().env as CloudflareEnv & {
-  NEXTAUTH_SECRET?: string;
-};
-
-console.log("Secret in Worker env:", Boolean(env.NEXTAUTH_SECRET));
-console.log("Secret in process.env:", Boolean(process.env.NEXTAUTH_SECRET));
-
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -18,4 +11,18 @@ const handler = NextAuth({
   ],
 });
 
-export { handler as GET, handler as POST };
+export async function GET(request: Request, context: unknown) {
+  console.log("NEXTAUTH_SECRET exists:", Boolean(process.env.NEXTAUTH_SECRET));
+
+  const cf = getCloudflareContext();
+  console.log(
+    "Cloudflare binding exists:",
+    Boolean(
+      (cf.env as CloudflareEnv & { NEXTAUTH_SECRET?: string }).NEXTAUTH_SECRET,
+    ),
+  );
+
+  return handler(request, context as never);
+}
+
+export const POST = handler;
