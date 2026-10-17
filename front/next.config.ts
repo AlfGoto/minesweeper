@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  serverExternalPackages: ["@swc/core"],
+
   outputFileTracingExcludes: {
     "*": [
       "./node_modules/@swc/core/**",
