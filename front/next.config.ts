@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+
   images: {
     remotePatterns: [
       {
@@ -12,7 +12,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  outputFileTracingExcludes: {
+    "*": [
+      "./node_modules/@swc/core/**",
+      "./node_modules/@swc/core-*/**",
+      "./node_modules/@parcel/watcher/**",
+      "./node_modules/@parcel/watcher-*/**",
+      "./node_modules/next-intl-swc-plugin-extractor/**",
+    ],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
 export default withNextIntl(nextConfig);
