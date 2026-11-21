@@ -37,4 +37,12 @@
       "enabled": false,
     },
   },
+  // Worker Previews (PRs) on this same Worker. Values and secrets are set in Cloudflare, not here.
+  // API bindings read from env must be repeated here.
+  // see https://developers.cloudflare.com/workers/previews/configuration/
+  "previews": {
+    "images": {
+      "binding": "IMAGES",
+    },
+  },
 }
