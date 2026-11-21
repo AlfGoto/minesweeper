@@ -1,0 +1,164 @@
+name: claude
+
+# EXECUTOR. Answers when someone writes "@claude" in an issue, a PR comment, an inline PR comment
+# or a PR review, or when a human replies to Claude without writing "@claude" (see the `reply` job).
+#
+# From AlfGoto/Behalf stacks/common + stacks/node (Node 22).
+
+env:
+  # GitHub login of the human who reviews and merges (assignee + reviewer of every PR).
+  OWNER_LOGIN: AlfGoto
+  # Commands the agent may run besides git / gh. 4 independent folders, no root package: always --prefix.
+  # Only listed scripts: NO deploy (npm run deploy*, wrangler deploy, cdk deploy, projen deploy).
+  STACK_TOOLS: "Bash(npm --prefix front ci:*),Bash(npm --prefix front install:*),Bash(npm --prefix front run lint:*),Bash(npm --prefix front run build:*),Bash(npm --prefix api ci:*),Bash(npm --prefix api install:*),Bash(npm --prefix api test:*),Bash(npm --prefix api run test:*),Bash(npm --prefix api run build:*),Bash(npm --prefix api run eslint:*),Bash(npm --prefix websocket ci:*),Bash(npm --prefix websocket install:*)"
+  # Safety net: refused even if an allow rule above would match.
+  DENY_TOOLS: "Bash(npm run deploy:*),Bash(npm --prefix api run deploy:*),Bash(npm --prefix websocket run deploy:*),Bash(wrangler:*),Bash(npx wrangler:*),Bash(cdk:*),Bash(npx cdk:*),Bash(npx projen deploy:*),Bash(npx projen destroy:*)"
+  # How the agent runs the tests before pushing.
+  TEST_HINT: "Run checks only for the folder you changed, before pushing, always with --prefix: front/ → npm --prefix front ci && npm --prefix front run lint && npm --prefix front run build; api/ → npm --prefix api ci && npm --prefix api test; websocket/ → npm --prefix websocket ci. Never deploy anything."
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    # Only "opened": "assigned" fires a second run for the same issue.
+    types: [opened]
+
+jobs:
+  # Is this comment a human reply to Claude (no "@claude" needed)?
+  # - Issue / PR conversation: the last earlier comment (other bots ignored) is from claude[bot].
+  # - Inline PR thread: the comment replies to a claude[bot] comment.
+  # `/preview` commands are never replies (a preview workflow handles them, if you have one).
+  reply:
+    if: >-
+      (github.event_name == 'issue_comment' || github.event_name == 'pull_request_review_comment') &&
+      github.event.comment.user.type != 'Bot' &&
+      !contains(github.event.comment.body, '@claude') &&
+      github.event.comment.body != '/preview' &&
+      !startsWith(github.event.comment.body, '/preview ')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      pull-requests: read
+    outputs:
+      is_reply: ${{ steps.check.outputs.is_reply }}
+      phrase: ${{ steps.check.outputs.phrase }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          BODY: ${{ github.event.comment.body }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+          ISSUE: ${{ github.event.issue.number }}
+          PARENT_ID: ${{ github.event.comment.in_reply_to_id }}
+        run: |
+          parent=""
+          if [ "$EVENT" = "issue_comment" ]; then
+            # Comments come oldest first, 100 per page. Read only the last page
+            # (plus the one before when the new comment is alone on the last one).
+            url="repos/$REPO/issues/$ISSUE/comments?per_page=100"
+            total=$(gh api "repos/$REPO/issues/$ISSUE" --jq '.comments')
+            last=$(( (total + 99) / 100 ))
+            pages="$last"
+            if [ $(( total % 100 )) -eq 1 ] && [ "$last" -gt 1 ]; then pages="$((last - 1)) $last"; fi
+            parent=$(for p in $pages; do gh api "$url&page=$p"; done | jq -rs \
+              "add | [.[] | select(.id != $COMMENT_ID) | select((.user.login | endswith(\"[bot]\") | not) or .user.login == \"claude[bot]\")] | last | .user.login // \"\"")
+          elif [ -n "$PARENT_ID" ]; then
+            parent=$(gh api "repos/$REPO/pulls/comments/$PARENT_ID" --jq '.user.login')
+          fi
+          echo "Previous author: $parent"
+          if [ "$parent" = "claude[bot]" ]; then
+            # The action needs a trigger phrase in the comment: use the comment's first word.
+            first=$(printf '%s' "$BODY" | tr -s '[:space:]' '\n' | sed '/^$/d' | head -n 1)
+            echo "is_reply=true" >> "$GITHUB_OUTPUT"
+            echo "phrase=$first" >> "$GITHUB_OUTPUT"
+          fi
+
+  claude:
+    needs: reply
+    if: |
+      !cancelled() && (
+      needs.reply.outputs.is_reply == 'true' ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))))
+    runs-on: ubuntu-latest
+    # One agent run at a time per issue/PR: runs QUEUE, they never cancel each other.
+    # Job-level on purpose: a workflow-level group lets a non-@claude comment replace a pending @claude run.
+    concurrency:
+      group: claude-${{ github.event.issue.number || github.event.pull_request.number }}
+      cancel-in-progress: false
+    # Stops a stuck run (GitHub's default is 6 h of billed minutes).
+    timeout-minutes: 30
+    # Give the agent every right its job needs NOW (see practices/3: a missing right = a manual PR later,
+    # because the agent can't edit workflows). Still no merge, no push to main.
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+      checks: read
+    steps:
+      # Full history: `git pull origin main` can't merge into a shallow clone.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # PR status = whose turn. Draft = the agent is working, don't look.
+      # The WORKFLOW sets it, not the model.
+      - id: before
+        name: Mark PR as draft while the agent works
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number || (github.event.issue.pull_request && github.event.issue.number) || '' }}
+        run: |
+          if [ -z "$PR" ]; then exit 0; fi
+          sha=$(gh api "repos/$REPO/pulls/$PR" --jq '.head.sha')
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          gh pr ready "$PR" --undo -R "$REPO" || true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # The review workflow asks "@claude please fix…" as claude[bot] (review ↔ fix loop).
+          allowed_bots: "claude[bot]"
+          # Normal: "@claude". Human reply to Claude: the comment's first word (see `reply` job).
+          trigger_phrase: ${{ needs.reply.outputs.phrase || '@claude' }}
+          # Lets Claude read CI results on the PR.
+          additional_permissions: |
+            actions: read
+            checks: read
+          # Git: fetch + pull + merge (update from main, fix conflicts) + add/commit + read-only commands.
+          # No rebase, no reset, no force push. The action pushes itself. No gh pr merge: the human merges.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 60
+            --allowedTools "Bash(git fetch:*),Bash(git pull:*),Bash(git merge:*),Bash(git add:*),Bash(git commit:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(cd:*),Bash(gh pr create:*),Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh pr comment:*),Bash(gh pr edit:*),Bash(gh issue view:*),Bash(gh issue comment:*),${{ env.STACK_TOOLS }}"
+            --disallowedTools "${{ env.DENY_TOOLS }}"
+            --append-system-prompt "Read CLAUDE.md and docs/ (and CONTEXT.md if it exists) before changing anything. Use the terms from the glossary, never its _Avoid_ words. Build only what docs/ decided or what ${{ env.OWNER_LOGIN }} asked for: never add a route, endpoint, page, package, field, setting, command or example code on your own, even if an issue lists it without a docs/ decision. If something is not decided, ask in a comment and do not build it. If a change contradicts docs/, say so in a comment instead of doing it. Update docs/ when you change a decision. Push to the PR branch; never to main. When you work from an issue: once your changes are pushed, open the pull request yourself as a DRAFT with gh pr create --draft (base main, head = your branch, --assignee ${{ env.OWNER_LOGIN }}, --reviewer ${{ env.OWNER_LOGIN }}). Draft means the human should not look yet: the workflows mark it ready when it is their turn. Never change a PR's draft/ready status yourself. Write the PR body to pr-body.md at the repo root with the Write tool, then run gh pr create --body-file pr-body.md (never a multi-line --body, never a file in /tmp). Never commit pr-body.md. The PR body follows .github/pull_request_template.md, has the line Fixes #<issue number>, and its How to test comes first: checkbox steps, every command written out in full, each followed by → what the human should see. Find real commands and ids in the code; never guess. When you push to an existing PR, update its How to test too (gh pr edit --body-file pr-body.md). ${{ env.TEST_HINT }} Never wait for CI (no gh pr checks --watch, no sleep loops): this runner is billed while it waits. Push once, at the end. Then comment the PR link on the issue. Write for a busy human: result first, simple English, short lines, bold the key point, no filler. If the human must do something, end with a clear Next step for you line."
+
+      # Agent pushed nothing (answered a question, nothing to fix, or failed) → nothing else will
+      # happen on this PR → the human's turn. It pushed → stay draft: the review decides.
+      - name: Mark PR ready if the agent pushed nothing
+        if: always() && steps.before.outputs.pr != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ steps.before.outputs.pr }}
+          BEFORE: ${{ steps.before.outputs.sha }}
+        run: |
+          after=$(gh api "repos/$REPO/pulls/$PR" --jq '.head.sha')
+          if [ "$after" = "$BEFORE" ]; then gh pr ready "$PR" -R "$REPO"; fi
