@@ -37,4 +37,21 @@
       "enabled": false,
     },
   },
+  // Preview Worker for PRs. Separate from production so it has its own
+  // vars and secrets (BFF_URL, NEXTAUTH_SECRET, Google ids): test values only.
+  // Used with: wrangler versions upload --env preview
+  "env": {
+    "preview": {
+      "name": "minesweeper-preview",
+      "services": [
+        {
+          "binding": "WORKER_SELF_REFERENCE",
+          "service": "minesweeper-preview",
+        },
+      ],
+      "images": {
+        "binding": "IMAGES",
+      },
+    },
+  },
 }
