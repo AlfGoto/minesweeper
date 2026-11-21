@@ -1,0 +1,111 @@
+name: fix-conflicts-on-push
+
+# ALTERNATIVE to fix-conflicts.yml: also covers direct pushes to main (not only merged PRs).
+# Use one of the two, not both.
+#
+# After a push to main: find open PRs that now have merge conflicts
+# and comment "@claude fix conflicts" on each → claude.yml fixes them.
+#
+# Two steps, because:
+# - A comment made with GITHUB_TOKEN never triggers other workflows,
+#   so the comment must come from claude[bot] (posted by claude-code-action).
+# - claude-code-action does not support `push` events.
+# So: `find` (on push) lists the PRs, then starts this same workflow with
+# workflow_dispatch (GITHUB_TOKEN CAN trigger that). `ask` (on dispatch) posts the comments.
+# Manual "Run workflow" with no input = check now.
+#
+# No `paths:` filter on purpose: a change to any file can cause a conflict.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      prs:
+        description: "PR numbers to ask (space-separated). Empty = check all open PRs."
+        required: false
+        default: ""
+
+concurrency:
+  group: fix-conflicts-on-push-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
+
+jobs:
+  find:
+    if: github.event_name == 'push' || inputs.prs == ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+      issues: read
+      actions: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          prs=""
+          for n in $(gh api "repos/$REPO/pulls?state=open&base=main&per_page=100" --jq '.[].number'); do
+            # GitHub computes "mergeable" in the background after a push: null = not ready yet.
+            state=""
+            for _ in 1 2 3 4 5 6; do
+              m=$(gh api "repos/$REPO/pulls/$n" --jq '.mergeable')
+              if [ "$m" != "null" ]; then
+                state=$(gh api "repos/$REPO/pulls/$n" --jq '.mergeable_state')
+                break
+              fi
+              sleep 5
+            done
+            echo "PR #$n: mergeable_state=$state"
+            [ "$state" = "dirty" ] || continue
+            # Already asked and nothing happened since (last comment = our ask)? Don't ask again.
+            last=$(gh api --paginate "repos/$REPO/issues/$n/comments?per_page=100" --jq '.[] | .body | @json' | tail -n 1)
+            if [ "$last" = '"@claude fix conflicts"' ]; then echo "  already asked, skip"; continue; fi
+            prs="$prs $n"
+          done
+          prs=${prs# }
+          echo "Conflicting PRs: ${prs:-none}"
+          if [ -n "$prs" ]; then
+            gh workflow run fix-conflicts-on-push.yml -R "$REPO" --ref main -f prs="$prs"
+          fi
+
+  ask:
+    if: github.event_name == 'workflow_dispatch' && inputs.prs != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - id: cmds
+        env:
+          PRS: ${{ inputs.prs }}
+        run: |
+          {
+            echo "list<<EOF"
+            for n in $PRS; do
+              # Numbers only: the input is pasted into the prompt.
+              [[ "$n" =~ ^[0-9]+$ ]] && echo "gh pr comment $n --body \"@claude fix conflicts\""
+            done
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # Tiny Claude step: only to post as claude[bot], so the comments trigger claude.yml.
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # The dispatch from the `find` job runs as github-actions[bot].
+          allowed_bots: "github-actions[bot]"
+          prompt: |
+            Run each shell command below, copied character for character, one after the other. Then stop. Do nothing else.
+            ${{ steps.cmds.outputs.list }}
+          claude_args: |
+            --model claude-haiku-5-5
+            --max-turns 15
+            --allowedTools "Bash(gh pr comment:*)"
