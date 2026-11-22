@@ -88,14 +88,16 @@ export async function CurrentMonthLeaderboard() {
           </TableBody>
         </Table>
       </div>
-      <div className="text-center mt-4">
-        <Link
-          href={`/stats/leaderboard/monthly/${month}`}
-          className="text-sm text-muted-foreground hover:text-foreground"
-        >
-          {t("viewAll")} →
-        </Link>
-      </div>
+      {rows.length > 0 && (
+        <div className="text-center mt-4">
+          <Link
+            href={`/stats/leaderboard/monthly/${month}`}
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            {t("viewAll")} →
+          </Link>
+        </div>
+      )}
     </>
   );
 }
