@@ -83,22 +83,20 @@ const listMonths = () => {
 // Reads one month partition only, sorted by time (fastest first)
 const getMonthlyTop = async (month: string, limit: number) => {
   const games = await BestGameMonth.getAllBestGameForThisMonths(month)
-  return Promise.all(
-    games
-      .sort((a, b) => a.time - b.time)
-      .slice(0, limit)
-      .map(async (game) => {
-        const user = await User.getUserByEmail(game.userEmail)
-        return {
-          time: game.time,
-          flags: game.flags,
-          revealed: game.revealed,
-          date: game.date,
-          userId: user?.userId ?? "",
-          userPicture: user?.userPicture ?? "",
-          userName: user?.userName ?? ""
-        }
-      })
+  return chunkPromiseAll(
+    games.sort((a, b) => a.time - b.time).slice(0, limit),
+    async (game) => {
+      const user = await User.getUserByEmail(game.userEmail)
+      return {
+        time: game.time,
+        flags: game.flags,
+        revealed: game.revealed,
+        date: game.date,
+        userId: user?.userId ?? "",
+        userPicture: user?.userPicture ?? "",
+        userName: user?.userName ?? ""
+      }
+    }
   )
 }
 
