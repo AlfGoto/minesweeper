@@ -319,6 +319,10 @@
     "timePlayedTitle": "Clasificación Tiempo Jugado - Buscaminas",
     "timePlayedDescription": "Clasificación de los jugadores de Buscaminas más dedicados por tiempo total jugado.",
     "timePlayedSubtitle": "Jugadores clasificados por tiempo total jugando al Buscaminas",
+    "monthlyTitle": "Clasificación de {month} - Buscaminas",
+    "monthlyDescription": "Top 100 de las partidas de Buscaminas más rápidas de {month}. Mira los mejores tiempos mensuales de jugadores de todo el mundo.",
+    "monthlySubtitle": "Mejor partida de cada jugador en {month} (UTC)",
+    "monthlySinceLaunch": "Desde el lanzamiento: los datos empiezan en julio de 2026.",
     "backToStats": "Volver a Stats",
     "viewAll": "Ver todo"
   },

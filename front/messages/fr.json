@@ -319,6 +319,10 @@
     "timePlayedTitle": "Classement Temps Joué - Démineur",
     "timePlayedDescription": "Classement des joueurs de Démineur les plus dévoués par temps total joué.",
     "timePlayedSubtitle": "Joueurs classés par temps total passé à jouer au Démineur",
+    "monthlyTitle": "Classement de {month} - Démineur",
+    "monthlyDescription": "Top 100 des parties de Démineur les plus rapides de {month}. Voir les meilleurs temps mensuels des joueurs du monde entier.",
+    "monthlySubtitle": "Meilleure partie de chaque joueur en {month} (UTC)",
+    "monthlySinceLaunch": "Depuis le lancement : les données commencent en juillet 2026.",
     "backToStats": "Retour aux Stats",
     "viewAll": "Voir tout"
   },

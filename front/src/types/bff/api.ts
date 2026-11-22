@@ -321,6 +321,80 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/stats/month/{month}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get the monthly leaderboard of one UTC month (yyyy-MM). Empty month: empty list. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    month: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Monthly leaderboard (top 100 at most, fastest first) */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MonthlyEntry"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/stats/months": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get every month from 2026-07 to the current month that has at least one game, with its top 3 */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Every month with at least one game, with its top 3 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MonthlyTop3"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/{userId}": {
         parameters: {
             query?: never;
@@ -595,6 +669,7 @@ export interface paths {
                             "blue-lagoon"?: number;
                             "purple-parade"?: number;
                             classic?: number;
+                            beach?: number;
                         };
                     };
                 };
@@ -690,6 +765,8 @@ export interface paths {
                             "retro-grid"?: number;
                             "amber-dunes"?: number;
                             "deep-reef"?: number;
+                            "beach-sea"?: number;
+                            "beach-sand"?: number;
                         };
                     };
                 };
@@ -740,6 +817,56 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["SkinStats"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/skins/stats/{skinType}/{skinName}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Skin stats of one skin (1 read) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    skinType: components["schemas"]["StatsSkinType"];
+                    skinName: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Skin stats of one skin */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SkinStats"];
+                    };
+                };
+                /** @description Skin not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
                     };
                 };
             };
@@ -1006,6 +1133,19 @@ export interface components {
             totalRestarts: number;
             placement?: number;
             totalPlayers: number;
+        };
+        MonthlyEntry: {
+            time: number;
+            flags: number;
+            revealed: number;
+            date: string;
+            userPicture: string;
+            userName: string;
+            userId: string;
+        };
+        MonthlyTop3: {
+            month: string;
+            top3: components["schemas"]["MonthlyEntry"][];
         };
         User: {
             userId: string;
