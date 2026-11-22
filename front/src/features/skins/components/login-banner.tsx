@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { LogIn } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import type { CellSkin } from "@/types/bff";
 import { CellSkins } from "@/features/skins/cells/skins";
 import { CellSkinSwatch } from "./collection-previews";
@@ -24,8 +25,7 @@ export function LoginBanner() {
           {SWATCH_SKINS.map((skin, index) => (
             <span
               key={skin}
-              className="rounded-md ring-[3px] ring-primary"
-              style={{ marginLeft: index === 0 ? 0 : -10 }}
+              className={cn("rounded-md ring-2 ring-primary", index > 0 && "-ml-2")}
             >
               <CellSkinSwatch skin={skin} />
             </span>
@@ -35,7 +35,7 @@ export function LoginBanner() {
       </div>
       <Button
         variant="secondary"
-        className="bg-white text-foreground hover:bg-white/90"
+        className="bg-background text-foreground hover:bg-background/90"
         onClick={() => signIn("google")}
       >
         <LogIn className="size-4" aria-hidden />
