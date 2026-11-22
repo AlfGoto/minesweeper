@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { executeTransactWrite } from "dynamodb-toolbox"
 import { z } from "zod"
 import { AlfCoins } from "../../core/alfCoins"
+import { User } from "../../core/user"
 import {
   Skin,
   bannerSkins,
@@ -12,7 +13,6 @@ import {
   cellsSkinsNames,
   skinTypes
 } from "../../core/skin"
-import { User } from "../../core/user"
 
 export const SkinTypeSchema = z.enum(skinTypes).openapi("SkinType")
 export const SkinTypesResponseSchema = z.array(SkinTypeSchema).openapi("SkinTypesResponse")
