@@ -3,17 +3,31 @@ import { notFound } from "next/navigation";
 import Script from "next/script";
 import { Link } from "@/i18n/navigation";
 import {
+  CellSkins,
   getSkinMetaBySlug,
   getAllSkinSlugs,
   getPublishedSkinsWithMeta,
 } from "@/features/skins/cells/skins";
-import { CellSkinLargeDemoGrid } from "@/features/shared/components/cell-skin-preview";
+import {
+  PreviewGrid,
+  LARGE_DEMO_GRID,
+  LARGE_DEMO_GRID_SIZE,
+} from "@/features/shared/components/cell-skin-preview";
 import { getCellSkinSeo } from "@/features/skins/seo";
 import { getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
-import { PageContainer } from "@/components/page-container";
-import { PlayCta } from "@/components/play-cta";
-import { getSkinStats } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { SkinCtaButtons } from "@/components/skin-cta-buttons";
+import {
+  BottomCta,
+  FaqSection,
+  RelatedSection,
+  StatBoxes,
+  Swatch,
+  TextSection,
+  getSkinColors,
+} from "@/components/skin-page-parts";
+import { getCellSkinsPrices, getSkinStats } from "@/lib/api";
 
 type Props = {
   params: Promise<{ skinName: string; locale: string }>;
@@ -93,7 +107,14 @@ export default async function SkinPage({ params }: Props) {
 
   const seoContent = getCellSkinSeo(skin.id, locale);
   const pageUrl = `https://minesweeper.fr/skins/${skin.slug}`;
-  const stats = await getSkinStats("cells", skin.id);
+  const [stats, prices, tHome, tSkins] = await Promise.all([
+    getSkinStats("cells", skin.id),
+    getCellSkinsPrices(),
+    getTranslations("homepage"),
+    getTranslations("skinsPage"),
+  ]);
+  const price = (prices as Partial<Record<string, number>>)[skin.id];
+  const colors = getSkinColors(CellSkins[skin.id]?.ogColors);
 
   const nameHash = skin.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const baseFaqs = [
@@ -227,131 +248,144 @@ export default async function SkinPage({ params }: Props) {
         }}
       />
 
-      <PageContainer size="narrow">
+      <main>
         <article>
-          <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-2 text-sm text-gray-500">
-              <li>
-                <Link href="/" className="hover:text-green-700">
-                  Minesweeper
-                </Link>
-              </li>
-              <li>/</li>
-              <li>
-                <Link href="/skins" className="hover:text-green-700">
-                  {t("breadcrumbSkins")}
-                </Link>
-              </li>
-              <li>/</li>
-              <li className="font-medium text-green-700">{skin.name}</li>
-            </ol>
-          </nav>
-
-          <header className="mb-8">
-            <h1 className="mb-4 text-4xl font-bold text-gray-900">
-              {skin.name}
-            </h1>
-            {seoContent?.heroTagline ? (
-              <p className="text-lg font-medium text-gray-700">
-                {seoContent.heroTagline}
-              </p>
-            ) : (
-              <p className="text-lg text-gray-600">{skin.description}</p>
-            )}
-            {stats && stats.games > 0 && (
-              <p className="mt-4 text-sm font-medium text-muted-foreground">
-                {t("winRate", { rate: stats.winRate, games: stats.games })}
-              </p>
-            )}
-          </header>
-
-          <section
-            aria-label="Skin Preview"
-            className="mb-10 flex justify-center"
+          <div
+            style={{
+              backgroundImage: `linear-gradient(to bottom, ${colors.tint}, white)`,
+            }}
           >
-            <div className="overflow-hidden rounded-xl border shadow-lg">
-              <CellSkinLargeDemoGrid skin={skin.id} />
-            </div>
-          </section>
+            <div className="mx-auto max-w-6xl px-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 py-5">
+                <nav aria-label="Breadcrumb">
+                  <ol className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                    <li>
+                      <Link href="/" className="hover:underline">
+                        Minesweeper
+                      </Link>
+                    </li>
+                    <li aria-hidden>/</li>
+                    <li>
+                      <Link href="/skins" className="hover:underline">
+                        {t("breadcrumbSkins")}
+                      </Link>
+                    </li>
+                    <li aria-hidden>/</li>
+                    <li className="font-medium text-foreground">{skin.name}</li>
+                  </ol>
+                </nav>
+                <Button asChild>
+                  <Link href="/" prefetch>
+                    {tHome("backToGame")}
+                  </Link>
+                </Button>
+              </div>
 
-          {seoContent?.sections ? (
-            seoContent.sections.map((section) => (
-              <section
-                key={section.title}
-                aria-label={section.title}
-                className="mb-10"
-              >
-                <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-                  {section.title}
-                </h2>
-                <div className="space-y-4 leading-relaxed text-gray-600">
+              <header className="flex flex-wrap items-center gap-14 pt-8 pb-12 md:pb-[72px]">
+                <div className="flex flex-1 basis-[420px] flex-col gap-6">
+                  <h1 className="text-[40px] leading-tight font-bold tracking-tight text-neutral-900 md:text-6xl">
+                    {skin.name}
+                  </h1>
+                  {seoContent?.heroTagline ? (
+                    <p className="max-w-[520px] text-xl font-medium text-neutral-700">
+                      {seoContent.heroTagline}
+                    </p>
+                  ) : (
+                    <p className="max-w-[520px] text-xl font-medium text-neutral-700">
+                      {skin.description}
+                    </p>
+                  )}
+                  <StatBoxes
+                    winRateLabel={t("winRateLabel")}
+                    winRateText={
+                      stats && stats.games > 0
+                        ? t("winRate", { rate: stats.winRate, games: stats.games })
+                        : undefined
+                    }
+                    priceLabel={t("priceLabel")}
+                    price={price}
+                  />
+                  <SkinCtaButtons
+                    signInLabel={tSkins("signInToUnlock")}
+                    playLabel={t("playNow")}
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    {t("trySkin", { name: skin.name })}
+                  </p>
+                </div>
+
+                <section
+                  aria-label="Skin Preview"
+                  className="w-full md:w-auto md:flex-none"
+                >
+                  <div
+                    className="mx-auto w-full max-w-[440px] rounded-[28px] p-3 shadow-2xl md:w-auto md:max-w-none md:p-7"
+                    style={{ backgroundColor: colors.dark }}
+                  >
+                    <div className="rounded-2xl bg-white/8 p-2">
+                      <div className="overflow-hidden rounded-[10px] md:w-[440px]">
+                        <PreviewGrid
+                          skin={skin.id}
+                          grid={LARGE_DEMO_GRID}
+                          gridSize={LARGE_DEMO_GRID_SIZE}
+                          className="grid w-full"
+                          cellClassName="aspect-square text-sm md:text-xl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </header>
+            </div>
+          </div>
+
+          <div className="mx-auto flex max-w-[760px] flex-col gap-14 px-6 pt-4">
+            {seoContent?.sections ? (
+              seoContent.sections.map((section) => (
+                <TextSection key={section.title} title={section.title}>
                   {section.content.split("\n\n").map((paragraph, pIndex) => (
                     <p key={pIndex}>{paragraph}</p>
                   ))}
-                </div>
-              </section>
-            ))
-          ) : (
-            <section aria-label="About this skin" className="mb-10">
-              <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-                {t("aboutSkin", { name: skin.name })}
-              </h2>
-              <p className="leading-relaxed text-gray-600">
-                {skin.longDescription}
-              </p>
-            </section>
-          )}
+                </TextSection>
+              ))
+            ) : (
+              <TextSection title={t("aboutSkin", { name: skin.name })}>
+                <p>{skin.longDescription}</p>
+              </TextSection>
+            )}
 
-          <section aria-label="Frequently Asked Questions" className="mb-10">
-            <h2 className="mb-6 text-2xl font-semibold text-gray-900">
-              {t("faq")}
-            </h2>
-            <div className="space-y-6">
-              {faqEntries.map((entry) => (
-                <div key={entry.question}>
-                  <h3 className="mb-2 font-medium text-gray-900">
-                    {entry.question}
-                  </h3>
-                  <p className="text-gray-600">{entry.answer}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+            <FaqSection
+              ariaLabel="Frequently Asked Questions"
+              title={t("faq")}
+              entries={faqEntries}
+            />
 
-          <section aria-label="Related skins" className="mb-10">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-              {t("moreSkins")}
-            </h2>
-            <nav className="flex flex-wrap gap-3">
-              {getPublishedSkinsWithMeta(locale)
+            <RelatedSection
+              ariaLabel="Related skins"
+              title={t("moreSkins")}
+              viewAllHref="/skins"
+              viewAllLabel={t("viewAll")}
+              items={getPublishedSkinsWithMeta(locale)
                 .filter((s) => s.slug !== skin.slug)
                 .slice(0, 6)
-                .map((relatedSkin) => (
-                  <Link
-                    key={relatedSkin.slug}
-                    href={`/skins/${relatedSkin.slug}`}
-                    className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 transition-colors hover:border-green-400 hover:bg-green-50"
-                  >
-                    {relatedSkin.name}
-                  </Link>
-                ))}
-              <Link
-                href="/skins"
-                className="rounded-full border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-200"
-              >
-                {t("viewAll")}
-              </Link>
-            </nav>
-          </section>
+                .map((relatedSkin) => ({
+                  slug: relatedSkin.slug,
+                  name: relatedSkin.name,
+                  href: `/skins/${relatedSkin.slug}`,
+                  swatch: <Swatch skin={relatedSkin.id} size="md" />,
+                }))}
+            />
+          </div>
 
-          <section aria-label="Call to action" className="text-center">
-            <PlayCta>{t("playNow")}</PlayCta>
-            <p className="mt-4 text-sm text-gray-500">
-              {t("trySkin", { name: skin.name })}
-            </p>
-          </section>
+          <BottomCta
+            darkColor={colors.dark}
+            swatch={<Swatch skin={skin.id} size="lg" />}
+            trySkinText={t("trySkin", { name: skin.name })}
+            signInLabel={tSkins("signInToUnlock")}
+            playLabel={t("playNow")}
+          />
         </article>
-      </PageContainer>
+      </main>
     </>
   );
 }

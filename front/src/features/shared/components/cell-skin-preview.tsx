@@ -161,6 +161,7 @@ export function PreviewGrid({
   rows = gridSize,
   compact,
   cellClassName,
+  className,
 }: {
   skin: CellSkin;
   grid: PreviewCell[];
@@ -168,10 +169,11 @@ export function PreviewGrid({
   rows?: number;
   compact?: boolean;
   cellClassName?: string;
+  className?: string;
 }) {
   return (
     <div
-      className={cn("inline-grid overflow-hidden")}
+      className={cn("inline-grid overflow-hidden", className)}
       style={{ gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))` }}
     >
       {Array.from({ length: grid.length }).map((_, index) => (

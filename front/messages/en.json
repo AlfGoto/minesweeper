@@ -119,6 +119,9 @@
     "cosmetic": "Cosmetic",
     "notFound": "Background Skin Not Found",
     "winRate": "{rate, number, percent} win rate over {games, number} {games, plural, one {game} other {games}}",
+    "winRateLabel": "Win rate",
+    "priceLabel": "Price",
+    "previewCaption": "Shown with the default Green Grass cells",
     "skinTitle": "{name} Minesweeper Background Skin",
     "skinLabel": "Minesweeper Background Skin",
     "skinBreadcrumb": "{name} Background",
@@ -142,6 +145,8 @@
   "gridSkinPage": {
     "notFound": "Skin Not Found",
     "winRate": "{rate, number, percent} win rate over {games, number} {games, plural, one {game} other {games}}",
+    "winRateLabel": "Win rate",
+    "priceLabel": "Price",
     "skinTitle": "{name} Skin for Minesweeper",
     "breadcrumbSkins": "Skins",
     "aboutSkin": "About the {name} Skin",
