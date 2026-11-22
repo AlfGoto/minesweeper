@@ -118,6 +118,7 @@
     "breadcrumb": "Skins de fond",
     "cosmetic": "Cosmétique",
     "notFound": "Skin de fond introuvable",
+    "winRate": "{rate, number, percent} de victoires sur {games, number} {games, plural, one {partie} other {parties}}",
     "skinTitle": "Skin de fond {name} pour Minesweeper",
     "skinLabel": "Skin de fond Minesweeper",
     "skinBreadcrumb": "Fond {name}",
@@ -140,6 +141,7 @@
   },
   "gridSkinPage": {
     "notFound": "Skin introuvable",
+    "winRate": "{rate, number, percent} de victoires sur {games, number} {games, plural, one {partie} other {parties}}",
     "skinTitle": "Skin {name} pour Minesweeper",
     "breadcrumbSkins": "Skins",
     "aboutSkin": "À propos du skin {name}",

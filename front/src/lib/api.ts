@@ -1,5 +1,19 @@
 import { client } from "@/types/bff";
 
+export async function getSkinStats(
+  skinType: "cells" | "background",
+  skinName: string,
+) {
+  try {
+    const response = await client.GET("/skins/stats/{skinType}/{skinName}", {
+      params: { path: { skinType, skinName } },
+    });
+    return response.data ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getBestGames() {
   const response = await client.GET("/games/best");
   return response.data ?? [];

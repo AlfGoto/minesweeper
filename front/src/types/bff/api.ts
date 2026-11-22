@@ -608,6 +608,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/skins/stats/{skinType}/{skinName}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    skinType: "cells" | "background";
+                    skinName: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Skin stats of one skin */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SkinStats"];
+                    };
+                };
+                /** @description Skin not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/skins/banners": {
         parameters: {
             query?: never;
@@ -1023,6 +1072,15 @@ export interface components {
         /** @enum {string} */
         BannerSkin: "default" | "level" | "gold";
         /** @enum {string} */
+        SkinStats: {
+            skinType: "cells" | "background";
+            skinName: string;
+            games: number;
+            wins: number;
+            winRate: number;
+            timePlayed: number;
+            bestTime?: number;
+        };
         BackgroundSkin: "default" | "flower-floor" | "igloo" | "aurora-drift" | "retro-grid" | "amber-dunes" | "deep-reef" | "beach-sea" | "beach-sand";
         /** @enum {string} */
         CellSkinsNamesEnum: "default" | "flowerfloor" | "inferno-hard" | "igloo" | "jade-temple" | "paper-cutout" | "void-orchid" | "minimal-zoned" | "antic" | "emoji-tiles" | "heart-tiles" | "laughing-faces" | "fruit-basket" | "red-burst" | "orange-pop" | "yellow-zest" | "green-garden" | "blue-lagoon" | "purple-parade" | "classic" | "beach";

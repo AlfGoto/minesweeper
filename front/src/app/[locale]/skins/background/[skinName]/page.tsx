@@ -8,6 +8,7 @@ import {
   getPublishedBackgroundSkins,
 } from "@/features/skins/backgrounds";
 import { getBackgroundSkinSeo } from "@/features/skins/seo";
+import { getSkinStats } from "@/lib/api";
 import { getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 
@@ -90,6 +91,7 @@ export default async function BackgroundSkinPage({ params }: Props) {
   const publishedBackgroundCount = getPublishedBackgroundSkins(locale).length;
   const pageUrl = `https://minesweeper.fr/skins/background/${skin.slug}`;
   const faqEntries = seoContent?.faqs ?? skin.faq;
+  const stats = await getSkinStats("background", skin.id);
 
   const softwareStructuredData = {
     "@context": "https://schema.org",
@@ -234,6 +236,11 @@ export default async function BackgroundSkinPage({ params }: Props) {
             ) : (
               <p className="mx-auto max-w-3xl text-lg text-slate-600">
                 {skin.description}
+              </p>
+            )}
+            {stats && stats.games > 0 && (
+              <p className="mt-4 text-sm font-medium text-muted-foreground">
+                {t("winRate", { rate: stats.winRate, games: stats.games })}
               </p>
             )}
             <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-500">
