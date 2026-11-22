@@ -39,14 +39,10 @@ export function Swatch({ skin, size }: { skin: CellSkin; size: "md" | "lg" }) {
 }
 
 export function StatBoxes({
-  winRateLabel,
-  winRateText,
   priceLabel,
   price,
   dark,
 }: {
-  winRateLabel: string;
-  winRateText?: string;
   priceLabel: string;
   price?: number;
   dark?: boolean;
@@ -61,12 +57,6 @@ export function StatBoxes({
   );
   return (
     <div className="flex flex-wrap gap-3">
-      {winRateText && (
-        <div className={box}>
-          <p className={label}>{winRateLabel}</p>
-          <p className="text-[15px] font-medium">{winRateText}</p>
-        </div>
-      )}
       {typeof price === "number" && (
         <div className={box}>
           <p className={label}>{priceLabel}</p>

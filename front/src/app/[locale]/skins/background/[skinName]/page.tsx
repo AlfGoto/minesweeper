@@ -267,17 +267,16 @@ export default async function BackgroundSkinPage({ params }: Props) {
                     {skin.description}
                   </p>
                 )}
+                {stats && stats.games > 0 && (
+                  <p className="text-sm font-medium text-slate-300">
+                    {t("winRate", { rate: stats.winRate, games: stats.games })}
+                  </p>
+                )}
                 <p className="max-w-[520px] text-sm text-slate-400">
                   {t("livePreview", { name: skin.name.toLowerCase() })}
                 </p>
                 <StatBoxes
                   dark
-                  winRateLabel={t("winRateLabel")}
-                  winRateText={
-                    stats && stats.games > 0
-                      ? t("winRate", { rate: stats.winRate, games: stats.games })
-                      : undefined
-                  }
                   priceLabel={t("priceLabel")}
                   price={price}
                 />

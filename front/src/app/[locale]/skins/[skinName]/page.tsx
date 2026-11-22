@@ -295,13 +295,12 @@ export default async function SkinPage({ params }: Props) {
                       {skin.description}
                     </p>
                   )}
+                  {stats && stats.games > 0 && (
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {t("winRate", { rate: stats.winRate, games: stats.games })}
+                    </p>
+                  )}
                   <StatBoxes
-                    winRateLabel={t("winRateLabel")}
-                    winRateText={
-                      stats && stats.games > 0
-                        ? t("winRate", { rate: stats.winRate, games: stats.games })
-                        : undefined
-                    }
                     priceLabel={t("priceLabel")}
                     price={price}
                   />
