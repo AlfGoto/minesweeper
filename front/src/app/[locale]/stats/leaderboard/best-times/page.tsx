@@ -71,18 +71,18 @@ async function BestTimesContent() {
       <nav aria-label="Breadcrumb" className="mb-6">
         <ol className="flex items-center gap-2 text-sm text-gray-500">
           <li>
-            <Link href="/" className="hover:text-green-600">
+            <Link href="/" className="hover:text-green-700">
               Minesweeper
             </Link>
           </li>
           <li>/</li>
           <li>
-            <Link href="/stats" className="hover:text-green-600">
+            <Link href="/stats" className="hover:text-green-700">
               {t("stats")}
             </Link>
           </li>
           <li>/</li>
-          <li className="text-green-600 font-medium">{t("bestTimes")}</li>
+          <li className="text-green-700 font-medium">{t("bestTimes")}</li>
         </ol>
       </nav>
 

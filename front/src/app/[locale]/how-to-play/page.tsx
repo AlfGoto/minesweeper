@@ -200,12 +200,12 @@ async function HowToPlayContent({ locale }: { locale: string }) {
         <nav aria-label="Breadcrumb" className="mb-6">
           <ol className="flex items-center gap-2 text-sm text-gray-500">
             <li>
-              <Link href="/" className="hover:text-green-600">
+              <Link href="/" className="hover:text-green-700">
                 Minesweeper
               </Link>
             </li>
             <li>/</li>
-            <li className="text-green-600 font-medium">{t("breadcrumb")}</li>
+            <li className="text-green-700 font-medium">{t("breadcrumb")}</li>
           </ol>
         </nav>
 

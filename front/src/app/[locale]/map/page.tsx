@@ -73,12 +73,12 @@ async function MapContent({ locale }: { locale: string }) {
       <nav aria-label="Breadcrumb" className="mb-6">
         <ol className="flex items-center gap-2 text-sm text-gray-500">
           <li>
-            <Link href="/" className="hover:text-green-600">
+            <Link href="/" className="hover:text-green-700">
               Minesweeper
             </Link>
           </li>
           <li>/</li>
-          <li className="text-green-600 font-medium">{t("breadcrumb")}</li>
+          <li className="text-green-700 font-medium">{t("breadcrumb")}</li>
         </ol>
       </nav>
 
@@ -112,7 +112,7 @@ async function MapContent({ locale }: { locale: string }) {
             <Link
               key={page.path}
               href={page.path}
-              className="block px-4 py-3 hover:bg-gray-50 transition-colors text-gray-700 hover:text-green-600"
+              className="block px-4 py-3 hover:bg-gray-50 transition-colors text-gray-700 hover:text-green-700"
             >
               {t(page.label)}
             </Link>
@@ -122,7 +122,7 @@ async function MapContent({ locale }: { locale: string }) {
 
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
-          <Link href="/skins" className="hover:text-green-600">
+          <Link href="/skins" className="hover:text-green-700">
             {t("gridSkins")} ({cellSkins.length})
           </Link>
         </h2>
@@ -141,7 +141,7 @@ async function MapContent({ locale }: { locale: string }) {
 
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
-          <Link href="/skins/background" className="hover:text-green-600">
+          <Link href="/skins/background" className="hover:text-green-700">
             {t("backgroundSkins")} ({backgroundSkins.length})
           </Link>
         </h2>
@@ -160,7 +160,7 @@ async function MapContent({ locale }: { locale: string }) {
 
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
-          <Link href="/players" className="hover:text-green-600">
+          <Link href="/players" className="hover:text-green-700">
             {t("players")} ({indexablePlayers.length})
           </Link>
         </h2>
