@@ -28,7 +28,7 @@ export async function SkinsPage({ locale = "en" }: SkinsPageProps) {
   const selectedSkin: CellSkin = user?.selectedSkin?.cells ?? "default";
 
   return (
-    <main className="mx-auto w-full max-w-4xl p-4 md:p-8 flex flex-col gap-4">
+    <main className="mx-auto w-full max-w-6xl p-6 flex flex-col gap-6">
       <h1 className="sr-only">{t("pageTitle")}</h1>
       <div className="flex justify-end">
         <Link href="/" prefetch>

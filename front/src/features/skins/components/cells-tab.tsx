@@ -4,35 +4,25 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { CellSkin } from "@/types/bff";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import {
   CellSkins,
   getLocalizedSkinMeta,
   getPublishedSkinsWithMeta,
 } from "@/features/skins/cells/skins";
-import {
-  CellSkinLargeDemoGrid,
-  CellSkinPreview,
-} from "@/features/shared/components/cell-skin-preview";
 import { buyCellSkinAction, selectCellSkinAction } from "@/features/skins/actions";
 import { OwnedFilter } from "./owned-filter";
 import { toast } from "sonner";
-import { signIn } from "next-auth/react";
-import { SkinName } from "./skin-name";
-import { AlfCoinsProgressCard } from "./alf-coins-progress-card";
+import { SkinCard } from "./skin-card";
+import { LoginBanner } from "./login-banner";
+import { CellSkinCardPreview } from "./collection-previews";
 
-const gridClassName = "grid grid-cols-1 min-[440px]:grid-cols-2 sm:grid-cols-3 gap-4";
+export const collectionGridClassName =
+  "grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4";
 
 type CellsTabProps = {
   isLoggedIn?: boolean;
   coins: number;
-  revealedCells: number;
   selectedSkin: CellSkin;
   unlockedSkins: CellSkin[];
   prices: Partial<Record<CellSkin, number>>;
@@ -55,7 +45,6 @@ function formatSkinLabel(skin: CellSkin, locale: string = "en", defaultLabel: st
 export function CellsTab({
   isLoggedIn = true,
   coins,
-  revealedCells,
   selectedSkin,
   unlockedSkins,
   prices,
@@ -63,7 +52,6 @@ export function CellsTab({
 }: CellsTabProps) {
   const router = useRouter();
   const t = useTranslations("skinsPage");
-  const tHome = useTranslations("homepage");
   const [isPending, startTransition] = useTransition();
   const [optimisticSelectedSkin, setOptimisticSelectedSkin] =
     useState<CellSkin>(selectedSkin);
@@ -127,105 +115,42 @@ export function CellsTab({
 
   const renderSkinCard = (skin: CellSkin) => {
     const isOwned = isLoggedIn && normalizedUnlockedSkins.includes(skin);
-    const isSelected = isLoggedIn && isOwned && skin === optimisticSelectedSkin;
-    const isSelectable = isLoggedIn && isOwned && !isSelected && !isPending;
+    const isSelected = isOwned && skin === optimisticSelectedSkin;
     const price = prices[skin];
     const canBuy = isLoggedIn && typeof price === "number" && coins >= price;
+    const slug = slugBySkin.get(skin);
+    // The unrevealed colour of the skin fills the preview area.
+    const hiddenColor = CellSkins[skin]?.ogColors?.hidden;
 
     return (
-      <div
+      <SkinCard
         key={skin}
-        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 ${
-          isSelected ? "bg-muted/70" : ""
-        } ${
-          isSelectable ? "cursor-pointer hover:bg-muted/40 transition-colors" : ""
-        }`}
-        onClick={isSelectable ? () => onSelect(skin) : undefined}
-        onKeyDown={
-          isSelectable
-            ? (event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  onSelect(skin);
-                }
-              }
-            : undefined
+        name={formatSkinLabel(skin, locale, t("default"))}
+        href={slug && `/skins/${slug}`}
+        preview={
+          <div
+            className="flex justify-center rounded-xl py-[22px]"
+            style={{ backgroundColor: hiddenColor }}
+          >
+            <CellSkinCardPreview skin={skin} />
+          </div>
         }
-        role={isSelectable ? "button" : undefined}
-        tabIndex={isSelectable ? 0 : undefined}
-      >
-        {isSelected ? (
-          <div
-            className="pointer-events-none absolute inset-0 overflow-hidden m-0"
-            aria-hidden
-          >
-            <div className="absolute -inset-16 flex items-center justify-center">
-              <div className="scale-[1.30] translate-y-10 blur-[2px] opacity-45">
-                <CellSkinLargeDemoGrid skin={skin} />
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-background/45" />
-          </div>
-        ) : null}
-
-        <div className="relative z-10 flex items-start justify-between gap-4">
-          <SkinName href={slugBySkin.get(skin) && `/skins/${slugBySkin.get(skin)}`}>
-            {formatSkinLabel(skin, locale, t("default"))}
-          </SkinName>
-          <div
-            onClick={(event) => event.stopPropagation()}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <CellSkinPreview skin={skin} />
-          </div>
-        </div>
-
-        {isOwned ? null : (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full"
-                disabled={isPending || typeof price !== "number"}
-              >
-                {typeof price === "number" ? `${price} AlfCoins` : t("unavailable")}
-              </Button>
-            </PopoverTrigger>
-            {!isLoggedIn ? (
-              <PopoverContent className="space-y-3">
-                <p className="text-sm text-muted-foreground">{t("loginToUnlock")}</p>
-                <Button className="w-full" onClick={() => signIn("google")}>
-                  {tHome("login")}
-                </Button>
-              </PopoverContent>
-            ) : (
-              <PopoverContent className="space-y-3">
-                <p className="font-semibold">{t("buyConfirmTitle", { skinName: formatSkinLabel(skin, locale, t("default")) })}</p>
-                <p className="text-sm text-muted-foreground">
-                  {typeof price === "number"
-                    ? t("buyConfirmText", { price })
-                    : t("skinNotAvailable")}
-                </p>
-                <Button
-                  className="w-full"
-                  disabled={isPending || !canBuy}
-                  onClick={() => onBuy(skin)}
-                >
-                  {t("confirmPurchase")}
-                </Button>
-              </PopoverContent>
-            )}
-          </Popover>
-        )}
-      </div>
+        isLoggedIn={isLoggedIn}
+        isDefault={skin === "default"}
+        isOwned={isOwned}
+        isSelected={isSelected}
+        price={price}
+        canBuy={canBuy}
+        isPending={isPending}
+        onSelect={() => onSelect(skin)}
+        onBuy={() => onBuy(skin)}
+      />
     );
   };
 
   return (
     <div className="space-y-4">
-      {isLoggedIn && (
-        <AlfCoinsProgressCard coins={coins} revealedCells={revealedCells} />
-      )}
+      {!isLoggedIn && <LoginBanner />}
 
       {isLoggedIn && (
         <div className="flex items-center justify-end">
@@ -234,16 +159,16 @@ export function CellsTab({
       )}
 
       {!isLoggedIn || !groupOwned ? (
-        <div className={gridClassName}>{allCellSkins.map(renderSkinCard)}</div>
+        <div className={collectionGridClassName}>{allCellSkins.map(renderSkinCard)}</div>
       ) : (
         <>
-          <div className={gridClassName}>
+          <div className={collectionGridClassName}>
             {groupedSkins.owned.map(renderSkinCard)}
           </div>
           {groupedSkins.owned.length > 0 && groupedSkins.notOwned.length > 0 ? (
             <Separator className="my-6" />
           ) : null}
-          <div className={gridClassName}>
+          <div className={collectionGridClassName}>
             {groupedSkins.notOwned.map(renderSkinCard)}
           </div>
         </>

@@ -4,34 +4,25 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import type { BackgroundSkin } from "@/types/bff";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import {
   backgroundSkins,
   getLocalizedBackgroundSkinMeta,
 } from "@/features/skins/backgrounds";
-import { BackgroundSkinPreview } from "@/features/shared/components/background-skin-preview";
 import {
   buyBackgroundSkinAction,
   selectBackgroundSkinAction,
 } from "@/features/skins/actions";
 import { OwnedFilter } from "./owned-filter";
 import { toast } from "sonner";
-import { signIn } from "next-auth/react";
-import { SkinName } from "./skin-name";
-import { AlfCoinsProgressCard } from "./alf-coins-progress-card";
-
-const gridClassName = "grid grid-cols-1 min-[440px]:grid-cols-2 sm:grid-cols-3 gap-4";
+import { SkinCard } from "./skin-card";
+import { LoginBanner } from "./login-banner";
+import { BackgroundSkinCardPreview } from "./collection-previews";
+import { collectionGridClassName } from "./cells-tab";
 
 type BackgroundSkinsShopProps = {
   isLoggedIn?: boolean;
   coins: number;
-  revealedCells: number;
   selectedSkin: BackgroundSkin;
   unlockedSkins: BackgroundSkin[];
   prices: Partial<Record<BackgroundSkin, number>>;
@@ -48,7 +39,6 @@ function formatSkinLabel(skin: BackgroundSkin, defaultLabel: string = "Default")
 export function BackgroundSkinsShop({
   isLoggedIn = true,
   coins,
-  revealedCells,
   selectedSkin,
   unlockedSkins,
   prices,
@@ -56,7 +46,6 @@ export function BackgroundSkinsShop({
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("skinsPage");
-  const tHome = useTranslations("homepage");
   const [isPending, startTransition] = useTransition();
   const [optimisticSelectedSkin, setOptimisticSelectedSkin] =
     useState<BackgroundSkin>(selectedSkin);
@@ -117,102 +106,32 @@ export function BackgroundSkinsShop({
     const skinLabel =
       getLocalizedBackgroundSkinMeta(skinData, locale).name || formatSkinLabel(skin, t("default"));
     const isOwned = isLoggedIn && normalizedUnlockedSkins.includes(skin);
-    const isSelected = isLoggedIn && isOwned && skin === optimisticSelectedSkin;
-    const isSelectable = isLoggedIn && isOwned && !isSelected && !isPending;
+    const isSelected = isOwned && skin === optimisticSelectedSkin;
     const price = prices[skin];
     const canBuy = isLoggedIn && typeof price === "number" && coins >= price;
 
     return (
-      <div
+      <SkinCard
         key={skin}
-        className={`relative overflow-hidden rounded-lg border p-4 space-y-3 ${
-          isSelected ? "bg-muted/70" : ""
-        } ${
-          isSelectable ? "cursor-pointer hover:bg-muted/40 transition-colors" : ""
-        }`}
-        onClick={isSelectable ? () => onSelect(skin) : undefined}
-        onKeyDown={
-          isSelectable
-            ? (event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  onSelect(skin);
-                }
-              }
-            : undefined
-        }
-        role={isSelectable ? "button" : undefined}
-        tabIndex={isSelectable ? 0 : undefined}
-      >
-        {isSelected ? (
-          <div
-            className="pointer-events-none absolute inset-0 overflow-hidden m-0"
-            aria-hidden
-          >
-            <div
-              className={`absolute inset-0 ${skinData.value}`}
-              style={skinData.style}
-            />
-            <div className="absolute inset-0 bg-background/60" />
-          </div>
-        ) : null}
-
-        <div className="relative z-10 flex items-start justify-between gap-4">
-          <SkinName href={skinData.slug && `/skins/background/${skinData.slug}`}>{skinLabel}</SkinName>
-          <div
-            onClick={(event) => event.stopPropagation()}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <BackgroundSkinPreview skin={skinData} />
-          </div>
-        </div>
-
-        {isOwned ? null : (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full"
-                disabled={isPending || typeof price !== "number"}
-              >
-                {typeof price === "number" ? `${price} AlfCoins` : t("unavailable")}
-              </Button>
-            </PopoverTrigger>
-            {!isLoggedIn ? (
-              <PopoverContent className="space-y-3">
-                <p className="text-sm text-muted-foreground">{t("loginToUnlock")}</p>
-                <Button className="w-full" onClick={() => signIn("google")}>
-                  {tHome("login")}
-                </Button>
-              </PopoverContent>
-            ) : (
-              <PopoverContent className="space-y-3">
-                <p className="font-semibold">{t("buyConfirmTitle", { skinName: skinLabel })}</p>
-                <p className="text-sm text-muted-foreground">
-                  {typeof price === "number"
-                    ? t("buyConfirmText", { price })
-                    : t("skinNotAvailable")}
-                </p>
-                <Button
-                  className="w-full"
-                  disabled={isPending || !canBuy}
-                  onClick={() => onBuy(skin)}
-                >
-                  {t("confirmPurchase")}
-                </Button>
-              </PopoverContent>
-            )}
-          </Popover>
-        )}
-      </div>
+        name={skinLabel}
+        href={skinData.slug && `/skins/background/${skinData.slug}`}
+        preview={<BackgroundSkinCardPreview skin={skinData} />}
+        isLoggedIn={isLoggedIn}
+        isDefault={skin === "default"}
+        isOwned={isOwned}
+        isSelected={isSelected}
+        price={price}
+        canBuy={canBuy}
+        isPending={isPending}
+        onSelect={() => onSelect(skin)}
+        onBuy={() => onBuy(skin)}
+      />
     );
   };
 
   return (
     <div className="space-y-4">
-      {isLoggedIn && (
-        <AlfCoinsProgressCard coins={coins} revealedCells={revealedCells} />
-      )}
+      {!isLoggedIn && <LoginBanner />}
 
       {isLoggedIn && (
         <div className="flex items-center justify-end">
@@ -221,18 +140,18 @@ export function BackgroundSkinsShop({
       )}
 
       {!isLoggedIn || !groupOwned ? (
-        <div className={gridClassName}>
+        <div className={collectionGridClassName}>
           {allBackgroundSkins.map(renderSkinCard)}
         </div>
       ) : (
         <>
-          <div className={gridClassName}>
+          <div className={collectionGridClassName}>
             {groupedSkins.owned.map(renderSkinCard)}
           </div>
           {groupedSkins.owned.length > 0 && groupedSkins.notOwned.length > 0 ? (
             <Separator className="my-6" />
           ) : null}
-          <div className={gridClassName}>
+          <div className={collectionGridClassName}>
             {groupedSkins.notOwned.map(renderSkinCard)}
           </div>
         </>

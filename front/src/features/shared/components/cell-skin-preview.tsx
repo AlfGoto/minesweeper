@@ -12,7 +12,7 @@ import { CellSkin } from "@/types/bff";
 
 type PreviewCell = Cell;
 
-const PREVIEW_2X2_CELLS: PreviewCell[] = [
+export const PREVIEW_2X2_CELLS: PreviewCell[] = [
   { status: "hidden", value: 0 },
   { status: "flagged", value: 0 },
   { status: "revealed", value: 2 },
@@ -92,6 +92,7 @@ function SkinCell({
   gridSize,
   rows = gridSize,
   compact,
+  cellClassName,
 }: {
   skin: CellSkin;
   id: number;
@@ -99,6 +100,7 @@ function SkinCell({
   gridSize: number;
   rows?: number;
   compact?: boolean;
+  cellClassName?: string;
 }) {
   const cell = getCell(grid, id);
   const row = Math.floor(id / gridSize);
@@ -141,7 +143,7 @@ function SkinCell({
     <div
       className={cn(
         "box-border flex items-center justify-center select-none font-bold transition-none",
-        compact ? "size-8 text-sm" : "size-10 text-base",
+        cellClassName ?? (compact ? "size-8 text-sm" : "size-10 text-base"),
         skinData.className,
         numberColor,
       )}
@@ -158,12 +160,14 @@ export function PreviewGrid({
   gridSize,
   rows = gridSize,
   compact,
+  cellClassName,
 }: {
   skin: CellSkin;
   grid: PreviewCell[];
   gridSize: number;
   rows?: number;
   compact?: boolean;
+  cellClassName?: string;
 }) {
   return (
     <div
@@ -179,6 +183,7 @@ export function PreviewGrid({
           gridSize={gridSize}
           rows={rows}
           compact={compact}
+          cellClassName={cellClassName}
         />
       ))}
     </div>

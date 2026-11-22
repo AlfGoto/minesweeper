@@ -5,6 +5,7 @@ import type { CellSkin } from "@/types/bff";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CellsTab } from "./cells-tab";
 import { BannersTab } from "./banners-tab";
+import { AlfCoinsProgressCard } from "./alf-coins-progress-card";
 import { useTranslations } from "next-intl";
 
 type CellSkinsShopProps = {
@@ -18,6 +19,30 @@ type CellSkinsShopProps = {
   backgroundsTabContent: ReactNode;
 };
 
+function TabHeader({
+  title,
+  description,
+  aside,
+}: {
+  title: string;
+  description: string;
+  aside?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-start justify-between gap-6">
+      <div className="space-y-2">
+        <h2 className="text-[44px] font-bold leading-[1.05] tracking-tight">
+          {title}
+        </h2>
+        <p className="max-w-[640px] text-[17px] text-muted-foreground">
+          {description}
+        </p>
+      </div>
+      {aside}
+    </div>
+  );
+}
+
 export function CellSkinsShop({
   isLoggedIn = true,
   coins,
@@ -29,12 +54,13 @@ export function CellSkinsShop({
   backgroundsTabContent,
 }: CellSkinsShopProps) {
   const t = useTranslations("skinsPage");
+  const coinsCard = isLoggedIn ? (
+    <AlfCoinsProgressCard coins={coins} revealedCells={revealedCells} />
+  ) : undefined;
+
   return (
-    <Tabs
-      defaultValue="cells"
-      className="w-full max-w-4xl mx-auto border rounded-lg gap-0 bg-white flex-1"
-    >
-      <TabsList className="w-[calc(100%-1rem)] mx-2 my-4 p-2">
+    <Tabs defaultValue="cells" className="w-full gap-6">
+      <TabsList className="w-full max-w-[480px]">
         <TabsTrigger value="cells" className="cursor-pointer flex-1">
           {t("cells")}
         </TabsTrigger>
@@ -49,16 +75,16 @@ export function CellSkinsShop({
       <TabsContent
         value="cells"
         forceMount
-        className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
+        className="data-[state=inactive]:hidden space-y-6 w-full"
       >
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold">{t("cellsTitle")}</h2>
-          <p className="text-muted-foreground">{t("cellsDescription")}</p>
-        </div>
+        <TabHeader
+          title={t("cellsTitle")}
+          description={t("cellsDescription")}
+          aside={coinsCard}
+        />
         <CellsTab
           isLoggedIn={isLoggedIn}
           coins={coins}
-          revealedCells={revealedCells}
           selectedSkin={selectedSkin}
           unlockedSkins={unlockedSkins}
           prices={prices}
@@ -69,12 +95,13 @@ export function CellSkinsShop({
       <TabsContent
         value="backgrounds"
         forceMount
-        className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
+        className="data-[state=inactive]:hidden space-y-6 w-full"
       >
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold">{t("backgroundsTitle")}</h2>
-          <p className="text-muted-foreground">{t("backgroundsDescription")}</p>
-        </div>
+        <TabHeader
+          title={t("backgroundsTitle")}
+          description={t("backgroundsDescription")}
+          aside={coinsCard}
+        />
         <Suspense fallback={<div className="text-muted-foreground">{t("loading")}</div>}>
           {backgroundsTabContent}
         </Suspense>
@@ -83,12 +110,13 @@ export function CellSkinsShop({
       <TabsContent
         value="banners"
         forceMount
-        className="data-[state=inactive]:hidden p-4 space-y-4 w-full"
+        className="data-[state=inactive]:hidden space-y-6 w-full"
       >
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold">{t("bannersTitle")}</h2>
-          <p className="text-muted-foreground">{t("bannersDescription")}</p>
-        </div>
+        <TabHeader
+          title={t("bannersTitle")}
+          description={t("bannersDescription")}
+          aside={coinsCard}
+        />
         <BannersTab />
       </TabsContent>
     </Tabs>
