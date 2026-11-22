@@ -50,6 +50,9 @@ function incrementSkinStatsForUser(stats: SkinStatsType, game: GameEntityType): 
   }
 }
 
+// A missing skin of a kind counts for the default skin.
+const DEFAULT_SKIN = "default" as const
+
 function incrementUserSkinStats(
   cache: UserStatsCacheEntityType,
   game: GameEntityType
@@ -62,11 +65,8 @@ function incrementUserSkinStats(
     background: { ...cache.skinStats?.background }
   }
 
-  if (!selectedSkin) return skinStats
-
   for (const skinType of skinTypes) {
-    const skinName = selectedSkin[skinType]
-    if (!skinName) continue
+    const skinName = selectedSkin?.[skinType] ?? DEFAULT_SKIN
 
     const currentTypeStats = skinStats[skinType] ?? {}
     const currentSkinStats =
@@ -189,12 +189,10 @@ function incrementSkinStats(skin: SkinEntityType, game: GameEntityType): SkinEnt
 
 async function updateSkinStats(game: GameEntityType) {
   const selectedSkin = game.selectedSkin
-  if (!selectedSkin) return
 
   const updates = skinTypes
-    .filter((type) => selectedSkin[type])
     .map(async (skinType) => {
-      const skinName = selectedSkin[skinType]!
+      const skinName = selectedSkin?.[skinType] ?? DEFAULT_SKIN
       const currentSkin = await Skin.get(skinType, skinName)
       const newSkin = incrementSkinStats(currentSkin ?? emptySkinStats(skinType, skinName), game)
       await Skin.update(newSkin)

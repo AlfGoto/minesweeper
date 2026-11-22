@@ -236,7 +236,15 @@ export const route = new OpenAPIHono()
       const game = c.req.valid("json")
       const user = await User.getUserByEmail(game.userEmail)
 
-      await Game.create({ ...game, selectedSkin: user?.selectedSkin })
+      // A missing skin of a kind counts for the default skin.
+      await Game.create({
+        ...game,
+        selectedSkin: {
+          cells: user?.selectedSkin?.cells ?? "default",
+          banner: user?.selectedSkin?.banner ?? "default",
+          background: user?.selectedSkin?.background ?? "default"
+        }
+      })
 
       let totalNoFlagsWin = user?.totalNoFlagsWin ?? 0
       if (game.status === "won" && game.flags === 0) {
