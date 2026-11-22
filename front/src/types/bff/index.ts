@@ -9,6 +9,7 @@ export type User = components["schemas"]["User"];
 export type UserStats = components["schemas"]["UserStats"];
 export type UserGame = components["schemas"]["UserGame"];
 
+export type SkinStats = components["schemas"]["SkinStats"];
 export type SkinsTypes = components["schemas"]["SkinType"];
 export type CellSkin = components["schemas"]["CellSkin"];
 export type BackgroundSkin = components["schemas"]["BackgroundSkin"];

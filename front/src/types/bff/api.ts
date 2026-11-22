@@ -608,6 +608,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/skins/stats/{skinType}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    skinType: "cells" | "background";
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Skin stats of all skins of a kind */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SkinStats"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/skins/banners": {
         parameters: {
             query?: never;
@@ -1001,6 +1038,16 @@ export interface components {
         };
         SkinTypesResponse: components["schemas"]["SkinType"][];
         /** @enum {string} */
+        SkinStats: {
+            /** @enum {string} */
+            skinType: "cells" | "background";
+            skinName: string;
+            games: number;
+            wins: number;
+            winRate: number;
+            timePlayed: number;
+            bestTime?: number;
+        };
         SkinType: "cells" | "banner" | "background";
         UserSkins: {
             userId: string;

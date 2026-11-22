@@ -322,6 +322,23 @@
     "backToStats": "Retour aux Stats",
     "viewAll": "Voir tout"
   },
+  "skinStatsPage": {
+    "metaTitle": "Statistiques des skins du démineur - Skins et fonds les plus joués",
+    "metaDescription": "Statistiques de chaque skin du démineur : parties, victoires, taux de victoire, temps de jeu et meilleur temps pour chaque skin de cellules et chaque fond.",
+    "title": "Statistiques des skins",
+    "subtitle": "Parties, victoires et meilleurs temps de chaque skin, triés par parties jouées.",
+    "stats": "Statistiques",
+    "cellSkins": "Skins de cellules",
+    "backgrounds": "Fonds",
+    "skin": "Skin",
+    "games": "Parties",
+    "wins": "Victoires",
+    "winRate": "Taux de victoire",
+    "timePlayed": "Temps de jeu",
+    "bestTime": "Meilleur temps",
+    "noBestTime": "-",
+    "backToStats": "Retour aux statistiques"
+  },
   "redditPage": {
     "title": "Minesweeper.fr",
     "subtitle": "L'expérience Démineur moderne avec skins, stats et classements",

@@ -322,6 +322,23 @@
     "backToStats": "Back to Stats",
     "viewAll": "View all"
   },
+  "skinStatsPage": {
+    "metaTitle": "Minesweeper Skin Stats - Most Played Skins & Backgrounds",
+    "metaDescription": "Stats of every Minesweeper skin: games, wins, win rate, time played and best time for each cell skin and background.",
+    "title": "Skin Stats",
+    "subtitle": "Games, wins and best times of every skin, sorted by games played.",
+    "stats": "Stats",
+    "cellSkins": "Cell skins",
+    "backgrounds": "Backgrounds",
+    "skin": "Skin",
+    "games": "Games",
+    "wins": "Wins",
+    "winRate": "Win rate",
+    "timePlayed": "Time played",
+    "bestTime": "Best time",
+    "noBestTime": "-",
+    "backToStats": "Back to Stats"
+  },
   "redditPage": {
     "title": "Minesweeper.fr",
     "subtitle": "The modern Minesweeper experience with skins, stats & leaderboards",
