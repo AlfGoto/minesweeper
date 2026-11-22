@@ -230,18 +230,18 @@ export default async function SkinPage({ params }: Props) {
           <nav aria-label="Breadcrumb" className="mb-6">
             <ol className="flex items-center gap-2 text-sm text-gray-500">
               <li>
-                <Link href="/" className="hover:text-green-600">
+                <Link href="/" className="hover:text-green-700">
                   Minesweeper
                 </Link>
               </li>
               <li>/</li>
               <li>
-                <Link href="/skins" className="hover:text-green-600">
+                <Link href="/skins" className="hover:text-green-700">
                   {t("breadcrumbSkins")}
                 </Link>
               </li>
               <li>/</li>
-              <li className="font-medium text-green-600">{skin.name}</li>
+              <li className="font-medium text-green-700">{skin.name}</li>
             </ol>
           </nav>
 

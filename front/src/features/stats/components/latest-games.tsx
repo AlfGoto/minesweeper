@@ -110,7 +110,7 @@ function StatusBadge({
   label: string;
 }) {
   const config = {
-    won: { emoji: "🏆", className: "text-green-600" },
+    won: { emoji: "🏆", className: "text-green-700" },
     lost: { emoji: "💣", className: "text-red-600" },
     restarted: { emoji: "🔄", className: "text-gray-400" },
   };

@@ -61,7 +61,7 @@ export default async function BlogIndexPage({
                 href={`/blog${page.url.startsWith("/") ? "" : "/"}${page.url}`}
                 className="block group"
               >
-                <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
+                <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
                   {page.seo.title}
                 </h2>
                 <p className="text-gray-600 mt-2">{page.seo.description}</p>
