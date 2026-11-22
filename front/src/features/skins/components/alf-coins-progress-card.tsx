@@ -19,7 +19,7 @@ export function AlfCoinsProgressCard({
   const progressPercent = (revealedTowardNextCoin / coinStep) * 100;
 
   return (
-    <div className="w-full min-w-[240px] space-y-2 rounded-xl border bg-white px-4 py-3 sm:w-fit">
+    <div className="w-full min-w-60 space-y-2 rounded-xl border bg-background px-4 py-3 sm:w-fit">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-sm font-medium">{t("yourAlfCoins")}</h2>
         <p className="flex items-center gap-1.5 text-2xl font-bold">

@@ -17,8 +17,7 @@ import { SkinCard } from "./skin-card";
 import { LoginBanner } from "./login-banner";
 import { CellSkinCardPreview } from "./collection-previews";
 
-export const collectionGridClassName =
-  "grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4";
+import { collectionGridClassName } from "./collection-grid";
 
 type CellsTabProps = {
   isLoggedIn?: boolean;
@@ -129,7 +128,7 @@ export function CellsTab({
         href={slug && `/skins/${slug}`}
         preview={
           <div
-            className="flex justify-center rounded-xl py-[22px]"
+            className="flex justify-center rounded-xl py-6"
             style={{ backgroundColor: hiddenColor }}
           >
             <CellSkinCardPreview skin={skin} />

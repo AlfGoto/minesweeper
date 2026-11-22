@@ -40,7 +40,7 @@ The mini design system of **minesweeper.fr**. It formalizes what the site alread
 | Button | `ui/button` | Every action. Default (primary), outline, secondary, ghost, link, destructive. |
 | Dialog | `ui/dialog` | Win and lose dialogs, confirmations. |
 | Tabs | `ui/tabs` | /skins Collection (Grid, Backgrounds, Banners), /stats. |
-| Popover | `ui/popover` | Skin preview on click, buy confirmation, sign-in prompt. |
+| Popover | `ui/popover` | Skin preview on click, buy confirmation. |
 | Select | `ui/select` | Locale switcher, filters. |
 | Table | `ui/table` | Leaderboards, latest games. |
 | Separator | `ui/separator` | Between groups in the Collection. |

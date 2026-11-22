@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { SkinCard } from "./skin-card";
 import { LoginBanner } from "./login-banner";
 import { BackgroundSkinCardPreview } from "./collection-previews";
-import { collectionGridClassName } from "./cells-tab";
+import { collectionGridClassName } from "./collection-grid";
 
 type BackgroundSkinsShopProps = {
   isLoggedIn?: boolean;

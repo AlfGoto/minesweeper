@@ -32,7 +32,7 @@ type SkinCardProps = {
 function PricePill({ price }: { price?: number }) {
   const t = useTranslations("skinsPage");
   return (
-    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-[13px] font-medium">
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-sm font-medium">
       {typeof price === "number" ? (
         <>
           <Coins className="size-3.5" aria-hidden />
@@ -65,7 +65,7 @@ export function SkinCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-[18px] border bg-white p-3",
+        "flex flex-col gap-3 rounded-xl border bg-background p-3",
         isSelected && "border-2 border-primary",
       )}
     >
@@ -83,7 +83,7 @@ export function SkinCard({
           </span>
         ) : !isLoggedIn ? (
           isDefault ? (
-            <span className="inline-flex shrink-0 items-center rounded-full bg-muted px-2.5 py-1 text-[13px] font-medium text-muted-foreground">
+            <span className="inline-flex shrink-0 items-center rounded-full bg-muted px-2.5 py-1 text-sm font-medium text-muted-foreground">
               {t("default")}
             </span>
           ) : (

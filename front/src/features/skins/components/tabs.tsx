@@ -31,10 +31,8 @@ function TabHeader({
   return (
     <div className="flex flex-wrap items-start justify-between gap-6">
       <div className="space-y-2">
-        <h2 className="text-[44px] font-bold leading-[1.05] tracking-tight">
-          {title}
-        </h2>
-        <p className="max-w-[640px] text-[17px] text-muted-foreground">
+        <h2 className="text-4xl font-bold tracking-tight">{title}</h2>
+        <p className="max-w-2xl text-base text-muted-foreground">
           {description}
         </p>
       </div>
@@ -60,7 +58,7 @@ export function CellSkinsShop({
 
   return (
     <Tabs defaultValue="cells" className="w-full gap-6">
-      <TabsList className="w-full max-w-[480px]">
+      <TabsList className="w-full max-w-md">
         <TabsTrigger value="cells" className="cursor-pointer flex-1">
           {t("cells")}
         </TabsTrigger>

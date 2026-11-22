@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Popover,
   PopoverContent,
@@ -54,7 +55,7 @@ export function CellSkinSwatch({ skin }: { skin: CellSkin }) {
         skin={skin}
         grid={PREVIEW_2X2_CELLS}
         gridSize={2}
-        cellClassName="size-5 text-[10px]"
+        cellClassName="size-5 text-xs"
       />
     </span>
   );
@@ -67,9 +68,9 @@ const HIDDEN_CELLS_3X3: Cell[] = Array.from({ length: 9 }, () => ({
 
 function BackgroundLargePreview({ skin }: { skin: BackgroundPreviewSkin }) {
   return (
-    <div className="rounded-[1.25rem] border bg-white p-3 shadow-xl">
+    <div className="rounded-xl border bg-background p-3 shadow-xl">
       <div
-        className={cn("size-115 rounded-2xl ring-1 ring-inset ring-black/5", skin.value)}
+        className={cn("size-115 rounded-2xl ring-1 ring-inset ring-border", skin.value)}
         style={skin.style}
       />
     </div>
@@ -85,17 +86,18 @@ export function BackgroundSkinCardPreview({
 }: {
   skin: BackgroundPreviewSkin;
 }) {
+  const t = useTranslations("skinsPage");
   return (
     <Popover>
       <PopoverTrigger asChild>
         <button
           type="button"
           className={cn(
-            "flex h-[172px] w-full cursor-pointer items-center justify-center rounded-xl p-0 ring-1 ring-inset ring-black/5",
+            "flex h-44 w-full cursor-pointer items-center justify-center rounded-xl p-0 ring-1 ring-inset ring-border",
             skin.value,
           )}
           style={skin.style}
-          aria-label={`Preview ${skin.name} background skin`}
+          aria-label={t("previewBackground", { name: skin.name })}
         >
           <span className="overflow-hidden rounded-lg leading-none shadow-lg">
             <PreviewGrid
