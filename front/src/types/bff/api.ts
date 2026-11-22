@@ -202,6 +202,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/stats/month/{month}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get the monthly leaderboard of one UTC month (yyyy-MM). Empty month: empty list. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    month: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Monthly leaderboard (top 100 at most, fastest first) */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MonthlyEntry"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/stats/best": {
         parameters: {
             query?: never;
@@ -923,6 +961,15 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        MonthlyEntry: {
+            time: number;
+            flags: number;
+            revealed: number;
+            date: string;
+            userPicture: string;
+            userName: string;
+            userId: string;
+        };
         BestGame: {
             userId: string;
             time: number;
