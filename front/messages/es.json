@@ -11,12 +11,21 @@
     "h1": "Buscaminas Competitivo - Obtén tu Ranking Mundial",
     "winDialog": {
       "title": "¡Ganaste!",
+      "subline": "Tablero despejado",
       "time": "Tiempo",
       "playAgain": "Jugar de nuevo"
     },
     "loseDialog": {
       "title": "Fin del juego",
+      "subline": "Pisaste una mina",
       "playAgain": "Intentar de nuevo"
+    },
+    "endDialog": {
+      "signIn": "Iniciar sesión",
+      "signInPitch": "Inicia sesión para desbloquear skins y entrar en la clasificación.",
+      "savedFromNext": "Tus partidas se guardan desde la siguiente.",
+      "skinsHint": "20+ skins",
+      "rankingHint": "Clasificación mundial"
     }
   },
   "howToPlayPage": {

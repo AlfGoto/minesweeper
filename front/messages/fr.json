@@ -11,12 +11,21 @@
     "h1": "Démineur Compétitif - Obtiens ton Rang Mondial",
     "winDialog": {
       "title": "Victoire !",
+      "subline": "Plateau terminé",
       "time": "Temps",
       "playAgain": "Rejouer"
     },
     "loseDialog": {
       "title": "Perdu",
+      "subline": "Vous avez touché une mine",
       "playAgain": "Réessayer"
+    },
+    "endDialog": {
+      "signIn": "Se connecter",
+      "signInPitch": "Connectez-vous pour débloquer des skins et entrer dans le classement.",
+      "savedFromNext": "Vos parties sont enregistrées dès la suivante.",
+      "skinsHint": "20+ skins",
+      "rankingHint": "Classement mondial"
     }
   },
   "howToPlayPage": {

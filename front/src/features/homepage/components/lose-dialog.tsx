@@ -1,17 +1,16 @@
 "use client"
 
-import { Dialog, DialogTitle, DialogHeader, DialogContent, DialogDescription } from "@/components/ui/dialog";
 import { useGame } from "../game-provider";
 import { useState, useEffect } from "react";
-import RestartButton from "./restart-button";
-import { formatTime } from "@/lib/dates";
 import { useTranslations } from "next-intl";
+import EndGameDialog from "./end-game-dialog";
 
 export default function LoseDialog() {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState(0);
   const { registerLoseDialogOpener, getTime } = useGame();
   const t = useTranslations("homepage.loseDialog");
+  const tWin = useTranslations("homepage.winDialog");
 
   useEffect(() => {
     const unregister = registerLoseDialogOpener((open) => {
@@ -24,14 +23,15 @@ export default function LoseDialog() {
   }, [registerLoseDialogOpener, getTime]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent className="flex flex-col items-center justify-center gap-4 w-fit">
-      <DialogHeader>
-        <DialogTitle>{t("title")}</DialogTitle>
-      </DialogHeader>
-      <DialogDescription>{formatTime(time)}</DialogDescription>
-      <RestartButton />
-    </DialogContent>
-    </Dialog>
+    <EndGameDialog
+      open={open}
+      onOpenChange={setOpen}
+      time={time}
+      variant="lose"
+      title={t("title")}
+      subline={t("subline")}
+      timeLabel={tWin("time")}
+      playAgain={t("playAgain")}
+    />
   );
 }
