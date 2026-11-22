@@ -1,11 +1,9 @@
 "use client"
 
-import { Dialog, DialogTitle, DialogHeader, DialogContent, DialogDescription } from "@/components/ui/dialog";
 import { useGame } from "../game-provider";
 import { useState, useEffect } from "react";
-import RestartButton from "./restart-button";
-import { formatTime } from "@/lib/dates";
 import { useTranslations } from "next-intl";
+import EndGameDialog from "./end-game-dialog";
 
 export default function WinDialog() {
   const [open, setOpen] = useState(false);
@@ -24,14 +22,15 @@ export default function WinDialog() {
   }, [registerWinDialogOpener, getTime]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent className="flex flex-col items-center justify-center gap-4 w-fit">
-      <DialogHeader>
-        <DialogTitle>{t("title")} 🎉</DialogTitle>
-      </DialogHeader>
-      <DialogDescription>{t("time")}: {formatTime(time)}</DialogDescription>
-      <RestartButton />
-    </DialogContent>
-    </Dialog>
+    <EndGameDialog
+      open={open}
+      onOpenChange={setOpen}
+      time={time}
+      variant="win"
+      title={t("title")}
+      subline={t("subline")}
+      timeLabel={t("time")}
+      playAgain={t("playAgain")}
+    />
   );
 }

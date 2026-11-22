@@ -11,12 +11,21 @@
     "h1": "Competitive Minesweeper - Get Your World Ranking",
     "winDialog": {
       "title": "You Won!",
+      "subline": "Board cleared",
       "time": "Time",
       "playAgain": "Play Again"
     },
     "loseDialog": {
       "title": "Game Over",
+      "subline": "You hit a mine",
       "playAgain": "Try Again"
+    },
+    "endDialog": {
+      "signIn": "Sign in",
+      "signInPitch": "Sign in to unlock skins and get on the leaderboard.",
+      "savedFromNext": "Your games are saved from your next one.",
+      "skinsHint": "20+ skins",
+      "rankingHint": "World ranking"
     }
   },
   "howToPlayPage": {
