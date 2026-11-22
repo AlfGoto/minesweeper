@@ -8,6 +8,9 @@ export namespace UserStatsCache {
       .query({
         partition: "USER_STATS_CACHE"
       })
+      .options({
+        maxPages: Infinity
+      })
       .entities(UserStatsCacheEntity)
       .send()
     return Items ?? []

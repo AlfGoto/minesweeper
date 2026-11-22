@@ -20,6 +20,9 @@ export namespace Skin {
       .query({
         partition: `SKIN#${skinType}`
       })
+      .options({
+        maxPages: Infinity
+      })
       .entities(SkinEntity)
       .send()
     return Items ?? []

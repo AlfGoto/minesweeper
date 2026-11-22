@@ -13,7 +13,8 @@ export namespace BestGame {
         partition: "BEST_GAMES"
       })
       .options({
-        reverse: true
+        reverse: true,
+        maxPages: Infinity
       })
       .entities(BestGameEntity)
       .send()

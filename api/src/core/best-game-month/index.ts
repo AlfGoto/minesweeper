@@ -12,6 +12,9 @@ export namespace BestGameMonth {
       .query({
         partition: `BEST_GAMES_MONTH#${effectiveMonth}`
       })
+      .options({
+        maxPages: Infinity
+      })
       .entities(BestGameMonthEntity)
       .send()
     return Items || []
