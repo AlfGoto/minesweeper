@@ -28,8 +28,8 @@ function SkinSwatch({ colors }: { colors?: SwatchColors }) {
         <span style={{ background: colors.revealedAlt }} />
         <span style={{ background: colors.hiddenAlt }} />
       </div>
-      <span className="absolute -right-1 -bottom-1 flex size-4 items-center justify-center rounded-full border bg-white">
-        <LockIcon className="size-2.5 text-muted-foreground" />
+      <span className="absolute -right-1 -bottom-1 flex size-4 items-center justify-center rounded-full border bg-background">
+        <LockIcon className="size-3 text-muted-foreground" />
       </span>
     </div>
   );
@@ -66,28 +66,28 @@ export default function EndGameDialog({
         <DialogTitle className="text-2xl font-bold tracking-tight">{title}</DialogTitle>
         <DialogDescription asChild>
           <div className="flex flex-col items-center gap-0.5">
-            <span className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">{timeLabel}</span>
+            <span className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">{timeLabel}</span>
             <span
               className={cn(
                 "font-bold tabular-nums leading-none",
-                isWin ? "text-[56px] text-foreground" : "text-[40px] text-neutral-700",
+                isWin ? "text-4xl" : "text-2xl",
               )}
             >
               {formatTime(time)}
             </span>
-            <span className="text-[13px] text-muted-foreground">{subline}</span>
+            <span className="text-sm text-muted-foreground">{subline}</span>
           </div>
         </DialogDescription>
 
         {isVisitor && (
-          <div className="flex w-full flex-col items-center gap-3.5 rounded-xl bg-muted p-[18px] text-center">
+          <div className="flex w-full flex-col items-center gap-4 rounded-xl bg-muted p-4 text-center">
             <div className="flex gap-2">
               {LOCKED_SKINS.map((skin) => (
                 <SkinSwatch key={skin.slug} colors={skin.ogColors} />
               ))}
             </div>
-            <p className="text-[15px] font-medium">{te("signInPitch")}</p>
-            <div className="flex gap-4 text-[13px] text-muted-foreground">
+            <p className="text-base font-medium">{te("signInPitch")}</p>
+            <div className="flex gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <PaletteIcon className="size-4" />
                 {te("skinsHint")}
@@ -101,7 +101,7 @@ export default function EndGameDialog({
               <LogInIcon />
               {te("signIn")}
             </Button>
-            <p className="text-xs text-muted-foreground">{te("savedFromNext")}</p>
+            <p className="text-sm text-muted-foreground">{te("savedFromNext")}</p>
           </div>
         )}
 
