@@ -13,6 +13,7 @@ import { getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 import { PageContainer } from "@/components/page-container";
 import { PlayCta } from "@/components/play-cta";
+import { getSkinStats } from "@/lib/api";
 
 type Props = {
   params: Promise<{ skinName: string; locale: string }>;
@@ -92,6 +93,7 @@ export default async function SkinPage({ params }: Props) {
 
   const seoContent = getCellSkinSeo(skin.id, locale);
   const pageUrl = `https://minesweeper.fr/skins/${skin.slug}`;
+  const stats = await getSkinStats("cells", skin.id);
 
   const nameHash = skin.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const baseFaqs = [
@@ -255,6 +257,11 @@ export default async function SkinPage({ params }: Props) {
               </p>
             ) : (
               <p className="text-lg text-gray-600">{skin.description}</p>
+            )}
+            {stats && stats.games > 0 && (
+              <p className="mt-4 text-sm font-medium text-muted-foreground">
+                {t("winRate", { rate: stats.winRate, games: stats.games })}
+              </p>
             )}
           </header>
 

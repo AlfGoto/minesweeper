@@ -118,6 +118,7 @@
     "breadcrumb": "Background Skins",
     "cosmetic": "Cosmetic",
     "notFound": "Background Skin Not Found",
+    "winRate": "{rate, number, percent} win rate over {games, number} {games, plural, one {game} other {games}}",
     "skinTitle": "{name} Minesweeper Background Skin",
     "skinLabel": "Minesweeper Background Skin",
     "skinBreadcrumb": "{name} Background",
@@ -140,6 +141,7 @@
   },
   "gridSkinPage": {
     "notFound": "Skin Not Found",
+    "winRate": "{rate, number, percent} win rate over {games, number} {games, plural, one {game} other {games}}",
     "skinTitle": "{name} Skin for Minesweeper",
     "breadcrumbSkins": "Skins",
     "aboutSkin": "About the {name} Skin",
