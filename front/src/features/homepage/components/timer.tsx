@@ -6,7 +6,13 @@ import { useGame } from "@/features/homepage/game-provider";
 import { formatTime } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 
-export default function Timer({ className }: { className?: string }) {
+export default function Timer({
+  className,
+  plain = false,
+}: {
+  className?: string;
+  plain?: boolean;
+}) {
   const { getStartTime, isGameOn } = useGame();
   const [displayTime, setDisplayTime] = useState("0s");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -38,6 +44,19 @@ export default function Timer({ className }: { className?: string }) {
       }
     };
   }, [getStartTime, isGameOn]);
+
+  if (plain) {
+    return (
+      <div
+        className={cn(
+          "text-center text-2xl font-bold tabular-nums font-mono",
+          className,
+        )}
+      >
+        {displayTime}
+      </div>
+    );
+  }
 
   return (
     <Button variant="outline" disabled className={cn(className, "px-0 tabular-nums disabled:opacity-100")}>
