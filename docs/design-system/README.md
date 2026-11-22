@@ -59,4 +59,3 @@ The mini design system of **minesweeper.fr**. It formalizes what the site alread
 
 - Fonts: Geist is loaded by `next/font` (Google). No font file in the repo, so none is stored here.
 - `sidebar-*` and `chart-*` tokens: sidebar ones are unused and left out; chart ones kept for /stats.
-- Previews are static renditions in plain HTML/CSS (`components/bundle.css`), not the React components.

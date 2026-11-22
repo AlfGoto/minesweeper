@@ -197,7 +197,7 @@ function FeatureCard({
       <p className="text-gray-600 mb-4">{description}</p>
       <Link
         href={href}
-        className="text-green-700 font-medium"
+        className="text-green-700 hover:underline font-medium"
       >
         {linkText} →
       </Link>
