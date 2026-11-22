@@ -62,7 +62,7 @@ export default function EndGameDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex flex-col items-center gap-5 rounded-xl px-6 pt-7 pb-6 sm:max-w-[400px]">
+      <DialogContent className="flex flex-col items-center gap-5 rounded-xl px-6 pt-7 pb-6 w-fit">
         <DialogTitle className="text-2xl font-bold tracking-tight">{title}</DialogTitle>
         <DialogDescription asChild>
           <div className="flex flex-col items-center gap-0.5">
