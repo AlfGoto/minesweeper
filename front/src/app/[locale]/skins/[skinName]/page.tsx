@@ -271,7 +271,7 @@ export default async function SkinPage({ params }: Props) {
                       </Link>
                     </li>
                     <li aria-hidden>/</li>
-                    <li className="font-medium text-foreground">{skin.name}</li>
+                    <li className="font-medium text-green-700">{skin.name}</li>
                   </ol>
                 </nav>
                 <Button asChild>
@@ -281,17 +281,17 @@ export default async function SkinPage({ params }: Props) {
                 </Button>
               </div>
 
-              <header className="flex flex-wrap items-center gap-14 pt-8 pb-12 md:pb-[72px]">
-                <div className="flex flex-1 basis-[420px] flex-col gap-6">
-                  <h1 className="text-[40px] leading-tight font-bold tracking-tight text-neutral-900 md:text-6xl">
+              <header className="flex flex-wrap items-center gap-14 pt-8 pb-12 md:pb-16">
+                <div className="flex flex-1 basis-96 flex-col gap-6">
+                  <h1 className="text-4xl leading-tight font-bold tracking-tight text-foreground">
                     {skin.name}
                   </h1>
                   {seoContent?.heroTagline ? (
-                    <p className="max-w-[520px] text-xl font-medium text-neutral-700">
+                    <p className="max-w-lg text-xl font-medium text-foreground">
                       {seoContent.heroTagline}
                     </p>
                   ) : (
-                    <p className="max-w-[520px] text-xl font-medium text-neutral-700">
+                    <p className="max-w-lg text-xl font-medium text-foreground">
                       {skin.description}
                     </p>
                   )}
@@ -318,11 +318,11 @@ export default async function SkinPage({ params }: Props) {
                   className="w-full md:w-auto md:flex-none"
                 >
                   <div
-                    className="mx-auto w-full max-w-[440px] rounded-[28px] p-3 shadow-2xl md:w-auto md:max-w-none md:p-7"
+                    className="mx-auto w-full max-w-md rounded-xl p-3 shadow-2xl md:w-auto md:max-w-none md:p-7"
                     style={{ backgroundColor: colors.dark }}
                   >
                     <div className="rounded-2xl bg-white/8 p-2">
-                      <div className="overflow-hidden rounded-[10px] md:w-[440px]">
+                      <div className="overflow-hidden rounded-lg md:w-110">
                         <PreviewGrid
                           skin={skin.id}
                           grid={LARGE_DEMO_GRID}
@@ -338,7 +338,7 @@ export default async function SkinPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="mx-auto flex max-w-[760px] flex-col gap-14 px-6 pt-4">
+          <div className="mx-auto flex max-w-3xl flex-col gap-14 px-6 pt-4">
             {seoContent?.sections ? (
               seoContent.sections.map((section) => (
                 <TextSection key={section.title} title={section.title}>

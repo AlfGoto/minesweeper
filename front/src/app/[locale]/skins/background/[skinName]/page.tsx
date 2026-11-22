@@ -251,19 +251,19 @@ export default async function BackgroundSkinPage({ params }: Props) {
             </div>
 
             <header className="flex flex-wrap items-center gap-14 pt-10 pb-8 text-white">
-              <div className="flex flex-1 basis-[420px] flex-col gap-6">
-                <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+              <div className="flex flex-1 basis-96 flex-col gap-6">
+                <p className="text-sm font-semibold uppercase text-slate-400">
                   {t("skinLabel")}
                 </p>
-                <h1 className="text-[40px] leading-tight font-bold tracking-tight md:text-6xl">
+                <h1 className="text-4xl leading-tight font-bold tracking-tight">
                   {skin.name}
                 </h1>
                 {seoContent?.heroTagline ? (
-                  <p className="max-w-[520px] text-xl text-slate-200">
+                  <p className="max-w-lg text-xl text-slate-200">
                     {seoContent.heroTagline}
                   </p>
                 ) : (
-                  <p className="max-w-[520px] text-xl text-slate-200">
+                  <p className="max-w-lg text-xl text-slate-200">
                     {skin.description}
                   </p>
                 )}
@@ -272,7 +272,7 @@ export default async function BackgroundSkinPage({ params }: Props) {
                     {t("winRate", { rate: stats.winRate, games: stats.games })}
                   </p>
                 )}
-                <p className="max-w-[520px] text-sm text-slate-400">
+                <p className="max-w-lg text-sm text-slate-400">
                   {t("livePreview", { name: skin.name.toLowerCase() })}
                 </p>
                 <StatBoxes
@@ -291,8 +291,8 @@ export default async function BackgroundSkinPage({ params }: Props) {
                 aria-label="Skin Preview"
                 className="flex w-full flex-col items-center gap-3 md:w-auto md:flex-none"
               >
-                <div className="w-full max-w-[400px] rounded-[18px] border border-white/14 bg-white/6 p-3 shadow-2xl md:w-auto md:max-w-none md:p-3.5">
-                  <div className="overflow-hidden rounded-xl md:w-[400px]">
+                <div className="w-full max-w-md rounded-xl border border-white/14 bg-white/6 p-3 shadow-2xl md:w-auto md:max-w-none md:p-3.5">
+                  <div className="overflow-hidden rounded-xl md:w-100">
                     <PreviewGrid
                       skin="default"
                       grid={LARGE_DEMO_GRID}
@@ -302,7 +302,7 @@ export default async function BackgroundSkinPage({ params }: Props) {
                     />
                   </div>
                 </div>
-                <p className="text-[13px] text-slate-400">{t("previewCaption")}</p>
+                <p className="text-sm text-slate-400">{t("previewCaption")}</p>
               </section>
             </header>
 
@@ -326,7 +326,7 @@ export default async function BackgroundSkinPage({ params }: Props) {
             </section>
           </div>
 
-          <div className="mx-4 flex max-w-[860px] flex-col gap-14 rounded-[32px] bg-white/94 px-5 py-8 shadow-2xl md:mx-auto md:p-12">
+          <div className="mx-4 flex max-w-3xl flex-col gap-14 rounded-xl bg-white/90 px-5 py-8 shadow-2xl md:mx-auto md:p-12">
             {seoContent?.sections ? (
               seoContent.sections.map((section) => (
                 <TextSection key={section.title} title={section.title}>
@@ -342,16 +342,16 @@ export default async function BackgroundSkinPage({ params }: Props) {
             )}
 
             <section aria-label="Explore more">
-              <p className="text-[17px] leading-7 text-neutral-700">
+              <p className="text-base leading-relaxed text-foreground">
                 {t("exploreMore")}{" "}
                 <Link
                   href="/skins/background"
-                  className="font-medium text-neutral-900 underline"
+                  className="font-medium text-foreground underline"
                 >
                   {t("fullCollection")}
                 </Link>{" "}
                 {t("orJump")}{" "}
-                <Link href="/" className="font-medium text-neutral-900 underline">
+                <Link href="/" className="font-medium text-foreground underline">
                   {t("game")}
                 </Link>{" "}
                 {t("toTry")}
