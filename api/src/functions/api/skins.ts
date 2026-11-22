@@ -2,8 +2,8 @@ import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { executeTransactWrite } from "dynamodb-toolbox"
 import { z } from "zod"
 import { AlfCoins } from "../../core/alfCoins"
-import { User } from "../../core/user"
 import {
+  Skin,
   bannerSkins,
   backgroundSkins,
   cellsSkins,
@@ -12,6 +12,7 @@ import {
   cellsSkinsNames,
   skinTypes
 } from "../../core/skin"
+import { User } from "../../core/user"
 
 export const SkinTypeSchema = z.enum(skinTypes).openapi("SkinType")
 export const SkinTypesResponseSchema = z.array(SkinTypeSchema).openapi("SkinTypesResponse")
@@ -98,6 +99,38 @@ const normalizeUnlockedSkinsForResponse = (
     cells: unlockedSkins.cells ? Array.from(unlockedSkins.cells) : undefined,
     banner: unlockedSkins.banner ? Array.from(unlockedSkins.banner) : undefined,
     background: unlockedSkins.background ? Array.from(unlockedSkins.background) : undefined
+  }
+}
+
+const StatsSkinTypeSchema = z.enum(["cells", "background"]).openapi("StatsSkinType")
+
+export const SkinStatsSchema = z
+  .object({
+    skinType: StatsSkinTypeSchema,
+    skinName: z.string(),
+    games: z.number(),
+    wins: z.number(),
+    winRate: z.number(),
+    timePlayed: z.number(),
+    bestTime: z.number().optional()
+  })
+  .openapi("SkinStats")
+
+const toSkinStats = (
+  skinType: "cells" | "background",
+  skinName: string,
+  item?: { totalGames: number; totalWin: number; totalTime: number; bestTime?: number }
+) => {
+  const games = item?.totalGames ?? 0
+  const wins = item?.totalWin ?? 0
+  return {
+    skinType,
+    skinName,
+    games,
+    wins,
+    winRate: games > 0 ? wins / games : 0,
+    timePlayed: item?.totalTime ?? 0,
+    bestTime: item?.bestTime
   }
 }
 
@@ -194,6 +227,55 @@ export const route = new OpenAPIHono()
     }),
     async (c) => {
       return c.json(BackgroundSkinsCatalogSchema.parse(backgroundSkins), 200)
+    }
+  )
+  .openapi(
+    createRoute({
+      method: "get",
+      path: "/stats/{skinType}",
+      request: { params: z.object({ skinType: StatsSkinTypeSchema }) },
+      responses: {
+        200: {
+          description: "Skin stats of all skins of a kind",
+          content: { "application/json": { schema: z.array(SkinStatsSchema) } }
+        }
+      },
+      description: "Skin stats of all skins of a kind (1 query)"
+    }),
+    async (c) => {
+      const { skinType } = c.req.valid("param")
+      const items = await Skin.getBySkinType(skinType)
+      return c.json(
+        items.map((item) => toSkinStats(skinType, item.skinName, item)),
+        200
+      )
+    }
+  )
+  .openapi(
+    createRoute({
+      method: "get",
+      path: "/stats/{skinType}/{skinName}",
+      request: { params: z.object({ skinType: StatsSkinTypeSchema, skinName: z.string() }) },
+      responses: {
+        200: {
+          description: "Skin stats of one skin",
+          content: { "application/json": { schema: SkinStatsSchema } }
+        },
+        404: {
+          description: "Skin not found",
+          content: { "application/json": { schema: z.object({ message: z.string() }) } }
+        }
+      },
+      description: "Skin stats of one skin (1 read)"
+    }),
+    async (c) => {
+      const { skinType, skinName } = c.req.valid("param")
+      const names: readonly string[] = skinType === "cells" ? cellsSkinsNames : backgroundSkinsNames
+      if (!names.includes(skinName)) {
+        return c.json({ message: "Skin not found" }, 404)
+      }
+      const item = await Skin.get(skinType, skinName as any)
+      return c.json(toSkinStats(skinType, skinName, item), 200)
     }
   )
   .openapi(
