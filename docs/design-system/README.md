@@ -23,7 +23,7 @@ The mini design system of **minesweeper.fr**. It formalizes what the site alread
 - **Type:** Geist only (`--font-sans`), Geist Mono for numbers if needed. Hierarchy by size and weight, never by colour: H1 36px bold, section H2 24px semibold, body 16px with relaxed leading, helper text 14px `muted-foreground`.
 - **Colour use:** text = `foreground`; secondary text = `muted-foreground`; actions = `primary`; hover fills = `accent`; links and the current breadcrumb = `green-700` (about 5:1 on white). `green-600` is no longer used for text: it was only 3.2:1.
 - **Radius:** base 10px. Buttons `radius-md`, cards and dialogs `radius-lg`/`radius-xl`, chips and progress bars `radius-full`.
-- **Spacing:** Tailwind 4px scale. Pages: `space-4` padding on mobile, `space-8` on md+. Sections: `space-10` apart. Widths: 768px (narrow, skin pages), 896px (default, /skins), 1152px (wide).
+- **Spacing:** Tailwind 4px scale. Pages: `space-4` padding on mobile, `space-8` on md+. Sections: `space-10` apart. Widths: 768px (narrow, skin pages), 896px (default), 1152px (wide, /skins Collection).
 - **Motion:** tw-animate-css fade + zoom-95 on dialogs and popovers (200ms). The game has its own keyframes (cell reveal, flag fall, bomb explode, win sweep): those belong to the game, not the UI.
 - **Focus:** 3px ring in `ring` at 50%. Never remove it.
 
@@ -40,7 +40,7 @@ The mini design system of **minesweeper.fr**. It formalizes what the site alread
 | Button | `ui/button` | Every action. Default (primary), outline, secondary, ghost, link, destructive. |
 | Dialog | `ui/dialog` | Win and lose dialogs, confirmations. |
 | Tabs | `ui/tabs` | /skins Collection (Grid, Backgrounds, Banners), /stats. |
-| Popover | `ui/popover` | Skin preview on click, buy confirmation, sign-in prompt. |
+| Popover | `ui/popover` | Skin preview on click, buy confirmation. |
 | Select | `ui/select` | Locale switcher, filters. |
 | Table | `ui/table` | Leaderboards, latest games. |
 | Separator | `ui/separator` | Between groups in the Collection. |

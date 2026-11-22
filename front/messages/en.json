@@ -184,6 +184,7 @@
     "default": "Default",
     "signInToUnlock": "Sign in to unlock",
     "unavailable": "Unavailable",
+    "previewBackground": "Preview {name}",
     "skinBought": "Skin bought.",
     "skinSelected": "Skin selected.",
     "couldNotBuy": "Could not buy this skin.",

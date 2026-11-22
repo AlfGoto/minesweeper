@@ -1,5 +1,6 @@
 "use client";
 
+import { Coins } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 type AlfCoinsProgressCardProps = {
@@ -18,24 +19,23 @@ export function AlfCoinsProgressCard({
   const progressPercent = (revealedTowardNextCoin / coinStep) * 100;
 
   return (
-    <div className="rounded-lg border bg-white px-4 py-3 space-y-2 w-full flex-wrap sm:w-fit">
-      <div className="flex flex-wrap gap-3 items-center justify-between">
-        <h2 className="text-lg font-semibold flex-1 sm:flex-none">{t("yourAlfCoins")}</h2>
-        <p className="text-2xl font-bold flex-1 sm:flex-none text-right sm:text-left">
+    <div className="w-full min-w-60 space-y-2 rounded-xl border bg-background px-4 py-3 sm:w-fit">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-sm font-medium">{t("yourAlfCoins")}</h2>
+        <p className="flex items-center gap-1.5 text-2xl font-bold">
+          <Coins className="size-5" aria-hidden />
           {coins}
         </p>
       </div>
-      <div className="space-y-1">
-        <p className="text-[0.625rem] text-muted-foreground">
-          {t("toNextAlfCoin", { revealed: revealedTowardNextCoin, step: coinStep })}
-        </p>
-        <div className="h-2 w-full sm:w-48 rounded-full bg-muted overflow-hidden">
-          <div
-            className="h-full bg-green-300 transition-all duration-300"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
+      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div
+          className="h-full bg-green-300 transition-all duration-300"
+          style={{ width: `${progressPercent}%` }}
+        />
       </div>
+      <p className="text-xs text-muted-foreground">
+        {t("toNextAlfCoin", { revealed: revealedTowardNextCoin, step: coinStep })}
+      </p>
     </div>
   );
 }

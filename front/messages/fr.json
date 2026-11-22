@@ -184,6 +184,7 @@
     "default": "Par défaut",
     "signInToUnlock": "Connectez-vous pour débloquer",
     "unavailable": "Indisponible",
+    "previewBackground": "Prévisualiser {name}",
     "skinBought": "Skin acheté.",
     "skinSelected": "Skin sélectionné.",
     "couldNotBuy": "Impossible d'acheter ce skin.",
