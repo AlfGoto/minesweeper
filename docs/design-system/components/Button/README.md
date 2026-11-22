@@ -3,7 +3,7 @@
 The one action control of the site: shadcn `ui/button`.
 
 - **default** (primary, near-black): the main action of a view. Restart, Back to game, Play now, Login, Confirm purchase.
-- **outline**: secondary actions and prices on shop cards ("250 AlfCoins").
+- **outline**: secondary actions and prices on Collection cards ("250 AlfCoins").
 - **secondary / ghost**: low-emphasis actions, icon buttons.
 - **link**: inline text actions.
 - **destructive**: only for something that removes or breaks.

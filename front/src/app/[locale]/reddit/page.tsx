@@ -170,7 +170,7 @@ async function RedditContent() {
           {t("contactMe")}{" "}
           <a
             href="mailto:contact@minesweeper.fr"
-            className="text-green-600 hover:underline"
+            className="text-green-700 hover:underline"
           >
             contact@minesweeper.fr
           </a>
@@ -197,7 +197,7 @@ function FeatureCard({
       <p className="text-gray-600 mb-4">{description}</p>
       <Link
         href={href}
-        className="text-green-600 hover:text-green-700 font-medium"
+        className="text-green-700 font-medium"
       >
         {linkText} →
       </Link>
