@@ -326,6 +326,11 @@
     "monthlySubtitle": "Fastest game of each player in {month} (UTC)",
     "monthlySinceLaunch": "Since launch: data starts in July 2026.",
     "backToStats": "Back to Stats",
+    "monthlyIndexTitle": "Monthly Leaderboards - Minesweeper",
+    "monthlyIndexDescription": "Top 3 fastest Minesweeper players of every month. Open a month to see its full top 100.",
+    "monthlyIndexHeading": "Monthly leaderboards",
+    "monthlyIndexSubtitle": "Top 3 of every month, newest first (UTC).",
+    "monthlyIndexBreadcrumb": "Monthly",
     "viewAll": "View all"
   },
   "skinStatsPage": {

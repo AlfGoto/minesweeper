@@ -326,6 +326,11 @@
     "monthlySubtitle": "Meilleure partie de chaque joueur en {month} (UTC)",
     "monthlySinceLaunch": "Depuis le lancement : les données commencent en juillet 2026.",
     "backToStats": "Retour aux Stats",
+    "monthlyIndexTitle": "Classements mensuels - Démineur",
+    "monthlyIndexDescription": "Top 3 des joueurs de Démineur les plus rapides de chaque mois. Ouvrez un mois pour voir son top 100.",
+    "monthlyIndexHeading": "Classements mensuels",
+    "monthlyIndexSubtitle": "Top 3 de chaque mois, du plus récent au plus ancien (UTC).",
+    "monthlyIndexBreadcrumb": "Mensuel",
     "viewAll": "Voir tout"
   },
   "skinStatsPage": {
