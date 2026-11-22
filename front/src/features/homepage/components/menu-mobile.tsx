@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import RestartButton from "./restart-button";
 import MoreSheet from "./more-sheet";
 
-export const mobileWidthClassName =
+const mobileWidthClassName =
   "w-[min(calc(100vw-0.5rem),calc(100dvh-10rem))]";
 
 export default async function MenuMobile() {
