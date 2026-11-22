@@ -3,7 +3,7 @@ import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
-import { getSkinStats } from "@/lib/api";
+import { getAllSkinStats } from "@/lib/api";
 import { formatTime } from "@/lib/dates";
 import { getPublishedSkinsWithMeta } from "@/features/skins/cells/skins";
 import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds";
@@ -73,8 +73,8 @@ type Row = {
 async function SkinStatsContent({ locale }: { locale: string }) {
   const [t, cellStats, backgroundStats] = await Promise.all([
     getTranslations("skinStatsPage"),
-    getSkinStats("cells"),
-    getSkinStats("background"),
+    getAllSkinStats("cells"),
+    getAllSkinStats("background"),
   ]);
 
   const toRows = (
@@ -130,8 +130,8 @@ async function SkinStatsContent({ locale }: { locale: string }) {
       </header>
 
       <div className="flex flex-col gap-10">
-        <SkinTable title={t("cellSkins")} rows={cellRows} />
-        <SkinTable title={t("backgrounds")} rows={backgroundRows} />
+        <SkinTable title={t("cellSkins")} rows={cellRows} locale={locale} />
+        <SkinTable title={t("backgrounds")} rows={backgroundRows} locale={locale} />
       </div>
 
       <div className="mt-8 text-center">
@@ -143,8 +143,22 @@ async function SkinStatsContent({ locale }: { locale: string }) {
   );
 }
 
-async function SkinTable({ title, rows }: { title: string; rows: Row[] }) {
+async function SkinTable({
+  title,
+  rows,
+  locale,
+}: {
+  title: string;
+  rows: Row[];
+  locale: string;
+}) {
   const t = await getTranslations("skinStatsPage");
+  const count = new Intl.NumberFormat(locale);
+  const percent = new Intl.NumberFormat(locale, {
+    style: "percent",
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
 
   return (
     <section>
@@ -178,12 +192,14 @@ async function SkinTable({ title, rows }: { title: string; rows: Row[] }) {
                     {row.name}
                   </Link>
                 </TableCell>
-                <TableCell className="text-right">{row.games}</TableCell>
+                <TableCell className="text-right">
+                  {count.format(row.games)}
+                </TableCell>
                 <TableCell className="text-right hidden sm:table-cell">
-                  {row.wins}
+                  {count.format(row.wins)}
                 </TableCell>
                 <TableCell className="text-right">
-                  {(row.winRate * 100).toFixed(1)}%
+                  {percent.format(row.winRate)}
                 </TableCell>
                 <TableCell className="text-right hidden md:table-cell">
                   {formatTime(row.timePlayed)}

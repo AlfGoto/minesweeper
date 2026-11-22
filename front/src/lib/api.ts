@@ -111,7 +111,7 @@ export async function getBackgroundSkinsPrices() {
   return response.data ?? {};
 }
 
-export async function getSkinStats(skinType: "cells" | "background") {
+export async function getAllSkinStats(skinType: "cells" | "background") {
   const response = await client.GET("/skins/stats/{skinType}", {
     params: { path: { skinType } },
   });
