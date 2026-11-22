@@ -1,5 +1,6 @@
 import { createOgImage, ogImageSize } from "@/lib/og-image";
-import { formatMonth } from "@/lib/months";
+import { formatMonth, isValidMonth } from "@/lib/months";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 export const runtime = "edge";
@@ -13,6 +14,7 @@ export default async function Image({
   params: Promise<{ locale: string; month: string }>;
 }) {
   const { locale, month } = await params;
+  if (!isValidMonth(month)) notFound();
   const t = await getTranslations({ locale, namespace: "leaderboardPage" });
   const label = formatMonth(month, locale);
 

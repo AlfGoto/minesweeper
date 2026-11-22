@@ -113,13 +113,13 @@ async function MonthlyContent({
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead style={{ textAlign: "left" }}>{tTable("rank")}</TableHead>
-              <TableHead style={{ textAlign: "left" }}>{tTable("player")}</TableHead>
-              <TableHead style={{ textAlign: "left" }}>{tTable("time")}</TableHead>
-              <TableHead className="hidden sm:table-cell" style={{ textAlign: "left" }}>
+              <TableHead className="text-left">{tTable("rank")}</TableHead>
+              <TableHead className="text-left">{tTable("player")}</TableHead>
+              <TableHead className="text-left">{tTable("time")}</TableHead>
+              <TableHead className="hidden sm:table-cell text-left">
                 {tTable("flags")}
               </TableHead>
-              <TableHead className="hidden sm:table-cell" style={{ textAlign: "left" }}>
+              <TableHead className="hidden sm:table-cell text-left">
                 {tTable("date")}
               </TableHead>
             </TableRow>
@@ -131,7 +131,7 @@ async function MonthlyContent({
 
               return (
                 <TableRow key={`${game.userId}-${index}`} className="hover:bg-accent">
-                  <TableCell style={{ textAlign: "left" }}>
+                  <TableCell className="text-left">
                     <Link href={href} className="block">
                       {rank === 1 ? (
                         <span className="text-xl">🥇</span>
@@ -144,7 +144,7 @@ async function MonthlyContent({
                       )}
                     </Link>
                   </TableCell>
-                  <TableCell style={{ textAlign: "left" }}>
+                  <TableCell className="text-left">
                     <Link href={href} className="flex items-center gap-3">
                       <Image
                         src={game.userPicture}
@@ -156,17 +156,17 @@ async function MonthlyContent({
                       <span className="font-medium">{game.userName}</span>
                     </Link>
                   </TableCell>
-                  <TableCell className="font-mono font-semibold" style={{ textAlign: "left" }}>
+                  <TableCell className="font-mono font-semibold text-left">
                     <Link href={href} className="block">
                       {formatTime(game.time)}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground hidden sm:table-cell" style={{ textAlign: "left" }}>
+                  <TableCell className="text-muted-foreground hidden sm:table-cell text-left">
                     <Link href={href} className="block">
                       {game.flags}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground hidden sm:table-cell" style={{ textAlign: "left" }}>
+                  <TableCell className="text-muted-foreground hidden sm:table-cell text-left">
                     <Link href={href} className="block">
                       <LocalDate date={game.date} locale={locale} />
                     </Link>

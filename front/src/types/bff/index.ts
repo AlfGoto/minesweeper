@@ -4,7 +4,7 @@ import { paths, components } from "./api";
 export type Game = components["schemas"]["Game"];
 export type BestGame = components["schemas"]["BestGame"];
 export type MonthlyEntry = components["schemas"]["MonthlyEntry"];
-export type Stats =components["schemas"]["Stats"];
+export type Stats = components["schemas"]["Stats"];
 export type StatsAll = components["schemas"]["StatsAll"];
 export type User = components["schemas"]["User"];
 export type UserStats = components["schemas"]["UserStats"];
