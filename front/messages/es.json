@@ -326,6 +326,23 @@
     "backToStats": "Volver a Stats",
     "viewAll": "Ver todo"
   },
+  "skinStatsPage": {
+    "metaTitle": "Estadísticas de skins del buscaminas - Skins y fondos más jugados",
+    "metaDescription": "Estadísticas de cada skin del buscaminas: partidas, victorias, porcentaje de victorias, tiempo jugado y mejor tiempo de cada skin de celdas y cada fondo.",
+    "title": "Estadísticas de skins",
+    "subtitle": "Partidas, victorias y mejores tiempos de cada skin, ordenados por partidas jugadas.",
+    "stats": "Estadísticas",
+    "cellSkins": "Skins de celdas",
+    "backgrounds": "Fondos",
+    "skin": "Skin",
+    "games": "Partidas",
+    "wins": "Victorias",
+    "winRate": "Porcentaje de victorias",
+    "timePlayed": "Tiempo jugado",
+    "bestTime": "Mejor tiempo",
+    "noBestTime": "-",
+    "backToStats": "Volver a estadísticas"
+  },
   "redditPage": {
     "title": "Minesweeper.fr",
     "subtitle": "La experiencia moderna de Buscaminas con skins, stats y clasificaciones",

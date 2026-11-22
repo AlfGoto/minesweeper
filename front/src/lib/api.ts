@@ -117,3 +117,10 @@ export async function getBackgroundSkinsPrices() {
   const response = await client.GET("/skins/backgrounds");
   return response.data ?? {};
 }
+
+export async function getAllSkinStats(skinType: "cells" | "background") {
+  const response = await client.GET("/skins/stats/{skinType}", {
+    params: { path: { skinType } },
+  });
+  return response.data ?? [];
+}
