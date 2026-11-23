@@ -57,8 +57,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           }}
         />
 
-        <Script
-          id="structured-data"
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -77,7 +76,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               gamePlatform: ["Web Browser", "Desktop", "Mobile"],
               description:
                 "Play the classic Minesweeper game with modern graphics and unique skins, compete on the leaderboard, and track your progress.",
-              inLanguage: ["en", "fr", "es", "nl", "de", "it", "pt"],
+              inLanguage: ["en", "fr", "es"],
               operatingSystem: "Any",
               playMode: "SinglePlayer",
               numberOfPlayers: {
@@ -92,12 +91,14 @@ export default async function LocaleLayout({ children, params }: Props) {
               },
               screenshot: "https://minesweeper.fr/opengraph-image",
               featureList: [
-                "Multiple difficulty levels",
+                "20×20 grid with 30% mines",
                 "Global leaderboard",
                 "Personal statistics",
                 "Unique skins and themes",
                 "Real-time gameplay",
                 "No download required",
+                "Server-side games",
+                "World ranking percentile",
               ],
               author: {
                 "@type": "Person",
@@ -111,11 +112,10 @@ export default async function LocaleLayout({ children, params }: Props) {
                   "https://facebook.com/alfgoto",
                 ],
               },
-            }),
+            }).replace(/</g, "\\u003c"),
           }}
         />
-        <Script
-          id="organization-data"
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -135,7 +135,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                 "https://www.linkedin.com/in/alfred-gauthier/",
                 "https://facebook.com/alfgoto",
               ],
-            }),
+            }).replace(/</g, "\\u003c"),
           }}
         />
       </head>

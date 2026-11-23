@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { use } from "react";
 import { Link } from "@/i18n/navigation";
 import { getPublishedBackgroundSkins } from "@/features/skins/backgrounds";
@@ -115,15 +114,17 @@ async function BackgroundSkinsContent({ locale }: { locale: string }) {
 
   return (
     <>
-      <Script
-        id="background-itemlist-structured-data"
+      <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListSchema).replace(/</g, "\\u003c"),
+        }}
       />
-      <Script
-        id="background-breadcrumb-structured-data"
+      <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+        }}
       />
 
       <main className="min-h-screen px-4 py-12">

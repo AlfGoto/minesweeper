@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Link } from "@/i18n/navigation";
 import { use } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
@@ -176,23 +175,25 @@ async function HowToPlayContent({ locale }: { locale: string }) {
 
   return (
     <>
-      <Script
-        id="faq-structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
-      />
-      <Script
-        id="howto-structured-data"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(howToStructuredData),
+          __html: JSON.stringify(faqStructuredData).replace(/</g, "\\u003c"),
         }}
       />
-      <Script
-        id="breadcrumb-structured-data"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbStructuredData),
+          __html: JSON.stringify(howToStructuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbStructuredData).replace(
+            /</g,
+            "\\u003c",
+          ),
         }}
       />
 

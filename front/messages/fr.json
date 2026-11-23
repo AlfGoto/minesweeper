@@ -377,7 +377,7 @@
       },
       "leaderboards": {
         "title": "Classements mondiaux",
-        "description": "Affrontez des joueurs du monde entier. Suivez les meilleurs temps sur les difficultés Facile, Moyen et Difficile. Voyez qui est le plus rapide.",
+        "description": "Affrontez des joueurs du monde entier sur le meilleur temps et le temps joué.",
         "link": "Voir le classement"
       },
       "stats": {
