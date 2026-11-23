@@ -377,7 +377,7 @@
       },
       "leaderboards": {
         "title": "Global Leaderboards",
-        "description": "Compete with players worldwide. Track best times across Easy, Medium, and Hard difficulties. See who's the fastest.",
+        "description": "Compete with players worldwide on best time and time played.",
         "link": "View Leaderboard"
       },
       "stats": {

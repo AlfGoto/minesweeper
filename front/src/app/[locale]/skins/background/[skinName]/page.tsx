@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import {
@@ -193,30 +192,37 @@ export default async function BackgroundSkinPage({ params }: Props) {
 
   return (
     <>
-      <Script
-        id="background-product-structured-data"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(softwareStructuredData),
+          __html: JSON.stringify(softwareStructuredData).replace(
+            /</g,
+            "\\u003c",
+          ),
         }}
       />
-      <Script
-        id="background-faq-structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
-      />
-      <Script
-        id="background-webpage-structured-data"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(webPageStructuredData),
+          __html: JSON.stringify(faqStructuredData).replace(/</g, "\\u003c"),
         }}
       />
-      <Script
-        id="background-breadcrumb-structured-data"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbStructuredData),
+          __html: JSON.stringify(webPageStructuredData).replace(
+            /</g,
+            "\\u003c",
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbStructuredData).replace(
+            /</g,
+            "\\u003c",
+          ),
         }}
       />
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { Link } from "@/i18n/navigation";
 import {
   CellSkins,
@@ -223,28 +222,34 @@ export default async function SkinPage({ params }: Props) {
 
   return (
     <>
-      <Script
-        id="product-structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <Script
-        id="faq-structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
-      />
-      <Script
-        id="webpage-structured-data"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(webPageStructuredData),
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
         }}
       />
-      <Script
-        id="breadcrumb-structured-data"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbStructuredData),
+          __html: JSON.stringify(faqStructuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageStructuredData).replace(
+            /</g,
+            "\\u003c",
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbStructuredData).replace(
+            /</g,
+            "\\u003c",
+          ),
         }}
       />
 

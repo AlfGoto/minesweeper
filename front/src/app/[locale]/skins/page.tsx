@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { SkinsPage } from "@/features/skins";
 import { getPublishedSkinsWithMeta } from "@/features/skins/cells/skins";
 import { use } from "react";
@@ -104,15 +103,17 @@ export default function SkinsPageWrapper({
 
   return (
     <>
-      <Script
-        id="itemlist-structured-data"
+      <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListSchema).replace(/</g, "\\u003c"),
+        }}
       />
-      <Script
-        id="breadcrumb-structured-data"
+      <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+        }}
       />
       <SkinsPage locale={locale} />
     </>
