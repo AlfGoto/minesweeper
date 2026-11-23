@@ -96,13 +96,6 @@ export function getBlogPageDate(page: Pick<AllPages[number], "seo">): Date | und
 }
 
 export function isBlogPagePublished(page: Pick<AllPages[number], "seo">): boolean {
-  const articleSchema = page.seo.schemas.find(
-    (schema): schema is Extract<typeof schema, { type: "article" }> => schema.type === "article"
-  );
-  if (!articleSchema?.date) return true;
-
-  const publishDate = new Date(articleSchema.date);
-  if (Number.isNaN(publishDate.getTime())) return true;
-
-  return publishDate.getTime() <= Date.now();
+  const publishDate = getBlogPageDate(page);
+  return !publishDate || publishDate.getTime() <= Date.now();
 }
