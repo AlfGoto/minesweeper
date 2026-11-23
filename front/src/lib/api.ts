@@ -24,6 +24,11 @@ export async function getAllBestGames() {
   return response.data ?? [];
 }
 
+export async function getMonthlyIndex() {
+  const response = await client.GET("/stats/months");
+  return response.data ?? [];
+}
+
 export async function getMonthlyLeaderboard(month: string) {
   const response = await client.GET("/stats/month/{month}", {
     params: { path: { month } },

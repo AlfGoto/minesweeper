@@ -329,6 +329,11 @@
     "monthlySubtitle": "Mejor partida de cada jugador en {month} (UTC)",
     "monthlySinceLaunch": "Desde el lanzamiento: los datos empiezan en julio de 2026.",
     "backToStats": "Volver a Stats",
+    "monthlyIndexTitle": "Clasificaciones mensuales - Buscaminas",
+    "monthlyIndexDescription": "Top 3 de los jugadores de Buscaminas más rápidos de cada mes. Abre un mes para ver su top 100.",
+    "monthlyIndexHeading": "Clasificaciones mensuales",
+    "monthlyIndexSubtitle": "Top 3 de cada mes, del más reciente al más antiguo (UTC).",
+    "monthlyIndexBreadcrumb": "Mensual",
     "viewAll": "Ver todo"
   },
   "skinStatsPage": {
