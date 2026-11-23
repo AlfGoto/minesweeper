@@ -163,6 +163,18 @@
     "faqPreview": "¿Puedo previsualizar el skin {name} antes de desbloquearlo?",
     "faqPreviewAnswer": "Sí, puedes ver una vista previa del skin {name} en la tienda de skins y en esta página antes de decidir desbloquearlo."
   },
+  "classicColors": {
+    "title": "Colores del Buscaminas clásico y skin - Paleta Windows 95 (1–8)",
+    "metaDescription": "¿De qué color es cada número del Buscaminas? Los 8 colores de los números de la paleta original de Windows (1 azul, 2 verde, 3 rojo…) con códigos hex, y el skin Clásico gratis.",
+    "heading": "¿De qué color es cada número en el Buscaminas clásico?",
+    "answer": "En el Buscaminas original de Windows, el 1 es azul, el 2 es verde, el 3 es rojo, el 4 es azul oscuro (marino), el 5 es granate, el 6 es verde azulado, el 7 es negro y el 8 es gris.",
+    "number": "Número",
+    "color": "Color",
+    "hex": "Hex",
+    "names": ["Azul", "Verde", "Rojo", "Azul oscuro (marino)", "Granate", "Verde azulado", "Negro", "Gris"],
+    "softer": "Nuestro skin Clásico usa tonos ligeramente más suaves de estos colores para mejorar la legibilidad.",
+    "blogLink": "Leer más: los colores del Buscaminas explicados"
+  },
   "skinsPage": {
     "backToGame": "Volver al juego",
     "pageTitle": "Skins y temas de Buscaminas",

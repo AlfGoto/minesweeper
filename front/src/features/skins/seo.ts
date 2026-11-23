@@ -89,9 +89,9 @@ Once comfortable with the mechanics, you can explore the skin shop to find theme
   },
 
   classic: {
-    title: "Classic Minesweeper Skin - Gray Colors & Windows 95 Theme",
+    title: "Classic Minesweeper Colors & Skin - Windows 95 Palette (1–8)",
     metaDescription:
-      "Play Minesweeper with the Classic skin: gray, monochrome 3D beveled cells straight from Windows 95. One of 20+ free minesweeper skins and colors to unlock.",
+      "What color is each number in Minesweeper? The 8 number colors of the original Windows palette (1 blue, 2 green, 3 red…) with hex codes, plus the free Classic skin.",
     heroTagline:
       "The iconic Windows 95 Minesweeper design that started it all.",
     sections: [
@@ -111,7 +111,7 @@ Beyond sentiment, the design works. The monochromatic scheme reduces visual nois
         title: "Technical Design Details",
         content: `The Classic skin uses a precise silver gray (#c0c0c0) that matches the original Windows system color. Border widths create the 3D effect: bright white (#fefefe) on top-left edges, medium gray (#818181) on bottom-right. Revealed cells switch to a flatter appearance with subtle single-pixel borders.
 
-Number colors follow the original palette: blue for 1, green for 2, red for 3. These specific shades were chosen for maximum readability against the gray background while maintaining the authentic retro feel.`,
+Number colors take their cue from the original palette: blue for 1, green for 2, red for 3. We use slightly softer shades, chosen for maximum readability against the gray background while keeping the retro feel.`,
       },
     ],
     faqs: [

@@ -17,6 +17,14 @@ import { getCellSkinSeo } from "@/features/skins/seo";
 import { getTranslations } from "next-intl/server";
 import { generateAlternates, generateOgImages } from "@/lib/seo-config";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { SkinCtaButtons } from "@/components/skin-cta-buttons";
 import {
   BottomCta,
@@ -28,6 +36,18 @@ import {
   getSkinColors,
 } from "@/components/skin-page-parts";
 import { getCellSkinsPrices, getSkinStats } from "@/lib/api";
+
+/** Number colors (1–8) of the original Windows Minesweeper. */
+const WINDOWS_NUMBER_HEX = [
+  "#0000FF",
+  "#008000",
+  "#FF0000",
+  "#000080",
+  "#800000",
+  "#008080",
+  "#000000",
+  "#808080",
+];
 
 type Props = {
   params: Promise<{ skinName: string; locale: string }>;
@@ -50,10 +70,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const seoContent = getCellSkinSeo(skin.id, locale);
+  const tColors = await getTranslations({ locale, namespace: "classicColors" });
+  const isClassic = skin.id === "classic";
   const fullTitle = t("skinTitle", { name: skin.name });
-  const title =
-    seoContent?.title ?? (fullTitle.length > 60 ? `${skin.name} - Minesweeper Skin` : fullTitle);
-  const description = seoContent?.metaDescription ?? skin.description;
+  const title = isClassic
+    ? tColors("title")
+    : (seoContent?.title ?? (fullTitle.length > 60 ? `${skin.name} - Minesweeper Skin` : fullTitle));
+  const description = isClassic
+    ? tColors("metaDescription")
+    : (seoContent?.metaDescription ?? skin.description);
   const alternates = generateAlternates(`/skins/${skin.slug}`, locale);
   const keywords = seoContent?.keywords ?? skin.keywords;
 
@@ -99,6 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SkinPage({ params }: Props) {
   const { skinName, locale } = await params;
   const t = await getTranslations("gridSkinPage");
+  const tColors = await getTranslations("classicColors");
   const skin = getSkinMetaBySlug(skinName, locale);
 
   if (!skin) {
@@ -339,6 +365,38 @@ export default async function SkinPage({ params }: Props) {
           </div>
 
           <div className="mx-auto flex max-w-3xl flex-col gap-14 px-6 pt-4">
+            {skin.id === "classic" && (
+              <TextSection title={tColors("heading")}>
+                <p>{tColors("answer")}</p>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{tColors("number")}</TableHead>
+                      <TableHead>{tColors("color")}</TableHead>
+                      <TableHead>{tColors("hex")}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {WINDOWS_NUMBER_HEX.map((hex, index) => (
+                      <TableRow key={hex}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{(tColors.raw("names") as string[])[index]}</TableCell>
+                        <TableCell>{hex}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <p>{tColors("softer")}</p>
+                <p>
+                  <Link
+                    href="/blog/minesweeper-colors-explained"
+                    className="text-green-700 hover:underline"
+                  >
+                    {tColors("blogLink")}
+                  </Link>
+                </p>
+              </TextSection>
+            )}
             {seoContent?.sections ? (
               seoContent.sections.map((section) => (
                 <TextSection key={section.title} title={section.title}>
