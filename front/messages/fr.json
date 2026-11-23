@@ -239,6 +239,12 @@
     "leaderboard": "Classement",
     "totalTime": "Temps total",
     "viewAll": "Voir tout",
+    "currentMonth": {
+      "tab": "Mois en cours",
+      "viewAll": "Voir tout",
+      "cta": "Gagnez une partie pour entrer dans le classement de ce mois",
+      "endsIn": "Se termine dans {days}j {hours}h {minutes}m {seconds}s"
+    },
     "yourStats": "Vos statistiques",
     "metaTitle": "Stats Démineur - Suivez vos parties et meilleurs temps",
     "metaDescription": "Consultez vos statistiques Démineur : parties totales, victoires, taux de réussite, meilleur temps et métriques détaillées. Connectez-vous pour suivre votre progression.",

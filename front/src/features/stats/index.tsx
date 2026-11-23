@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { getServerSession } from "next-auth";
+import { CurrentMonthLeaderboard } from "./components/current-month-leaderboard";
 import { Leaderboard } from "./components/leaderboard";
 import { TotalTimeLeaderboard } from "./components/total-time-leaderboard";
 import { Stats } from "./components/stats";
@@ -34,8 +35,21 @@ export async function StatsPage() {
 
       <Suspense fallback={<LeaderboardSkeleton />}>
         <ResponsiveTabs
-          defaultValue="latest-games"
+          defaultValue="current-month"
           items={[
+            {
+              value: "current-month",
+              label: `📅 ${t("currentMonth.tab")}`,
+              trigger: (
+                <>
+                  <span className="text-2xl">📅</span>
+                  <h2 className="text-2xl font-bold">
+                    {t("currentMonth.tab")}
+                  </h2>
+                </>
+              ),
+              content: <CurrentMonthLeaderboard />,
+            },
             {
               value: "latest-games",
               label: `🏆 ${t("leaderboard")}`,

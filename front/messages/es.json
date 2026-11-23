@@ -239,6 +239,12 @@
     "leaderboard": "Clasificación",
     "totalTime": "Tiempo total",
     "viewAll": "Ver todo",
+    "currentMonth": {
+      "tab": "Mes actual",
+      "viewAll": "Ver todo",
+      "cta": "Gana una partida para entrar en la clasificación de este mes",
+      "endsIn": "Termina en {days}d {hours}h {minutes}m {seconds}s"
+    },
     "yourStats": "Tus estadísticas",
     "metaTitle": "Stats Buscaminas - Sigue tus partidas y mejores tiempos",
     "metaDescription": "Consulta tus estadísticas de Buscaminas: partidas totales, victorias, tasa de victorias, mejor tiempo y métricas detalladas. Inicia sesión para seguir tu progreso.",
