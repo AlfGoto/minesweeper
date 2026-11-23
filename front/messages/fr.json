@@ -163,6 +163,18 @@
     "faqPreview": "Puis-je prévisualiser le skin {name} avant de le débloquer ?",
     "faqPreviewAnswer": "Oui, vous pouvez voir un aperçu du skin {name} dans la boutique de skins et sur cette page avant de décider de le débloquer."
   },
+  "classicColors": {
+    "title": "Couleurs du Démineur classique & skin - Palette Windows 95 (1–8)",
+    "metaDescription": "Quelle couleur pour chaque chiffre du Démineur ? Les 8 couleurs des chiffres de la palette Windows d'origine (1 bleu, 2 vert, 3 rouge…) avec codes hex, et le skin Classique gratuit.",
+    "heading": "Quelle est la couleur de chaque chiffre du Démineur classique ?",
+    "answer": "Dans le Démineur Windows d'origine, le 1 est bleu, le 2 est vert, le 3 est rouge, le 4 est bleu foncé (marine), le 5 est bordeaux, le 6 est sarcelle, le 7 est noir et le 8 est gris.",
+    "number": "Chiffre",
+    "color": "Couleur",
+    "hex": "Hex",
+    "names": ["Bleu", "Vert", "Rouge", "Bleu foncé (marine)", "Bordeaux", "Sarcelle", "Noir", "Gris"],
+    "softer": "Notre skin Classique garde le bleu, le vert et le rouge pour 1, 2 et 3. Les chiffres 4 à 8 utilisent d'autres couleurs, choisies pour la lisibilité.",
+    "blogLink": "En savoir plus : les couleurs du Démineur expliquées"
+  },
   "skinsPage": {
     "backToGame": "Retour au jeu",
     "pageTitle": "Skins et thèmes Démineur",

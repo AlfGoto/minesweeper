@@ -163,6 +163,18 @@
     "faqPreview": "Can I preview the {name} skin before unlocking?",
     "faqPreviewAnswer": "Yes, you can see a preview of the {name} skin in the skins shop and on this page before deciding to unlock it."
   },
+  "classicColors": {
+    "title": "Classic Minesweeper Colors & Skin - Windows 95 Palette (1–8)",
+    "metaDescription": "What color is each number in Minesweeper? The 8 number colors of the original Windows palette (1 blue, 2 green, 3 red…) with hex codes, plus the free Classic skin.",
+    "heading": "What color is each number in classic Minesweeper?",
+    "answer": "In the original Windows Minesweeper, 1 is blue, 2 is green, 3 is red, 4 is dark blue (navy), 5 is maroon, 6 is teal, 7 is black and 8 is gray.",
+    "number": "Number",
+    "color": "Color",
+    "hex": "Hex",
+    "names": ["Blue", "Green", "Red", "Dark blue (navy)", "Maroon", "Teal", "Black", "Gray"],
+    "softer": "Our Classic skin keeps blue, green and red for 1, 2 and 3. Numbers 4 to 8 use different colors, chosen for readability.",
+    "blogLink": "Read more: Minesweeper colors explained"
+  },
   "skinsPage": {
     "backToGame": "Back to game",
     "pageTitle": "Minesweeper Skins & Themes",
