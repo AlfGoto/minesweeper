@@ -172,7 +172,7 @@
     "color": "Color",
     "hex": "Hex",
     "names": ["Blue", "Green", "Red", "Dark blue (navy)", "Maroon", "Teal", "Black", "Gray"],
-    "softer": "Our Classic skin uses slightly softer shades of these colors for readability.",
+    "softer": "Our Classic skin keeps blue, green and red for 1, 2 and 3. Numbers 4 to 8 use different colors, chosen for readability.",
     "blogLink": "Read more: Minesweeper colors explained"
   },
   "skinsPage": {

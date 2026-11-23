@@ -172,7 +172,7 @@
     "color": "Couleur",
     "hex": "Hex",
     "names": ["Bleu", "Vert", "Rouge", "Bleu foncé (marine)", "Bordeaux", "Sarcelle", "Noir", "Gris"],
-    "softer": "Notre skin Classique utilise des nuances légèrement plus douces de ces couleurs pour une meilleure lisibilité.",
+    "softer": "Notre skin Classique garde le bleu, le vert et le rouge pour 1, 2 et 3. Les chiffres 4 à 8 utilisent d'autres couleurs, choisies pour la lisibilité.",
     "blogLink": "En savoir plus : les couleurs du Démineur expliquées"
   },
   "skinsPage": {

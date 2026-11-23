@@ -172,7 +172,7 @@
     "color": "Color",
     "hex": "Hex",
     "names": ["Azul", "Verde", "Rojo", "Azul oscuro (marino)", "Granate", "Verde azulado", "Negro", "Gris"],
-    "softer": "Nuestro skin Clásico usa tonos ligeramente más suaves de estos colores para mejorar la legibilidad.",
+    "softer": "Nuestro skin Clásico mantiene el azul, el verde y el rojo para 1, 2 y 3. Los números del 4 al 8 usan otros colores, elegidos por legibilidad.",
     "blogLink": "Leer más: los colores del Buscaminas explicados"
   },
   "skinsPage": {

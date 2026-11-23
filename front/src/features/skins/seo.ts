@@ -111,7 +111,7 @@ Beyond sentiment, the design works. The monochromatic scheme reduces visual nois
         title: "Technical Design Details",
         content: `The Classic skin uses a precise silver gray (#c0c0c0) that matches the original Windows system color. Border widths create the 3D effect: bright white (#fefefe) on top-left edges, medium gray (#818181) on bottom-right. Revealed cells switch to a flatter appearance with subtle single-pixel borders.
 
-Number colors take their cue from the original palette: blue for 1, green for 2, red for 3. We use slightly softer shades, chosen for maximum readability against the gray background while keeping the retro feel.`,
+Number colors take their cue from the original palette: blue for 1, green for 2, red for 3. Numbers 4 to 8 use different colors, chosen for maximum readability against the gray background while keeping the retro feel.`,
       },
     ],
     faqs: [
