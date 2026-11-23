@@ -64,13 +64,7 @@ export class MinesweeperBff extends cdk.Stack {
 
     const api = new apigw.HttpApi(this, "MinesweeperBffApi", {
       corsPreflight: {
-        allowHeaders: [
-          "Content-Type",
-          "Authorization",
-          "Content-Length",
-          "X-Requested-With",
-          "X-Api-Secret"
-        ],
+        allowHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With"],
         allowMethods: [apigw.CorsHttpMethod.ANY],
         allowOrigins: ["*"],
         allowCredentials: false
