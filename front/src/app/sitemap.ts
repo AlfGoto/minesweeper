@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllBackgroundSkinSlugs } from "@/features/skins/backgrounds";
 import { getAllSkinSlugs } from "@/features/skins/cells/skins";
 import { getAllStats, getMonthlyIndex } from "@/lib/api";
-import { filterIndexablePlayers, getTopPlayers, isBlogPagePublished } from "@/lib/seo-config";
+import { filterIndexablePlayers, getBlogPageDate, getTopPlayers, isBlogPagePublished } from "@/lib/seo-config";
 import { createPlayerSlug } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
 import { getAllPages } from "@basalf/cms-next";
@@ -11,19 +11,31 @@ const BASE_URL = "https://minesweeper.fr";
 
 export const revalidate = 86400; // 1 day
 
+// Fixed lastModified for pages that rarely change. Update by hand, only when
+// the page content really changes.
+const SKIN_PAGES_LAST_MODIFIED = new Date("2026-11-23");
+const BACKGROUND_PAGES_LAST_MODIFIED = new Date("2026-11-23");
+const HOW_TO_PLAY_LAST_MODIFIED = new Date("2026-11-23");
+const MAP_LAST_MODIFIED = new Date("2026-11-23");
+const REDDIT_LAST_MODIFIED = new Date("2026-11-23");
+// Blog page without an article date in the CMS
+const BLOG_FALLBACK_LAST_MODIFIED = new Date("2026-11-23");
+
 function createEntries(
   path: string,
   changeFrequency: "weekly" | "monthly" | "daily",
-  priority: number
+  priority: number,
+  options: { lastModified?: Date; locales?: readonly string[] } = {}
 ): MetadataRoute.Sitemap {
-  return routing.locales.map((locale) => {
+  const { lastModified = new Date(), locales = routing.locales } = options;
+  return locales.map((locale) => {
     const url = locale === routing.defaultLocale
       ? `${BASE_URL}${path}`
       : `${BASE_URL}/${locale}${path}`;
 
     return {
       url,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency,
       priority,
     };
@@ -35,17 +47,19 @@ export function getStaticPages(): MetadataRoute.Sitemap {
   const backgroundSkinSlugs = getAllBackgroundSkinSlugs();
 
   const skinPages = skinSlugs.flatMap((slug) =>
-    createEntries(`/skins/${slug}`, "monthly", 0.7)
+    createEntries(`/skins/${slug}`, "monthly", 0.7, { lastModified: SKIN_PAGES_LAST_MODIFIED })
   );
 
   const backgroundSkinPages = backgroundSkinSlugs.flatMap((slug) =>
-    createEntries(`/skins/background/${slug}`, "monthly", 0.65)
+    createEntries(`/skins/background/${slug}`, "monthly", 0.65, {
+      lastModified: BACKGROUND_PAGES_LAST_MODIFIED,
+    })
   );
 
   return [
     ...createEntries("", "weekly", 1),
-    ...createEntries("/how-to-play", "monthly", 0.9),
-    ...createEntries("/map", "weekly", 0.85),
+    ...createEntries("/how-to-play", "monthly", 0.9, { lastModified: HOW_TO_PLAY_LAST_MODIFIED }),
+    ...createEntries("/map", "weekly", 0.85, { lastModified: MAP_LAST_MODIFIED }),
     ...createEntries("/players", "daily", 0.9),
     ...createEntries("/stats", "daily", 0.9),
     ...createEntries("/stats/leaderboard/best-times", "daily", 0.85),
@@ -53,7 +67,7 @@ export function getStaticPages(): MetadataRoute.Sitemap {
     ...createEntries("/stats/leaderboard/monthly", "daily", 0.85),
     ...createEntries("/stats/skins", "daily", 0.85),
     ...createEntries("/skins", "weekly", 0.85),
-    ...createEntries("/reddit", "monthly", 0.5),
+    ...createEntries("/reddit", "monthly", 0.5, { lastModified: REDDIT_LAST_MODIFIED }),
     ...createEntries("/skins/background", "weekly", 0.8),
     ...createEntries("/blog", "weekly", 0.7),
     ...skinPages,
@@ -79,7 +93,7 @@ async function getBlogPages(): Promise<MetadataRoute.Sitemap> {
 
       return {
         url,
-        lastModified: new Date(),
+        lastModified: getBlogPageDate(page) ?? BLOG_FALLBACK_LAST_MODIFIED,
         changeFrequency: "weekly" as const,
         priority: 0.6,
       };
@@ -98,7 +112,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     createEntries(
       `/players/${createPlayerSlug(player.userName, player.userId)}`,
       "weekly",
-      topPlayerIds.has(player.userId) ? 0.3 : 0.1
+      topPlayerIds.has(player.userId) ? 0.3 : 0.1,
+      { locales: [routing.defaultLocale] }
     )
   );
 

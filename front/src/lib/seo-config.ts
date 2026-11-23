@@ -52,16 +52,11 @@ export interface IndexablePlayer extends StatsAll {
 export function shouldIndexProfile(stats: StatsAll | undefined): { indexable: boolean; reason?: string } {
   if (!stats) return { indexable: false };
 
-  if (stats.totalGames >= SEO_CONFIG.minGamesForIndex) {
-    return { indexable: true, reason: "games" };
-  }
-
-  if (stats.totalWin >= SEO_CONFIG.minWinsForIndex) {
-    return { indexable: true, reason: "wins" };
-  }
-
-  if (stats.bestTime && stats.bestTime > 0) {
-    return { indexable: true, reason: "bestTime" };
+  if (
+    stats.totalGames >= SEO_CONFIG.minGamesForIndex &&
+    stats.totalWin >= SEO_CONFIG.minWinsForIndex
+  ) {
+    return { indexable: true, reason: "games-and-wins" };
   }
 
   return { indexable: false };
@@ -90,6 +85,16 @@ export function getTopPlayers(allStats: StatsAll[], limit: number = SEO_CONFIG.t
  * a page dated in the future is treated as unpublished (hidden from the blog
  * index, the sitemap, and 404s directly) until that date passes.
  */
+export function getBlogPageDate(page: Pick<AllPages[number], "seo">): Date | undefined {
+  const articleSchema = page.seo.schemas.find(
+    (schema): schema is Extract<typeof schema, { type: "article" }> => schema.type === "article"
+  );
+  if (!articleSchema?.date) return undefined;
+
+  const date = new Date(articleSchema.date);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
 export function isBlogPagePublished(page: Pick<AllPages[number], "seo">): boolean {
   const articleSchema = page.seo.schemas.find(
     (schema): schema is Extract<typeof schema, { type: "article" }> => schema.type === "article"
