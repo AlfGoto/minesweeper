@@ -64,7 +64,13 @@ export class MinesweeperBff extends cdk.Stack {
 
     const api = new apigw.HttpApi(this, "MinesweeperBffApi", {
       corsPreflight: {
-        allowHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With"],
+        allowHeaders: [
+          "Content-Type",
+          "Authorization",
+          "Content-Length",
+          "X-Requested-With",
+          "X-Api-Secret"
+        ],
         allowMethods: [apigw.CorsHttpMethod.ANY],
         allowOrigins: ["*"],
         allowCredentials: false
@@ -76,6 +82,7 @@ export class MinesweeperBff extends cdk.Stack {
         STAGE: props.stage,
         SERVICE: props.serviceName,
         NODE_OPTIONS: "--enable-source-maps",
+        API_SECRET: process.env.API_SECRET ?? "",
         TABLE_NAME: table.tableName
       },
       bundling: { minify: true, sourceMap: true },
