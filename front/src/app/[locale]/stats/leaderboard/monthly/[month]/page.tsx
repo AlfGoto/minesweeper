@@ -91,6 +91,10 @@ async function MonthlyContent({
         items={[
           { label: "Minesweeper", href: "/" },
           { label: t("stats"), href: "/stats" },
+          {
+            label: t("monthlyIndexBreadcrumb"),
+            href: "/stats/leaderboard/monthly",
+          },
           { label },
         ]}
       />
