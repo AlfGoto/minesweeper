@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto"
 import { swaggerUI } from "@hono/swagger-ui"
 import { OpenAPIHono } from "@hono/zod-openapi"
 import middy from "@middy/core"
@@ -9,7 +10,26 @@ import { route as StatsRoute } from "./stats"
 import { route as UserStatsRoute } from "./user-stats"
 import { notifyError } from "../../core/discord/notify-error"
 
+const SECRET_HEADER = "x-api-secret"
+
+const isValidSecret = (received: string | undefined): boolean => {
+  const expected = process.env.API_SECRET
+  // Fail closed: no secret configured means every call is rejected.
+  if (!expected || !received) return false
+  const a = Buffer.from(received)
+  const b = Buffer.from(expected)
+  return a.length === b.length && timingSafeEqual(a, b)
+}
+
 const app = new OpenAPIHono()
+
+app.use("*", async (c, next) => {
+  if (c.req.method === "OPTIONS") return next()
+  if (!isValidSecret(c.req.header(SECRET_HEADER))) {
+    throw new HTTPException(401, { message: "Unauthorized" })
+  }
+  await next()
+})
 
 const routes = app
   .route("/games", GameRoute)

@@ -5,6 +5,7 @@ import type { components } from "./api";
 
 const uncachedClient = createClient<paths>({
   baseUrl: process.env.BFF_URL,
+  headers: { "x-api-secret": process.env.API_SECRET ?? "" },
   fetch: (request) => fetch(request, { cache: "no-store" }),
 });
 

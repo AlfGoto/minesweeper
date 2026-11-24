@@ -20,6 +20,7 @@ const REVALIDATE_SECONDS = 45;
 
 export const client = createClient<paths>({
   baseUrl: process.env.BFF_URL,
+  headers: { "x-api-secret": process.env.API_SECRET ?? "" },
   fetch: (request) =>
     fetch(request, { next: { revalidate: REVALIDATE_SECONDS } }),
 });
