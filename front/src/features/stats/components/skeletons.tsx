@@ -133,11 +133,18 @@ export async function LeaderboardSkeleton() {
   ]);
 
   return (
-    <Tabs defaultValue="leaderboard" className="w-full border rounded-lg gap-0">
+    <Tabs defaultValue="current-month" className="w-full border rounded-lg gap-0">
       <div className="mx-2 my-4 sm:hidden">
         <Skeleton className="h-9 w-full rounded-md" />
       </div>
       <TabsList className="w-fit mx-2 my-4 p-2 hidden sm:inline-flex">
+        <TabsTrigger
+          value="current-month"
+          className="flex items-center gap-2 cursor-pointer w-fit"
+        >
+          <span className="text-2xl">📅</span>
+          <h2 className="text-2xl font-bold">{t("currentMonth.tab")}</h2>
+        </TabsTrigger>
         <TabsTrigger
           value="leaderboard"
           className="flex items-center gap-2 cursor-pointer w-fit"
@@ -153,7 +160,11 @@ export async function LeaderboardSkeleton() {
           <h2 className="text-2xl font-bold">{t("totalTime")}</h2>
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="leaderboard" className="p-2">
+      <TabsContent value="current-month" className="p-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 px-2 pb-2">
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-4 w-40" />
+        </div>
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
